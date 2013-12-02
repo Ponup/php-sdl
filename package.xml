@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
+    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+  <name>sdl2</name>
+  <channel>pecl.php.net</channel>
+  <summary>SDL2 library wrapper</summary>
+  <description>This extension allows you to execute multimedia PHP applications using the SDL2 library API.</description>
+  <lead>
+    <name>Remi Collet</name>
+    <user>remi</user>
+    <email>remi@php.net</email>
+    <active>yes</active>
+  </lead>
+  <date>2013-11-30</date>
+  <time>12:50:00</time>
+  <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+  </version>
+  <stability>
+    <release>devel</release>
+    <api>devel</api>
+  </stability>
+  <license>PHP 3.01</license>
+  <notes>
+- initial version
+- init/quit functions
+- cpuinfo functions
+  </notes>
+  <contents>
+    <dir name="/">
+      <file role='doc' name='CREDITS'/>
+      <file role='doc' name='LICENSE'/>
+      <file role='doc' name='EXPERIMENTAL'/>
+      <file role='src' name='config.m4'/>
+      <file role='src' name='sdl2.dsp'/>
+      <file role='src' name='config.w32'/>
+      <file role='src' name='sdl2.c'/>
+      <file role='src' name='php_sdl2.h'/>
+      <file role='src' name='cpuinfo.c'/>
+      <file role='src' name='cpuinfo.h'/>
+      <file role='src' name='rect.c'/>
+      <file role='src' name='rect.h'/>
+      <file role='src' name='video.c'/>
+      <file role='src' name='video.h'/>
+      <dir name="tests">
+        <file role='test' name='001-load.phpt'/>
+        <file role='test' name='002-simpleinit.phpt'/>
+        <file role='test' name='003-otherinit.phpt'/>
+        <file role='test' name='004-cpuinfo.phpt'/>
+        <file role='test' name='005-video.phpt'/>
+      </dir> <!-- //tests -->
+    </dir>
+  </contents>
+  <dependencies>
+    <required>
+      <php>
+        <min>5.3.0</min>
+      </php>
+      <pearinstaller>
+        <min>1.9.0</min>
+      </pearinstaller>
+    </required>
+  </dependencies>
+  <providesextension>sdl2</providesextension>
+  <extsrcrelease/>
+</package>

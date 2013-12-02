@@ -1,0 +1,120 @@
+--TEST--
+rect group test, procedural mode
+--SKIPIF--
+<?php
+if (!extension_loaded("sdl2")) die("skip: SDL2 extension not loaded");
+?>
+--FILE--
+<?php
+echo "+++ Empty (true)\n";
+$r = new SDL_Rect(0,0,0,0);
+var_dump($r);
+var_dump(SDL_RectEmpty($r));
+
+echo "+++ Empty (false)\n";
+$r = new SDL_Rect(1,2,3,4);
+var_dump($r);
+var_dump(SDL_RectEmpty($r));
+
+$r1 = new SDL_Rect(10,10,20,20);
+$r2 = new SDL_Rect(10,10,20,20);
+$r3 = new SDL_Rect(16,17,22,24);
+$r4 = new SDL_Rect(100,10,20,20);
+
+echo "+++ Equal (true)\n";
+var_dump(SDL_RectEquals($r1, $r1));
+var_dump(SDL_RectEquals($r1, $r2));
+echo "+++ Equal (false)\n";
+var_dump(SDL_RectEquals($r1, $r3));
+var_dump(SDL_RectEquals($r2, $r3));
+
+echo "+++ Inter (true)\n";
+var_dump(SDL_HasIntersection($r2, $r3));
+var_dump(SDL_IntersectRect($r2, $r3, $x));
+var_dump($x); unset($x);
+
+echo "+++ Inter (false)\n";
+var_dump(SDL_HasIntersection($r2, $r4));
+var_dump(SDL_IntersectRect($r2, $r4, $x));
+var_dump($x); unset($x);
+
+echo "+++ Uninon\n";
+var_dump(SDL_UnionRect($r2, $r3, $x));
+var_dump($x); unset($x);
+var_dump(SDL_UnionRect($r2, $r4, $x));
+var_dump($x); unset($x);
+?>
+Done
+--EXPECTF--
++++ Empty (true)
+object(SDL_Rect)#1 (4) {
+  ["x"]=>
+  int(0)
+  ["y"]=>
+  int(0)
+  ["w"]=>
+  int(0)
+  ["h"]=>
+  int(0)
+}
+bool(true)
++++ Empty (false)
+object(SDL_Rect)#2 (4) {
+  ["x"]=>
+  int(1)
+  ["y"]=>
+  int(2)
+  ["w"]=>
+  int(3)
+  ["h"]=>
+  int(4)
+}
+bool(false)
++++ Equal (true)
+bool(true)
+bool(true)
++++ Equal (false)
+bool(false)
+bool(false)
++++ Inter (true)
+bool(true)
+bool(true)
+object(SDL_Rect)#6 (4) {
+  ["x"]=>
+  int(16)
+  ["y"]=>
+  int(17)
+  ["w"]=>
+  int(14)
+  ["h"]=>
+  int(13)
+}
++++ Inter (false)
+bool(false)
+bool(false)
+NULL
++++ Uninon
+NULL
+object(SDL_Rect)#6 (4) {
+  ["x"]=>
+  int(10)
+  ["y"]=>
+  int(10)
+  ["w"]=>
+  int(28)
+  ["h"]=>
+  int(31)
+}
+NULL
+object(SDL_Rect)#6 (4) {
+  ["x"]=>
+  int(10)
+  ["y"]=>
+  int(10)
+  ["w"]=>
+  int(110)
+  ["h"]=>
+  int(20)
+}
+Done
+
