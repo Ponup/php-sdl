@@ -265,6 +265,14 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
+       ZEND_ARG_INFO(0, point)
+       ZEND_ARG_INFO(0, count)
+       ZEND_ARG_INFO(0, clip)
+       ZEND_ARG_INFO(1, rect)
+ZEND_END_ARG_INFO()
+
+
 /* {{{ proto bool SDLCALL SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
 
  *  \brief Calculate a minimal rectangle enclosing a set of points
@@ -274,36 +282,49 @@ PHP_FUNCTION(SDL_UnionRect)
                                                     int count,
                                                     const SDL_Rect * clip,
                                                     SDL_Rect * result);
+ */
 PHP_FUNCTION(SDL_EnclosePoints)
 {
-	zval *object, *z_x1, *z_x2, *z_y1, *z_y2;
-	SDL_Rect rect;
-	int x1, y1, x2, y2;
+	zval *z_points, *z_clip, *z_result, **z_point;
+	long i, count;
+	int nb;
+	SDL_Rect clip, result;
+	SDL_Point *points;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "alOz", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(object, &rect);
-	convert_to_long_ex(&z_x1);
-	convert_to_long_ex(&z_y1);
-	convert_to_long_ex(&z_x2);
-	convert_to_long_ex(&z_y2);
-	x1 = (int)Z_LVAL_P(z_x1);
-	y1 = (int)Z_LVAL_P(z_y1);
-	x2 = (int)Z_LVAL_P(z_x2);
-	y2 = (int)Z_LVAL_P(z_y2);
+	RETVAL_FALSE;
 
-	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2)) {
-		Z_LVAL_P(z_x1) = x1;
-		Z_LVAL_P(z_y1) = y1;
-		Z_LVAL_P(z_x2) = x2;
-		Z_LVAL_P(z_y2) = y2;
-		RETURN_TRUE;
+	if (count<=0) {
+		count = zend_hash_next_free_element(Z_ARRVAL_P(z_points));
 	}
-	RETURN_FALSE;
-}
- */
+	points = emalloc(sizeof(SDL_Point)*count);
 
+	zval_to_sdl_rect(z_clip, &clip);
+	for (i=0, nb=0 ; i<count ; i++) {
+		if (zend_hash_index_find(Z_ARRVAL_P(z_points), i, (void**)&z_point) == FAILURE) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld missing", i);
+
+		} else if (Z_TYPE_PP(z_point) != IS_OBJECT || Z_OBJCE_PP(z_point) != php_sdl_point_ce) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld is not a SDL_Point object", i);
+
+		} else {
+			zval_to_sdl_point(*z_point, points+nb);
+			nb++;
+		}
+	}
+
+	if (!nb) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "no point in provided array");
+
+	} else if (SDL_EnclosePoints(points, nb, &clip, &result)) {
+		zval_dtor(z_result);
+		sdl_rect_to_zval(&result, z_result TSRMLS_CC);
+		RETVAL_TRUE;
+	}
+	efree(points);
+}
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
@@ -396,6 +417,7 @@ zend_function_entry sdl2_rect_functions[] = {
 	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
 	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
 	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
+	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
 	ZEND_FE_END
 };
 /* }}} */

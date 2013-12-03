@@ -50,6 +50,17 @@ var_dump(SDL_IntersectRectAndLine($r1, $x1, $y1, $x2, $y2));
 var_dump($x1, $y1, $x2, $y2);
 $x1=0; $y1=2; $x2=40; $y2=6;
 var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
+
+echo "+++ EnclosePoints\n";
+$pts = array(
+	new SDL_Point(20,14),
+	new SDL_Point(13,20),
+	new SDL_Point(24,20),
+	new SDL_Point(20,28),
+);
+var_dump(SDL_EnclosePoints($pts, 0, $r1, $res1), $res1);
+$pts[]="foo";
+var_dump(SDL_EnclosePoints($pts, 6, $r4, $res2), $res2);
 ?>
 Done
 --EXPECTF--
@@ -113,7 +124,7 @@ object(SDL_Rect)#6 (4) {
   int(31)
 }
 NULL
-object(SDL_Rect)#6 (4) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(10)
   ["y"]=>
@@ -130,5 +141,23 @@ int(15)
 int(29)
 int(24)
 bool(false)
++++ EnclosePoints
+bool(true)
+object(SDL_Rect)#%d (4) {
+  ["x"]=>
+  int(13)
+  ["y"]=>
+  int(14)
+  ["w"]=>
+  int(12)
+  ["h"]=>
+  int(15)
+}
+
+Warning: SDL_EnclosePoints(): point #4 is not a SDL_Point object in %s/006-rect.php on line 56
+
+Warning: SDL_EnclosePoints(): point #5 missing in %s/006-rect.php on line 56
+bool(false)
+NULL
 Done
 
