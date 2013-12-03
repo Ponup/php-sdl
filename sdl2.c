@@ -197,112 +197,13 @@ PHP_FUNCTION(SDL_Quit)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)
-       ZEND_ARG_INFO(0, driverIndex)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VideoInit, 0, 0, 0)
-       ZEND_ARG_INFO(0, drivername)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_dysplayindex, 0, 0, 1)
-       ZEND_ARG_INFO(0, displayIndex)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(0, modeIndex)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(1, rect)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
-       ZEND_ARG_INFO(0, window)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
-       ZEND_ARG_INFO(0, title)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-       ZEND_ARG_INFO(0, w)
-       ZEND_ARG_INFO(0, y)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowTitle, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
-       ZEND_ARG_INFO(0, title)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
-       ZEND_ARG_INFO(0, rect)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect2, 0, 0, 2)
-       ZEND_ARG_INFO(0, rectA)
-       ZEND_ARG_INFO(0, rectB)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
-       ZEND_ARG_INFO(0, rectA)
-       ZEND_ARG_INFO(0, rectB)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
-
 /* {{{ sdl2_functions[] */
 zend_function_entry sdl2_functions[] = {
-	/* SDL */
 	ZEND_FE(SDL_Init,						arginfo_SDL_Init)
 	ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
 	ZEND_FE(SDL_Quit,						arginfo_sdl2_none)
 	ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
 	ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
-
-	/* SDL_cpuinfo */
-	ZEND_FE(SDL_GetCPUCount,				arginfo_sdl2_none)
-	ZEND_FE(SDL_GetCPUCacheLineSize,		arginfo_sdl2_none)
-	ZEND_FE(SDL_HasRDTSC,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasAltiVec,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasMMX,						arginfo_sdl2_none)
-	ZEND_FE(SDL_Has3DNow,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasSSE,						arginfo_sdl2_none)
-	ZEND_FE(SDL_HasSSE2,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasSSE3,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasSSE41,					arginfo_sdl2_none)
-	ZEND_FE(SDL_HasSSE42,					arginfo_sdl2_none)
-	ZEND_FE(SDL_GetSystemRAM,				arginfo_sdl2_none)
-
-	/* SDL video */
-	ZEND_FE(SDL_GetNumVideoDrivers,			arginfo_sdl2_none)
-	ZEND_FE(SDL_GetVideoDriver,				arginfo_SDL_GetVideoDriver)
-	ZEND_FE(SDL_VideoInit,					arginfo_SDL_VideoInit)
-	ZEND_FE(SDL_VideoQuit,					arginfo_sdl2_none)
-	ZEND_FE(SDL_GetCurrentVideoDriver,		arginfo_sdl2_none)
-	ZEND_FE(SDL_GetNumVideoDisplays,		arginfo_sdl2_none)
-	ZEND_FE(SDL_GetDisplayName,				arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetDisplayBounds,			arginfo_SDL_GetDisplayBounds)
-	ZEND_FE(SDL_GetNumDisplayModes,			arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
-	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
-
-	/* SDL video / window */
-	ZEND_FE(SDL_CreateWindow,				arginfo_SDL_CreateWindow)
-	ZEND_FE(SDL_DestroyWindow,				arginfo_SDL_Window)
-	ZEND_FE(SDL_UpdateWindowSurface,		arginfo_SDL_Window)
-	ZEND_FE(SDL_GetWindowTitle,				arginfo_SDL_Window)
-	ZEND_FE(SDL_SetWindowTitle,				arginfo_SDL_SetWindowTitle)
-
-	/* SDL rect */
-	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
-	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
-	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
-	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
-	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
-
 	ZEND_FE_END
 };
 /* }}} */

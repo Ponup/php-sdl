@@ -86,6 +86,10 @@ static PHP_METHOD(SDL_Rect, __construct)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
+       ZEND_ARG_INFO(0, rect)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto bool SDL_RectEmpty(SDL_Rect rect)
 
  *  \brief Returns true if the rectangle has no area.
@@ -105,9 +109,11 @@ PHP_FUNCTION(SDL_RectEmpty)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
-       ZEND_ARG_INFO(0, rect)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect2, 0, 0, 2)
+       ZEND_ARG_INFO(0, rectA)
+       ZEND_ARG_INFO(0, rectB)
 ZEND_END_ARG_INFO()
+
 
 /* {{{ proto bool SDL_RectEquals(SDL_Rect a, SDL_Rect b)
 
@@ -152,6 +158,12 @@ PHP_FUNCTION(SDL_HasIntersection)
 	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
+       ZEND_ARG_INFO(0, rectA)
+       ZEND_ARG_INFO(0, rectB)
+       ZEND_ARG_INFO(1, result)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
        ZEND_ARG_INFO(0, rect)
@@ -256,6 +268,18 @@ static zend_object_value php_sdl_rect_new(zend_class_entry *class_type TSRMLS_DC
 }
 /* }}} */
 
+/* {{{ sdl2_functions[] */
+zend_function_entry sdl2_rect_functions[] = {
+	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
+	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
+	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
+	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
+	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
+	ZEND_FE_END
+};
+/* }}} */
+
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl2_rect)
 {
@@ -271,5 +295,5 @@ PHP_MINIT_FUNCTION(sdl2_rect)
 	zend_declare_property_long(php_sdl_rect_ce, "w", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_rect_ce, "h", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	return SUCCESS;
+	return (zend_register_functions(NULL, sdl2_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

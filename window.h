@@ -25,12 +25,6 @@
 extern "C" {
 #endif
 
-PHP_FUNCTION(SDL_CreateWindow);
-PHP_FUNCTION(SDL_DestroyWindow);
-PHP_FUNCTION(SDL_UpdateWindowSurface);
-PHP_FUNCTION(SDL_GetWindowTitle);
-PHP_FUNCTION(SDL_SetWindowTitle);
-
 PHP_MINIT_FUNCTION(sdl2_window);
 
 #ifdef  __cplusplus

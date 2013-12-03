@@ -594,6 +594,15 @@ struct php_sdl_window {
  extern DECLSPEC void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context);
  */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
+       ZEND_ARG_INFO(0, title)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+       ZEND_ARG_INFO(0, w)
+       ZEND_ARG_INFO(0, y)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window__construct, 0, 0, 6)
        ZEND_ARG_INFO(0, title)
        ZEND_ARG_INFO(0, x)
@@ -754,6 +763,11 @@ PHP_FUNCTION(SDL_GetWindowTitle)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowTitle, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, title)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetTitle, 0, 0, 1)
        ZEND_ARG_INFO(0, title)
 ZEND_END_ARG_INFO()
@@ -783,15 +797,32 @@ PHP_FUNCTION(SDL_SetWindowTitle)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+/* generic arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_window_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
+       ZEND_ARG_INFO(0, window)
+ZEND_END_ARG_INFO()
+
+
+/* {{{ sdl2_window_functions[] */
+zend_function_entry sdl2_window_functions[] = {
+	ZEND_FE(SDL_CreateWindow,				arginfo_SDL_CreateWindow)
+	ZEND_FE(SDL_DestroyWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_UpdateWindowSurface,		arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowTitle,				arginfo_SDL_Window)
+	ZEND_FE(SDL_SetWindowTitle,				arginfo_SDL_SetWindowTitle)
+	ZEND_FE_END
+};
+/* }}} */
 
 static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_ME(SDL_Window, __construct,     arginfo_SDL_Window__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
-	PHP_FALIAS(UpdateSurface,    SDL_UpdateWindowSurface,     arginfo_none)
-	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_none)
-	PHP_FALIAS(GetTitle,         SDL_GetWindowTitle,          arginfo_none)
+	PHP_FALIAS(UpdateSurface,    SDL_UpdateWindowSurface,     arginfo_window_none)
+	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_window_none)
+	PHP_FALIAS(GetTitle,         SDL_GetWindowTitle,          arginfo_window_none)
 	PHP_FALIAS(SetTitle,         SDL_SetWindowTitle,          arginfo_SDL_Window_SetTitle)
 
 	PHP_FE_END
@@ -834,6 +865,7 @@ static zend_object_value php_sdl_window_new(zend_class_entry *class_type TSRMLS_
 }
 /* }}} */
 
+
 #define REGISTER_WINDOW_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_WINDOW_" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_window_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
@@ -863,5 +895,5 @@ PHP_MINIT_FUNCTION(sdl2_window)
 	REGISTER_WINDOW_CLASS_CONST_LONG("FOREIGN",            SDL_WINDOW_FOREIGN);
 	REGISTER_WINDOW_CLASS_CONST_LONG("ALLOW_HIGHDPI",      SDL_WINDOW_ALLOW_HIGHDPI);
 
-	return SUCCESS;
+	return (zend_register_functions(NULL, sdl2_window_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

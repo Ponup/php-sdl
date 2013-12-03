@@ -28,12 +28,6 @@ extern "C" {
 void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
 void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
 
-PHP_FUNCTION(SDL_RectEmpty);
-PHP_FUNCTION(SDL_RectEquals);
-PHP_FUNCTION(SDL_HasIntersection);
-PHP_FUNCTION(SDL_IntersectRect);
-PHP_FUNCTION(SDL_UnionRect);
-
 PHP_MINIT_FUNCTION(sdl2_rect);
 
 #ifdef  __cplusplus

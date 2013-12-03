@@ -47,6 +47,10 @@ PHP_FUNCTION(SDL_GetNumVideoDrivers)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)
+       ZEND_ARG_INFO(0, driverIndex)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto string SDL_GetVideoDriver(int driverIndex)
 
  *  \brief Get the name of a built in video driver.
@@ -73,6 +77,10 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 }
 /* }}} */
 
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VideoInit, 0, 0, 0)
+       ZEND_ARG_INFO(0, drivername)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_VideoInit([string driver])
 
@@ -152,6 +160,12 @@ PHP_FUNCTION(SDL_GetCurrentVideoDriver)
 	RETURN_STRING(name, 1);
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_INFO(1, rect)
+ZEND_END_ARG_INFO()
+
 
 /* {{{ proto int SDL_GetNumVideoDisplays(void)
 
@@ -244,6 +258,11 @@ PHP_FUNCTION(SDL_GetNumDisplayModes)
 }
 /* }}} */
 
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_INFO(0, modeIndex)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto array SDL_GetDisplayMode(int displayIndex, int modeIndex)
 
@@ -338,10 +357,36 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
  extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
  */
 
+/* generic arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_video_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_dysplayindex, 0, 0, 1)
+       ZEND_ARG_INFO(0, displayIndex)
+ZEND_END_ARG_INFO()
+
+/* {{{ sdl2_functions[] */
+zend_function_entry sdl2_video_functions[] = {
+	ZEND_FE(SDL_GetNumVideoDrivers,			arginfo_video_none)
+	ZEND_FE(SDL_GetVideoDriver,				arginfo_SDL_GetVideoDriver)
+	ZEND_FE(SDL_VideoInit,					arginfo_SDL_VideoInit)
+	ZEND_FE(SDL_VideoQuit,					arginfo_video_none)
+	ZEND_FE(SDL_GetCurrentVideoDriver,		arginfo_video_none)
+	ZEND_FE(SDL_GetNumVideoDisplays,		arginfo_video_none)
+	ZEND_FE(SDL_GetDisplayName,				arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetDisplayBounds,			arginfo_SDL_GetDisplayBounds)
+	ZEND_FE(SDL_GetNumDisplayModes,			arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
+	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE_END
+};
+/* }}} */
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl2_video)
 {
-	return SUCCESS;
+	return (zend_register_functions(NULL, sdl2_video_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
 

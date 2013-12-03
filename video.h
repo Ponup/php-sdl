@@ -25,19 +25,6 @@
 extern "C" {
 #endif
 
-PHP_FUNCTION(SDL_GetNumVideoDrivers);
-PHP_FUNCTION(SDL_GetVideoDriver);
-PHP_FUNCTION(SDL_VideoInit);
-PHP_FUNCTION(SDL_VideoQuit);
-PHP_FUNCTION(SDL_GetCurrentVideoDriver);
-PHP_FUNCTION(SDL_GetNumVideoDisplays);
-PHP_FUNCTION(SDL_GetDisplayName);
-PHP_FUNCTION(SDL_GetDisplayBounds);
-PHP_FUNCTION(SDL_GetNumDisplayModes);
-PHP_FUNCTION(SDL_GetDisplayMode);
-PHP_FUNCTION(SDL_GetDesktopDisplayMode);
-PHP_FUNCTION(SDL_GetCurrentDisplayMode);
-
 PHP_MINIT_FUNCTION(sdl2_video);
 
 #ifdef  __cplusplus
