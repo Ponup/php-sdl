@@ -18,31 +18,24 @@
 
 /* $ Id: $ */ 
 
-#ifndef PHP_SDL2_VIDEO_H
-#define PHP_SDL2_VIDEO_H
+#ifndef PHP_SDL2_WINDOW_H
+#define PHP_SDL2_WINDOW_H
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-PHP_FUNCTION(SDL_GetNumVideoDrivers);
-PHP_FUNCTION(SDL_GetVideoDriver);
-PHP_FUNCTION(SDL_VideoInit);
-PHP_FUNCTION(SDL_VideoQuit);
-PHP_FUNCTION(SDL_GetCurrentVideoDriver);
-PHP_FUNCTION(SDL_GetNumVideoDisplays);
-PHP_FUNCTION(SDL_GetDisplayName);
-PHP_FUNCTION(SDL_GetDisplayBounds);
-PHP_FUNCTION(SDL_GetNumDisplayModes);
-PHP_FUNCTION(SDL_GetDisplayMode);
-PHP_FUNCTION(SDL_GetDesktopDisplayMode);
-PHP_FUNCTION(SDL_GetCurrentDisplayMode);
+PHP_FUNCTION(SDL_CreateWindow);
+PHP_FUNCTION(SDL_DestroyWindow);
+PHP_FUNCTION(SDL_UpdateWindowSurface);
+PHP_FUNCTION(SDL_GetWindowTitle);
+PHP_FUNCTION(SDL_SetWindowTitle);
 
-PHP_MINIT_FUNCTION(sdl2_video);
+PHP_MINIT_FUNCTION(sdl2_window);
 
 #ifdef  __cplusplus
 } // extern "C" 
 #endif
 
-#endif /* PHP_SDL2_VIDEO_H */
+#endif /* PHP_SDL2_WINDOW_H */
 

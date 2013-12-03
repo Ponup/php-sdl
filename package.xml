@@ -48,6 +48,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='rect.h'/>
       <file role='src' name='video.c'/>
       <file role='src' name='video.h'/>
+      <file role='src' name='window.c'/>
+      <file role='src' name='window.h'/>
       <dir name="tests">
         <file role='test' name='001-load.phpt'/>
         <file role='test' name='002-simpleinit.phpt'/>

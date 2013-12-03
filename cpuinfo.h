@@ -38,6 +38,8 @@ PHP_FUNCTION(SDL_HasSSE41);
 PHP_FUNCTION(SDL_HasSSE42);
 PHP_FUNCTION(SDL_GetSystemRAM);
 
+PHP_MINIT_FUNCTION(sdl2_cpuinfo);
+
 #ifdef  __cplusplus
 } // extern "C" 
 #endif

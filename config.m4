@@ -35,5 +35,11 @@ if test "$PHP_SDL2" != "no"; then
   PHP_SUBST(SDL2_SHARED_LIBADD)
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
-  PHP_NEW_EXTENSION(sdl2, sdl2.c cpuinfo.c rect.c video.c, $ext_shared)
+  sources="
+cpuinfo.c
+rect.c
+video.c
+window.c
+"
+  PHP_NEW_EXTENSION(sdl2, sdl2.c $sources, $ext_shared)
 fi

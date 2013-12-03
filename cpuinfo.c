@@ -206,3 +206,10 @@ PHP_FUNCTION(SDL_GetSystemRAM)
 }
 /* }}} */
 
+/* {{{ MINIT */
+PHP_MINIT_FUNCTION(sdl2_cpuinfo)
+{
+	return SUCCESS;
+}
+/* }}} */
+

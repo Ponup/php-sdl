@@ -22,6 +22,7 @@
 #include "cpuinfo.h"
 #include "rect.h"
 #include "video.h"
+#include "window.h"
 
 #ifdef COMPILE_DL_SDL2
 ZEND_GET_MODULE(sdl2)
@@ -47,8 +48,10 @@ PHP_MINIT_FUNCTION(sdl2)
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
 
 	if (1
+		&& SUCCESS == PHP_MINIT_CALL(sdl2_cpuinfo)
+		&& SUCCESS == PHP_MINIT_CALL(sdl2_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl2_video)
-		&& SUCCESS == PHP_MINIT_CALL(sdl2_rect)) {
+		&& SUCCESS == PHP_MINIT_CALL(sdl2_window)) {
 		return SUCCESS;
 	}
 	return FAILURE;
