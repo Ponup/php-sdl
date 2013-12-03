@@ -20,12 +20,15 @@
 
 #include "php_sdl2.h"
 zend_class_entry *php_sdl_rect_ce;
-
 static zend_object_handlers php_sdl_rect_handlers;
-
 struct php_sdl_rect {
 	zend_object   zo;
-	SDL_Rect      rect;
+};
+
+zend_class_entry *php_sdl_point_ce;
+static zend_object_handlers php_sdl_point_handlers;
+struct php_sdl_point {
+	zend_object   zo;
 };
 
 
@@ -36,6 +39,13 @@ void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
 	zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h TSRMLS_CC);
+}
+
+void sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
+{
+	object_init_ex(value, php_sdl_rect_ce);
+	zend_update_property_long(php_sdl_rect_ce, value, "x", 1, pt->x TSRMLS_CC);
+	zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y TSRMLS_CC);
 }
 
 void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
@@ -52,7 +62,17 @@ void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 	rect->h = (int)Z_LVAL_P(val);
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 6)
+void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
+{
+	zval *val;
+
+	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_DC);
+	pt->x = (int)Z_LVAL_P(val);
+	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_DC);
+	pt->y = (int)Z_LVAL_P(val);
+}
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, x)
        ZEND_ARG_INFO(0, y)
        ZEND_ARG_INFO(0, w)
@@ -65,11 +85,8 @@ ZEND_END_ARG_INFO()
 */
 static PHP_METHOD(SDL_Rect, __construct)
 {
-//	struct php_sdl_rect *intern;
 	long x, y, w, h;
 	zend_error_handling error_handling;
-
-//	intern = (struct php_sdl_rect *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x, &y, &w, &h)) {
@@ -82,6 +99,33 @@ static PHP_METHOD(SDL_Rect, __construct)
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "w", 1, w TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h TSRMLS_CC);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Point__construct, 0, 0, 2)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Point, __construct(, int x, int y)
+
+ *  \brief A rectangle, with the origin at the upper left.
+*/
+static PHP_METHOD(SDL_Point, __construct)
+{
+	long x, y;
+	zend_error_handling error_handling;
+
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y)) {
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		return;
+	}
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x TSRMLS_CC);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
 }
 /* }}} */
 
@@ -221,7 +265,8 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
-/**
+/* {{{ proto bool SDLCALL SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
+
  *  \brief Calculate a minimal rectangle enclosing a set of points
  *
  *  \return SDL_TRUE if any points were within the clipping rect
@@ -229,7 +274,37 @@ PHP_FUNCTION(SDL_UnionRect)
                                                     int count,
                                                     const SDL_Rect * clip,
                                                     SDL_Rect * result);
+PHP_FUNCTION(SDL_EnclosePoints)
+{
+	zval *object, *z_x1, *z_x2, *z_y1, *z_y2;
+	SDL_Rect rect;
+	int x1, y1, x2, y2;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_rect(object, &rect);
+	convert_to_long_ex(&z_x1);
+	convert_to_long_ex(&z_y1);
+	convert_to_long_ex(&z_x2);
+	convert_to_long_ex(&z_y2);
+	x1 = (int)Z_LVAL_P(z_x1);
+	y1 = (int)Z_LVAL_P(z_y1);
+	x2 = (int)Z_LVAL_P(z_x2);
+	y2 = (int)Z_LVAL_P(z_y2);
+
+	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2)) {
+		Z_LVAL_P(z_x1) = x1;
+		Z_LVAL_P(z_y1) = y1;
+		Z_LVAL_P(z_x2) = x2;
+		Z_LVAL_P(z_y2) = y2;
+		RETURN_TRUE;
+	}
+	RETURN_FALSE;
+}
  */
+
+/* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
        ZEND_ARG_INFO(0, rect)
@@ -287,40 +362,10 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 /* }}} */
 
 
-/* {{{ php_sdl_rect_free
-	 */
-static void php_sdl_rect_free(void *object TSRMLS_DC)
-{
-	struct php_sdl_rect *intern = (struct php_sdl_rect *) object;
-
-	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
-}
-/* }}} */
-
-/* {{{ php_sdl_rect_new
- */
-static zend_object_value php_sdl_rect_new(zend_class_entry *class_type TSRMLS_DC)
-{
-	zend_object_value retval;
-	struct php_sdl_rect *intern;
-
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
-
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	object_properties_init(&intern->zo, class_type);
-
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_rect_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_rect_handlers;
-
-	return retval;
-}
-/* }}} */
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+/* {{{ php_sdl_rect_methods[] */
 static const zend_function_entry php_sdl_rect_methods[] = {
 	PHP_ME(SDL_Rect, __construct,     arginfo_SDL_Rect__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
@@ -333,6 +378,15 @@ static const zend_function_entry php_sdl_rect_methods[] = {
 
 	PHP_FE_END
 };
+/* }}} */
+
+/* {{{ php_sdl_rect_methods[] */
+static const zend_function_entry php_sdl_point_methods[] = {
+	PHP_ME(SDL_Point, __construct,     arginfo_SDL_Point__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+
+	PHP_FE_END
+};
+/* }}} */
 
 /* {{{ sdl2_functions[] */
 zend_function_entry sdl2_rect_functions[] = {
@@ -350,12 +404,15 @@ zend_function_entry sdl2_rect_functions[] = {
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl2_rect)
 {
-	zend_class_entry ce_rect;
+	zend_class_entry ce_rect, ce_point;
 
 	INIT_CLASS_ENTRY(ce_rect, "SDL_Rect", php_sdl_rect_methods);
-	ce_rect.create_object = php_sdl_rect_new;
 	php_sdl_rect_ce = zend_register_internal_class(&ce_rect TSRMLS_CC);
 	memcpy(&php_sdl_rect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+
+	INIT_CLASS_ENTRY(ce_point, "SDL_Point", php_sdl_point_methods);
+	php_sdl_point_ce = zend_register_internal_class(&ce_point TSRMLS_CC);
+	memcpy(&php_sdl_point_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	zend_declare_property_long(php_sdl_rect_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_rect_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
@@ -364,3 +421,5 @@ PHP_MINIT_FUNCTION(sdl2_rect)
 
 	return (zend_register_functions(NULL, sdl2_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
+/* }}} */
+
