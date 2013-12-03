@@ -221,21 +221,71 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
+/**
+ *  \brief Calculate a minimal rectangle enclosing a set of points
+ *
+ *  \return SDL_TRUE if any points were within the clipping rect
+ extern DECLSPEC SDL_bool SDLCALL SDL_EnclosePoints(const SDL_Point * points,
+                                                    int count,
+                                                    const SDL_Rect * clip,
+                                                    SDL_Rect * result);
+ */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
+       ZEND_ARG_INFO(0, rect)
+       ZEND_ARG_INFO(1, X1)
+       ZEND_ARG_INFO(1, Y1)
+       ZEND_ARG_INFO(1, X2)
+       ZEND_ARG_INFO(1, Y2)
 ZEND_END_ARG_INFO()
 
-static const zend_function_entry php_sdl_rect_methods[] = {
-	PHP_ME(SDL_Rect, __construct,     arginfo_SDL_Rect__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_IntersectLine, 0, 0, 4)
+       ZEND_ARG_INFO(1, X1)
+       ZEND_ARG_INFO(1, Y1)
+       ZEND_ARG_INFO(1, X2)
+       ZEND_ARG_INFO(1, Y2)
+ZEND_END_ARG_INFO()
 
-	PHP_FALIAS(Empty,            SDL_RectEmpty,          arginfo_none)
-	PHP_FALIAS(Equal,            SDL_RectEquals,         arginfo_SDL_Rect)
-	PHP_FALIAS(HasIntersection,  SDL_HasIntersection,    arginfo_SDL_Rect)
-	PHP_FALIAS(Intersect,        SDL_IntersectRect,      arginfo_SDL_Rect_Result)
-	PHP_FALIAS(Union,            SDL_UnionRect,          arginfo_SDL_Rect_Result)
+/* {{{ proto bool SDL_IntersectRectAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
 
-	PHP_FE_END
-};
+ *  \brief Calculate the intersection of a rectangle and line segment.
+ *
+ *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
+ extern DECLSPEC SDL_bool SDLCALL SDL_IntersectRectAndLine(const SDL_Rect *
+                                                           rect, int *X1,
+                                                           int *Y1, int *X2,
+                                                           int *Y2);
+ */
+PHP_FUNCTION(SDL_IntersectRectAndLine)
+{
+	zval *object, *z_x1, *z_x2, *z_y1, *z_y2;
+	SDL_Rect rect;
+	int x1, y1, x2, y2;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_rect(object, &rect);
+	convert_to_long_ex(&z_x1);
+	convert_to_long_ex(&z_y1);
+	convert_to_long_ex(&z_x2);
+	convert_to_long_ex(&z_y2);
+	x1 = (int)Z_LVAL_P(z_x1);
+	y1 = (int)Z_LVAL_P(z_y1);
+	x2 = (int)Z_LVAL_P(z_x2);
+	y2 = (int)Z_LVAL_P(z_y2);
+
+	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2)) {
+		Z_LVAL_P(z_x1) = x1;
+		Z_LVAL_P(z_y1) = y1;
+		Z_LVAL_P(z_x2) = x2;
+		Z_LVAL_P(z_y2) = y2;
+		RETURN_TRUE;
+	}
+	RETURN_FALSE;
+}
+/* }}} */
+
 
 /* {{{ php_sdl_rect_free
 	 */
@@ -268,6 +318,22 @@ static zend_object_value php_sdl_rect_new(zend_class_entry *class_type TSRMLS_DC
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+static const zend_function_entry php_sdl_rect_methods[] = {
+	PHP_ME(SDL_Rect, __construct,     arginfo_SDL_Rect__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+
+	PHP_FALIAS(Empty,            SDL_RectEmpty,            arginfo_none)
+	PHP_FALIAS(Equal,            SDL_RectEquals,           arginfo_SDL_Rect)
+	PHP_FALIAS(HasIntersection,  SDL_HasIntersection,      arginfo_SDL_Rect)
+	PHP_FALIAS(Intersect,        SDL_IntersectRect,        arginfo_SDL_Rect_Result)
+	PHP_FALIAS(Union,            SDL_UnionRect,            arginfo_SDL_Rect_Result)
+	PHP_FALIAS(IntersectLine,    SDL_IntersectRectAndLine, arginfo_SDL_Rect_IntersectLine)
+
+	PHP_FE_END
+};
+
 /* {{{ sdl2_functions[] */
 zend_function_entry sdl2_rect_functions[] = {
 	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
@@ -275,6 +341,7 @@ zend_function_entry sdl2_rect_functions[] = {
 	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
 	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
 	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
+	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
 	ZEND_FE_END
 };
 /* }}} */

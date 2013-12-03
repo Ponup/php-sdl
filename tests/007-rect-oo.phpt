@@ -43,6 +43,13 @@ var_dump($r2->Union($r3, $x));
 var_dump($x); unset($x);
 var_dump($r2->Union($r4, $x));
 var_dump($x); unset($x);
+
+echo "+++ InterLine\n";
+$x1=0; $y1=10; $x2=40; $y2=30;
+var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
+var_dump($x1, $y1, $x2, $y2);
+$x1=0; $y1=2; $x2=40; $y2=6;
+var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
 ?>
 Done
 --EXPECTF--
@@ -116,5 +123,12 @@ object(SDL_Rect)#6 (4) {
   ["h"]=>
   int(20)
 }
++++ InterLine
+bool(true)
+int(10)
+int(15)
+int(29)
+int(24)
+bool(false)
 Done
 

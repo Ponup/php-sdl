@@ -29,8 +29,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <license>PHP 3.01</license>
   <notes>
 - initial version
-- init/quit functions
-- cpuinfo functions
+- new class: SDL_Window
+- new class: SDL_Rect
   </notes>
   <contents>
     <dir name="/">
