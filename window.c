@@ -28,14 +28,39 @@ struct php_sdl_window {
 	SDL_Window   *window;
 };
 
+#define FETCH_WINDOW(__ptr, __id, __check) \
+{ \
+        intern = (struct php_sdl_window *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = intern->window; \
+        if (__check && !__ptr) {\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                RETURN_FALSE;\
+        }\
+}
 
-/**
+
+/* {{{ proto void SDL_GetWindowDisplayIndex(SDL_Window window)
+
  *  \brief Get the display index associated with a window.
  *
  *  \return the display index of the display containing the center of the
  *          window, or -1 on error.
  extern DECLSPEC int SDLCALL SDL_GetWindowDisplayIndex(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_GetWindowDisplayIndex)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	RETURN_LONG(SDL_GetWindowDisplayIndex(window));
+}
+/* }}} */
 
 /**
  *  \brief Set the display mode used when a fullscreen window is visible.
@@ -683,16 +708,6 @@ static PHP_METHOD(SDL_Window, __construct)
 /* }}} */
 
 
-#define FETCH_WINDOW(__ptr, __id, __check) \
-{ \
-        intern = (struct php_sdl_window *)zend_object_store_get_object(__id TSRMLS_CC);\
-        __ptr = intern->window; \
-        if (__check && !__ptr) {\
-                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
-                RETURN_FALSE;\
-        }\
-}
-
 /* {{{ proto SDL_UpdateWindowSurface(SDL_Window window)
 
  *  \brief Copy the window surface to the screen.
@@ -812,6 +827,7 @@ zend_function_entry sdl2_window_functions[] = {
 	ZEND_FE(SDL_UpdateWindowSurface,		arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowTitle,				arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowTitle,				arginfo_SDL_SetWindowTitle)
+	ZEND_FE(SDL_GetWindowDisplayIndex,		arginfo_SDL_Window)
 	ZEND_FE_END
 };
 /* }}} */
@@ -823,6 +839,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_window_none)
 	PHP_FALIAS(GetTitle,         SDL_GetWindowTitle,          arginfo_window_none)
 	PHP_FALIAS(SetTitle,         SDL_SetWindowTitle,          arginfo_SDL_Window_SetTitle)
+	PHP_FALIAS(GetDisplayIndex,  SDL_GetWindowDisplayIndex,   arginfo_window_none)
 
 	PHP_FE_END
 };
