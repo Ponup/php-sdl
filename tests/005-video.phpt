@@ -56,34 +56,34 @@ object(SDL_Rect)#1 (4) {
   int(1050)
 }
 SDL_GetNumDisplayModes(0):int(%d)
-SDL_GetDisplayMode(0,0):array(4) {
+SDL_GetDisplayMode(0,0):object(SDL_DisplayMode)#2 (4) {
   ["format"]=>
   int(%d)
   ["w"]=>
   int(%d)
   ["h"]=>
   int(%d)
-  ["refresh"]=>
+  ["refresh_rate"]=>
   int(%d)
 }
-SDL_GetDesktopDisplayMode(0):array(4) {
+SDL_GetDesktopDisplayMode(0):object(SDL_DisplayMode)#2 (4) {
   ["format"]=>
   int(%d)
   ["w"]=>
   int(%d)
   ["h"]=>
   int(%d)
-  ["refresh"]=>
+  ["refresh_rate"]=>
   int(%d)
 }
-SDL_GetCurrentDisplayMode(0):array(4) {
+SDL_GetCurrentDisplayMode(0):object(SDL_DisplayMode)#2 (4) {
   ["format"]=>
   int(%d)
   ["w"]=>
   int(%d)
   ["h"]=>
   int(%d)
-  ["refresh"]=>
+  ["refresh_rate"]=>
   int(%d)
 }
 NULL

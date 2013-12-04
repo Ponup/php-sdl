@@ -22,13 +22,12 @@
 #include "rect.h"
 
 zend_class_entry *php_sdl_window_ce;
-
 static zend_object_handlers php_sdl_window_handlers;
-
 struct php_sdl_window {
 	zend_object   zo;
 	SDL_Window   *window;
 };
+
 
 /**
  *  \brief Get the display index associated with a window.
