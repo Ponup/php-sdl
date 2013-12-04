@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("sdl_smpeg", "for sdl_smpeg support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("sdl_smpeg", "enable sdl_smpeg support", "no");
+
+if (PHP_SDL_SMPEG != "no") {
+	EXTENSION("sdl_smpeg", "sdl_smpeg.c");
+}
+

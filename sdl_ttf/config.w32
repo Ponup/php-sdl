@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("sdl_ttf", "for sdl_ttf support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("sdl_ttf", "enable sdl_ttf support", "no");
+
+if (PHP_SDL_TTF != "no") {
+	EXTENSION("sdl_ttf", "sdl_ttf.c");
+}
+

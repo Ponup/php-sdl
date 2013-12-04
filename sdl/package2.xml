@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+	<name>sdl</name>
+	<channel>pecl.php.net</channel>
+	<summary>Simple DirectMedia Layer for PHP</summary>
+	<description>This extension allows you to develop multimedia applications with PHP using the complete SDL library API.</description>
+	<lead>
+		<name>Santiago Lizardo</name>
+		<user>santiagolizardo</user>
+		<email>santiagolizardo@php.net</email>
+		<active>yes</active>
+	</lead>
+	<date>2013-12-02</date>
+	<time>21:00:00</time>
+	<version>     
+		<release>0.9.2</release>
+		<api>0.9.2</api>
+	</version>
+	<stability>
+		<release>beta</release>
+		<api>beta</api>
+	</stability>
+	<license uri="http://www.php.net/license">PHP License</license>
+	<notes>
+	Code improvements and bugfixes mostly authorship of remi@php.net:
+	- Improved reflection (arg info).
+	- Minor efforts towards C89 compatibility.
+	- Deprecated PHP functions are not longer used.
+	- Report SDL headers/library version in phpinfo.
+	</notes>
+	<contents>
+		<dir name="/">
+			<file role="src" name="config.m4" />
+			<file role="src" name="php_sdl.h" />
+			<file role="src" name="php_sdl.c" />
+			<file role="src" name="php_sdl_cdrom.h" />
+			<file role="src" name="php_sdl_cdrom.c" />
+			<file role="src" name="php_sdl_event.h" />
+			<file role="src" name="php_sdl_event.c" />
+			<file role="src" name="php_sdl_joystick.h" />
+			<file role="src" name="php_sdl_joystick.c" />
+			<file role="src" name="php_sdl_thread.h" />
+			<file role="src" name="php_sdl_thread.c" />
+			<file role="src" name="php_sdl_time.h" />
+			<file role="src" name="php_sdl_time.c" />
+			<file role="src" name="php_sdl_wm.h" />
+			<file role="src" name="php_sdl_wm.c" />
+			<file role="src" name="php_sdl_audio.h" />
+			<file role="src" name="php_sdl_audio.c" />
+			<file role="doc" name="CREDITS" />
+			<file role="doc" name="LICENSE" />
+			<file role="doc" name="examples/keyboard-events.php" />
+			<file role="test" name="tests/001.phpt" />
+		</dir>
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.3</min>
+			</php>
+			<pearinstaller>
+				<min>1.9</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<providesextension>sdl</providesextension>
+	<extsrcrelease />
+	<changelog>
+		<release>
+			<date>2013-11-25</date>
+			<time>21:00:00</time>
+			<version>     
+				<release>0.9.1</release>
+				<api>0.9.1</api>
+			</version>
+			<stability>
+				<release>beta</release>
+				<api>beta</api>
+			</stability>
+			<license uri="http://www.php.net/license">PHP License</license>
+			<notes>
+			- Improved config.m4 files (thanks to remi@php.net).
+			- Removed all the deprecated zend_get_parameters_ex calls.
+			- Suppressed the warnings on php_sdl_audio.h file.
+			</notes>
+		</release>
+		<release>
+			<date>2013-11-24</date>
+			<time>21:00:00</time>
+			<version>     
+				<release>0.9.0</release>
+				<api>0.9.0</api>
+			</version>
+			<stability>
+				<release>beta</release>
+				<api>beta</api>
+			</stability>
+			<license uri="http://www.php.net/license">PHP License</license>
+			<notes>Initial PECL release</notes>
+		</release>
+	</changelog>
+</package>
