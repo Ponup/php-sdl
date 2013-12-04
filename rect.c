@@ -401,7 +401,7 @@ static const zend_function_entry php_sdl_rect_methods[] = {
 };
 /* }}} */
 
-/* {{{ php_sdl_rect_methods[] */
+/* {{{ php_sdl_point_methods[] */
 static const zend_function_entry php_sdl_point_methods[] = {
 	PHP_ME(SDL_Point, __construct,     arginfo_SDL_Point__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
@@ -432,14 +432,17 @@ PHP_MINIT_FUNCTION(sdl2_rect)
 	php_sdl_rect_ce = zend_register_internal_class(&ce_rect TSRMLS_CC);
 	memcpy(&php_sdl_rect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	INIT_CLASS_ENTRY(ce_point, "SDL_Point", php_sdl_point_methods);
-	php_sdl_point_ce = zend_register_internal_class(&ce_point TSRMLS_CC);
-	memcpy(&php_sdl_point_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-
 	zend_declare_property_long(php_sdl_rect_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_rect_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_rect_ce, "w", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_rect_ce, "h", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+
+	INIT_CLASS_ENTRY(ce_point, "SDL_Point", php_sdl_point_methods);
+	php_sdl_point_ce = zend_register_internal_class(&ce_point TSRMLS_CC);
+	memcpy(&php_sdl_point_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+
+	zend_declare_property_long(php_sdl_point_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_point_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return (zend_register_functions(NULL, sdl2_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
