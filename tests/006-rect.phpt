@@ -2,7 +2,7 @@
 rect group test, procedural mode
 --SKIPIF--
 <?php
-if (!extension_loaded("sdl2")) die("skip: SDL2 extension not loaded");
+if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
 ?>
 --FILE--
 <?php

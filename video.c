@@ -12,13 +12,14 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#include "php_sdl2.h"
+#include "php_sdl.h"
 #include "rect.h"
 
 zend_class_entry *php_sdl_displaymode_ce;
@@ -421,8 +422,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_dysplayindex, 0, 0, 1)
        ZEND_ARG_INFO(0, displayIndex)
 ZEND_END_ARG_INFO()
 
-/* {{{ sdl2_functions[] */
-zend_function_entry sdl2_video_functions[] = {
+/* {{{ sdl_functions[] */
+zend_function_entry sdl_video_functions[] = {
 	ZEND_FE(SDL_GetNumVideoDrivers,			arginfo_video_none)
 	ZEND_FE(SDL_GetVideoDriver,				arginfo_SDL_GetVideoDriver)
 	ZEND_FE(SDL_VideoInit,					arginfo_SDL_VideoInit)
@@ -447,7 +448,7 @@ static const zend_function_entry php_sdl_displaymode_methods[] = {
 /* }}} */
 
 /* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl2_video)
+PHP_MINIT_FUNCTION(sdl_video)
 {
 	zend_class_entry ce_displaymode;
 
@@ -460,7 +461,7 @@ PHP_MINIT_FUNCTION(sdl2_video)
 	zend_declare_property_long(php_sdl_displaymode_ce, "h",            1,                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_displaymode_ce, "refresh_rate", sizeof("refresh_rate")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	return (zend_register_functions(NULL, sdl2_video_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return (zend_register_functions(NULL, sdl_video_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
 

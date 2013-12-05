@@ -12,13 +12,14 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#include "php_sdl2.h"
+#include "php_sdl.h"
 #include "rect.h"
 
 zend_class_entry *php_sdl_window_ce;
@@ -820,8 +821,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-/* {{{ sdl2_window_functions[] */
-zend_function_entry sdl2_window_functions[] = {
+/* {{{ sdl_window_functions[] */
+zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_CreateWindow,				arginfo_SDL_CreateWindow)
 	ZEND_FE(SDL_DestroyWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_UpdateWindowSurface,		arginfo_SDL_Window)
@@ -887,7 +888,7 @@ static zend_object_value php_sdl_window_new(zend_class_entry *class_type TSRMLS_
 	zend_declare_class_constant_long(php_sdl_window_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
 
 /* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl2_window)
+PHP_MINIT_FUNCTION(sdl_window)
 {
 	zend_class_entry ce_window;
 
@@ -911,5 +912,5 @@ PHP_MINIT_FUNCTION(sdl2_window)
 	REGISTER_WINDOW_CLASS_CONST_LONG("FOREIGN",            SDL_WINDOW_FOREIGN);
 	REGISTER_WINDOW_CLASS_CONST_LONG("ALLOW_HIGHDPI",      SDL_WINDOW_ALLOW_HIGHDPI);
 
-	return (zend_register_functions(NULL, sdl2_window_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return (zend_register_functions(NULL, sdl_window_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

@@ -12,14 +12,15 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#ifndef PHP_SDL2_RECT_H
-#define PHP_SDL2_RECT_H
+#ifndef PHP_SDL_RECT_H
+#define PHP_SDL_RECT_H
 
 #ifdef  __cplusplus
 extern "C" {
@@ -34,5 +35,5 @@ PHP_MINIT_FUNCTION(sdl2_rect);
 } // extern "C" 
 #endif
 
-#endif /* PHP_SDL2_RECT_H */
+#endif /* PHP_SDL_RECT_H */
 

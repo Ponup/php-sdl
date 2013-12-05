@@ -12,26 +12,27 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#include "php_sdl2.h"
+#include "php_sdl.h"
 #include "cpuinfo.h"
 #include "rect.h"
 #include "video.h"
 #include "window.h"
 
-#ifdef COMPILE_DL_SDL2
-ZEND_GET_MODULE(sdl2)
+#ifdef COMPILE_DL_SDL
+ZEND_GET_MODULE(sdl)
 #endif
 
 #define PHP_MINIT_CALL(func) PHP_MINIT(func)(INIT_FUNC_ARGS_PASSTHRU)
 
 /* {{{ PHP_MINIT_FUNCTION */
-PHP_MINIT_FUNCTION(sdl2)
+PHP_MINIT_FUNCTION(sdl)
 {
 /*
  *  These are the flags which may be passed to SDL_Init().  You should
@@ -48,10 +49,10 @@ PHP_MINIT_FUNCTION(sdl2)
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
 
 	if (1
-		&& SUCCESS == PHP_MINIT_CALL(sdl2_cpuinfo)
-		&& SUCCESS == PHP_MINIT_CALL(sdl2_rect)
-		&& SUCCESS == PHP_MINIT_CALL(sdl2_video)
-		&& SUCCESS == PHP_MINIT_CALL(sdl2_window)) {
+		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_window)) {
 		return SUCCESS;
 	}
 	return FAILURE;
@@ -60,7 +61,7 @@ PHP_MINIT_FUNCTION(sdl2)
 
 
 /* {{{ PHP_MSHUTDOWN_FUNCTION */
-PHP_MSHUTDOWN_FUNCTION(sdl2)
+PHP_MSHUTDOWN_FUNCTION(sdl)
 {
 	return SUCCESS;
 }
@@ -68,16 +69,16 @@ PHP_MSHUTDOWN_FUNCTION(sdl2)
 
 
 /* {{{ PHP_MINFO_FUNCTION */
-PHP_MINFO_FUNCTION(sdl2)
+PHP_MINFO_FUNCTION(sdl)
 {
 	SDL_version ver;
 	char buf[64];
 
 
 	php_info_print_table_start();
-	php_info_print_table_header(2, "SDL2 support", "enabled");
+	php_info_print_table_header(2, "SDL support", "enabled");
 
-	php_info_print_table_row(2, "SDL2 module version", PHP_SDL2_VERSION);
+	php_info_print_table_row(2, "SDL module version", PHP_SDL_VERSION);
 
 	/* buildtime headers version */
 	SDL_VERSION(&ver);
@@ -93,7 +94,7 @@ PHP_MINFO_FUNCTION(sdl2)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl2_none, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Init, 0, 0, 0)
@@ -197,11 +198,11 @@ PHP_FUNCTION(SDL_Quit)
 }
 /* }}} */
 
-/* {{{ sdl2_functions[] */
-zend_function_entry sdl2_functions[] = {
+/* {{{ sdl_functions[] */
+zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_Init,						arginfo_SDL_Init)
 	ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
-	ZEND_FE(SDL_Quit,						arginfo_sdl2_none)
+	ZEND_FE(SDL_Quit,						arginfo_sdl_none)
 	ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
 	ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
 	ZEND_FE_END
@@ -209,18 +210,18 @@ zend_function_entry sdl2_functions[] = {
 /* }}} */
 
 
-/* {{{ sdl2_module_entry
+/* {{{ sdl_module_entry
  */
-zend_module_entry sdl2_module_entry = {
+zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
-	"SDL2",
-	sdl2_functions,
-	PHP_MINIT(sdl2),     /* Replace with NULL if there is nothing to do at php startup   */ 
-	PHP_MSHUTDOWN(sdl2), /* Replace with NULL if there is nothing to do at php shutdown  */
+	"SDL",
+	sdl_functions,
+	PHP_MINIT(sdl),     /* Replace with NULL if there is nothing to do at php startup   */ 
+	PHP_MSHUTDOWN(sdl), /* Replace with NULL if there is nothing to do at php shutdown  */
 	NULL, /* RINIT */
 	NULL, /* RSHUTDOWN */
-	PHP_MINFO(sdl2),
-	PHP_SDL2_VERSION, 
+	PHP_MINFO(sdl),
+	PHP_SDL_VERSION, 
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */

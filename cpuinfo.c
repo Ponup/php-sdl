@@ -12,13 +12,14 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#include "php_sdl2.h"
+#include "php_sdl.h"
 
 /* {{{ proto void SDL_GetCPUCount(void )
 
@@ -210,8 +211,8 @@ PHP_FUNCTION(SDL_GetSystemRAM)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_cpuinfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ sdl2_cpuinfo_functions[] */
-zend_function_entry sdl2_cpuinfo_functions[] = {
+/* {{{ sdl_cpuinfo_functions[] */
+zend_function_entry sdl_cpuinfo_functions[] = {
 	ZEND_FE(SDL_GetCPUCount,				arginfo_cpuinfo_none)
 	ZEND_FE(SDL_GetCPUCacheLineSize,		arginfo_cpuinfo_none)
 	ZEND_FE(SDL_HasRDTSC,					arginfo_cpuinfo_none)
@@ -229,9 +230,9 @@ zend_function_entry sdl2_cpuinfo_functions[] = {
 /* }}} */
 
 /* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl2_cpuinfo)
+PHP_MINIT_FUNCTION(sdl_cpuinfo)
 {
-	return (zend_register_functions(NULL, sdl2_cpuinfo_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return (zend_register_functions(NULL, sdl_cpuinfo_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
 

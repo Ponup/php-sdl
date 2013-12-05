@@ -2,10 +2,10 @@ dnl
 dnl $ Id: $
 dnl
 
-PHP_ARG_ENABLE(sdl2, whether to enable sdl2 functions,
-[  --enable-sdl2         Enable sdl2 support])
+PHP_ARG_ENABLE(sdl, whether to enable SDL functions,
+[  --enable-sdl         Enable SDL support])
 
-if test "$PHP_SDL2" != "no"; then
+if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
   export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2"
 
@@ -27,12 +27,12 @@ if test "$PHP_SDL2" != "no"; then
     SDL2_VERSION=`$SDL2_CONFIG --version`
     AC_MSG_RESULT(using SDL2 version $SDL2_VERSION)
     PHP_EVAL_INCLINE(`$SDL2_CONFIG --cflags`)
-    PHP_EVAL_LIBLINE(`$SDL2_CONFIG --libs`, SDL2_SHARED_LIBADD)
+    PHP_EVAL_LIBLINE(`$SDL2_CONFIG --libs`, SDL_SHARED_LIBADD)
   else
     AC_MSG_ERROR(Cannot find sdl2-config)
   fi
 
-  PHP_SUBST(SDL2_SHARED_LIBADD)
+  PHP_SUBST(SDL_SHARED_LIBADD)
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
   sources="
@@ -41,5 +41,5 @@ rect.c
 video.c
 window.c
 "
-  PHP_NEW_EXTENSION(sdl2, sdl2.c $sources, $ext_shared)
+  PHP_NEW_EXTENSION(sdl, sdl.c $sources, $ext_shared)
 fi

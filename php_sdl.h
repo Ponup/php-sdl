@@ -12,14 +12,15 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#ifndef PHP_SDL2_H
-#define PHP_SDL2_H
+#ifndef PHP_SDL_H
+#define PHP_SDL_H
 
 #ifdef  __cplusplus
 extern "C" {
@@ -32,8 +33,7 @@ extern "C" {
 #include <php.h>
 #include <zend_exceptions.h>
 
-#ifdef HAVE_SDL2
-#define PHP_SDL2_VERSION "0.1.0"
+#define PHP_SDL_VERSION "2.0.0-dev"
 
 #include <SDL.h>
 
@@ -48,20 +48,19 @@ extern "C" {
 extern "C" {
 #endif
 
-extern zend_module_entry sdl2_module_entry;
-#define phpext_sdl2_ptr &sdl2_module_entry
+extern zend_module_entry sdl_module_entry;
 
 #ifdef PHP_WIN32
-#define PHP_SDL2_API __declspec(dllexport)
+#define PHP_SDL_API __declspec(dllexport)
 #else
-#define PHP_SDL2_API
+#define PHP_SDL_API
 #endif
 
-PHP_MINIT_FUNCTION(sdl2);
-PHP_MSHUTDOWN_FUNCTION(sdl2);
-PHP_RINIT_FUNCTION(sdl2);
-PHP_RSHUTDOWN_FUNCTION(sdl2);
-PHP_MINFO_FUNCTION(sdl2);
+PHP_MINIT_FUNCTION(sdl);
+PHP_MSHUTDOWN_FUNCTION(sdl);
+PHP_RINIT_FUNCTION(sdl);
+PHP_RSHUTDOWN_FUNCTION(sdl);
+PHP_MINFO_FUNCTION(sdl);
 
 #ifdef ZTS
 #include "TSRM.h"
@@ -76,9 +75,8 @@ PHP_MINFO_FUNCTION(sdl2);
 } // extern "C" 
 #endif
 
-#endif /* PHP_HAVE_SDL2 */
 
-#endif /* PHP_SDL2_H */
+#endif /* PHP_SDL_H */
 
 
 /*

@@ -12,24 +12,25 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#ifndef PHP_SDL2_WINDOW_H
-#define PHP_SDL2_WINDOW_H
+#ifndef PHP_SDL_WINDOW_H
+#define PHP_SDL_WINDOW_H
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-PHP_MINIT_FUNCTION(sdl2_window);
+PHP_MINIT_FUNCTION(sdl_window);
 
 #ifdef  __cplusplus
 } // extern "C" 
 #endif
 
-#endif /* PHP_SDL2_WINDOW_H */
+#endif /* PHP_SDL_WINDOW_H */
 

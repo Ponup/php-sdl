@@ -12,13 +12,14 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Authors: Remi Collet <remi@php.net>                                  |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
 /* $ Id: $ */ 
 
-#include "php_sdl2.h"
+#include "php_sdl.h"
 zend_class_entry *php_sdl_rect_ce;
 static zend_object_handlers php_sdl_rect_handlers;
 struct php_sdl_rect {
@@ -409,8 +410,8 @@ static const zend_function_entry php_sdl_point_methods[] = {
 };
 /* }}} */
 
-/* {{{ sdl2_functions[] */
-zend_function_entry sdl2_rect_functions[] = {
+/* {{{ sdl_functions[] */
+zend_function_entry sdl_rect_functions[] = {
 	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
 	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
 	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
@@ -424,7 +425,7 @@ zend_function_entry sdl2_rect_functions[] = {
 
 
 /* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl2_rect)
+PHP_MINIT_FUNCTION(sdl_rect)
 {
 	zend_class_entry ce_rect, ce_point;
 
@@ -444,7 +445,7 @@ PHP_MINIT_FUNCTION(sdl2_rect)
 	zend_declare_property_long(php_sdl_point_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_point_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	return (zend_register_functions(NULL, sdl2_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return (zend_register_functions(NULL, sdl_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
 
