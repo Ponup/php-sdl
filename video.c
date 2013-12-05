@@ -414,6 +414,64 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
  extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
  */
 
+
+/* {{{ proto bool SDL_IsScreenSaverEnabled(void)
+
+ *  \brief Returns whether the screensaver is currently enabled (default on).
+ *
+ *  \sa SDL_EnableScreenSaver()
+ *  \sa SDL_DisableScreenSaver()
+ extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
+ */
+PHP_FUNCTION(SDL_IsScreenSaverEnabled)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	RETURN_BOOL(SDL_IsScreenSaverEnabled());
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_EnableScreenSaver(void)
+
+ *  \brief Allow the screen to be blanked by a screensaver
+ *
+ *  \sa SDL_IsScreenSaverEnabled()
+ *  \sa SDL_DisableScreenSaver()
+ extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
+ */
+PHP_FUNCTION(SDL_EnableScreenSaver)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	SDL_EnableScreenSaver();
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_DisableScreenSaver(void)
+
+ *  \brief Prevent the screen from being blanked by a screensaver
+ *
+ *  \sa SDL_IsScreenSaverEnabled()
+ *  \sa SDL_EnableScreenSaver()
+ extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
+ */
+PHP_FUNCTION(SDL_DisableScreenSaver)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	SDL_DisableScreenSaver();
+}
+/* }}} */
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_video_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -436,6 +494,9 @@ zend_function_entry sdl_video_functions[] = {
 	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
 	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
 	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_IsScreenSaverEnabled,		arginfo_video_none)
+	ZEND_FE(SDL_EnableScreenSaver,			arginfo_video_none)
+	ZEND_FE(SDL_DisableScreenSaver,			arginfo_video_none)
 	ZEND_FE_END
 };
 /* }}} */

@@ -553,31 +553,6 @@ PHP_FUNCTION(SDL_RestoreWindow)
 
 
 /**
- *  \brief Returns whether the screensaver is currently enabled (default on).
- *
- *  \sa SDL_EnableScreenSaver()
- *  \sa SDL_DisableScreenSaver()
- extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
- */
-
-/**
- *  \brief Allow the screen to be blanked by a screensaver
- *
- *  \sa SDL_IsScreenSaverEnabled()
- *  \sa SDL_DisableScreenSaver()
- extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
- */
-
-/**
- *  \brief Prevent the screen from being blanked by a screensaver
- *
- *  \sa SDL_IsScreenSaverEnabled()
- *  \sa SDL_EnableScreenSaver()
- extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
- */
-
-
-/**
  *  \name OpenGL support functions
  */
 /* @{ */

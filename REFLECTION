@@ -1,0 +1,586 @@
+Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
+
+  - Constants [23] {
+    Constant [ integer SDL_INIT_TIMER ] { 1 }
+    Constant [ integer SDL_INIT_AUDIO ] { 16 }
+    Constant [ integer SDL_INIT_VIDEO ] { 32 }
+    Constant [ integer SDL_INIT_JOYSTICK ] { 512 }
+    Constant [ integer SDL_INIT_HAPTIC ] { 4096 }
+    Constant [ integer SDL_INIT_GAMECONTROLLER ] { 8192 }
+    Constant [ integer SDL_INIT_EVENTS ] { 16384 }
+    Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
+    Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer SDL_WINDOW_FULLSCREEN ] { 1 }
+    Constant [ integer SDL_WINDOW_OPENGL ] { 2 }
+    Constant [ integer SDL_WINDOW_SHOWN ] { 4 }
+    Constant [ integer SDL_WINDOW_HIDDEN ] { 8 }
+    Constant [ integer SDL_WINDOW_BORDERLESS ] { 16 }
+    Constant [ integer SDL_WINDOW_RESIZABLE ] { 32 }
+    Constant [ integer SDL_WINDOW_MINIMIZED ] { 64 }
+    Constant [ integer SDL_WINDOW_MAXIMIZED ] { 128 }
+    Constant [ integer SDL_WINDOW_INPUT_GRABBED ] { 256 }
+    Constant [ integer SDL_WINDOW_INPUT_FOCUS ] { 512 }
+    Constant [ integer SDL_WINDOW_MOUSE_FOCUS ] { 1024 }
+    Constant [ integer SDL_WINDOW_FULLSCREEN_DESKTOP ] { 4097 }
+    Constant [ integer SDL_WINDOW_FOREIGN ] { 2048 }
+    Constant [ integer SDL_WINDOW_ALLOW_HIGHDPI ] { 8192 }
+  }
+
+  - Functions {
+    Function [ <internal:SDL> function SDL_Init ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_InitSubSystem ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_Quit ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_QuitSubSystem ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WasInit ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCPUCount ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCPUCacheLineSize ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasRDTSC ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasAltiVec ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasMMX ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_Has3DNow ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE2 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE3 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE41 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE42 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSystemRAM ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_RectEmpty ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RectEquals ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $rectA ]
+        Parameter #1 [ <required> $rectB ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasIntersection ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $rectA ]
+        Parameter #1 [ <required> $rectB ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IntersectRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $rectA ]
+        Parameter #1 [ <required> $rectB ]
+        Parameter #2 [ <required> &$result ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UnionRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $rectA ]
+        Parameter #1 [ <required> $rectB ]
+        Parameter #2 [ <required> &$result ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IntersectRectAndLine ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $rect ]
+        Parameter #1 [ <required> &$X1 ]
+        Parameter #2 [ <required> &$Y1 ]
+        Parameter #3 [ <required> &$X2 ]
+        Parameter #4 [ <required> &$Y2 ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_EnclosePoints ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $point ]
+        Parameter #1 [ <required> $count ]
+        Parameter #2 [ <required> $clip ]
+        Parameter #3 [ <required> &$rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetVideoDriver ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $driverIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VideoInit ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $drivername ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VideoQuit ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCurrentVideoDriver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumVideoDisplays ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayBounds ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> &$rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumDisplayModes ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> $modeIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDesktopDisplayMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCurrentDisplayMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsScreenSaverEnabled ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_EnableScreenSaver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_DisableScreenSaver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateWindow ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $title ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+        Parameter #3 [ <required> $w ]
+        Parameter #4 [ <required> $y ]
+        Parameter #5 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroyWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpdateWindowSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowTitle ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowTitle ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $title ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowDisplayIndex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ShowWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HideWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RaiseWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MaximizeWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MinimizeWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RestoreWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+  }
+
+  - Classes [4] {
+    Class [ <internal:SDL> class SDL_Rect ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $x ]
+        Property [ <default> public $y ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+      }
+
+      - Methods [7] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Empty ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Equal ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $rect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method HasIntersection ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $rect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Intersect ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $rect ]
+            Parameter #1 [ <required> &$result ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Union ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $rect ]
+            Parameter #1 [ <required> &$result ]
+          }
+        }
+
+        Method [ <internal:SDL> public method IntersectLine ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> &$X1 ]
+            Parameter #1 [ <required> &$Y1 ]
+            Parameter #2 [ <required> &$X2 ]
+            Parameter #3 [ <required> &$Y2 ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Point ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [2] {
+        Property [ <default> public $x ]
+        Property [ <default> public $y ]
+      }
+
+      - Methods [1] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_DisplayMode ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $format ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+        Property [ <default> public $refresh_rate ]
+      }
+
+      - Methods [1] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $format ]
+            Parameter #1 [ <required> $w ]
+            Parameter #2 [ <required> $h ]
+            Parameter #3 [ <required> $refresh_rate ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Window ] {
+
+      - Constants [14] {
+        Constant [ integer FULLSCREEN ] { 1 }
+        Constant [ integer OPENGL ] { 2 }
+        Constant [ integer SHOWN ] { 4 }
+        Constant [ integer HIDDEN ] { 8 }
+        Constant [ integer BORDERLESS ] { 16 }
+        Constant [ integer RESIZABLE ] { 32 }
+        Constant [ integer MINIMIZED ] { 64 }
+        Constant [ integer MAXIMIZED ] { 128 }
+        Constant [ integer INPUT_GRABBED ] { 256 }
+        Constant [ integer INPUT_FOCUS ] { 512 }
+        Constant [ integer MOUSE_FOCUS ] { 1024 }
+        Constant [ integer FULLSCREEN_DESKTOP ] { 4097 }
+        Constant [ integer FOREIGN ] { 2048 }
+        Constant [ integer ALLOW_HIGHDPI ] { 8192 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [12] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $title ]
+            Parameter #1 [ <required> $x ]
+            Parameter #2 [ <required> $y ]
+            Parameter #3 [ <required> $w ]
+            Parameter #4 [ <required> $y ]
+            Parameter #5 [ <required> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpdateSurface ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetTitle ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetTitle ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $title ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetDisplayIndex ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Show ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Hide ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Raise ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Maximize ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Minimize ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Restore ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+  }
+}
+
