@@ -34,7 +34,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- initial version for SDL2, using object
+- initial version for SDL2, rewrite from scratch providing procedural style and object oriented style
 - implemented classes:
   SDL_DisplayMode
   SDL_Point
