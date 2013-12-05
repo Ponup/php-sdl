@@ -292,46 +292,143 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
                                                     SDL_bool bordered);
  */
 
-/**
+
+/* {{{ proto void SDL_ShowWindow(SDL_Window window)
+
  *  \brief Show a window.
  *
  *  \sa SDL_HideWindow()
  extern DECLSPEC void SDLCALL SDL_ShowWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_ShowWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_ShowWindow(window);
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_HideWindow(SDL_Window window)
+
  *  \brief Hide a window.
  *
  *  \sa SDL_ShowWindow()
  extern DECLSPEC void SDLCALL SDL_HideWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_HideWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_HideWindow(window);
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_RaiseWindow(SDL_Window window)
+
  *  \brief Raise a window above other windows and set the input focus.
  extern DECLSPEC void SDLCALL SDL_RaiseWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_RaiseWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_RaiseWindow(window);
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_MaximizeWindow(SDL_Window window)
+
  *  \brief Make a window as large as possible.
  *
  *  \sa SDL_RestoreWindow()
  extern DECLSPEC void SDLCALL SDL_MaximizeWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_MaximizeWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_MaximizeWindow(window);
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_MinimizeWindow(SDL_Window window)
+
  *  \brief Minimize a window to an iconic representation.
  *
  *  \sa SDL_RestoreWindow()
  extern DECLSPEC void SDLCALL SDL_MinimizeWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_MinimizeWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_MinimizeWindow(window);
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_RestoreWindow(SDL_Window window)
+
  *  \brief Restore the size and position of a minimized or maximized window.
  *
  *  \sa SDL_MaximizeWindow()
  *  \sa SDL_MinimizeWindow()
  extern DECLSPEC void SDLCALL SDL_RestoreWindow(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_RestoreWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	SDL_RestoreWindow(window);
+}
+/* }}} */
+
 
 /**
  *  \brief Set a window's fullscreen state.
@@ -829,6 +926,12 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowTitle,				arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowTitle,				arginfo_SDL_SetWindowTitle)
 	ZEND_FE(SDL_GetWindowDisplayIndex,		arginfo_SDL_Window)
+	ZEND_FE(SDL_ShowWindow,					arginfo_SDL_Window)
+	ZEND_FE(SDL_HideWindow,					arginfo_SDL_Window)
+	ZEND_FE(SDL_RaiseWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_MaximizeWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_MinimizeWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_RestoreWindow,				arginfo_SDL_Window)
 	ZEND_FE_END
 };
 /* }}} */
@@ -841,6 +944,12 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetTitle,         SDL_GetWindowTitle,          arginfo_window_none)
 	PHP_FALIAS(SetTitle,         SDL_SetWindowTitle,          arginfo_SDL_Window_SetTitle)
 	PHP_FALIAS(GetDisplayIndex,  SDL_GetWindowDisplayIndex,   arginfo_window_none)
+	PHP_FALIAS(Show,             SDL_ShowWindow,              arginfo_window_none)
+	PHP_FALIAS(Hide,             SDL_HideWindow,              arginfo_window_none)
+	PHP_FALIAS(Raise,            SDL_RaiseWindow,             arginfo_window_none)
+	PHP_FALIAS(Maximize,         SDL_MaximizeWindow,          arginfo_window_none)
+	PHP_FALIAS(Minimize,         SDL_MinimizeWindow,          arginfo_window_none)
+	PHP_FALIAS(Restore,          SDL_RestoreWindow,           arginfo_window_none)
 
 	PHP_FE_END
 };

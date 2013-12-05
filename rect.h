@@ -29,7 +29,7 @@ extern "C" {
 void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
 void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
 
-PHP_MINIT_FUNCTION(sdl2_rect);
+PHP_MINIT_FUNCTION(sdl_rect);
 
 #ifdef  __cplusplus
 } // extern "C" 
