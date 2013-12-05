@@ -29,7 +29,9 @@ int le_timer;
 
 typedef struct php_sdl_timer {
 	SDL_TimerID id;
-	long caller_thread_id;
+#ifdef ZTS
+	THREAD_T caller_thread_id;
+#endif
     zend_fcall_info *cb_fci;
 } php_sdl_timer_t;
 
@@ -72,7 +74,9 @@ PHP_FUNCTION(sdl_delay)
 Uint32 php_sdl_timer_callback(Uint32 interval, void *param)
 {
 	php_sdl_timer_t *timer_data = (php_sdl_timer_t*)param;
+#ifdef ZTS
 	void ***tsrm_ls = (void ***) ts_resource_ex(0, &(timer_data->caller_thread_id));
+#endif
 	zval *cb_retval = NULL;
 
 	timer_data->cb_fci->retval_ptr_ptr = &cb_retval;
@@ -125,10 +129,8 @@ PHP_FUNCTION(sdl_addtimer)
 	}
 
 	// We need the callers thread id for the callback to occur in the right thread
-#ifdef ZTS 
-	timer_data->caller_thread_id = (long)tsrm_thread_id();
-#else
-	timer_data->caller_thread_id = (long)getpid();
+#ifdef ZTS
+	timer_data->caller_thread_id = tsrm_thread_id();
 #endif
 	
 	timer_data->id = SDL_AddTimer((Uint32)interval, php_sdl_timer_callback, (void*)timer_data);
