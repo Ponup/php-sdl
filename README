@@ -1,3 +1,22 @@
+This branch is a full rewrite of PHP sdl extension for new SDL2.
+
+Standard SDL2 API is available in procedural style:
+
+    $w = SDL_CreateWindow(
+      "Foo window", 500, 50, 350, 300,
+      SDL_WINDOW_SHOWN+SDL_WINDOW_RESIZABLE);
+    SDL_SetWindowTitle($w, "Some new title");
+    SDL_DestroyWindow($w);
+
+And is also available in object oriented style:
+
+    $w = new SDL_Window(
+      "Foo window", 100, 50, 350, 300,
+    SDL_Window::SHOWN|SDL_Window::RESIZABLE);
+    $w->SetTitle("Some new title");
+    unset($w); // will destroy the window
+
+
 BUILDING ON UNIX etc.
 =====================
 
@@ -15,6 +34,7 @@ BUILDING ON WINDOWS
 ===================
 
 Not supported yet.
+
 
 TESTING
 =======
