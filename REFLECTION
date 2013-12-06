@@ -241,6 +241,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $displayIndex ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetClosestDisplayMode ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> $desired_displaymode ]
+        Parameter #2 [ <optional> &$closest_displaymode ]
+      }
+    }
     Function [ <internal:SDL> function SDL_IsScreenSaverEnabled ] {
 
       - Parameters [0] {

@@ -391,7 +391,14 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 }
 /* }}} */
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_INFO(0, desired_displaymode)
+       ZEND_ARG_INFO(1, closest_displaymode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_DisplayMode SDL_GetClosestDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])
+
  *  \brief Get the closest match to the requested display mode.
  *
  *  \param displayIndex The index of display from which mode should be queried.
@@ -413,6 +420,30 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
  *  \sa SDL_GetDisplayMode()
  extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
  */
+PHP_FUNCTION(SDL_GetClosestDisplayMode)
+{
+	long display;
+	zval *z_desired, *z_closest = NULL;
+	SDL_DisplayMode desired, closest;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lO|z", &display, &z_desired, php_sdl_displaymode_ce, &z_closest, php_sdl_displaymode_ce) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	zval_to_sdl_displaymode(z_desired, &desired);
+	if (SDL_GetClosestDisplayMode((int)display, &desired, &closest)==NULL) {
+		RETURN_NULL();
+	}
+
+	if (z_closest) {
+		zval_dtor(z_closest);
+		sdl_displaymode_to_zval(&closest, z_closest TSRMLS_DC);
+
+		RETURN_ZVAL(z_closest, 1, 0);
+	}
+	sdl_displaymode_to_zval(&closest, return_value TSRMLS_DC);
+}
+/* }}} */
 
 
 /* {{{ proto bool SDL_IsScreenSaverEnabled(void)
@@ -494,6 +525,7 @@ zend_function_entry sdl_video_functions[] = {
 	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
 	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
 	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetClosestDisplayMode,		arginfo_SDL_GetClosestDisplayMode)
 	ZEND_FE(SDL_IsScreenSaverEnabled,		arginfo_video_none)
 	ZEND_FE(SDL_EnableScreenSaver,			arginfo_video_none)
 	ZEND_FE(SDL_DisableScreenSaver,			arginfo_video_none)
