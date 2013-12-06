@@ -6,9 +6,10 @@ Done:
 	SDL.h
 	SDL_cpuinfo.h
 	SDL_rect.h
+	SDL_video.h (video)
 
 WIP:
-	SDL_video.h
+	SDL_video.h (window)
 
 TODO:
 	SDL_assert.h

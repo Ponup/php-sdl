@@ -700,15 +700,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
        ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window__construct, 0, 0, 6)
-       ZEND_ARG_INFO(0, title)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-       ZEND_ARG_INFO(0, w)
-       ZEND_ARG_INFO(0, y)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto SDL_Window SDL_CreateWindow(string title, int x, int y, int w, int h, int flags)
 
  *  \brief Create a window with the specified position, dimensions, and flags.
@@ -912,7 +903,7 @@ zend_function_entry sdl_window_functions[] = {
 /* }}} */
 
 static const zend_function_entry php_sdl_window_methods[] = {
-	PHP_ME(SDL_Window, __construct,     arginfo_SDL_Window__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Window, __construct,     arginfo_SDL_CreateWindow, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(UpdateSurface,    SDL_UpdateWindowSurface,     arginfo_window_none)
 	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_window_none)
