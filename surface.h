@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *zval);
+
 PHP_MINIT_FUNCTION(sdl_surface);
 
 #ifdef  __cplusplus

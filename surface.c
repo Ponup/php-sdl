@@ -27,6 +27,7 @@ static zend_object_handlers php_sdl_surface_handlers;
 struct php_sdl_surface {
 	zend_object   zo;
 	SDL_Surface   *surface;
+	Uint32        flags;
 };
 
 #define FETCH_SURFACE(__ptr, __id, __check) \
@@ -39,6 +40,23 @@ struct php_sdl_surface {
         }\
 }
 
+/* {{{ sdl_surface_to_zval */
+zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val)
+{
+	struct php_sdl_surface *intern;
+
+	if (surface) {
+		object_init_ex(z_val, php_sdl_surface_ce);
+		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->surface = surface;
+		/* copy flags to be able to check before access to surface */
+		intern->flags = surface->flags;
+
+		return SUCCESS;
+	}
+	return FAILURE;
+}
+/* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRGBSurface, 0, 0, 6)
        ZEND_ARG_INFO(0, flags)
@@ -75,7 +93,6 @@ ZEND_END_ARG_INFO()
 */
 PHP_FUNCTION(SDL_CreateRGBSurface)
 {
-	struct php_sdl_surface *intern;
 	long flags, width, height, depth, rmask, gmask, bmask, amask;
 	SDL_Surface *surface;
 
@@ -83,11 +100,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 		return;
 	}
 	surface = SDL_CreateRGBSurface(flags, width, height, depth, rmask, gmask, bmask, amask);
-	if (surface) {
-		object_init_ex(return_value, php_sdl_surface_ce);
-		intern = (struct php_sdl_surface *)zend_object_store_get_object(return_value TSRMLS_CC);
-		intern->surface = surface;
-	}
+	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
 
@@ -109,7 +122,10 @@ static PHP_METHOD(SDL_Surface, __construct)
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 
 	intern->surface = SDL_CreateRGBSurface(flags, width, height, depth, rmask, gmask, bmask, amask);
-	if (!intern->surface) {
+	if (intern->surface) {
+		/* copy flags to be able to check before access to surface */
+		intern->flags = intern->surface->flags;
+	} else {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
 	}
 }
@@ -170,7 +186,9 @@ static void php_sdl_surface_free(void *object TSRMLS_DC)
 	struct php_sdl_surface *intern = (struct php_sdl_surface *) object;
 
 	if (intern->surface) {
-		SDL_FreeSurface(intern->surface);
+		if (!(intern->flags & SDL_DONTFREE)) {
+			SDL_FreeSurface(intern->surface);
+		}
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);

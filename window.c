@@ -21,6 +21,7 @@
 
 #include "php_sdl.h"
 #include "rect.h"
+#include "surface.h"
 
 zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
@@ -441,7 +442,8 @@ PHP_FUNCTION(SDL_RestoreWindow)
                                                      Uint32 flags);
  */
 
-/**
+/* {{{ proto void SDL_GetWindowSurface(SDL_Window window)
+
  *  \brief Get the SDL surface associated with the window.
  *
  *  \return The window's framebuffer surface, or NULL on error.
@@ -455,6 +457,22 @@ PHP_FUNCTION(SDL_RestoreWindow)
  *  \sa SDL_UpdateWindowSurfaceRects()
  extern DECLSPEC SDL_Surface * SDLCALL SDL_GetWindowSurface(SDL_Window * window);
  */
+PHP_FUNCTION(SDL_GetWindowSurface)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+	SDL_Surface *surface;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	surface = SDL_GetWindowSurface(window);
+	sdl_surface_to_zval(surface, return_value);
+}
+/* }}} */
 
 
 /**
@@ -898,6 +916,7 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_MaximizeWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_MinimizeWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_RestoreWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowSurface,			arginfo_SDL_Window)
 	ZEND_FE_END
 };
 /* }}} */
@@ -916,6 +935,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(Maximize,         SDL_MaximizeWindow,          arginfo_window_none)
 	PHP_FALIAS(Minimize,         SDL_MinimizeWindow,          arginfo_window_none)
 	PHP_FALIAS(Restore,          SDL_RestoreWindow,           arginfo_window_none)
+	PHP_FALIAS(GetSurface,       SDL_GetWindowSurface,        arginfo_window_none)
 
 	PHP_FE_END
 };

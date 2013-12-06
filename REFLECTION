@@ -365,6 +365,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $window ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetWindowSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
   }
 
   - Classes [5] {
@@ -576,7 +582,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [12] {
+      - Methods [13] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -651,6 +657,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method Restore ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetSurface ] {
 
           - Parameters [0] {
           }
