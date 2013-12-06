@@ -470,7 +470,7 @@ PHP_FUNCTION(SDL_GetWindowSurface)
 	FETCH_WINDOW(window, object, 1);
 
 	surface = SDL_GetWindowSurface(window);
-	sdl_surface_to_zval(surface, return_value);
+	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
 }
 /* }}} */
 

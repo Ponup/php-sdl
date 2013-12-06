@@ -43,7 +43,7 @@ void sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
 #define read_displaymode_prop(z_value, name, value) \
 { \
 	zval *val; \
-	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0 TSRMLS_DC); \
+	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0 TSRMLS_CC); \
 	value = (int)Z_LVAL_P(val); \
 }
 
@@ -346,7 +346,7 @@ PHP_FUNCTION(SDL_GetDisplayMode)
 	if (SDL_GetDisplayMode((int)display, (int)mode, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_DC);
+	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
 }
 /* }}} */
 
@@ -366,7 +366,7 @@ PHP_FUNCTION(SDL_GetDesktopDisplayMode)
 	if (SDL_GetDesktopDisplayMode((int)display, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_DC);
+	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
 }
 /* }}} */
 
@@ -387,7 +387,7 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 	if (SDL_GetCurrentDisplayMode((int)display, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_DC);
+	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
 }
 /* }}} */
 
@@ -430,18 +430,18 @@ PHP_FUNCTION(SDL_GetClosestDisplayMode)
 		RETURN_FALSE;
 	}
 
-	zval_to_sdl_displaymode(z_desired, &desired);
+	zval_to_sdl_displaymode(z_desired, &desired TSRMLS_CC);
 	if (SDL_GetClosestDisplayMode((int)display, &desired, &closest)==NULL) {
 		RETURN_NULL();
 	}
 
 	if (z_closest) {
 		zval_dtor(z_closest);
-		sdl_displaymode_to_zval(&closest, z_closest TSRMLS_DC);
+		sdl_displaymode_to_zval(&closest, z_closest TSRMLS_CC);
 
 		RETURN_ZVAL(z_closest, 1, 0);
 	}
-	sdl_displaymode_to_zval(&closest, return_value TSRMLS_DC);
+	sdl_displaymode_to_zval(&closest, return_value TSRMLS_CC);
 }
 /* }}} */
 

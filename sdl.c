@@ -23,6 +23,7 @@
 #include "cpuinfo.h"
 #include "error.h"
 #include "rect.h"
+#include "surface.h"
 #include "video.h"
 #include "window.h"
 

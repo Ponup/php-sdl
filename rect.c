@@ -53,13 +53,13 @@ void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 {
 	zval *val;
 
-	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
 	rect->x = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
 	rect->y = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0 TSRMLS_CC);
 	rect->w = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_CC);
 	rect->h = (int)Z_LVAL_P(val);
 }
 
@@ -67,9 +67,9 @@ void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 {
 	zval *val;
 
-	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
 	pt->x = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_DC);
+	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
 	pt->y = (int)Z_LVAL_P(val);
 }
 
@@ -148,7 +148,7 @@ PHP_FUNCTION(SDL_RectEmpty)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(object, &rect);
+	zval_to_sdl_rect(object, &rect TSRMLS_CC);
 	
 	RETURN_BOOL(SDL_RectEmpty(&rect));
 }
@@ -173,8 +173,8 @@ PHP_FUNCTION(SDL_RectEquals)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1);
-	zval_to_sdl_rect(obj2, &rect2);
+	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
+	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
 	
 	RETURN_BOOL(SDL_RectEquals(&rect1, &rect2));
 }
@@ -197,8 +197,8 @@ PHP_FUNCTION(SDL_HasIntersection)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1);
-	zval_to_sdl_rect(obj2, &rect2);
+	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
+	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
 	
 	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
 }
@@ -232,8 +232,8 @@ PHP_FUNCTION(SDL_IntersectRect)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1);
-	zval_to_sdl_rect(obj2, &rect2);
+	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
+	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
 	if (SDL_IntersectRect(&rect1, &rect2, &rect3)) {
 		zval_dtor(result);
 		sdl_rect_to_zval(&rect3, result TSRMLS_CC);
@@ -258,8 +258,8 @@ PHP_FUNCTION(SDL_UnionRect)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1);
-	zval_to_sdl_rect(obj2, &rect2);
+	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
+	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
 	SDL_UnionRect(&rect1, &rect2, &rect3);
 	zval_dtor(result);
 	sdl_rect_to_zval(&rect3, result TSRMLS_CC);
@@ -302,7 +302,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	}
 	points = emalloc(sizeof(SDL_Point)*count);
 
-	zval_to_sdl_rect(z_clip, &clip);
+	zval_to_sdl_rect(z_clip, &clip TSRMLS_CC);
 	for (i=0, nb=0 ; i<count ; i++) {
 		if (zend_hash_index_find(Z_ARRVAL_P(z_points), i, (void**)&z_point) == FAILURE) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld missing", i);
@@ -311,7 +311,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld is not a SDL_Point object", i);
 
 		} else {
-			zval_to_sdl_point(*z_point, points+nb);
+			zval_to_sdl_point(*z_point, points+nb TSRMLS_CC);
 			nb++;
 		}
 	}
@@ -362,7 +362,7 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(object, &rect);
+	zval_to_sdl_rect(object, &rect TSRMLS_CC);
 	convert_to_long_ex(&z_x1);
 	convert_to_long_ex(&z_y1);
 	convert_to_long_ex(&z_x2);

@@ -41,10 +41,9 @@ struct php_sdl_surface {
 }
 
 /* {{{ sdl_surface_to_zval */
-zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val)
+zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 {
 	struct php_sdl_surface *intern;
-
 	if (surface) {
 		object_init_ex(z_val, php_sdl_surface_ce);
 		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
@@ -100,7 +99,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 		return;
 	}
 	surface = SDL_CreateRGBSurface(flags, width, height, depth, rmask, gmask, bmask, amask);
-	sdl_surface_to_zval(surface, return_value);
+	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
 }
 /* }}} */
 
