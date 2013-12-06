@@ -5,6 +5,7 @@ SDL2 library wrappers:
 Done:
 	SDL.h
 	SDL_cpuinfo.h
+	SDL_error.h
 	SDL_rect.h
 	SDL_video.h (video)
 
@@ -20,7 +21,6 @@ TODO:
 	SDL_blendmode.h
 	SDL_clipboard.h
 	SDL_endian.h
-	SDL_error.h
 	SDL_events.h
 	SDL_filesystem.h
 	SDL_gamecontroller.h

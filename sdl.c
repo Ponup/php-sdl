@@ -21,6 +21,7 @@
 
 #include "php_sdl.h"
 #include "cpuinfo.h"
+#include "error.h"
 #include "rect.h"
 #include "video.h"
 #include "window.h"
@@ -50,6 +51,7 @@ PHP_MINIT_FUNCTION(sdl)
 
 	if (1
 		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)

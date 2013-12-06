@@ -120,6 +120,22 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [0] {
       }
     }
+    Function [ <internal:SDL> function SDL_SetError ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $error_message ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetError ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_ClearError ] {
+
+      - Parameters [0] {
+      }
+    }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {

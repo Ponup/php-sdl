@@ -42,6 +42,6 @@ Release_TS
 Release_TSDbg
 Release_TS_inline
 Debug_TS
-sdl2*.tgz
+sdl-*.tgz
 tmp-php.ini
 run-tests.php

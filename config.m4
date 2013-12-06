@@ -37,6 +37,7 @@ if test "$PHP_SDL" != "no"; then
 
   sources="
 cpuinfo.c
+error.c
 rect.c
 surface.c
 video.c

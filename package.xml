@@ -53,6 +53,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='cpuinfo.h'/>
       <file role='src' name='rect.c'/>
       <file role='src' name='rect.h'/>
+      <file role='src' name='error.c'/>
+      <file role='src' name='error.h'/>
       <file role='src' name='surface.c'/>
       <file role='src' name='surface.h'/>
       <file role='src' name='video.c'/>
@@ -65,6 +67,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='003-otherinit.phpt'/>
         <file role='test' name='004-cpuinfo.phpt'/>
         <file role='test' name='005-video.phpt'/>
+        <file role='test' name='006-rect.phpt'/>
+        <file role='test' name='007-rect-oo.phpt'/>
+        <file role='test' name='008-error.phpt'/>
       </dir> <!-- //tests -->
     </dir>
   </contents>
