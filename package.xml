@@ -53,6 +53,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='cpuinfo.h'/>
       <file role='src' name='rect.c'/>
       <file role='src' name='rect.h'/>
+      <file role='src' name='surface.c'/>
+      <file role='src' name='surface.h'/>
       <file role='src' name='video.c'/>
       <file role='src' name='video.h'/>
       <file role='src' name='window.c'/>

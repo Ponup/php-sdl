@@ -51,6 +51,7 @@ PHP_MINIT_FUNCTION(sdl)
 	if (1
 		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_window)) {
 		return SUCCESS;

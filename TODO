@@ -10,6 +10,7 @@ Done:
 
 WIP:
 	SDL_video.h (window)
+	SDL_surface.h
 
 TODO:
 	SDL_assert.h
@@ -49,7 +50,6 @@ TODO:
 	SDL_scancode.h
 	SDL_shape.h
 	SDL_stdinc.h
-	SDL_surface.h
 	SDL_system.h
 	SDL_syswm.h
 	SDL_test_assert.h

@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [23] {
+  - Constants [27] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -10,6 +10,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_INIT_EVENTS ] { 16384 }
     Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
     Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer SDL_SWSURFACE ] { 0 }
+    Constant [ integer SDL_PREALLOC ] { 1 }
+    Constant [ integer SDL_RLEACCEL ] { 2 }
+    Constant [ integer SDL_DONTFREE ] { 4 }
     Constant [ integer SDL_WINDOW_FULLSCREEN ] { 1 }
     Constant [ integer SDL_WINDOW_OPENGL ] { 2 }
     Constant [ integer SDL_WINDOW_SHOWN ] { 4 }
@@ -169,6 +173,25 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $count ]
         Parameter #2 [ <required> $clip ]
         Parameter #3 [ <required> &$rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateRGBSurface ] {
+
+      - Parameters [8] {
+        Parameter #0 [ <required> $flags ]
+        Parameter #1 [ <required> $width ]
+        Parameter #2 [ <required> $height ]
+        Parameter #3 [ <required> $depth ]
+        Parameter #4 [ <required> $Rmask ]
+        Parameter #5 [ <required> $Gmask ]
+        Parameter #6 [ <optional> $Bmask ]
+        Parameter #7 [ <optional> $Amask ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $surface ]
       }
     }
     Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
@@ -344,7 +367,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [4] {
+  - Classes [5] {
     Class [ <internal:SDL> class SDL_Rect ] {
 
       - Constants [0] {
@@ -444,6 +467,51 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
           - Parameters [2] {
             Parameter #0 [ <required> $x ]
             Parameter #1 [ <required> $y ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Surface ] {
+
+      - Constants [4] {
+        Constant [ integer SWSURFACE ] { 0 }
+        Constant [ integer PREALLOC ] { 1 }
+        Constant [ integer RLEACCEL ] { 2 }
+        Constant [ integer DONTFREE ] { 4 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+        Property [ <default> public $pitch ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [8] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $width ]
+            Parameter #2 [ <required> $height ]
+            Parameter #3 [ <required> $depth ]
+            Parameter #4 [ <required> $Rmask ]
+            Parameter #5 [ <required> $Gmask ]
+            Parameter #6 [ <optional> $Bmask ]
+            Parameter #7 [ <optional> $Amask ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
           }
         }
       }
