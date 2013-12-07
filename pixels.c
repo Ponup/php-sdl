@@ -55,10 +55,10 @@ struct php_sdl_pixelformat {
 
 #define FETCH_PIXELFORMAT(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(__id TSRMLS_CC);\
-        __ptr = intern->format; \
+        internpf = (struct php_sdl_pixelformat *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = internpf->format; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", internpf->zo.ce->name);\
                 RETURN_FALSE;\
         }\
 }
@@ -319,7 +319,7 @@ static PHP_METHOD(SDL_PixelFormat, __construct)
  */
 PHP_FUNCTION(SDL_FreeFormat)
 {
-	struct php_sdl_pixelformat *intern;
+	struct php_sdl_pixelformat *internpf;
 	zval *object;
 	SDL_PixelFormat *format;
 
@@ -328,8 +328,8 @@ PHP_FUNCTION(SDL_FreeFormat)
 	}
 	FETCH_PIXELFORMAT(format, object, 1);
 
-	SDL_FreeFormat(intern->format);
-	intern->format = NULL;
+	SDL_FreeFormat(internpf->format);
+	internpf->format = NULL;
 }
 /* }}} */
 
@@ -390,20 +390,48 @@ static PHP_METHOD(SDL_Palette, __construct)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPixelFormatPalette, 0, 0, 2)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(0, palette)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_SetPalette, 0, 0, 1)
+       ZEND_ARG_INFO(0, palette)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetPixelFormatPalette(SDL_PixelFormat format, SDL_Palette palette);
+
  *  \brief Set the palette for a pixel format structure.
  extern DECLSPEC int SDLCALL SDL_SetPixelFormatPalette(SDL_PixelFormat * format,
                                                        SDL_Palette *palette);
  */
+PHP_FUNCTION(SDL_SetPixelFormatPalette)
+{
+	struct php_sdl_palette *intern;
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format, *z_palette;
+	SDL_Palette *palette;
+	SDL_PixelFormat *format;
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 3)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_format, php_sdl_pixelformat_ce, &z_palette, php_sdl_palette_ce) == FAILURE) {
+		return;
+	}
+	FETCH_PALETTE(palette, z_palette, 1);
+	FETCH_PIXELFORMAT(format, z_format, 1);
+
+	RETURN_LONG(SDL_SetPixelFormatPalette(format, palette));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 2)
        ZEND_ARG_INFO(0, palette)
        ZEND_ARG_INFO(0, colors)
        ZEND_ARG_INFO(0, first)
        ZEND_ARG_INFO(0, ncolors)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_SetColors, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_SetColors, 0, 0, 1)
        ZEND_ARG_INFO(0, colors)
        ZEND_ARG_INFO(0, first)
        ZEND_ARG_INFO(0, ncolors)
@@ -430,9 +458,9 @@ PHP_FUNCTION(SDL_SetPaletteColors)
 	SDL_Palette *palette;
 	SDL_Color *colors;
 	int i, nb;
-	long first, ncolors=0, count;
+	long first=0, ncolors=0, count;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oal|l", &object, php_sdl_palette_ce, &z_colors, &first, &ncolors) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oa|ll", &object, php_sdl_palette_ce, &z_colors, &first, &ncolors) == FAILURE) {
 		return;
 	}
 	FETCH_PALETTE(palette, object, 1);
@@ -840,7 +868,8 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 static const zend_function_entry php_sdl_pixelformat_methods[] = {
 	PHP_ME(SDL_PixelFormat, __construct,  arginfo_SDL_AllocFormat, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
-	PHP_FALIAS(Free,             SDL_FreeFormat,           arginfo_format_none)
+	PHP_FALIAS(Free,             SDL_FreeFormat,             arginfo_format_none)
+	PHP_FALIAS(SetPalette,       SDL_SetPixelFormatPalette,  arginfo_SDL_PixelFormat_SetPalette)
 	PHP_FE_END
 };
 
@@ -856,6 +885,7 @@ zend_function_entry sdl_pixels_functions[] = {
 
 	ZEND_FE(SDL_AllocFormat,						arginfo_SDL_AllocFormat)
 	ZEND_FE(SDL_FreeFormat,							arginfo_SDL_PixelFormat)
+	ZEND_FE(SDL_SetPixelFormatPalette,				arginfo_SDL_SetPixelFormatPalette)
 	ZEND_FE_END
 };
 /* }}} */

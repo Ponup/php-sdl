@@ -249,7 +249,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [4] {
         Parameter #0 [ <required> $palette ]
         Parameter #1 [ <required> $colors ]
-        Parameter #2 [ <required> $first ]
+        Parameter #2 [ <optional> $first ]
         Parameter #3 [ <optional> $ncolors ]
       }
     }
@@ -263,6 +263,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [1] {
         Parameter #0 [ <required> $format ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetPixelFormatPalette ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $pixelformat ]
+        Parameter #1 [ <required> $palette ]
       }
     }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
@@ -586,7 +593,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [3] {
             Parameter #0 [ <required> $colors ]
-            Parameter #1 [ <required> $first ]
+            Parameter #1 [ <optional> $first ]
             Parameter #2 [ <optional> $ncolors ]
           }
         }
@@ -623,7 +630,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $palette ]
       }
 
-      - Methods [2] {
+      - Methods [3] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
@@ -634,6 +641,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Free ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetPalette ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $palette ]
           }
         }
       }
