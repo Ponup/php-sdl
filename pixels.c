@@ -551,6 +551,12 @@ static HashTable *sdl_palette_get_properties(zval *object TSRMLS_DC)
 }
 /* }}} */
 
+/* {{{ sdl_palette_write_property */
+void sdl_palette_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+{
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, use SDL_SetPaletteColors() or SDL_Palette::SetColors()");
+}
+/* }}} */
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_palette_none, 0, 0, 0)
@@ -617,6 +623,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
 	php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;
+	php_sdl_palette_handlers.write_property = sdl_palette_write_property;
 
 	REGISTER_PALETTE_PROP("ncolors");
 	REGISTER_PALETTE_PROP("version");

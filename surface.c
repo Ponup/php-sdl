@@ -271,6 +271,14 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 }
 /* }}} */
 
+/* {{{ sdl_surface_write_property */
+void sdl_surface_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+{
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Surface is read-only");
+}
+/* }}} */
+
+
 
 #define REGISTER_SURFACE_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
@@ -290,6 +298,7 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	memcpy(&php_sdl_surface_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_surface_handlers.read_property  = sdl_surface_read_property;
 	php_sdl_surface_handlers.get_properties = sdl_surface_get_properties;
+	php_sdl_surface_handlers.write_property = sdl_surface_write_property;
 
 	REGISTER_SURFACE_PROP("flags");
 	REGISTER_SURFACE_PROP("w");
