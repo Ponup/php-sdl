@@ -21,7 +21,7 @@ if test "$PHP_SDL" != "no"; then
     [AC_MSG_RESULT(ok)],
     [AC_MSG_ERROR([need at least PHP v$REQ_PHP_VERSION])])
   else
-    if test "$PHP_VERSION_ID" -le "$REQ_PHP_VERSION_ID"; then
+    if test "$PHP_VERSION_ID" -lt "$REQ_PHP_VERSION_ID"; then
       AC_MSG_ERROR([SDL needs at least PHP v$REQ_PHP_VERSION])
     fi
   fi
