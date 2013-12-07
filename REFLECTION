@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [27] {
+  - Constants [96] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -10,6 +10,75 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_INIT_EVENTS ] { 16384 }
     Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
     Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer SDL_PIXELTYPE_UNKNOWN ] { 0 }
+    Constant [ integer SDL_PIXELTYPE_INDEX1 ] { 1 }
+    Constant [ integer SDL_PIXELTYPE_INDEX4 ] { 2 }
+    Constant [ integer SDL_PIXELTYPE_INDEX8 ] { 3 }
+    Constant [ integer SDL_PIXELTYPE_PACKED8 ] { 4 }
+    Constant [ integer SDL_PIXELTYPE_PACKED16 ] { 5 }
+    Constant [ integer SDL_PIXELTYPE_PACKED32 ] { 6 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU8 ] { 7 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU16 ] { 8 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU32 ] { 9 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYF16 ] { 10 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYF32 ] { 11 }
+    Constant [ integer SDL_BITMAPORDER_NONE ] { 0 }
+    Constant [ integer SDL_BITMAPORDER_4321 ] { 1 }
+    Constant [ integer SDL_BITMAPORDER_1234 ] { 2 }
+    Constant [ integer SDL_PACKEDORDER_NONE ] { 0 }
+    Constant [ integer SDL_PACKEDORDER_XRGB ] { 1 }
+    Constant [ integer SDL_PACKEDORDER_RGBX ] { 2 }
+    Constant [ integer SDL_PACKEDORDER_ARGB ] { 3 }
+    Constant [ integer SDL_PACKEDORDER_RGBA ] { 4 }
+    Constant [ integer SDL_PACKEDORDER_XBGR ] { 5 }
+    Constant [ integer SDL_PACKEDORDER_BGRX ] { 6 }
+    Constant [ integer SDL_PACKEDORDER_ABGR ] { 7 }
+    Constant [ integer SDL_PACKEDORDER_BGRA ] { 8 }
+    Constant [ integer SDL_PACKEDLAYOUT_NONE ] { 0 }
+    Constant [ integer SDL_PACKEDLAYOUT_332 ] { 1 }
+    Constant [ integer SDL_PACKEDLAYOUT_4444 ] { 2 }
+    Constant [ integer SDL_PACKEDLAYOUT_1555 ] { 3 }
+    Constant [ integer SDL_PACKEDLAYOUT_5551 ] { 4 }
+    Constant [ integer SDL_PACKEDLAYOUT_565 ] { 5 }
+    Constant [ integer SDL_PACKEDLAYOUT_8888 ] { 6 }
+    Constant [ integer SDL_PACKEDLAYOUT_2101010 ] { 7 }
+    Constant [ integer SDL_PACKEDLAYOUT_1010102 ] { 8 }
+    Constant [ integer SDL_PIXELFORMAT_UNKNOWN ] { 0 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX1LSB ] { 286261504 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX1MSB ] { 287310080 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX4LSB ] { 303039488 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX4MSB ] { 304088064 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX8 ] { 318769153 }
+    Constant [ integer SDL_PIXELFORMAT_RGB332 ] { 336660481 }
+    Constant [ integer SDL_PIXELFORMAT_RGB444 ] { 353504258 }
+    Constant [ integer SDL_PIXELFORMAT_RGB555 ] { 353570562 }
+    Constant [ integer SDL_PIXELFORMAT_BGR555 ] { 357764866 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB4444 ] { 355602434 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA4444 ] { 356651010 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR4444 ] { 359796738 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA4444 ] { 360845314 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB1555 ] { 355667970 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA5551 ] { 356782082 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR1555 ] { 359862274 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA5551 ] { 360976386 }
+    Constant [ integer SDL_PIXELFORMAT_RGB565 ] { 353701890 }
+    Constant [ integer SDL_PIXELFORMAT_BGR565 ] { 357896194 }
+    Constant [ integer SDL_PIXELFORMAT_RGB24 ] { 386930691 }
+    Constant [ integer SDL_PIXELFORMAT_BGR24 ] { 390076419 }
+    Constant [ integer SDL_PIXELFORMAT_RGB888 ] { 370546692 }
+    Constant [ integer SDL_PIXELFORMAT_RGBX8888 ] { 371595268 }
+    Constant [ integer SDL_PIXELFORMAT_BGR888 ] { 374740996 }
+    Constant [ integer SDL_PIXELFORMAT_BGRX8888 ] { 375789572 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB8888 ] { 372645892 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA8888 ] { 373694468 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR8888 ] { 376840196 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA8888 ] { 377888772 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB2101010 ] { 372711428 }
+    Constant [ integer SDL_PIXELFORMAT_YV12 ] { 842094169 }
+    Constant [ integer SDL_PIXELFORMAT_IYUV ] { 1448433993 }
+    Constant [ integer SDL_PIXELFORMAT_YUY2 ] { 844715353 }
+    Constant [ integer SDL_PIXELFORMAT_UYVY ] { 1498831189 }
+    Constant [ integer SDL_PIXELFORMAT_YVYU ] { 1431918169 }
     Constant [ integer SDL_SWSURFACE ] { 0 }
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
@@ -134,6 +203,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_ClearError ] {
 
       - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetPixelFormatName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $format ]
       }
     }
     Function [ <internal:SDL> function SDL_RectEmpty ] {

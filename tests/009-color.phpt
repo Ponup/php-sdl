@@ -10,6 +10,10 @@ $r = new SDL_Color(1,63,127,255);
 var_dump($r);
 $r = new SDL_Color(0,-1,256,123456);
 var_dump($r);
+var_dump(SDL_GetPixelFormatName(0));
+var_dump(SDL_GetPixelFormatName(SDL_PIXELFORMAT_RGBA4444));
+var_dump(SDL_GetPixelFormatName(SDL_PIXELFORMAT_YVYU));
+var_dump(SDL_GetPixelFormatName(-1));
 ?>
 Done
 --EXPECTF--
@@ -33,4 +37,8 @@ object(SDL_Color)#2 (4) {
   ["a"]=>
   int(64)
 }
+string(23) "SDL_PIXELFORMAT_UNKNOWN"
+string(24) "SDL_PIXELFORMAT_RGBA4444"
+string(20) "SDL_PIXELFORMAT_YVYU"
+string(23) "SDL_PIXELFORMAT_UNKNOWN"
 Done

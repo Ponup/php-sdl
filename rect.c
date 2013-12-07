@@ -410,7 +410,7 @@ static const zend_function_entry php_sdl_point_methods[] = {
 };
 /* }}} */
 
-/* {{{ sdl_functions[] */
+/* {{{ sdl_rect_functions[] */
 zend_function_entry sdl_rect_functions[] = {
 	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
 	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
