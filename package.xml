@@ -55,6 +55,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='rect.h'/>
       <file role='src' name='error.c'/>
       <file role='src' name='error.h'/>
+      <file role='src' name='pixels.c'/>
+      <file role='src' name='pixels.h'/>
       <file role='src' name='surface.c'/>
       <file role='src' name='surface.h'/>
       <file role='src' name='video.c'/>

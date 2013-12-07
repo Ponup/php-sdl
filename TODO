@@ -9,9 +9,10 @@ Done:
 	SDL_rect.h
 	SDL_video.h (video)
 
-WIP:
+WIP remi:
 	SDL_video.h (window)
 	SDL_surface.h
+	SDL_pixels.h
 
 TODO:
 	SDL_assert.h
@@ -40,7 +41,6 @@ TODO:
 	SDL_opengles2.h
 	SDL_opengles.h
 	SDL_opengl.h
-	SDL_pixels.h
 	SDL_platform.h
 	SDL_power.h
 	SDL_quit.h
