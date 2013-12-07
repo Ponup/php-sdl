@@ -51,14 +51,16 @@ PHP_MINIT_FUNCTION(sdl)
 	REGISTER_LONG_CONSTANT("SDL_INIT_NOPARACHUTE",     SDL_INIT_NOPARACHUTE,       CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
 
-	if (1
-		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
+	if (
+		SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
-		&& SUCCESS == PHP_MINIT_CALL(sdl_window)) {
+		&& SUCCESS == PHP_MINIT_CALL(sdl_window)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
+		) {
 		return SUCCESS;
 	}
 	return FAILURE;
