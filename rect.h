@@ -26,6 +26,11 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_rect_ce(void);
+void sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC);
+void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC);
+
+zend_class_entry *get_php_sdl_point_ce(void);
 void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
 void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
 

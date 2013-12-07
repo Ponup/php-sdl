@@ -22,11 +22,16 @@
 #include "php_sdl.h"
 #include "rect.h"
 
-zend_class_entry *php_sdl_displaymode_ce;
+static zend_class_entry *php_sdl_displaymode_ce;
 static zend_object_handlers php_sdl_displaymode_handlers;
 struct php_displaymode_rect {
 	zend_object   zo;
 };
+
+zend_class_entry *get_php_sdl_displaymode_ce(void)
+{
+	return php_sdl_displaymode_ce;
+}
 
 #define update_displaymode_prop(z_value, name, value) \
 	zend_update_property_long(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, value TSRMLS_CC)

@@ -26,6 +26,10 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_window_ce(void);
+void sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC);
+
 PHP_MINIT_FUNCTION(sdl_window);
 
 #ifdef  __cplusplus

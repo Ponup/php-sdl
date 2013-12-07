@@ -26,7 +26,9 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_surface_ce(void);
 void sdl_surface_to_zval(SDL_Surface *surface, zval *zval TSRMLS_DC);
+SDL_Surface *zval_to_sdl_surface(zval *z_val TSRMLS_DC);
 
 PHP_MINIT_FUNCTION(sdl_surface);
 

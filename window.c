@@ -23,12 +23,44 @@
 #include "rect.h"
 #include "surface.h"
 
-zend_class_entry *php_sdl_window_ce;
+static zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
 struct php_sdl_window {
 	zend_object   zo;
 	SDL_Window   *window;
+	Uint32        flags;
 };
+
+zend_class_entry *get_php_sdl_window_ce(void)
+{
+	return php_sdl_window_ce;
+}
+
+/* {{{ sdl_window_to_zval */
+void sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRMLS_DC)
+{
+	struct php_sdl_window *intern;
+	if (window) {
+		object_init_ex(z_val, php_sdl_window_ce);
+		intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->window = window;
+		intern->flags  = flags;
+	} else {
+		ZVAL_NULL(z_val);
+	}
+}
+/* }}} */
+
+/* {{{ zval_to_sdl_window */
+SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
+{
+	struct php_sdl_window *intern;
+
+	intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
+	return intern->window;
+}
+/* }}} */
+
 
 #define FETCH_WINDOW(__ptr, __id, __check) \
 { \
@@ -759,6 +791,7 @@ PHP_FUNCTION(SDL_CreateWindow)
 		object_init_ex(return_value, php_sdl_window_ce);
 		intern = (struct php_sdl_window *)zend_object_store_get_object(return_value TSRMLS_CC);
 		intern->window = window;
+		intern->flags  = 0;
 	}
 }
 /* }}} */
@@ -783,6 +816,7 @@ static PHP_METHOD(SDL_Window, __construct)
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 
 	intern->window = SDL_CreateWindow(title, x, y, w, h, flags);
+	intern->flags  = 0;
 	if (!intern->window) {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Can't create window", 0 TSRMLS_CC);
 	}
@@ -947,7 +981,9 @@ static void php_sdl_window_free(void *object TSRMLS_DC)
 	struct php_sdl_window *intern = (struct php_sdl_window *) object;
 
 	if (intern->window) {
-		SDL_DestroyWindow(intern->window);
+		if (!(intern->flags & SDL_DONTFREE)) {
+			SDL_DestroyWindow(intern->window);
+		}
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);

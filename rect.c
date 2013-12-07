@@ -20,18 +20,27 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
-zend_class_entry *php_sdl_rect_ce;
+static zend_class_entry *php_sdl_rect_ce;
 static zend_object_handlers php_sdl_rect_handlers;
 struct php_sdl_rect {
 	zend_object   zo;
 };
 
-zend_class_entry *php_sdl_point_ce;
+static zend_class_entry *php_sdl_point_ce;
 static zend_object_handlers php_sdl_point_handlers;
 struct php_sdl_point {
 	zend_object   zo;
 };
 
+zend_class_entry *get_php_sdl_point_ce(void)
+{
+	return php_sdl_point_ce;
+}
+
+zend_class_entry *get_php_sdl_rect_ce(void)
+{
+	return php_sdl_rect_ce;
+}
 
 void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
 {

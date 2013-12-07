@@ -393,6 +393,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $surface ]
       }
     }
+    Function [ <internal:SDL> function SDL_FillRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $rect ]
+        Parameter #2 [ <required> $color ]
+      }
+    }
     Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
 
       - Parameters [0] {
@@ -868,7 +876,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [2] {
+      - Methods [3] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -886,6 +894,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Free ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method FillRect ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $rect ]
+            Parameter #1 [ <required> $color ]
           }
         }
       }

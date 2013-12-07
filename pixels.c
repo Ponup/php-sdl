@@ -21,13 +21,13 @@
 
 #include "php_sdl.h"
 
-zend_class_entry *php_sdl_color_ce;
+static zend_class_entry *php_sdl_color_ce;
 static zend_object_handlers php_sdl_color_handlers;
 struct php_sdl_color {
 	zend_object   zo;
 };
 
-zend_class_entry *php_sdl_palette_ce;
+static zend_class_entry *php_sdl_palette_ce;
 static zend_object_handlers php_sdl_palette_handlers;
 struct php_sdl_palette {
 	zend_object   zo;
@@ -35,13 +35,28 @@ struct php_sdl_palette {
 	Uint32        flags;
 };
 
-zend_class_entry *php_sdl_pixelformat_ce;
+static zend_class_entry *php_sdl_pixelformat_ce;
 static zend_object_handlers php_sdl_pixelformat_handlers;
 struct php_sdl_pixelformat {
 	zend_object      zo;
 	SDL_PixelFormat *format;
 	Uint32           flags;
 };
+
+zend_class_entry *get_php_sdl_color_ce(void)
+{
+	return php_sdl_color_ce;
+}
+
+zend_class_entry *get_php_sdl_pixelformat_ce(void)
+{
+	return php_sdl_pixelformat_ce;
+}
+
+zend_class_entry *get_php_sdl_palette_ce(void)
+{
+	return php_sdl_palette_ce;
+}
 
 #define FETCH_PALETTE(__ptr, __id, __check) \
 { \
@@ -55,10 +70,10 @@ struct php_sdl_pixelformat {
 
 #define FETCH_PIXELFORMAT(__ptr, __id, __check) \
 { \
-        internpf = (struct php_sdl_pixelformat *)zend_object_store_get_object(__id TSRMLS_CC);\
-        __ptr = internpf->format; \
+        intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = intern->format; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", internpf->zo.ce->name);\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
                 RETURN_FALSE;\
         }\
 }
@@ -122,6 +137,25 @@ void sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags 
 }
 /* }}} */
 
+/* {{{ zval_to_sdl_pixelformat */
+SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC)
+{
+	struct php_sdl_pixelformat *intern;
+
+	intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(z_val TSRMLS_CC);
+	return intern->format;
+}
+/* }}} */
+
+/* {{{ zval_to_sdl_palette */
+SDL_Palette *zval_to_sdl_palette(zval *z_val TSRMLS_DC)
+{
+	struct php_sdl_palette *intern;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(z_val TSRMLS_CC);
+	return intern->palette;
+}
+/* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Color__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, r)
@@ -319,7 +353,7 @@ static PHP_METHOD(SDL_PixelFormat, __construct)
  */
 PHP_FUNCTION(SDL_FreeFormat)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *object;
 	SDL_PixelFormat *format;
 
@@ -328,8 +362,8 @@ PHP_FUNCTION(SDL_FreeFormat)
 	}
 	FETCH_PIXELFORMAT(format, object, 1);
 
-	SDL_FreeFormat(internpf->format);
-	internpf->format = NULL;
+	SDL_FreeFormat(intern->format);
+	intern->format = NULL;
 }
 /* }}} */
 
@@ -408,7 +442,6 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_SetPixelFormatPalette)
 {
 	struct php_sdl_palette *intern;
-	struct php_sdl_pixelformat *internpf;
 	zval *z_format, *z_palette;
 	SDL_Palette *palette;
 	SDL_PixelFormat *format;
@@ -417,7 +450,7 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 		return;
 	}
 	FETCH_PALETTE(palette, z_palette, 1);
-	FETCH_PIXELFORMAT(format, z_format, 1);
+	format = zval_to_sdl_pixelformat(z_format);
 
 	RETURN_LONG(SDL_SetPixelFormatPalette(format, palette));
 }
@@ -550,7 +583,7 @@ ZEND_END_ARG_INFO()
  */
 PHP_FUNCTION(SDL_MapRGB)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format;
 	SDL_PixelFormat *format;
 	long r, g, b;
@@ -591,7 +624,7 @@ ZEND_END_ARG_INFO()
  */
 PHP_FUNCTION(SDL_MapRGBA)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format;
 	SDL_PixelFormat *format;
 	long r, g, b, a;
@@ -624,7 +657,7 @@ ZEND_END_ARG_INFO()
  */
 PHP_FUNCTION(SDL_GetRGB)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format, *z_r, *z_g, *z_b;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b;
@@ -657,7 +690,7 @@ ZEND_END_ARG_INFO()
 */
 PHP_METHOD(SDL_PixelFormat, GetRGB)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format, *z_r, *z_g, *z_b;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b;
@@ -699,7 +732,7 @@ ZEND_END_ARG_INFO()
  */
 PHP_FUNCTION(SDL_GetRGBA)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format, *z_r, *z_g, *z_b, *z_a;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b, a;
@@ -735,7 +768,7 @@ ZEND_END_ARG_INFO()
 */
 PHP_METHOD(SDL_PixelFormat, GetRGBA)
 {
-	struct php_sdl_pixelformat *internpf;
+	struct php_sdl_pixelformat *intern;
 	zval *z_format, *z_r, *z_g, *z_b, *z_a;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b, a;

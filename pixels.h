@@ -26,10 +26,18 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_color_ce(void);
 void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC);
 void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC);
-zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC);
+
+zend_class_entry *get_php_sdl_pixelformat_ce(void);
 zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC);
+
+zend_class_entry *get_php_sdl_palette_ce(void);
+zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_Palette *zval_to_sdl_palette(zval *z_val TSRMLS_DC);
+
 
 PHP_MINIT_FUNCTION(sdl_pixels);
 
