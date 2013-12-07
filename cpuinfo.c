@@ -192,6 +192,7 @@ PHP_FUNCTION(SDL_HasSSE42)
 /* }}} */
 
 
+#if SDL_COMPILEDVERSION > 2000
 /* {{{ proto void SDL_GetSystemRAM(void )
 
  *  This function returns the amount of RAM configured in the system, in MB.
@@ -206,6 +207,7 @@ PHP_FUNCTION(SDL_GetSystemRAM)
 	RETURN_LONG(SDL_GetSystemRAM());
 }
 /* }}} */
+#endif
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_cpuinfo_none, 0, 0, 0)
@@ -224,7 +226,9 @@ zend_function_entry sdl_cpuinfo_functions[] = {
 	ZEND_FE(SDL_HasSSE3,					arginfo_cpuinfo_none)
 	ZEND_FE(SDL_HasSSE41,					arginfo_cpuinfo_none)
 	ZEND_FE(SDL_HasSSE42,					arginfo_cpuinfo_none)
+#if SDL_COMPILEDVERSION > 2000
 	ZEND_FE(SDL_GetSystemRAM,				arginfo_cpuinfo_none)
+#endif
 	ZEND_FE_END
 };
 /* }}} */
