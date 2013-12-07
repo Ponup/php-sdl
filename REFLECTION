@@ -211,6 +211,27 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $format ]
       }
     }
+    Function [ <internal:SDL> function SDL_PixelFormatEnumToMasks ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $format ]
+        Parameter #1 [ <required> &$bpp ]
+        Parameter #2 [ <required> &$Rmask ]
+        Parameter #3 [ <required> &$Gmask ]
+        Parameter #4 [ <required> &$Bmask ]
+        Parameter #5 [ <required> &$Amask ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MasksToPixelFormatEnum ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $bpp ]
+        Parameter #1 [ <required> $Rmask ]
+        Parameter #2 [ <required> $Gmask ]
+        Parameter #3 [ <required> $Bmask ]
+        Parameter #4 [ <required> $Amask ]
+      }
+    }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {

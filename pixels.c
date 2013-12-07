@@ -50,6 +50,7 @@ void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC)
 	color->a = (Uint8)Z_LVAL_P(val);
 }
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Color__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, r)
        ZEND_ARG_INFO(0, g)
@@ -78,6 +79,7 @@ static PHP_METHOD(SDL_Color, __construct)
 }
 /* }}} */
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPixelFormatName, 0, 0, 1)
        ZEND_ARG_INFO(0, format)
 ZEND_END_ARG_INFO()
@@ -104,7 +106,17 @@ PHP_FUNCTION(SDL_GetPixelFormatName)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormatEnumToMasks, 0, 0, 6)
+       ZEND_ARG_INFO(0, format)
+       ZEND_ARG_INFO(1, bpp)
+       ZEND_ARG_INFO(1, Rmask)
+       ZEND_ARG_INFO(1, Gmask)
+       ZEND_ARG_INFO(1, Bmask)
+       ZEND_ARG_INFO(1, Amask)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto bool SDL_PixelFormatEnumToMasks(int format, int &bpp, int &Rmask, int &Gmask, int &Bmask, int &Amask)
+
  *  \brief Convert one of the enumerated pixel formats to a bpp and RGBA masks.
  *
  *  \return SDL_TRUE, or SDL_FALSE if the conversion wasn't possible.
@@ -117,8 +129,44 @@ PHP_FUNCTION(SDL_GetPixelFormatName)
                                                              Uint32 * Bmask,
                                                              Uint32 * Amask);
  */
+PHP_FUNCTION(SDL_PixelFormatEnumToMasks)
+{
+	zval *z_bpp, *z_rmask, *z_gmask, *z_bmask, *z_amask;
+	long format;
+	int bpp;
+	Uint32 rmask, gmask, bmask, amask;
 
-/**
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lzzzzz", &format, &z_bpp, &z_rmask, &z_gmask, &z_bmask, &z_amask) == FAILURE) {
+		RETURN_FALSE;
+	}
+	if (SDL_PixelFormatEnumToMasks((Uint32)format, &bpp, &rmask, &gmask, &bmask, &amask)) {
+		zval_dtor(z_bpp);
+		ZVAL_LONG(z_bpp, bpp);
+		zval_dtor(z_rmask);
+		ZVAL_LONG(z_rmask, rmask);
+		zval_dtor(z_gmask);
+		ZVAL_LONG(z_gmask, gmask);
+		zval_dtor(z_bmask);
+		ZVAL_LONG(z_bmask, bmask);
+		zval_dtor(z_amask);
+		ZVAL_LONG(z_amask, amask);
+
+		RETURN_TRUE;
+	}
+	RETURN_FALSE;;
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MasksToPixelFormatEnum, 0, 0, 5)
+       ZEND_ARG_INFO(0, bpp)
+       ZEND_ARG_INFO(0, Rmask)
+       ZEND_ARG_INFO(0, Gmask)
+       ZEND_ARG_INFO(0, Bmask)
+       ZEND_ARG_INFO(0, Amask)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto bool SDL_MasksToPixelFormatEnum(int format, int bpp, int Rmask, int Gmask, int Bmask, int Amask)
  *  \brief Convert a bpp and RGBA masks to an enumerated pixel format.
  *
  *  \return The pixel format, or ::SDL_PIXELFORMAT_UNKNOWN if the conversion
@@ -131,6 +179,18 @@ PHP_FUNCTION(SDL_GetPixelFormatName)
                                                            Uint32 Bmask,
                                                            Uint32 Amask);
  */
+PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
+{
+	long bpp, rmask, gmask, bmask, amask;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lllll", &bpp, &rmask, &gmask, &bmask, &amask) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	RETURN_LONG(SDL_MasksToPixelFormatEnum((int)bpp, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
+}
+/* }}} */
+
 
 /**
  *  \brief Create an SDL_PixelFormat structure from a pixel format enum.
@@ -232,6 +292,8 @@ static const zend_function_entry php_sdl_color_methods[] = {
 /* {{{ sdl_pixels_functions[] */
 zend_function_entry sdl_pixels_functions[] = {
 	ZEND_FE(SDL_GetPixelFormatName,					arginfo_SDL_GetPixelFormatName)
+	ZEND_FE(SDL_PixelFormatEnumToMasks,				arginfo_SDL_PixelFormatEnumToMasks)
+	ZEND_FE(SDL_MasksToPixelFormatEnum,				arginfo_SDL_MasksToPixelFormatEnum)
 	ZEND_FE_END
 };
 /* }}} */
