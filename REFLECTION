@@ -253,6 +253,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <optional> $ncolors ]
       }
     }
+    Function [ <internal:SDL> function SDL_AllocFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $format ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $format ]
+      }
+    }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {
@@ -506,7 +518,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [7] {
+  - Classes [8] {
     Class [ <internal:SDL> class SDL_Color ] {
 
       - Constants [0] {
@@ -576,6 +588,52 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> $colors ]
             Parameter #1 [ <required> $first ]
             Parameter #2 [ <optional> $ncolors ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_PixelFormat ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [16] {
+        Property [ <default> public $format ]
+        Property [ <default> public $BitsPerPixel ]
+        Property [ <default> public $BytesPerPixel ]
+        Property [ <default> public $Rmask ]
+        Property [ <default> public $Gmask ]
+        Property [ <default> public $Bmask ]
+        Property [ <default> public $Amask ]
+        Property [ <default> public $Rloss ]
+        Property [ <default> public $Gloss ]
+        Property [ <default> public $Bloss ]
+        Property [ <default> public $Aloss ]
+        Property [ <default> public $Rshift ]
+        Property [ <default> public $Gshift ]
+        Property [ <default> public $Bshift ]
+        Property [ <default> public $Ashift ]
+        Property [ <default> public $palette ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $format ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
           }
         }
       }
@@ -700,11 +758,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static methods [0] {
       }
 
-      - Properties [4] {
+      - Properties [6] {
         Property [ <default> public $flags ]
         Property [ <default> public $w ]
         Property [ <default> public $h ]
         Property [ <default> public $pitch ]
+        Property [ <default> public $format ]
+        Property [ <default> public $clip_rect ]
       }
 
       - Methods [2] {

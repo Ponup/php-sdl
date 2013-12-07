@@ -20,6 +20,7 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "pixels.h"
 #include "rect.h"
 
 zend_class_entry *php_sdl_surface_ce;
@@ -41,7 +42,7 @@ struct php_sdl_surface {
 }
 
 /* {{{ sdl_surface_to_zval */
-zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
+void sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 {
 	struct php_sdl_surface *intern;
 	if (surface) {
@@ -50,10 +51,9 @@ zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 		intern->surface = surface;
 		/* copy flags to be able to check before access to surface */
 		intern->flags = surface->flags;
-
-		return SUCCESS;
+	} else {
+		ZVAL_NULL(z_val);
 	}
-	return FAILURE;
 }
 /* }}} */
 
@@ -241,6 +241,12 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 
 		} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
 			ZVAL_LONG(retval, intern->surface->w);
+
+		} else if (!strcmp(Z_STRVAL_P(member), "format")) {
+			sdl_pixelformat_to_zval(intern->surface->format, retval, SDL_DONTFREE);
+
+		} else if (!strcmp(Z_STRVAL_P(member), "clip_rect")) {
+			sdl_rect_to_zval(&intern->surface->clip_rect, retval);
 		}
 	}
 	return retval;
@@ -266,6 +272,14 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 		SDL_SURFACE_ADD_PROPERTY("w",     intern->surface->w);
 		SDL_SURFACE_ADD_PROPERTY("h",     intern->surface->h);
 		SDL_SURFACE_ADD_PROPERTY("pitch", intern->surface->pitch);
+
+		MAKE_STD_ZVAL(zv);
+		sdl_pixelformat_to_zval(intern->surface->format, zv, SDL_DONTFREE);
+		zend_hash_update(props, "format", sizeof("format"), &zv, sizeof(zv), NULL);
+
+		MAKE_STD_ZVAL(zv);
+		sdl_rect_to_zval(&intern->surface->clip_rect, zv);
+		zend_hash_update(props, "clip_rect", sizeof("paclip_rectlette"), &zv, sizeof(zv), NULL);
 	}
 	return props;
 }
@@ -304,6 +318,8 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_PROP("w");
 	REGISTER_SURFACE_PROP("h");
 	REGISTER_SURFACE_PROP("pitch");
+	zend_declare_property_null(php_sdl_surface_ce, "format",    sizeof("format")-1,    ZEND_ACC_PUBLIC TSRMLS_DC);
+	zend_declare_property_null(php_sdl_surface_ce, "clip_rect", sizeof("clip_rect")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
 
 	REGISTER_SURFACE_CLASS_CONST_LONG("SWSURFACE",         SDL_SWSURFACE);
 	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC",          SDL_PREALLOC);
