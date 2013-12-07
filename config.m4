@@ -9,11 +9,22 @@ if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
   export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2"
 
-	echo $PHP_VERSION
-	echo $PHP_VERSION_ID
-
-
-  AC_MSG_CHECKING(PHP version)
+  REQ_PHP_VERSION="5.3.0"
+  REQ_PHP_VERSION_ID=50300
+  if test -z "$PHP_VERSION_ID"; then
+    AC_MSG_CHECKING(PHP version)
+    AC_TRY_COMPILE([#include <php_version.h>], [
+    #if PHP_VERSION_ID < $REQ_PHP_VERSION_ID 
+    #error  this extension requires at least PHP version $REQ_PHP_VERSION
+    #endif
+    ],
+    [AC_MSG_RESULT(ok)],
+    [AC_MSG_ERROR([need at least PHP v$REQ_PHP_VERSION])])
+  else
+    if test "$PHP_VERSION_ID" -le "$REQ_PHP_VERSION_ID"; then
+      AC_MSG_ERROR([SDL needs at least PHP v$REQ_PHP_VERSION])
+    fi
+  fi
 
   export CPPFLAGS="$OLD_CPPFLAGS"
 

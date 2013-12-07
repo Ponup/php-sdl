@@ -45,3 +45,5 @@ Debug_TS
 sdl-*.tgz
 tmp-php.ini
 run-tests.php
+*.o
+*.loT
