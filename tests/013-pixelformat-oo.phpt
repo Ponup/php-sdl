@@ -25,6 +25,13 @@ var_dump($f->SetPalette($p));
 
 echo "= Result\n";
 var_dump($f);
+
+echo "= RGB\n";
+var_dump($f->MapRGB(100,100,100));
+var_dump($f->MapRGBA(200,200,200,200));
+var_dump($f->GetRGB(5, $r, $g, $b), $r, $g, $b);
+var_dump($f->GetRGBA(10, $r, $g, $b, $a), $r, $g, $b, $a);
+
 ?>
 = Done
 --EXPECTF--
@@ -256,4 +263,16 @@ object(SDL_PixelFormat)#%d (16) {
     }
   }
 }
+= RGB
+int(8)
+int(12)
+NULL
+int(85)
+int(85)
+int(85)
+NULL
+int(170)
+int(170)
+int(170)
+int(170)
 = Done

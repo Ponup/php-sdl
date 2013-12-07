@@ -526,15 +526,62 @@ PHP_FUNCTION(SDL_FreePalette)
 }
 /* }}} */
 
-/**
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGB, 0, 0, 4)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(0, r)
+       ZEND_ARG_INFO(0, g)
+       ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_MapRGB, 0, 0, 3)
+       ZEND_ARG_INFO(0, r)
+       ZEND_ARG_INFO(0, g)
+       ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_MapRGB(SDL_PixelFormat format, int r, int g, int b)
+
  *  \brief Maps an RGB triple to an opaque pixel value for a given pixel format.
  *
  *  \sa SDL_MapRGBA
  extern DECLSPEC Uint32 SDLCALL SDL_MapRGB(const SDL_PixelFormat * format,
                                            Uint8 r, Uint8 g, Uint8 b);
  */
+PHP_FUNCTION(SDL_MapRGB)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format;
+	SDL_PixelFormat *format;
+	long r, g, b;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olll", &z_format, php_sdl_pixelformat_ce, &r, &g, &b) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+
+	RETURN_LONG(SDL_MapRGB(format, (Uint8)r, (Uint8)g, (Uint8)b));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGBA, 0, 0, 5)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(0, r)
+       ZEND_ARG_INFO(0, g)
+       ZEND_ARG_INFO(0, b)
+       ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_MapRGBA, 0, 0, 4)
+       ZEND_ARG_INFO(0, r)
+       ZEND_ARG_INFO(0, g)
+       ZEND_ARG_INFO(0, b)
+       ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_MapRGBA(SDL_PixelFormat format, int r, int g, int b, int a)
+
  *  \brief Maps an RGBA quadruple to a pixel value for a given pixel format.
  *
  *  \sa SDL_MapRGB
@@ -542,8 +589,32 @@ PHP_FUNCTION(SDL_FreePalette)
                                             Uint8 r, Uint8 g, Uint8 b,
                                             Uint8 a);
  */
+PHP_FUNCTION(SDL_MapRGBA)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format;
+	SDL_PixelFormat *format;
+	long r, g, b, a;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ollll", &z_format, php_sdl_pixelformat_ce, &r, &g, &b, &a) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+
+	RETURN_LONG(SDL_MapRGBA(format, (Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a));
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGB, 0, 0, 5)
+       ZEND_ARG_INFO(0, pixel)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(1, r)
+       ZEND_ARG_INFO(1, g)
+       ZEND_ARG_INFO(1, b)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetRGB(int pixel, SDL_PixelFormat format, int &r, int &g, int &b)
+
  *  \brief Get the RGB components from a pixel of the specified format.
  *
  *  \sa SDL_GetRGBA
@@ -551,8 +622,73 @@ PHP_FUNCTION(SDL_FreePalette)
                                          const SDL_PixelFormat * format,
                                          Uint8 * r, Uint8 * g, Uint8 * b);
  */
+PHP_FUNCTION(SDL_GetRGB)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format, *z_r, *z_g, *z_b;
+	SDL_PixelFormat *format;
+	Uint8 r, g, b;
+	long pix;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "lOzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+	SDL_GetRGB((Uint32)pix, format, &r, &g, &b);
+	zval_dtor(z_r);
+	ZVAL_LONG(z_r, r);
+	zval_dtor(z_g);
+	ZVAL_LONG(z_g, g);
+	zval_dtor(z_b);
+	ZVAL_LONG(z_b, b);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_GetRGB, 0, 0, 4)
+       ZEND_ARG_INFO(0, pixel)
+       ZEND_ARG_INFO(1, r)
+       ZEND_ARG_INFO(1, g)
+       ZEND_ARG_INFO(1, b)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_PixelFormat::GetRGB(int pixel, int &r, int &g, int &b)
+
+ Duplicate implementation because for param order
+*/
+PHP_METHOD(SDL_PixelFormat, GetRGB)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format, *z_r, *z_g, *z_b;
+	SDL_PixelFormat *format;
+	Uint8 r, g, b;
+	long pix;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+	SDL_GetRGB((Uint32)pix, format, &r, &g, &b);
+	zval_dtor(z_r);
+	ZVAL_LONG(z_r, r);
+	zval_dtor(z_g);
+	ZVAL_LONG(z_g, g);
+	zval_dtor(z_b);
+	ZVAL_LONG(z_b, b);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGBA, 0, 0, 6)
+       ZEND_ARG_INFO(0, pixel)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(1, r)
+       ZEND_ARG_INFO(1, g)
+       ZEND_ARG_INFO(1, b)
+       ZEND_ARG_INFO(1, a)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetRGBA(int pixel, SDL_PixelFormat format, int &r, int &g, int &b, int &a)
+
  *  \brief Get the RGBA components from a pixel of the specified format.
  *
  *  \sa SDL_GetRGB
@@ -561,6 +697,66 @@ PHP_FUNCTION(SDL_FreePalette)
                                           Uint8 * r, Uint8 * g, Uint8 * b,
                                           Uint8 * a);
  */
+PHP_FUNCTION(SDL_GetRGBA)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format, *z_r, *z_g, *z_b, *z_a;
+	SDL_PixelFormat *format;
+	Uint8 r, g, b, a;
+	long pix;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "lOzzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+	SDL_GetRGBA((Uint32)pix, format, &r, &g, &b, &a);
+	zval_dtor(z_r);
+	ZVAL_LONG(z_r, r);
+	zval_dtor(z_g);
+	ZVAL_LONG(z_g, g);
+	zval_dtor(z_b);
+	ZVAL_LONG(z_b, b);
+	zval_dtor(z_a);
+	ZVAL_LONG(z_a, a);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_GetRGBA, 0, 0, 5)
+       ZEND_ARG_INFO(0, pixel)
+       ZEND_ARG_INFO(1, r)
+       ZEND_ARG_INFO(1, g)
+       ZEND_ARG_INFO(1, b)
+       ZEND_ARG_INFO(1, a)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_PixelFormat::GetRGBA(int pixel, int &r, int &g, int &b, int &a)
+
+ Duplicate implementation because for param order
+*/
+PHP_METHOD(SDL_PixelFormat, GetRGBA)
+{
+	struct php_sdl_pixelformat *internpf;
+	zval *z_format, *z_r, *z_g, *z_b, *z_a;
+	SDL_PixelFormat *format;
+	Uint8 r, g, b, a;
+	long pix;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olzzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
+		return;
+	}
+	FETCH_PIXELFORMAT(format, z_format, 1);
+	SDL_GetRGBA((Uint32)pix, format, &r, &g, &b, &a);
+	zval_dtor(z_r);
+	ZVAL_LONG(z_r, r);
+	zval_dtor(z_g);
+	ZVAL_LONG(z_g, g);
+	zval_dtor(z_b);
+	ZVAL_LONG(z_b, b);
+	zval_dtor(z_a);
+	ZVAL_LONG(z_a, a);
+}
+/* }}} */
+
 
 /**
  *  \brief Calculate a 256 entry gamma ramp for a gamma value.
@@ -866,10 +1062,14 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 };
 
 static const zend_function_entry php_sdl_pixelformat_methods[] = {
-	PHP_ME(SDL_PixelFormat, __construct,  arginfo_SDL_AllocFormat, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, __construct,  arginfo_SDL_AllocFormat,            ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, GetRGB,       arginfo_SDL_PixelFormat_GetRGB,     ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, GetRGBA,      arginfo_SDL_PixelFormat_GetRGBA,    ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Free,             SDL_FreeFormat,             arginfo_format_none)
 	PHP_FALIAS(SetPalette,       SDL_SetPixelFormatPalette,  arginfo_SDL_PixelFormat_SetPalette)
+	PHP_FALIAS(MapRGB,           SDL_MapRGB,                 arginfo_SDL_PixelFormat_MapRGB)
+	PHP_FALIAS(MapRGBA,          SDL_MapRGBA,                arginfo_SDL_PixelFormat_MapRGBA)
 	PHP_FE_END
 };
 
@@ -886,6 +1086,10 @@ zend_function_entry sdl_pixels_functions[] = {
 	ZEND_FE(SDL_AllocFormat,						arginfo_SDL_AllocFormat)
 	ZEND_FE(SDL_FreeFormat,							arginfo_SDL_PixelFormat)
 	ZEND_FE(SDL_SetPixelFormatPalette,				arginfo_SDL_SetPixelFormatPalette)
+	ZEND_FE(SDL_MapRGB,								arginfo_SDL_MapRGB)
+	ZEND_FE(SDL_MapRGBA,							arginfo_SDL_MapRGBA)
+	ZEND_FE(SDL_GetRGB,								arginfo_SDL_GetRGB)
+	ZEND_FE(SDL_GetRGBA,							arginfo_SDL_GetRGBA)
 	ZEND_FE_END
 };
 /* }}} */

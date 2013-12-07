@@ -272,6 +272,46 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $palette ]
       }
     }
+    Function [ <internal:SDL> function SDL_MapRGB ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $pixelformat ]
+        Parameter #1 [ <required> $r ]
+        Parameter #2 [ <required> $g ]
+        Parameter #3 [ <required> $b ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MapRGBA ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $pixelformat ]
+        Parameter #1 [ <required> $r ]
+        Parameter #2 [ <required> $g ]
+        Parameter #3 [ <required> $b ]
+        Parameter #4 [ <required> $a ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRGB ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $pixel ]
+        Parameter #1 [ <required> $pixelformat ]
+        Parameter #2 [ <required> &$r ]
+        Parameter #3 [ <required> &$g ]
+        Parameter #4 [ <required> &$b ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRGBA ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $pixel ]
+        Parameter #1 [ <required> $pixelformat ]
+        Parameter #2 [ <required> &$r ]
+        Parameter #3 [ <required> &$g ]
+        Parameter #4 [ <required> &$b ]
+        Parameter #5 [ <required> &$a ]
+      }
+    }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {
@@ -630,11 +670,32 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $palette ]
       }
 
-      - Methods [3] {
+      - Methods [7] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $format ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetRGB ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $pixel ]
+            Parameter #1 [ <required> &$r ]
+            Parameter #2 [ <required> &$g ]
+            Parameter #3 [ <required> &$b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetRGBA ] {
+
+          - Parameters [5] {
+            Parameter #0 [ <required> $pixel ]
+            Parameter #1 [ <required> &$r ]
+            Parameter #2 [ <required> &$g ]
+            Parameter #3 [ <required> &$b ]
+            Parameter #4 [ <required> &$a ]
           }
         }
 
@@ -648,6 +709,25 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $palette ]
+          }
+        }
+
+        Method [ <internal:SDL> public method MapRGB ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method MapRGBA ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+            Parameter #3 [ <required> $a ]
           }
         }
       }

@@ -26,6 +26,12 @@ var_dump(SDL_SetPixelFormatPalette($f, $p));
 echo "= Result\n";
 var_dump($f);
 
+echo "= RGB\n";
+var_dump(SDL_MapRGB($f, 100,100,100));
+var_dump(SDL_MapRGBA($f, 200, 200,200,200));
+var_dump(SDL_GetRGB(5, $f, $r, $g, $b), $r, $g, $b);
+var_dump(SDL_GetRGBA(10, $f, $r, $g, $b, $a), $r, $g, $b, $a);
+
 echo "= Free\n";
 SDL_FreeFormat($f);
 SDL_FreePalette($p);
@@ -260,5 +266,17 @@ object(SDL_PixelFormat)#%d (16) {
     }
   }
 }
+= RGB
+int(8)
+int(12)
+NULL
+int(85)
+int(85)
+int(85)
+NULL
+int(170)
+int(170)
+int(170)
+int(170)
 = Free
 = Done
