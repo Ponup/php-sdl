@@ -212,10 +212,65 @@ PHP_FUNCTION(SDL_FillRect)
 /* }}} */
 
 
-/*
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillRects, 0, 0, 4)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_INFO(0, count)
+       ZEND_ARG_INFO(0, color)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_FillRects, 0, 0, 3)
+       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_INFO(0, count)
+       ZEND_ARG_INFO(0, color)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_FillRects(SDL_Surface surface, SDL_Rect rect, int count, int color)
+
 extern DECLSPEC int SDLCALL SDL_FillRects
     (SDL_Surface * dst, const SDL_Rect * rects, int count, Uint32 color);
 */
+PHP_FUNCTION(SDL_FillRects)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_rects, **z_rect;
+	long color, count;
+	int i, nb;
+	SDL_Rect *rects;
+	SDL_Surface *surface;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oall", &z_surface, php_sdl_surface_ce, &z_rects, &count, &color) == FAILURE) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	if (count<=0) {
+		count = zend_hash_next_free_element(Z_ARRVAL_P(z_rects));
+	}
+	rects = emalloc(sizeof(SDL_Rect)*count);
+
+	for (i=nb=0 ; i<count ; i++) {
+		if (zend_hash_index_find(Z_ARRVAL_P(z_rects), i, (void**)&z_rect) == FAILURE) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "rects[%d] missing", i);
+
+		} else if (Z_TYPE_PP(z_rect) != IS_OBJECT || Z_OBJCE_PP(z_rect) != get_php_sdl_rect_ce()) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "rects[%d] is not a SDL_Rect object", i);
+
+		} else {
+			zval_to_sdl_rect(*z_rect, rects+nb TSRMLS_CC);
+			nb++;
+		}
+	}
+
+	if (nb) {
+		RETVAL_LONG(SDL_FillRects(surface, rects, nb, (Uint32)color));
+
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "no rect in provided array");
+		RETVAL_LONG(-1);
+	}
+	efree(rects);
+}
+/* }}} */
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
@@ -231,6 +286,7 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_CreateRGBSurface,			arginfo_SDL_CreateRGBSurface)
 	ZEND_FE(SDL_FreeSurface,				arginfo_SDL_Surface)
 	ZEND_FE(SDL_FillRect,					arginfo_SDL_FillRect)
+	ZEND_FE(SDL_FillRects,					arginfo_SDL_FillRects)
 	ZEND_FE_END
 };
 /* }}} */
@@ -240,6 +296,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 
 	PHP_FALIAS(Free,             SDL_FreeSurface,           arginfo_surface_none)
 	PHP_FALIAS(FillRect,         SDL_FillRect,              arginfo_SDL_Surface_FillRect)
+	PHP_FALIAS(FillRects,        SDL_FillRects,             arginfo_SDL_Surface_FillRects)
 
 	PHP_FE_END
 };
