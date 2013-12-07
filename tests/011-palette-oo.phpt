@@ -16,6 +16,10 @@ $p2 = new SDL_Palette(1);
 var_dump($p2);
 echo "= Color\n";
 var_dump($p2->colors[0]);
+$colors = array(new SDL_Color(1,2,3,4));
+var_dump($p2->SetColors($colors, 2));
+var_dump($p2->SetColors($colors, 0));
+var_dump($p2->colors[0]);
 echo "= Free\n";
 $p2->Free()
 ?>
@@ -55,6 +59,20 @@ object(SDL_Color)#%d (4) {
   int(255)
   ["a"]=>
   int(255)
+}
+
+%s: SDL_Palette::SetColors(): Invalid first color index, 2 >= 1 in %s/011-palette-oo.php on line 13
+int(-1)
+int(0)
+object(SDL_Color)#%d (4) {
+  ["r"]=>
+  int(1)
+  ["g"]=>
+  int(2)
+  ["b"]=>
+  int(3)
+  ["a"]=>
+  int(4)
 }
 = Free
 = Done

@@ -299,7 +299,21 @@ static PHP_METHOD(SDL_Palette, __construct)
                                                        SDL_Palette *palette);
  */
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 3)
+       ZEND_ARG_INFO(0, palette)
+       ZEND_ARG_INFO(0, colors)
+       ZEND_ARG_INFO(0, first)
+       ZEND_ARG_INFO(0, ncolors)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_SetColors, 0, 0, 2)
+       ZEND_ARG_INFO(0, colors)
+       ZEND_ARG_INFO(0, first)
+       ZEND_ARG_INFO(0, ncolors)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetPaletteColors(SDL_Palette palette, array colors, int first, int ncolors)
+
  *  \brief Set a range of colors in a palette.
  *
  *  \param palette    The palette to modify.
@@ -312,6 +326,57 @@ static PHP_METHOD(SDL_Palette, __construct)
                                                   const SDL_Color * colors,
                                                   int firstcolor, int ncolors);
  */
+PHP_FUNCTION(SDL_SetPaletteColors)
+{
+	struct php_sdl_palette *intern;
+	zval *object, *z_colors, **z_color;
+	SDL_Palette *palette;
+	SDL_Color *colors;
+	int i, nb;
+	long first, ncolors=0, count;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oal|l", &object, php_sdl_palette_ce, &z_colors, &first, &ncolors) == FAILURE) {
+		return;
+	}
+	FETCH_PALETTE(palette, object, 1);
+	count = zend_hash_next_free_element(Z_ARRVAL_P(z_colors));
+
+	if (ncolors <= 0) {
+		ncolors = count;
+	} else if (ncolors > count) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Invalid color number, %ld will be used instead of %ld", count, ncolors);
+		ncolors = count;
+	}
+	if (first >= intern->palette->ncolors) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid first color index, %ld >= %d", first, intern->palette->ncolors);
+		RETURN_LONG(-1);
+	}
+	if (first+ncolors > intern->palette->ncolors) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid color number, %ld > %d", first+ncolors, intern->palette->ncolors);
+		RETURN_LONG(-1);
+	}
+	colors = emalloc(sizeof(SDL_Color) * ncolors);
+	for (nb=i=0 ; i<ncolors ; i++) {
+		if (zend_hash_index_find(Z_ARRVAL_P(z_colors), i, (void **)&z_color) == FAILURE) {
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Unable to find colors[%d]", i);
+
+		} else if (Z_TYPE_PP(z_color) != IS_OBJECT || Z_OBJCE_PP(z_color) != php_sdl_color_ce) {
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "colors[%d] is not a SDL_Color object", i);
+		} else {
+			zval_to_sdl_color(*z_color, colors+nb TSRMLS_CC);
+			nb++;
+		}
+	}
+	if (nb) {
+		RETVAL_LONG(SDL_SetPaletteColors(palette, colors, (int)first, nb));
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "no color in provided array");
+		RETVAL_LONG(-1);
+	}
+	efree(colors);
+}
+/* }}} */
+
 
 /* {{{ proto void SDL_FreePalette(SDL_Palette palette)
 
@@ -507,6 +572,7 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_ME(SDL_Palette, __construct,  arginfo_SDL_AllocPalette, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Free,             SDL_FreePalette,           arginfo_palette_none)
+	PHP_FALIAS(SetColors,        SDL_SetPaletteColors,      arginfo_SDL_Palette_SetColors)
 
 	PHP_FE_END
 };
@@ -519,6 +585,7 @@ zend_function_entry sdl_pixels_functions[] = {
 
 	ZEND_FE(SDL_AllocPalette,						arginfo_SDL_AllocPalette)
 	ZEND_FE(SDL_FreePalette,						arginfo_SDL_Palette)
+	ZEND_FE(SDL_SetPaletteColors,					arginfo_SDL_SetPaletteColors)
 	ZEND_FE_END
 };
 /* }}} */
