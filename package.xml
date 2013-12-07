@@ -67,6 +67,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='video.h'/>
       <file role='src' name='window.c'/>
       <file role='src' name='window.h'/>
+      <dir name="examples">
+        <file role='doc' name='window.php'/>
+      </dir> <!-- examples -->
       <dir name="tests">
         <file role='test' name='001-load.phpt'/>
         <file role='test' name='002-simpleinit.phpt'/>
@@ -81,7 +84,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='011-palette-oo.phpt'/>
         <file role='test' name='012-pixelformat.phpt'/>
         <file role='test' name='013-pixelformat-oo.phpt'/>
-      </dir> <!-- //tests -->
+      </dir> <!-- tests -->
     </dir>
   </contents>
   <dependencies>

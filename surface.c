@@ -345,7 +345,7 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 
 		MAKE_STD_ZVAL(zv);
 		sdl_rect_to_zval(&intern->surface->clip_rect, zv);
-		zend_hash_update(props, "clip_rect", sizeof("paclip_rectlette"), &zv, sizeof(zv), NULL);
+		zend_hash_update(props, "clip_rect", sizeof("clip_rect"), &zv, sizeof(zv), NULL);
 	}
 	return props;
 }
