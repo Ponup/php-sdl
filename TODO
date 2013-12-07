@@ -6,13 +6,13 @@ Done:
 	SDL.h
 	SDL_cpuinfo.h
 	SDL_error.h
+	SDL_pixels.h
 	SDL_rect.h
 	SDL_video.h (video)
 
 WIP remi:
 	SDL_video.h (window)
 	SDL_surface.h
-	SDL_pixels.h
 
 TODO:
 	SDL_assert.h

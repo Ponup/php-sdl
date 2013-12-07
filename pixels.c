@@ -758,10 +758,37 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CalculateGammaRamp, 0, 0, 2)
+       ZEND_ARG_INFO(0, gamma)
+       ZEND_ARG_INFO(1, ramp)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_CalculateGammaRamp(float gamma, array &ramp)
+
  *  \brief Calculate a 256 entry gamma ramp for a gamma value.
  extern DECLSPEC void SDLCALL SDL_CalculateGammaRamp(float gamma, Uint16 * ramp);
  */
+PHP_FUNCTION(SDL_CalculateGammaRamp)
+{
+	double gamma;
+	zval *z_ramp, *zv;
+	Uint16 ramp[256];
+	int i;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dz", &gamma, &z_ramp) == FAILURE) {
+		RETURN_FALSE;
+	}
+	SDL_CalculateGammaRamp((float)gamma, ramp);
+	zval_dtor(z_ramp);
+	array_init(z_ramp);
+	for (i=0 ; i<256 ; i++) {
+		MAKE_STD_ZVAL(zv);
+		ZVAL_LONG(zv, ramp[i]);
+		add_next_index_zval(z_ramp, zv);
+	}
+}
+/* }}} */
+
 
 /* {{{ php_sdl_palette_free
 	 */
@@ -1090,6 +1117,7 @@ zend_function_entry sdl_pixels_functions[] = {
 	ZEND_FE(SDL_MapRGBA,							arginfo_SDL_MapRGBA)
 	ZEND_FE(SDL_GetRGB,								arginfo_SDL_GetRGB)
 	ZEND_FE(SDL_GetRGBA,							arginfo_SDL_GetRGBA)
+	ZEND_FE(SDL_CalculateGammaRamp,					arginfo_SDL_CalculateGammaRamp)
 	ZEND_FE_END
 };
 /* }}} */

@@ -36,9 +36,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <notes>
 - initial version for SDL2, rewrite from scratch providing procedural style and object oriented style
 - implemented classes:
+  SDL_Color
   SDL_DisplayMode
+  SDL_Palette
+  SDL_PixelFormat
   SDL_Point
   SDL_Rect
+  SDL_Surface
   SDL_Window
   </notes>
   <contents>
