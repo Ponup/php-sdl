@@ -27,6 +27,24 @@ struct php_sdl_color {
 	zend_object   zo;
 };
 
+zend_class_entry *php_sdl_palette_ce;
+static zend_object_handlers php_sdl_palette_handlers;
+struct php_sdl_palette {
+	zend_object   zo;
+	SDL_Palette   *palette;
+	Uint32        flags;
+};
+
+#define FETCH_PALETTE(__ptr, __id, __check) \
+{ \
+        intern = (struct php_sdl_palette *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = intern->palette; \
+        if (__check && !__ptr) {\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                RETURN_FALSE;\
+        }\
+}
+
 void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC)
 {
 	object_init_ex(value, php_sdl_color_ce);
@@ -49,6 +67,22 @@ void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC)
 	val = zend_read_property(php_sdl_color_ce, value, "a", 1, 0 TSRMLS_CC);
 	color->a = (Uint8)Z_LVAL_P(val);
 }
+
+/* {{{ sdl_palette_to_zval */
+zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC)
+{
+	struct php_sdl_palette *intern;
+	if (palette) {
+		object_init_ex(z_val, php_sdl_palette_ce);
+		intern = (struct php_sdl_palette *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->palette = palette;
+		intern->flags = flags;
+
+		return SUCCESS;
+	}
+	return FAILURE;
+}
+/* }}} */
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Color__construct, 0, 0, 4)
@@ -78,6 +112,7 @@ static PHP_METHOD(SDL_Color, __construct)
 	zend_update_property_long(php_sdl_color_ce, getThis(), "a", 1, a&255 TSRMLS_CC);
 }
 /* }}} */
+
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPixelFormatName, 0, 0, 1)
@@ -202,7 +237,12 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
  extern DECLSPEC void SDLCALL SDL_FreeFormat(SDL_PixelFormat *format);
  */
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_AllocPalette, 0, 0, 1)
+       ZEND_ARG_INFO(0, ncolors)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Palette SDL_AllocPalette(int ncolors)
+
  *  \brief Create a palette structure with the specified number of color
  *         entries.
  *
@@ -212,7 +252,46 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
  *
  *  \sa SDL_FreePalette()
  extern DECLSPEC SDL_Palette *SDLCALL SDL_AllocPalette(int ncolors);
+*/
+PHP_FUNCTION(SDL_AllocPalette)
+{
+	long ncolors;
+	SDL_Palette *palette;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ncolors)) {
+		return;
+	}
+	palette = SDL_AllocPalette(ncolors);
+	sdl_palette_to_zval(palette, return_value, 0 TSRMLS_CC);
+}
+/* }}} */
+
+/* {{{ proto SDL_Palette, __construct(ncolors)
  */
+static PHP_METHOD(SDL_Palette, __construct)
+{
+	struct php_sdl_palette *intern;
+	long ncolors;
+	zend_error_handling error_handling;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ncolors)) {
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		return;
+	}
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+
+	intern->palette = SDL_AllocPalette(ncolors);
+	if (intern->palette) {
+		intern->flags = 0;
+	} else {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
+	}
+}
+/* }}} */
+
 
 /**
  *  \brief Set the palette for a pixel format structure.
@@ -234,12 +313,28 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
                                                   int firstcolor, int ncolors);
  */
 
-/**
+/* {{{ proto void SDL_FreePalette(SDL_Palette palette)
+
  *  \brief Free a palette created with SDL_AllocPalette().
  *
  *  \sa SDL_AllocPalette()
  extern DECLSPEC void SDLCALL SDL_FreePalette(SDL_Palette * palette);
  */
+PHP_FUNCTION(SDL_FreePalette)
+{
+	struct php_sdl_palette *intern;
+	zval *object;
+	SDL_Palette *palette;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_palette_ce) == FAILURE) {
+		return;
+	}
+	FETCH_PALETTE(palette, object, 1);
+
+	SDL_FreePalette(intern->palette);
+	intern->palette = NULL;
+}
+/* }}} */
 
 /**
  *  \brief Maps an RGB triple to an opaque pixel value for a given pixel format.
@@ -282,6 +377,125 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
  extern DECLSPEC void SDLCALL SDL_CalculateGammaRamp(float gamma, Uint16 * ramp);
  */
 
+/* {{{ php_sdl_palette_free
+	 */
+static void php_sdl_palette_free(void *object TSRMLS_DC)
+{
+	struct php_sdl_palette *intern = (struct php_sdl_palette *) object;
+
+	if (intern->palette) {
+		if (!(intern->flags & SDL_DONTFREE)) {
+			SDL_FreePalette(intern->palette);
+		}
+	}
+
+	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	efree(intern);
+}
+/* }}} */
+
+/* {{{ php_sdl_palette_new
+ */
+static zend_object_value php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	zend_object_value retval;
+	struct php_sdl_palette *intern;
+
+	intern = emalloc(sizeof(*intern));
+	memset(intern, 0, sizeof(*intern));
+
+	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	object_properties_init(&intern->zo, class_type);
+
+	intern->palette = NULL;
+
+	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_palette_free, NULL TSRMLS_CC);
+	retval.handlers = (zend_object_handlers *) &php_sdl_palette_handlers;
+
+	return retval;
+}
+/* }}} */
+
+
+/* {{{ sdl_palette_read_property*/
+zval *sdl_palette_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+{
+	struct php_sdl_palette *intern = (struct php_sdl_palette *) zend_objects_get_address(object TSRMLS_CC);
+	zval *retval;
+
+	convert_to_string(member);
+
+	MAKE_STD_ZVAL(retval);
+	ZVAL_FALSE(retval);
+
+	if (intern->palette) {
+		if (!strcmp(Z_STRVAL_P(member), "ncolors")) {
+			ZVAL_LONG(retval, intern->palette->ncolors);
+
+		} else if (!strcmp(Z_STRVAL_P(member), "version")) {
+			ZVAL_LONG(retval, intern->palette->version);
+
+		} else if (!strcmp(Z_STRVAL_P(member), "refcount")) {
+			ZVAL_LONG(retval, intern->palette->refcount);
+
+		} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
+			int i;
+			zval *z_color;
+			array_init(retval);
+			for (i=0 ; i<intern->palette->ncolors ; i++) {
+				MAKE_STD_ZVAL(z_color);
+				sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
+				add_next_index_zval(retval, z_color);
+			}
+		}
+	}
+	return retval;
+}
+/* }}} */
+
+#define SDL_PALETTE_ADD_PROPERTY(n,f) \
+	MAKE_STD_ZVAL(zv); \
+	ZVAL_LONG(zv, (long)f); \
+	zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
+
+/* {{{ sdl_palette_read_property*/
+static HashTable *sdl_palette_get_properties(zval *object TSRMLS_DC)
+{
+	HashTable *props;
+	zval *zv, *z_color;
+	int i;
+	struct php_sdl_palette *intern = (struct php_sdl_palette *) zend_objects_get_address(object TSRMLS_CC);
+
+	props = zend_std_get_properties(object TSRMLS_CC);
+
+	if (intern->palette) {
+		SDL_PALETTE_ADD_PROPERTY("ncolors",  intern->palette->ncolors);
+		SDL_PALETTE_ADD_PROPERTY("version",  intern->palette->version);
+		SDL_PALETTE_ADD_PROPERTY("refcount", intern->palette->refcount);
+
+		MAKE_STD_ZVAL(zv);
+		array_init(zv);
+		for (i=0 ; i<intern->palette->ncolors ; i++) {
+			MAKE_STD_ZVAL(z_color);
+			sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
+			add_next_index_zval(zv, z_color);
+		}
+		zend_hash_update(props, "colors", sizeof("colors"), &zv, sizeof(zv), NULL);
+	}
+	return props;
+}
+/* }}} */
+
+
+/* generic arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_palette_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette, 0, 0, 1)
+       ZEND_ARG_INFO(0, palette)
+ZEND_END_ARG_INFO()
+
+
 /* {{{ php_sdl_color_methods[] */
 static const zend_function_entry php_sdl_color_methods[] = {
 	PHP_ME(SDL_Color, __construct,     arginfo_SDL_Color__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
@@ -289,29 +503,58 @@ static const zend_function_entry php_sdl_color_methods[] = {
 };
 /* }}} */
 
+static const zend_function_entry php_sdl_palette_methods[] = {
+	PHP_ME(SDL_Palette, __construct,  arginfo_SDL_AllocPalette, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+
+	PHP_FALIAS(Free,             SDL_FreePalette,           arginfo_palette_none)
+
+	PHP_FE_END
+};
+
 /* {{{ sdl_pixels_functions[] */
 zend_function_entry sdl_pixels_functions[] = {
 	ZEND_FE(SDL_GetPixelFormatName,					arginfo_SDL_GetPixelFormatName)
 	ZEND_FE(SDL_PixelFormatEnumToMasks,				arginfo_SDL_PixelFormatEnumToMasks)
 	ZEND_FE(SDL_MasksToPixelFormatEnum,				arginfo_SDL_MasksToPixelFormatEnum)
+
+	ZEND_FE(SDL_AllocPalette,						arginfo_SDL_AllocPalette)
+	ZEND_FE(SDL_FreePalette,						arginfo_SDL_Palette)
 	ZEND_FE_END
 };
 /* }}} */
+
+#define REGISTER_COLOR_PROP(name) \
+	zend_declare_property_long(php_sdl_color_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+
+#define REGISTER_PALETTE_PROP(name) \
+	zend_declare_property_long(php_sdl_palette_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_pixels)
 {
-	zend_class_entry ce_color;
+	zend_class_entry ce_color, ce_palette;
 
 	INIT_CLASS_ENTRY(ce_color, "SDL_Color", php_sdl_color_methods);
 	php_sdl_color_ce = zend_register_internal_class(&ce_color TSRMLS_CC);
 	memcpy(&php_sdl_color_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	zend_declare_property_long(php_sdl_color_ce, "r", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_color_ce, "g", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_color_ce, "b", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_color_ce, "a", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	REGISTER_COLOR_PROP("r");
+	REGISTER_COLOR_PROP("g");
+	REGISTER_COLOR_PROP("b");
+	REGISTER_COLOR_PROP("a");
+
+	INIT_CLASS_ENTRY(ce_palette, "SDL_Palette", php_sdl_palette_methods);
+	ce_palette.create_object = php_sdl_palette_new;
+	php_sdl_palette_ce = zend_register_internal_class(&ce_palette TSRMLS_CC);
+	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
+	php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;
+
+	REGISTER_PALETTE_PROP("ncolors");
+	REGISTER_PALETTE_PROP("version");
+	REGISTER_PALETTE_PROP("refcount");
+	zend_declare_property_null(php_sdl_palette_ce, "colors", sizeof("colors")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
 
 	/* Pixel type. */
 	REGISTER_LONG_CONSTANT("SDL_PIXELTYPE_UNKNOWN",          SDL_PIXELTYPE_UNKNOWN,            CONST_CS | CONST_PERSISTENT);

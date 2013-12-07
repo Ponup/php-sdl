@@ -232,6 +232,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #4 [ <required> $Amask ]
       }
     }
+    Function [ <internal:SDL> function SDL_AllocPalette ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $ncolors ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreePalette ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $palette ]
+      }
+    }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {
@@ -485,7 +497,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [6] {
+  - Classes [7] {
     Class [ <internal:SDL> class SDL_Color ] {
 
       - Constants [0] {
@@ -512,6 +524,40 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #1 [ <required> $g ]
             Parameter #2 [ <required> $b ]
             Parameter #3 [ <required> $a ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Palette ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $ncolors ]
+        Property [ <default> public $version ]
+        Property [ <default> public $refcount ]
+        Property [ <default> public $colors ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $ncolors ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
           }
         }
       }

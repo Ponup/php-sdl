@@ -250,7 +250,7 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 #define SDL_SURFACE_ADD_PROPERTY(n,f) \
 	MAKE_STD_ZVAL(zv); \
 	ZVAL_LONG(zv, (long)f); \
-	zend_hash_update(props, n, strlen(n) + 1, &zv, sizeof(zv), NULL)
+	zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
 
 /* {{{ sdl_surface_read_property*/
 static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
@@ -265,7 +265,7 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 		SDL_SURFACE_ADD_PROPERTY("flags", intern->surface->flags);
 		SDL_SURFACE_ADD_PROPERTY("w",     intern->surface->w);
 		SDL_SURFACE_ADD_PROPERTY("h",     intern->surface->h);
-		SDL_SURFACE_ADD_PROPERTY("pitch", intern->surface->h);
+		SDL_SURFACE_ADD_PROPERTY("pitch", intern->surface->pitch);
 	}
 	return props;
 }
