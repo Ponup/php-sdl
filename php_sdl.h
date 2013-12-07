@@ -49,6 +49,7 @@ extern "C" {
 #endif
 
 extern zend_module_entry sdl_module_entry;
+#define phpext_sdl_ptr &sdl_module_entry
 
 #ifdef PHP_WIN32
 #define PHP_SDL_API __declspec(dllexport)
