@@ -26,6 +26,9 @@
 extern "C" {
 #endif
 
+void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC);
+void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC);
+
 PHP_MINIT_FUNCTION(sdl_pixels);
 
 #ifdef  __cplusplus

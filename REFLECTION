@@ -389,7 +389,38 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [5] {
+  - Classes [6] {
+    Class [ <internal:SDL> class SDL_Color ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $r ]
+        Property [ <default> public $g ]
+        Property [ <default> public $b ]
+        Property [ <default> public $a ]
+      }
+
+      - Methods [1] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+            Parameter #3 [ <required> $a ]
+          }
+        }
+      }
+    }
+
     Class [ <internal:SDL> class SDL_Rect ] {
 
       - Constants [0] {
