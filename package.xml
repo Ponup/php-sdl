@@ -72,6 +72,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='006-rect.phpt'/>
         <file role='test' name='007-rect-oo.phpt'/>
         <file role='test' name='008-error.phpt'/>
+        <file role='test' name='009-color.phpt'/>
       </dir> <!-- //tests -->
     </dir>
   </contents>
