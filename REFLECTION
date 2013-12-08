@@ -406,6 +406,57 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $mode ]
       }
     }
+    Function [ <internal:SDL> function SDL_RWFromFP ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $fp ]
+        Parameter #1 [ <optional> $autoclose ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWsize ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWseek ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $offset ]
+        Parameter #2 [ <required> $whence ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWtell ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWread ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> &$buffer ]
+        Parameter #2 [ <required> $size ]
+        Parameter #3 [ <optional> $number ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWwrite ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $buffer ]
+        Parameter #2 [ <optional> $size ]
+        Parameter #3 [ <optional> $number ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWclose ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
     Function [ <internal:SDL> function SDL_CreateRGBSurface ] {
 
       - Parameters [8] {
@@ -970,7 +1021,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $type ]
       }
 
-      - Methods [2] {
+      - Methods [8] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [0] {
@@ -978,6 +1029,50 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Size ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Seek ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $whence ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Tell ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Read ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$buffer ]
+            Parameter #1 [ <required> $size ]
+            Parameter #2 [ <optional> $number ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Write ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $buffer ]
+            Parameter #1 [ <optional> $size ]
+            Parameter #2 [ <optional> $number ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Close ] {
 
           - Parameters [0] {
           }

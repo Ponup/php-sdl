@@ -30,6 +30,8 @@ zend_class_entry *get_php_sdl_rwops_ce(void);
 void sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC);
 SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC);
 
+int php_sdl_check_overflow(int a, int b);
+
 PHP_MINIT_FUNCTION(sdl_rwops);
 
 #ifdef  __cplusplus

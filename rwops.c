@@ -31,6 +31,25 @@ struct php_sdl_rwops {
 	char         *buf;
 };
 
+
+/* {{{ php_sdl_check_overflow */
+int php_sdl_check_overflow(int a, int b)
+{
+	TSRMLS_FETCH();
+
+	if(a <= 0 || b <= 0) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully\n");
+		return 1;
+	}
+	if(a > INT_MAX / b) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully\n");
+		return 1;
+	}
+	return 0;
+}
+/* }}} */
+
+
 /* {{{ get_php_sdl_rwops_ce */
 zend_class_entry *get_php_sdl_rwops_ce(void)
 {
@@ -264,6 +283,9 @@ PHP_FUNCTION(SDL_RWFromFP)
 	if (stream == NULL) {
 		RETURN_NULL();
 	}
+	if (autoclose) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "autoclose can raise unsupported error with PHP stream");
+	}
 
 	/* Can we get a FILE * */
 	if (php_stream_is(stream, PHP_STREAM_IS_STDIO))	{
@@ -297,13 +319,13 @@ PHP_FUNCTION(SDL_RWFromFP)
 PHP_FUNCTION(SDL_FreeRW)
 {
 	struct php_sdl_rwops *intern;
-	zval *object;
+	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
-	FETCH_RWOPS(rwops, object, 1);
+	FETCH_RWOPS(rwops, z_rwops, 1);
 
 	SDL_FreeRW(intern->rwops);
 	if (intern->buf) {
@@ -314,6 +336,7 @@ PHP_FUNCTION(SDL_FreeRW)
 }
 /* }}} */
 
+
 /* {{{ proto int SDL_RWsize(SDL_RWops area)
 
  define SDL_RWsize(ctx)         (ctx)->size(ctx)
@@ -321,28 +344,191 @@ PHP_FUNCTION(SDL_FreeRW)
 PHP_FUNCTION(SDL_RWsize)
 {
 	struct php_sdl_rwops *intern;
-	zval *object;
+	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
-	FETCH_RWOPS(rwops, object, 1);
+	FETCH_RWOPS(rwops, z_rwops, 1);
 
 	RETURN_LONG(SDL_RWsize(rwops));
 }
 /* }}} */
 
-/**
- *  \name Read/write macros
- *
- *  Macros to easily read and write from an SDL_RWops structure.
-#define SDL_RWseek(ctx, offset, whence) (ctx)->seek(ctx, offset, whence)
-#define SDL_RWtell(ctx)         (ctx)->seek(ctx, 0, RW_SEEK_CUR)
-#define SDL_RWread(ctx, ptr, size, n)   (ctx)->read(ctx, ptr, size, n)
-#define SDL_RWwrite(ctx, ptr, size, n)  (ctx)->write(ctx, ptr, size, n)
-#define SDL_RWclose(ctx)        (ctx)->close(ctx)
-/*/
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWseek, 0, 0, 3)
+       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_INFO(0, offset)
+       ZEND_ARG_INFO(0, whence)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_seek, 0, 0, 2)
+       ZEND_ARG_INFO(0, offset)
+       ZEND_ARG_INFO(0, whence)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_RWsize(SDL_RWops area)
+
+ define SDL_RWseek(ctx, offset, whence) (ctx)->seek(ctx, offset, whence)
+ */
+PHP_FUNCTION(SDL_RWseek)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+	long offset, whence;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_rwops, php_sdl_rwops_ce, &offset, &whence) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_RWseek(rwops, offset, whence));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_RWtell(SDL_RWops area)
+
+ define SDL_RWtell(ctx)         (ctx)->seek(ctx, 0, RW_SEEK_CUR)
+ */
+PHP_FUNCTION(SDL_RWtell)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_RWtell(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_RWclose(SDL_RWops area)
+
+ define SDL_RWclose(ctx)        (ctx)->close(ctx)
+ */
+PHP_FUNCTION(SDL_RWclose)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	/* close method also call free */
+	intern->rwops = NULL;
+	intern->buf   = NULL;
+
+	RETURN_LONG(SDL_RWclose(rwops));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWread, 0, 0, 3)
+       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_INFO(1, buffer)
+       ZEND_ARG_INFO(0, size)
+       ZEND_ARG_INFO(0, number)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_read, 0, 0, 2)
+       ZEND_ARG_INFO(1, buffer)
+       ZEND_ARG_INFO(0, size)
+       ZEND_ARG_INFO(0, number)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_RWread(SDL_RWops arean string, &buf, int size [, int n=1])
+
+ define SDL_RWread(ctx, ptr, size, n)   (ctx)->read(ctx, ptr, size, n)
+ */
+PHP_FUNCTION(SDL_RWread)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops, *z_buf;
+	long size, n=1, read;
+	SDL_RWops *rwops;
+	char *buf;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozl|l", &z_rwops, php_sdl_rwops_ce, &z_buf, &size, &n) == FAILURE) {
+		return;
+	}
+	if (php_sdl_check_overflow(size, n)) {
+		return;
+	}
+
+	FETCH_RWOPS(rwops, z_rwops, 1);
+	buf = emalloc(size * n);
+	read = SDL_RWread(rwops, buf, size, n) * size;
+	if (read > 0) {
+		if (read < (size * n)) {
+			buf = erealloc(buf, read);
+		}
+		zval_dtor(z_buf);
+		ZVAL_STRINGL(z_buf, buf, read, 0);
+	} else {
+		efree(buf);
+	}
+	RETURN_LONG(read);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWwrite, 0, 0, 2)
+       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_INFO(0, buffer)
+       ZEND_ARG_INFO(0, size)
+       ZEND_ARG_INFO(0, number)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_write, 0, 0, 1)
+       ZEND_ARG_INFO(0, buffer)
+       ZEND_ARG_INFO(0, size)
+       ZEND_ARG_INFO(0, number)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_RWwrite(SDL_RWops arean string, buf, int size [, int n=1])
+
+ define SDL_RWwrite(ctx, ptr, size, n)  (ctx)->write(ctx, ptr, size, n)
+ */
+PHP_FUNCTION(SDL_RWwrite)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	long size=0, n=1, write;
+	int buf_len;
+	SDL_RWops *rwops;
+	char *buf;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os|ll", &z_rwops, php_sdl_rwops_ce, &buf, &buf_len, &size, &n) == FAILURE) {
+		return;
+	}
+	if (size<=0) { /* optional arg, default to string length */
+		size = buf_len;
+		n = 1;
+	}
+	if (php_sdl_check_overflow(size, n)) {
+		return;
+	}
+	if (buf_len < (size * n)) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "given size reduce to buffer size (%d)", buf_len);
+		size = buf_len;
+		n = 1;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	write = SDL_RWwrite(rwops, buf, size, n) * size;
+	RETURN_LONG(write);
+}
+/* }}} */
 
 
 /* generic arginfo */
@@ -359,6 +545,11 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 
 	PHP_FALIAS(Free,         SDL_FreeRW,        arginfo_rwops_none)
 	PHP_FALIAS(Size,         SDL_RWsize,        arginfo_rwops_none)
+	PHP_FALIAS(Seek,         SDL_RWseek,        arginfo_SDL_RWops_seek)
+	PHP_FALIAS(Tell,         SDL_RWtell,        arginfo_rwops_none)
+	PHP_FALIAS(Read,         SDL_RWread,        arginfo_SDL_RWops_read)
+	PHP_FALIAS(Write,        SDL_RWwrite,       arginfo_SDL_RWops_write)
+	PHP_FALIAS(Close,        SDL_RWclose,       arginfo_rwops_none)
 
 	PHP_FE_END
 };
@@ -370,7 +561,12 @@ zend_function_entry sdl_rwops_functions[] = {
 	ZEND_FE(SDL_FreeRW,                       arginfo_SDL_RWops)
 	ZEND_FE(SDL_RWFromFile,                   arginfo_SDL_RWFromFile)
 	ZEND_FE(SDL_RWFromFP,                     arginfo_SDL_RWFromFP)
-	ZEND_FE(SDL_RWsize,                       arginfo_rwops_none)
+	ZEND_FE(SDL_RWsize,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWseek,                       arginfo_SDL_RWseek)
+	ZEND_FE(SDL_RWtell,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWread,                       arginfo_SDL_RWread)
+	ZEND_FE(SDL_RWwrite,                      arginfo_SDL_RWwrite)
+	ZEND_FE(SDL_RWclose,                      arginfo_SDL_RWops)
 	ZEND_FE_END
 };
 /* }}} */
