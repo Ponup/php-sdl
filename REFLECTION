@@ -10,6 +10,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_INIT_EVENTS ] { 16384 }
     Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
     Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
+    Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
+    Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
+    Constant [ integer SDL_POWERSTATE_CHARGING ] { 3 }
+    Constant [ integer SDL_POWERSTATE_CHARGED ] { 4 }
     Constant [ integer SDL_PIXELTYPE_UNKNOWN ] { 0 }
     Constant [ integer SDL_PIXELTYPE_INDEX1 ] { 1 }
     Constant [ integer SDL_PIXELTYPE_INDEX4 ] { 2 }
@@ -92,6 +97,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
     Constant [ integer SDL_DONTFREE ] { 4 }
+    Constant [ integer SDL_COMPILEDVERSION ] { 2001 }
+    Constant [ integer SDL_MAJOR_VERSION ] { 2 }
+    Constant [ integer SDL_MINOR_VERSION ] { 0 }
+    Constant [ integer SDL_PATCHLEVEL ] { 1 }
+    Constant [ string SDL_REVISION ] { hg-7890:c031abe0b287 }
     Constant [ integer SDL_WINDOW_FULLSCREEN ] { 1 }
     Constant [ integer SDL_WINDOW_OPENGL ] { 2 }
     Constant [ integer SDL_WINDOW_SHOWN ] { 4 }
@@ -106,16 +116,6 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_WINDOW_FULLSCREEN_DESKTOP ] { 4097 }
     Constant [ integer SDL_WINDOW_FOREIGN ] { 2048 }
     Constant [ integer SDL_WINDOW_ALLOW_HIGHDPI ] { 8192 }
-    Constant [ integer SDL_COMPILEDVERSION ] { 2001 }
-    Constant [ integer SDL_MAJOR_VERSION ] { 2 }
-    Constant [ integer SDL_MINOR_VERSION ] { 0 }
-    Constant [ integer SDL_PATCHLEVEL ] { 1 }
-    Constant [ string SDL_REVISION ] { hg-7890:c031abe0b287 }
-    Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
-    Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
-    Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
-    Constant [ integer SDL_POWERSTATE_CHARGING ] { 3 }
-    Constant [ integer SDL_POWERSTATE_CHARGED ] { 4 }
   }
 
   - Functions {
@@ -222,6 +222,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_ClearError ] {
 
       - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetPowerInfo ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$secs ]
+        Parameter #1 [ <optional> &$pct ]
       }
     }
     Function [ <internal:SDL> function SDL_GetPixelFormatName ] {
@@ -634,6 +641,44 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $path ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetRevision ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRevisionNumber ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetVersion ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version_array ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version_array ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSIONNUM ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION_ATLEAST ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
+      }
+    }
     Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
 
       - Parameters [0] {
@@ -809,51 +854,6 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [1] {
         Parameter #0 [ <required> $window ]
-      }
-    }
-    Function [ <internal:SDL> function SDL_GetRevision ] {
-
-      - Parameters [0] {
-      }
-    }
-    Function [ <internal:SDL> function SDL_GetRevisionNumber ] {
-
-      - Parameters [0] {
-      }
-    }
-    Function [ <internal:SDL> function SDL_GetVersion ] {
-
-      - Parameters [1] {
-        Parameter #0 [ <required> &$version_array ]
-      }
-    }
-    Function [ <internal:SDL> function SDL_VERSION ] {
-
-      - Parameters [1] {
-        Parameter #0 [ <required> &$version_array ]
-      }
-    }
-    Function [ <internal:SDL> function SDL_VERSIONNUM ] {
-
-      - Parameters [3] {
-        Parameter #0 [ <required> $x ]
-        Parameter #1 [ <required> $y ]
-        Parameter #2 [ <required> $z ]
-      }
-    }
-    Function [ <internal:SDL> function SDL_VERSION_ATLEAST ] {
-
-      - Parameters [3] {
-        Parameter #0 [ <required> $x ]
-        Parameter #1 [ <required> $y ]
-        Parameter #2 [ <required> $z ]
-      }
-    }
-    Function [ <internal:SDL> function SDL_GetPowerInfo ] {
-
-      - Parameters [2] {
-        Parameter #0 [ <required> &$secs ]
-        Parameter #1 [ <required> &$pct ]
       }
     }
   }
