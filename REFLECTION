@@ -471,6 +471,97 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $RWops ]
       }
     }
+    Function [ <internal:SDL> function SDL_ReadU8 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE16 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE16 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE32 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE32 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE64 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE64 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteU8 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE16 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE16 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE32 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE32 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE64 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE64 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
     Function [ <internal:SDL> function SDL_CreateRGBSurface ] {
 
       - Parameters [8] {
@@ -1035,7 +1126,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $type ]
       }
 
-      - Methods [8] {
+      - Methods [22] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [0] {
@@ -1089,6 +1180,97 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Close ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadU8 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE16 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE16 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE32 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE32 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE64 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE64 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteU8 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE16 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE16 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE32 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE32 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE64 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE64 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
           }
         }
       }

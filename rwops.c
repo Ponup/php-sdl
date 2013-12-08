@@ -602,6 +602,313 @@ PHP_FUNCTION(SDL_RWwrite)
 /* }}} */
 
 
+/* {{{ proto int SDL_ReadU8(SDL_RWops area)
+
+ *  \name Read endian functions
+ *
+ *  Read an item of the specified endianness and return in native format.
+ extern DECLSPEC Uint8 SDLCALL SDL_ReadU8(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadU8)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadU8(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_ReadLE16(SDL_RWops area)
+
+ extern DECLSPEC Uint16 SDLCALL SDL_ReadLE16(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadLE16)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadLE16(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_ReadBE16(SDL_RWops area)
+
+ extern DECLSPEC Uint16 SDLCALL SDL_ReadBE16(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadBE16)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadBE16(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_ReadLE32(SDL_RWops area)
+
+extern DECLSPEC Uint32 SDLCALL SDL_ReadLE32(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadLE32)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadLE32(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_ReadBE32(SDL_RWops area)
+
+extern DECLSPEC Uint32 SDLCALL SDL_ReadBE32(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadBE32)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadBE32(rwops));
+}
+/* }}} */
+
+
+#if SIZEOF_LONG > 4
+/* {{{ proto int SDL_ReadLE64(SDL_RWops area)
+
+extern DECLSPEC Uint64 SDLCALL SDL_ReadLE64(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadLE64)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadLE64(rwops));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_ReadBE64(SDL_RWops area)
+
+ extern DECLSPEC Uint64 SDLCALL SDL_ReadBE64(SDL_RWops * src);
+ */
+PHP_FUNCTION(SDL_ReadBE64)
+{
+	struct php_sdl_rwops *intern;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_ReadBE64(rwops));
+}
+/* }}} */
+#endif
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_write, 0, 0, 2)
+       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_writeint, 0, 0, 1)
+       ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_WriteU8(SDL_RWops area, int value)
+
+ *  \name Write endian functions
+ *
+ *  Write an item of native format to the specified endianness.
+ extern DECLSPEC size_t SDLCALL SDL_WriteU8(SDL_RWops * dst, Uint8 value);
+ */
+PHP_FUNCTION(SDL_WriteU8)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteU8(rwops, (Uint8)value));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_WriteLE16(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteLE16(SDL_RWops * dst, Uint16 value);
+ */
+PHP_FUNCTION(SDL_WriteLE16)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteLE16(rwops, (Uint16)value));
+}
+/* }}} */
+
+
+
+/* {{{ proto int SDL_WriteBE16(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteBE16(SDL_RWops * dst, Uint16 value);
+ */
+PHP_FUNCTION(SDL_WriteBE16)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteBE16(rwops, (Uint16)value));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_WriteLE32(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteLE32(SDL_RWops * dst, Uint32 value);
+ */
+PHP_FUNCTION(SDL_WriteLE32)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteLE32(rwops, (Uint32)value));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_WriteBE32(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteBE32(SDL_RWops * dst, Uint32 value);
+ */
+PHP_FUNCTION(SDL_WriteBE32)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteBE32(rwops, (Uint32)value));
+}
+/* }}} */
+
+
+#if SIZEOF_LONG > 4
+/* {{{ proto int SDL_WriteLE64(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteLE64(SDL_RWops * dst, Uint64 value);
+ */
+PHP_FUNCTION(SDL_WriteLE64)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteLE64(rwops, (Uint64)value));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_WriteBE64(SDL_RWops area, int value)
+
+ extern DECLSPEC size_t SDLCALL SDL_WriteBE64(SDL_RWops * dst, Uint64 value);
+ */
+PHP_FUNCTION(SDL_WriteBE64)
+{
+	struct php_sdl_rwops *intern;
+	long value;
+	zval *z_rwops;
+	SDL_RWops *rwops;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+		return;
+	}
+	FETCH_RWOPS(rwops, z_rwops, 1);
+
+	RETURN_LONG(SDL_WriteBE64(rwops, (Uint64)value));
+}
+/* }}} */
+#endif
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rwops_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -621,7 +928,24 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_FALIAS(Read,         SDL_RWread,        arginfo_SDL_RWops_read)
 	PHP_FALIAS(Write,        SDL_RWwrite,       arginfo_SDL_RWops_write)
 	PHP_FALIAS(Close,        SDL_RWclose,       arginfo_rwops_none)
-
+	PHP_FALIAS(ReadU8,       SDL_ReadU8,        arginfo_rwops_none)
+	PHP_FALIAS(ReadLE16,     SDL_ReadLE16,      arginfo_rwops_none)
+	PHP_FALIAS(ReadBE16,     SDL_ReadBE16,      arginfo_rwops_none)
+	PHP_FALIAS(ReadLE32,     SDL_ReadLE32,      arginfo_rwops_none)
+	PHP_FALIAS(ReadBE32,     SDL_ReadBE32,      arginfo_rwops_none)
+#if SIZEOF_LONG > 4
+	PHP_FALIAS(ReadLE64,     SDL_ReadLE64,      arginfo_rwops_none)
+	PHP_FALIAS(ReadBE64,     SDL_ReadBE64,      arginfo_rwops_none)
+#endif
+	PHP_FALIAS(WriteU8,      SDL_WriteU8,       arginfo_SDL_RWops_writeint)
+	PHP_FALIAS(WriteLE16,    SDL_WriteLE16,     arginfo_SDL_RWops_writeint)
+	PHP_FALIAS(WriteBE16,    SDL_WriteBE16,     arginfo_SDL_RWops_writeint)
+	PHP_FALIAS(WriteLE32,    SDL_WriteLE32,     arginfo_SDL_RWops_writeint)
+	PHP_FALIAS(WriteBE32,    SDL_WriteBE32,     arginfo_SDL_RWops_writeint)
+#if SIZEOF_LONG > 4
+	PHP_FALIAS(WriteLE64,    SDL_WriteLE32,     arginfo_SDL_RWops_writeint)
+	PHP_FALIAS(WriteBE64,    SDL_WriteBE32,     arginfo_SDL_RWops_writeint)
+#endif
 	PHP_FE_END
 };
 /* }}} */
@@ -640,6 +964,24 @@ zend_function_entry sdl_rwops_functions[] = {
 	ZEND_FE(SDL_RWread,                       arginfo_SDL_RWread)
 	ZEND_FE(SDL_RWwrite,                      arginfo_SDL_RWwrite)
 	ZEND_FE(SDL_RWclose,                      arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU8,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadLE16,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE16,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadLE32,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE32,                     arginfo_SDL_RWops)
+#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_ReadLE64,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE64,                     arginfo_SDL_RWops)
+#endif
+	ZEND_FE(SDL_WriteU8,                      arginfo_SDL_write)
+	ZEND_FE(SDL_WriteLE16,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE16,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteLE32,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE32,                    arginfo_SDL_write)
+#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_WriteLE64,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE64,                    arginfo_SDL_write)
+#endif
 	ZEND_FE_END
 };
 /* }}} */
