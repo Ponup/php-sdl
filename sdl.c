@@ -29,6 +29,7 @@
 #include "video.h"
 #include "version.h"
 #include "window.h"
+#include "power.h"
 
 #ifdef COMPILE_DL_SDL
 ZEND_GET_MODULE(sdl)
@@ -62,6 +63,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_window)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		) {
 		return SUCCESS;
 	}

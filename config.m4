@@ -50,6 +50,7 @@ pixels.c
 rect.c
 rwops.c
 surface.c
+power.c
 video.c
 window.c
 version.c
