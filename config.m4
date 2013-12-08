@@ -48,6 +48,7 @@ cpuinfo.c
 error.c
 pixels.c
 rect.c
+rwops.c
 surface.c
 video.c
 window.c

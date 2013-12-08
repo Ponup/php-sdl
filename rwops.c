@@ -31,7 +31,7 @@ zend_function_entry sdl_rwops_functions[] = {
 
 
 /* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl_surface)
+PHP_MINIT_FUNCTION(sdl_rwops)
 {
 	return (zend_register_functions(NULL, sdl_rwops_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
