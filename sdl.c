@@ -22,14 +22,14 @@
 #include "php_sdl.h"
 #include "cpuinfo.h"
 #include "error.h"
+#include "power.h"
 #include "pixels.h"
 #include "rect.h"
 #include "rwops.h"
 #include "surface.h"
-#include "video.h"
 #include "version.h"
+#include "video.h"
 #include "window.h"
-#include "power.h"
 
 #ifdef COMPILE_DL_SDL
 ZEND_GET_MODULE(sdl)
@@ -56,14 +56,14 @@ PHP_MINIT_FUNCTION(sdl)
 
 	if (   SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rwops)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_window)
-		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
-		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		) {
 		return SUCCESS;
 	}

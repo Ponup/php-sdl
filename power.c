@@ -21,7 +21,7 @@
 
 #include "php_sdl.h"
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 0)
 	ZEND_ARG_INFO(1, secs)
 	ZEND_ARG_INFO(1, pct)
 ZEND_END_ARG_INFO()
@@ -56,9 +56,11 @@ PHP_FUNCTION(SDL_GetPowerInfo)
 	power_state = SDL_GetPowerInfo(has_secs ? &secs : NULL, has_pct ? &pct : NULL);
 
 	if (has_secs) {
+		zval_dtor(z_secs);
 		ZVAL_LONG(z_secs, (long)secs);
 	}
 	if (has_pct) {
+		zval_dtor(z_pct);
 		ZVAL_LONG(z_pct, (long)pct);
 	}
 
