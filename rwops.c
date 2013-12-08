@@ -38,11 +38,11 @@ int php_sdl_check_overflow(int a, int b)
 	TSRMLS_FETCH();
 
 	if(a <= 0 || b <= 0) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully", a, b);
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully");
 		return 1;
 	}
 	if(a > INT_MAX / b) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully", a, b);
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully");
 		return 1;
 	}
 	return 0;
@@ -252,6 +252,43 @@ PHP_FUNCTION(SDL_RWFromFile)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromConstMem, 0, 0, 1)
+       ZEND_ARG_INFO(0, buf)
+       ZEND_ARG_INFO(0, size)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_RWops SDL_RWFromConstMem(string buf [, int size ])
+
+extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromConstMem(const void *mem,
+                                                      int size);
+ */
+PHP_FUNCTION(SDL_RWFromConstMem)
+{
+	char *buf, *pbuf;
+	int buf_len;
+	long size=0;
+	SDL_RWops *rwops;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &buf, &buf_len, &size)) {
+		return;
+	}
+	if (size<=0) {
+		size=buf_len;
+	} else if (buf_len < size) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "given size reduce to buffer size (%d)", buf_len);
+		size = buf_len;
+	}
+
+	pbuf=pestrndup(buf, size, 1);
+
+	rwops = SDL_RWFromConstMem(pbuf, size);
+	sdl_rwops_to_zval(rwops, return_value, 0, pbuf TSRMLS_CC);
+}
+/* }}} */
+
+/*
+extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromMem(void *mem, int size);
+*/
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFP, 0, 0, 1)
        ZEND_ARG_INFO(0, fp)
@@ -568,6 +605,7 @@ zend_function_entry sdl_rwops_functions[] = {
 	ZEND_FE(SDL_FreeRW,                       arginfo_SDL_RWops)
 	ZEND_FE(SDL_RWFromFile,                   arginfo_SDL_RWFromFile)
 	ZEND_FE(SDL_RWFromFP,                     arginfo_SDL_RWFromFP)
+	ZEND_FE(SDL_RWFromConstMem,               arginfo_SDL_RWFromConstMem)
 	ZEND_FE(SDL_RWsize,                       arginfo_SDL_RWops)
 	ZEND_FE(SDL_RWseek,                       arginfo_SDL_RWseek)
 	ZEND_FE(SDL_RWtell,                       arginfo_SDL_RWops)
