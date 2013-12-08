@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [96] {
+  - Constants [101] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -97,6 +97,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_WINDOW_FULLSCREEN_DESKTOP ] { 4097 }
     Constant [ integer SDL_WINDOW_FOREIGN ] { 2048 }
     Constant [ integer SDL_WINDOW_ALLOW_HIGHDPI ] { 8192 }
+    Constant [ integer SDL_COMPILEDVERSION ] { 2001 }
+    Constant [ integer SDL_MAJOR_VERSION ] { 2 }
+    Constant [ integer SDL_MINOR_VERSION ] { 0 }
+    Constant [ integer SDL_PATCHLEVEL ] { 1 }
+    Constant [ string SDL_REVISION ] { hg-7890:c031abe0b287 }
   }
 
   - Functions {
@@ -585,6 +590,44 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [1] {
         Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRevision ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRevisionNumber ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetVersion ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version_array ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version_array ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSIONNUM ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION_ATLEAST ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
       }
     }
   }

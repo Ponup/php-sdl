@@ -26,6 +26,7 @@
 #include "rect.h"
 #include "surface.h"
 #include "video.h"
+#include "version.h"
 #include "window.h"
 
 #ifdef COMPILE_DL_SDL
