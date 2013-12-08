@@ -2,7 +2,7 @@
 SDL_RWops test, procedural mode
 --SKIPIF--
 <?php
-if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
+if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
 ?>
 --FILE--
 <?php
@@ -30,6 +30,15 @@ echo "tell:"; var_dump(SDL_RWtell($rm));
 echo "read:"; var_dump(SDL_RWread($rm, $buf, 100), $buf);
 SDL_FreeRW($rm);
 
+echo "= Write memory\n";
+$wm = SDL_RWFromMem($buffer, 100);
+echo "Buffer:".strlen($buffer)."\n";
+echo "write:"; var_dump($l=SDL_RWwrite($wm, 'He says: '));
+echo "write:"; var_dump($l+=SDL_RWwrite($wm, $memory));
+echo "Buffer:".strlen($buffer)."\n";
+echo "Content:".substr($buffer,0,$l)."\n";
+SDL_FreeRW($wm);
+
 ?>
 = Done
 --CLEAN--
@@ -51,4 +60,12 @@ seek:int(0)
 tell:int(0)
 read:int(16)
 string(16) "Hello SDL2 world"
+= Write memory
+
+%s: SDL_RWFromMem(): this function may raised unsupported error with PHP memory in %s/015-rwops.php on line 27
+Buffer:100
+write:int(9)
+write:int(25)
+Buffer:100
+Content:He says: Hello SDL2 world
 = Done

@@ -286,9 +286,36 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 }
 /* }}} */
 
-/*
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromMem, 0, 0, 2)
+       ZEND_ARG_INFO(1, buf)
+       ZEND_ARG_INFO(0, size)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_RWops SDL_RWFromMem(string &buf, int size)
+
 extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromMem(void *mem, int size);
-*/
+ */
+PHP_FUNCTION(SDL_RWFromMem)
+{
+	zval *z_buf;
+	long size=0;
+	SDL_RWops *rwops;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zl", &z_buf, &size)) {
+		return;
+	}
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "this function may raised unsupported error with PHP memory");
+
+	Z_STRLEN_P(z_buf) = size;
+	Z_STRVAL_P(z_buf) = emalloc(size);
+	Z_TYPE_P(z_buf) = IS_STRING;
+	memset(Z_STRVAL_P(z_buf), 0, size);
+
+	rwops = SDL_RWFromMem(Z_STRVAL_P(z_buf), size);
+	sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
+}
+/* }}} */
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFP, 0, 0, 1)
        ZEND_ARG_INFO(0, fp)
@@ -605,6 +632,7 @@ zend_function_entry sdl_rwops_functions[] = {
 	ZEND_FE(SDL_FreeRW,                       arginfo_SDL_RWops)
 	ZEND_FE(SDL_RWFromFile,                   arginfo_SDL_RWFromFile)
 	ZEND_FE(SDL_RWFromFP,                     arginfo_SDL_RWFromFP)
+	ZEND_FE(SDL_RWFromMem,                    arginfo_SDL_RWFromMem)
 	ZEND_FE(SDL_RWFromConstMem,               arginfo_SDL_RWFromConstMem)
 	ZEND_FE(SDL_RWsize,                       arginfo_SDL_RWops)
 	ZEND_FE(SDL_RWseek,                       arginfo_SDL_RWseek)

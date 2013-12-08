@@ -2,8 +2,8 @@
 SDL_RWops test, stream mode
 --SKIPIF--
 <?php
-if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
-if (getenv("SKIP_ONLINE_TESTS")) die("skip: test requiring internet connection");
+if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
+if (getenv("SKIP_ONLINE_TESTS")) die("skip test requiring internet connection");
 ?>
 --FILE--
 <?php
