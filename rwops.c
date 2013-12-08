@@ -38,11 +38,11 @@ int php_sdl_check_overflow(int a, int b)
 	TSRMLS_FETCH();
 
 	if(a <= 0 || b <= 0) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully\n");
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully", a, b);
 		return 1;
 	}
 	if(a > INT_MAX / b) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully\n");
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully", a, b);
 		return 1;
 	}
 	return 0;
@@ -446,7 +446,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_read, 0, 0, 2)
        ZEND_ARG_INFO(0, number)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDL_RWread(SDL_RWops arean string, &buf, int size [, int n=1])
+/* {{{ proto int SDL_RWread(SDL_RWops arean string, &buf, [ int size=1 ,] int n)
 
  define SDL_RWread(ctx, ptr, size, n)   (ctx)->read(ctx, ptr, size, n)
  */
@@ -454,12 +454,16 @@ PHP_FUNCTION(SDL_RWread)
 {
 	struct php_sdl_rwops *intern;
 	zval *z_rwops, *z_buf;
-	long size, n=1, read;
+	long size, n=0, read;
 	SDL_RWops *rwops;
 	char *buf;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozl|l", &z_rwops, php_sdl_rwops_ce, &z_buf, &size, &n) == FAILURE) {
 		return;
+	}
+	if (n<=0) {
+		n = size;
+		size = 1;
 	}
 	if (php_sdl_check_overflow(size, n)) {
 		return;
@@ -467,13 +471,13 @@ PHP_FUNCTION(SDL_RWread)
 
 	FETCH_RWOPS(rwops, z_rwops, 1);
 	buf = emalloc(size * n);
-	read = SDL_RWread(rwops, buf, size, n) * size;
+	read = SDL_RWread(rwops, buf, size, n);
 	if (read > 0) {
-		if (read < (size * n)) {
-			buf = erealloc(buf, read);
+		if (read < n) {
+			buf = erealloc(buf, read * size);
 		}
 		zval_dtor(z_buf);
-		ZVAL_STRINGL(z_buf, buf, read, 0);
+		ZVAL_STRINGL(z_buf, buf, read * size, 0);
 	} else {
 		efree(buf);
 	}
@@ -495,7 +499,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_write, 0, 0, 1)
        ZEND_ARG_INFO(0, number)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDL_RWwrite(SDL_RWops arean string, buf, int size [, int n=1])
+/* {{{ proto int SDL_RWwrite(SDL_RWops arean string, buf [[, int size=1 ], int n])
 
  define SDL_RWwrite(ctx, ptr, size, n)  (ctx)->write(ctx, ptr, size, n)
  */
@@ -503,7 +507,7 @@ PHP_FUNCTION(SDL_RWwrite)
 {
 	struct php_sdl_rwops *intern;
 	zval *z_rwops;
-	long size=0, n=1, write;
+	long size=0, n=0, write;
 	int buf_len;
 	SDL_RWops *rwops;
 	char *buf;
@@ -512,20 +516,23 @@ PHP_FUNCTION(SDL_RWwrite)
 		return;
 	}
 	if (size<=0) { /* optional arg, default to string length */
-		size = buf_len;
-		n = 1;
+		n = buf_len;
+		size = 1;
+	} else if (n<=0) { /* only length, so consider char (consistency with other php function) */
+		n = size;
+		size = 1;
 	}
 	if (php_sdl_check_overflow(size, n)) {
 		return;
 	}
 	if (buf_len < (size * n)) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "given size reduce to buffer size (%d)", buf_len);
-		size = buf_len;
-		n = 1;
+		size = 1;
+		n = buf_len;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
 
-	write = SDL_RWwrite(rwops, buf, size, n) * size;
+	write = SDL_RWwrite(rwops, buf, size, n);
 	RETURN_LONG(write);
 }
 /* }}} */
