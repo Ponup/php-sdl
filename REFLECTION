@@ -616,6 +616,19 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $surface ]
       }
     }
+    Function [ <internal:SDL> function SDL_LoadBMP_RW ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> &$RWops ]
+        Parameter #1 [ <required> $freesrc ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LoadBMP ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $path ]
+      }
+    }
     Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
 
       - Parameters [0] {
