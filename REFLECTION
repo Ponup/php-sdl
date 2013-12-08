@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [107] {
+  - Constants [110] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -85,6 +85,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_JNIFILE ] { 3 }
     Constant [ integer SDL_MEMORY ] { 4 }
     Constant [ integer SDL_MEMORY_RO ] { 5 }
+    Constant [ integer RW_SEEK_SET ] { 0 }
+    Constant [ integer RW_SEEK_CUR ] { 1 }
+    Constant [ integer RW_SEEK_END ] { 2 }
     Constant [ integer SDL_SWSURFACE ] { 0 }
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
