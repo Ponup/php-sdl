@@ -275,7 +275,7 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 	if (size<=0) {
 		size=buf_len;
 	} else if (buf_len < size) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
 		size = buf_len;
 	}
 
@@ -348,7 +348,7 @@ PHP_FUNCTION(SDL_RWFromFP)
 		RETURN_NULL();
 	}
 	if (autoclose) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "autoclose can raise unsupported error with PHP stream");
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "autoclose can raise unsupported error with PHP stream");
 	}
 
 	/* Can we get a FILE * */
@@ -590,7 +590,7 @@ PHP_FUNCTION(SDL_RWwrite)
 		return;
 	}
 	if (buf_len < (size * n)) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
 		size = 1;
 		n = buf_len;
 	}
