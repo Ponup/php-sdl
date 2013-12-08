@@ -272,6 +272,85 @@ PHP_FUNCTION(SDL_FillRects)
 }
 /* }}} */
 
+
+/* {{{ proto bool SDL_LockSurface(SDL_Surface surface)
+
+ *  Evaluates to true if the surface needs to be locked before access.
+ define SDL_MUSTLOCK(S) (((S)->flags & SDL_RLEACCEL) != 0)
+ */
+PHP_FUNCTION(SDL_MUSTLOCK)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_surface, php_sdl_surface_ce)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+
+	RETURN_BOOL(SDL_MUSTLOCK(surface));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_LockSurface(SDL_Surface surface)
+
+ *  \brief Sets up a surface for directly accessing the pixels.
+ *
+ *  Between calls to SDL_LockSurface() / SDL_UnlockSurface(), you can write
+ *  to and read from \c surface->pixels, using the pixel format stored in
+ *  \c surface->format.  Once you are done accessing the surface, you should
+ *  use SDL_UnlockSurface() to release it.
+ *
+ *  Not all surfaces require locking.  If SDL_MUSTLOCK(surface) evaluates
+ *  to 0, then you can read and write to the surface at any time, and the
+ *  pixel format of the surface will not change.
+ *
+ *  No operating system or library calls should be made between lock/unlock
+ *  pairs, as critical system locks may be held during this time.
+ *
+ *  SDL_LockSurface() returns 0, or -1 if the surface couldn't be locked.
+ *  \sa SDL_UnlockSurface()
+ *  \sa SDL_LockSurface()
+ extern DECLSPEC int SDLCALL SDL_LockSurface(SDL_Surface * surface);
+ */
+PHP_FUNCTION(SDL_LockSurface)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_surface, php_sdl_surface_ce)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+
+	RETURN_LONG(SDL_LockSurface(surface));
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_UnlockSurface(SDL_Surface surface)
+
+extern DECLSPEC void SDLCALL SDL_UnlockSurface(SDL_Surface * surface);
+*/
+PHP_FUNCTION(SDL_UnlockSurface)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_surface, php_sdl_surface_ce)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+
+	SDL_UnlockSurface(surface);
+}
+/* }}} */
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -287,6 +366,9 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_FreeSurface,				arginfo_SDL_Surface)
 	ZEND_FE(SDL_FillRect,					arginfo_SDL_FillRect)
 	ZEND_FE(SDL_FillRects,					arginfo_SDL_FillRects)
+	ZEND_FE(SDL_MUSTLOCK,					arginfo_SDL_Surface)
+	ZEND_FE(SDL_LockSurface,				arginfo_SDL_Surface)
+	ZEND_FE(SDL_UnlockSurface,				arginfo_SDL_Surface)
 	ZEND_FE_END
 };
 /* }}} */
@@ -297,6 +379,9 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(Free,             SDL_FreeSurface,           arginfo_surface_none)
 	PHP_FALIAS(FillRect,         SDL_FillRect,              arginfo_SDL_Surface_FillRect)
 	PHP_FALIAS(FillRects,        SDL_FillRects,             arginfo_SDL_Surface_FillRects)
+	PHP_FALIAS(MustLock,         SDL_MUSTLOCK,              arginfo_surface_none)
+	PHP_FALIAS(Lock,             SDL_LockSurface,           arginfo_surface_none)
+	PHP_FALIAS(Unlock,           SDL_UnlockSurface,         arginfo_surface_none)
 
 	PHP_FE_END
 };
