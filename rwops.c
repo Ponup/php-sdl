@@ -107,7 +107,7 @@ static void php_sdl_rwops_free(void *object TSRMLS_DC)
 			SDL_FreeRW(intern->rwops);
 		}
 		if (intern->buf) {
-			pefree(intern->buf, 1);
+			efree(intern->buf);
 		}
 	}
 
@@ -279,7 +279,7 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 		size = buf_len;
 	}
 
-	pbuf=pestrndup(buf, size, 1);
+	pbuf=estrndup(buf, size);
 
 	rwops = SDL_RWFromConstMem(pbuf, size);
 	sdl_rwops_to_zval(rwops, return_value, 0, pbuf TSRMLS_CC);
@@ -337,7 +337,7 @@ PHP_FUNCTION(SDL_RWFromFP)
 		char *buff;
 		size_t buff_size;
 
-		buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 1);
+		buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 0);
 		if (!buff_size) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING,"Cannot read data");
 			RETURN_NULL();
@@ -366,7 +366,7 @@ PHP_FUNCTION(SDL_FreeRW)
 
 	SDL_FreeRW(intern->rwops);
 	if (intern->buf) {
-		pefree(intern->buf, 1);
+		efree(intern->buf);
 	}
 	intern->rwops = NULL;
 	intern->buf   = NULL;
