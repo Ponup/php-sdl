@@ -22,6 +22,7 @@
 #include "php_sdl.h"
 #include "pixels.h"
 #include "rect.h"
+#include "rwops.h"
 
 static zend_class_entry *php_sdl_surface_ce;
 static zend_object_handlers php_sdl_surface_handlers;
@@ -118,6 +119,88 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
 }
 /* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP_RW, 0, 0, 2)
+       ZEND_ARG_INFO(1, RWops)
+       ZEND_ARG_INFO(0, freesrc)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Surface SDL_LoadBMP_RW(SDL_RWops src, int freesrc)
+
+ *  Load a surface from a seekable SDL data stream (memory or file).
+ *
+ *  If \c freesrc is non-zero, the stream will be closed after being read.
+ *
+ *  The new surface should be freed with SDL_FreeSurface().
+ *
+ *  \return the new surface, or NULL if there was an error.
+ extern DECLSPEC SDL_Surface *SDLCALL SDL_LoadBMP_RW(SDL_RWops * src,
+                                                     int freesrc);
+ */
+PHP_FUNCTION(SDL_LoadBMP_RW)
+{
+	zval *z_rwops;
+	long freesrc;
+	SDL_Surface *surface;
+	SDL_RWops *rwops;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &z_rwops, get_php_sdl_rwops_ce(), &freesrc)) {
+		return;
+	}
+	rwops = zval_to_sdl_rwops(z_rwops);
+	surface = SDL_LoadBMP_RW(rwops, 0);
+	if (freesrc) {
+		/* we close the SDL_RWops ourself, to free the PHP object */
+		zval_dtor(z_rwops);
+		ZVAL_NULL(z_rwops);
+	}
+	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP, 0, 0, 1)
+       ZEND_ARG_INFO(0, path)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Surface SDL_LoadBMP(string file)
+
+	PHP note: stream are supported
+
+ *  Load a surface from a file.
+ *
+ *  Convenience macro.
+ define SDL_LoadBMP(file)   SDL_LoadBMP_RW(SDL_RWFromFile(file, "rb"), 1)
+ */
+PHP_FUNCTION(SDL_LoadBMP)
+{
+	char *path;
+	int path_len;
+	zval *z_rwops;
+	SDL_Surface *surface;
+	SDL_RWops *rwops;
+	php_stream *stream;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, ARG_PATH, &path, &path_len)) {
+		return;
+	}
+	stream = php_stream_open_wrapper(path, "rb", REPORT_ERRORS, NULL);
+	MAKE_STD_ZVAL(z_rwops);
+	php_stream_to_zval_rwops(stream, z_rwops, 0);
+
+	rwops = zval_to_sdl_rwops(z_rwops);
+	surface = SDL_LoadBMP_RW(rwops, 0);
+
+	/* we close the SDL_RWops ourself, to free the PHP object */
+	zval_dtor(z_rwops);
+	ZVAL_NULL(z_rwops);
+
+	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
+}
+/* }}} */
+
+
 
 /* {{{ proto SDL_Surface, __construct(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
  */
@@ -369,6 +452,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_MUSTLOCK,					arginfo_SDL_Surface)
 	ZEND_FE(SDL_LockSurface,				arginfo_SDL_Surface)
 	ZEND_FE(SDL_UnlockSurface,				arginfo_SDL_Surface)
+	ZEND_FE(SDL_LoadBMP_RW,					arginfo_SDL_LoadBMP_RW)
+	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
 	ZEND_FE_END
 };
 /* }}} */

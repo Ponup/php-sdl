@@ -90,8 +90,11 @@ SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC)
 {
 	struct php_sdl_rwops *intern;
 
-	intern = (struct php_sdl_rwops *)zend_object_store_get_object(z_val TSRMLS_CC);
-	return intern->rwops;
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_rwops_ce) {
+		intern = (struct php_sdl_rwops *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->rwops;
+	}
+	return NULL;
 }
 /* }}} */
 
@@ -104,7 +107,7 @@ static void php_sdl_rwops_free(void *object TSRMLS_DC)
 
 	if (intern->rwops) {
 		if (!(intern->flags & SDL_DONTFREE)) {
-			SDL_FreeRW(intern->rwops);
+			SDL_RWclose(intern->rwops);
 		}
 		if (intern->buf) {
 			efree(intern->buf);
@@ -317,33 +320,12 @@ PHP_FUNCTION(SDL_RWFromMem)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFP, 0, 0, 1)
-       ZEND_ARG_INFO(0, fp)
-       ZEND_ARG_INFO(0, autoclose)
-ZEND_END_ARG_INFO()
-
-/* {{{ proto SDL_RWops SDL_RWFromFP(resource fp, bool autoclose)
-
-   PHP change: this function support PHP stream
-   * SDL_RWFromFP will be used for real file
-   * SDL_RWFromMem will be used for other stream
-     (inspired from gd extension)
-
- extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromFP(FILE * fp,
-                                                 SDL_bool autoclose);
- */
-PHP_FUNCTION(SDL_RWFromFP)
+/* {{{ php_stream_to_zval_rwops */
+void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose)
 {
-	zval *z_stream;
 	SDL_RWops *rwops;
-	php_stream *stream;
-	long autoclose=0;
 	FILE * fp = NULL;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|l", &z_stream, &autoclose)) {
-		return;
-	}
-	php_stream_from_zval(stream, &z_stream);
 	if (stream == NULL) {
 		RETURN_NULL();
 	}
@@ -372,6 +354,35 @@ PHP_FUNCTION(SDL_RWFromFP)
 		rwops = SDL_RWFromMem(buff, (int)buff_size);
 		sdl_rwops_to_zval(rwops, return_value, 0, buff TSRMLS_CC);
 	}
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFP, 0, 0, 1)
+       ZEND_ARG_INFO(0, fp)
+       ZEND_ARG_INFO(0, autoclose)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_RWops SDL_RWFromFP(resource fp, bool autoclose)
+
+   PHP change: this function support PHP stream
+   * SDL_RWFromFP will be used for real file
+   * SDL_RWFromMem will be used for other stream
+     (inspired from gd extension)
+
+ extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromFP(FILE * fp,
+                                                 SDL_bool autoclose);
+ */
+PHP_FUNCTION(SDL_RWFromFP)
+{
+	zval *z_stream;
+	long autoclose=0;
+	php_stream *stream;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|l", &z_stream, &autoclose)) {
+		return;
+	}
+	php_stream_from_zval(stream, &z_stream);
+	php_stream_to_zval_rwops(stream, return_value, autoclose);
 }
 /* }}} */
 
