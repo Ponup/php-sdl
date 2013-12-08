@@ -24,6 +24,7 @@
 #include "php_sdl.h"
 
 void convert_sdl_version_to_php_array(SDL_version *version, zval *version_array) {
+	array_init(version_array);
 	add_assoc_long(version_array, "major", version->major);
 	add_assoc_long(version_array, "minor", version->minor);
 	add_assoc_long(version_array, "patch", version->patch);
@@ -97,11 +98,12 @@ PHP_FUNCTION(SDL_GetVersion)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
 
 	SDL_GetVersion(&version);
+	zval_dtor(version_array);
 	convert_sdl_version_to_php_array(&version, version_array);
 }
 
@@ -129,11 +131,11 @@ PHP_FUNCTION(SDL_VERSION)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
-
 	SDL_VERSION(&version);
+	zval_dtor(version_array);
 	convert_sdl_version_to_php_array(&version, version_array);
 }
 
