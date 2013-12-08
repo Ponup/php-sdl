@@ -42,6 +42,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   SDL_PixelFormat
   SDL_Point
   SDL_Rect
+  SDL_RWops
   SDL_Surface
   SDL_Window
   </notes>
@@ -65,6 +66,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='rwops.h'/>
       <file role='src' name='surface.c'/>
       <file role='src' name='surface.h'/>
+      <file role='src' name='version.c'/>
+      <file role='src' name='version.h'/>
       <file role='src' name='video.c'/>
       <file role='src' name='video.h'/>
       <file role='src' name='window.c'/>
@@ -86,6 +89,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='011-palette-oo.phpt'/>
         <file role='test' name='012-pixelformat.phpt'/>
         <file role='test' name='013-pixelformat-oo.phpt'/>
+        <file role='test' name='014-version.phpt'/>
+        <file role='test' name='015-rwops.phpt'/>
+        <file role='test' name='016-rwops-oo.phpt'/>
+        <file role='test' name='017-rwops-stream.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>
