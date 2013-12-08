@@ -72,6 +72,13 @@ PHP_MINFO_FUNCTION(sdl);
 #define ZEND_FE_END { NULL, NULL, NULL, 0, 0 }
 #endif
 
+/* Arginfo PATH exists only in php >= 5.4.0 */
+#if PHP_VERSION_ID < 50400
+#define ARG_PATH "s"
+#else
+#define ARG_PATH "p"
+#endif
+
 #ifdef  __cplusplus
 } // extern "C" 
 #endif

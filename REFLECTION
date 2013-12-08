@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [101] {
+  - Constants [107] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -79,6 +79,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_PIXELFORMAT_YUY2 ] { 844715353 }
     Constant [ integer SDL_PIXELFORMAT_UYVY ] { 1498831189 }
     Constant [ integer SDL_PIXELFORMAT_YVYU ] { 1431918169 }
+    Constant [ integer SDL_UNKNOWN ] { 0 }
+    Constant [ integer SDL_WINFILE ] { 1 }
+    Constant [ integer SDL_STDFILE ] { 2 }
+    Constant [ integer SDL_JNIFILE ] { 3 }
+    Constant [ integer SDL_MEMORY ] { 4 }
+    Constant [ integer SDL_MEMORY_RO ] { 5 }
     Constant [ integer SDL_SWSURFACE ] { 0 }
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
@@ -379,6 +385,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <required> &$rect ]
       }
     }
+    Function [ <internal:SDL> function SDL_AllocRW ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeRW ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWFromFile ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $path ]
+        Parameter #1 [ <required> $mode ]
+      }
+    }
     Function [ <internal:SDL> function SDL_CreateRGBSurface ] {
 
       - Parameters [8] {
@@ -650,7 +674,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [8] {
+  - Classes [9] {
     Class [ <internal:SDL> class SDL_Color ] {
 
       - Constants [0] {
@@ -917,6 +941,42 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
           - Parameters [2] {
             Parameter #0 [ <required> $x ]
             Parameter #1 [ <required> $y ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_RWops ] {
+
+      - Constants [6] {
+        Constant [ integer UNKNOWN ] { 0 }
+        Constant [ integer WINFILE ] { 1 }
+        Constant [ integer STDFILE ] { 2 }
+        Constant [ integer JNIFILE ] { 3 }
+        Constant [ integer MEMORY ] { 4 }
+        Constant [ integer MEMORY_RO ] { 5 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [1] {
+        Property [ <default> public $type ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
           }
         }
       }
