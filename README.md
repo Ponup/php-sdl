@@ -12,17 +12,17 @@ PHP-SDL
 
 ### Via PECL (recommended)
 
-  pecl install sdl
+    pecl install sdl-beta
 
 ### Manual
 
 Download the source code and within the main directory run these commands:
 
-  phpize
-  ./configure --with-sdl (or --with-sdl=<PATH>)
-  make
-  make test
-  sudo make install
+    phpize
+   ./configure --with-sdl (or --with-sdl=<PATH>)
+    make
+    make test
+    sudo make install
 
 Then add
 
@@ -36,8 +36,8 @@ We are working on the Windows build. Stay tuned.
 
 ## Documentation
 
-The SDL extension mimics in almost  every single aspect to the official C library, so until we write our own documentation, refer to the [http://www.libsdl.org/release/SDL-1.2.15/docs/index.html](C counterpart).
+The SDL extension mimics in almost  every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](http://www.libsdl.org/release/SDL-1.2.15/docs/index.html).
 
 ## Support / Feedback / Bugs / Feature Requests
 
-Please submit anything that needs our attention to [https://github.com/phpsdl/extension/issues](issues section) on Github. We are commited to attend any request in a short timespan if it's a sensible matter.
+Please submit anything that needs our attention to [issues section](https://github.com/phpsdl/extension/issues) on Github. We are commited to attend any request in a short timespan if it's a sensible matter.
