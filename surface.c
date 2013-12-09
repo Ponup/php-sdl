@@ -873,6 +873,89 @@ PHP_FUNCTION(SDL_GetSurfaceColorMod)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceAlphaMod, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetAlphaMod, 0, 0, 1)
+       ZEND_ARG_INFO(0, alpha)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetSurfaceColorMod(SDL_Surface src, int alpha)
+
+ *  \brief Set an additional alpha value used in blit operations.
+ *
+ *  \param surface The surface to update.
+ *  \param alpha The alpha value multiplied into blit operations.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid.
+ *
+ *  \sa SDL_GetSurfaceAlphaMod()
+ extern DECLSPEC int SDLCALL SDL_SetSurfaceAlphaMod(SDL_Surface * surface,
+                                                    Uint8 alpha);
+ */
+PHP_FUNCTION(SDL_SetSurfaceAlphaMod)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	long a;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &a)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	RETURN_LONG(SDL_SetSurfaceAlphaMod(surface, (Uint8)a));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceAlphaMod, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, alpha)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetAlphaMod, 0, 0, 1)
+       ZEND_ARG_INFO(1, alpha)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
+
+ *  \brief Get the additional alpha value used in blit operations.
+ *
+ *  \param surface The surface to query.
+ *  \param alpha A pointer filled in with the current alpha value.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid.
+ *
+ *  \sa SDL_SetSurfaceAlphaMod()
+ extern DECLSPEC int SDLCALL SDL_GetSurfaceAlphaMod(SDL_Surface * surface,
+                                                    Uint8 * alpha);
+ */
+PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_a;
+	Uint8 a;
+	SDL_Surface *surface;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_a)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	result = SDL_GetSurfaceAlphaMod(surface, &a);
+	if (result == 0) {
+		zval_dtor(z_a);
+		ZVAL_LONG(z_a, (long)a);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -903,6 +986,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_GetColorKey,				arginfo_SDL_GetColorKey)
 	ZEND_FE(SDL_SetSurfaceColorMod,			arginfo_SDL_SetSurfaceColorMod)
 	ZEND_FE(SDL_GetSurfaceColorMod,			arginfo_SDL_GetSurfaceColorMod)
+	ZEND_FE(SDL_SetSurfaceAlphaMod,			arginfo_SDL_SetSurfaceAlphaMod)
+	ZEND_FE(SDL_GetSurfaceAlphaMod,			arginfo_SDL_GetSurfaceAlphaMod)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -927,6 +1012,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetColorKey,      SDL_GetColorKey,           arginfo_SDL_Surface_GetColorKey)
 	PHP_FALIAS(SetColorMod,      SDL_SetSurfaceColorMod,    arginfo_SDL_Surface_SetColorMod)
 	PHP_FALIAS(GetColorMod,      SDL_GetSurfaceColorMod,    arginfo_SDL_Surface_GetColorMod)
+	PHP_FALIAS(SetAlphaMod,      SDL_SetSurfaceAlphaMod,    arginfo_SDL_Surface_SetAlphaMod)
+	PHP_FALIAS(GetAlphaMod,      SDL_GetSurfaceAlphaMod,    arginfo_SDL_Surface_GetAlphaMod)
 	PHP_FE_END
 };
 

@@ -709,6 +709,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <required> &$blue ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetSurfaceAlphaMod ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $alpha ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceAlphaMod ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> &$alpha ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1402,7 +1416,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [16] {
+      - Methods [18] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1528,6 +1542,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> &$red ]
             Parameter #1 [ <required> &$green ]
             Parameter #2 [ <required> &$blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetAlphaMod ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $alpha ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetAlphaMod ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$alpha ]
           }
         }
       }
