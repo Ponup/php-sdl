@@ -652,6 +652,126 @@ PHP_FUNCTION(SDL_UpperBlit)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceRLE, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, flag)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetRLE, 0, 0, 1)
+       ZEND_ARG_INFO(0, flag)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
+
+ *  \brief Sets the RLE acceleration hint for a surface.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid
+ *
+ *  \note If RLE is enabled, colorkey and alpha blending blits are much faster,
+ *        but the surface must be locked before directly accessing the pixels.
+ extern DECLSPEC int SDLCALL SDL_SetSurfaceRLE(SDL_Surface * surface,
+                                               int flag);
+ */
+PHP_FUNCTION(SDL_SetSurfaceRLE)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	long flag;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_surface, php_sdl_surface_ce, &flag)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	RETURN_LONG(SDL_SetSurfaceRLE(surface, (int)flag));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetColorKey, 0, 0, 3)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, flag)
+       ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 2)
+       ZEND_ARG_INFO(0, flag)
+       ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
+
+ *  \brief Sets the color key (transparent pixel) in a blittable surface.
+ *
+ *  \param surface The surface to update
+ *  \param flag Non-zero to enable colorkey and 0 to disable colorkey
+ *  \param key The transparent pixel in the native surface format
+ *
+ *  \return 0 on success, or -1 if the surface is not valid
+ *
+ *  You can pass SDL_RLEACCEL to enable RLE accelerated blits.
+ extern DECLSPEC int SDLCALL SDL_SetColorKey(SDL_Surface * surface,
+                                             int flag, Uint32 key);
+ */
+PHP_FUNCTION(SDL_SetColorKey)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	long flag, key;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &flag, &key)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	RETURN_LONG(SDL_SetColorKey(surface, (int)flag, (Uint32)key));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetColorKey, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorKey, 0, 0, 1)
+       ZEND_ARG_INFO(1, key)
+ZEND_END_ARG_INFO()
+/* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
+
+ *  \brief Gets the color key (transparent pixel) in a blittable surface.
+ *
+ *  \param surface The surface to update
+ *  \param key A pointer filled in with the transparent pixel in the native
+ *             surface format
+ *
+ *  \return 0 on success, or -1 if the surface is not valid or colorkey is not
+ *          enabled.
+ extern DECLSPEC int SDLCALL SDL_GetColorKey(SDL_Surface * surface,
+                                             Uint32 * key);
+ */
+PHP_FUNCTION(SDL_GetColorKey)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_key;
+	Uint32 key;
+	SDL_Surface *surface;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_key)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	result = SDL_GetColorKey(surface, &key);
+	if (result == 0) {
+		zval_dtor(z_key);
+		ZVAL_LONG(z_key, (long)key);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -677,6 +797,9 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
 	ZEND_FE(SDL_SaveBMP_RW,					arginfo_SDL_SaveBMP_RW)
 	ZEND_FE(SDL_SaveBMP,					arginfo_SDL_SaveBMP)
+	ZEND_FE(SDL_SetSurfaceRLE,				arginfo_SDL_SetSurfaceRLE)
+	ZEND_FE(SDL_SetColorKey,				arginfo_SDL_SetColorKey)
+	ZEND_FE(SDL_GetColorKey,				arginfo_SDL_GetColorKey)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -696,6 +819,9 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(UpperBlit,        SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
 	PHP_FALIAS(SaveBMP_RW,       SDL_SaveBMP_RW,            arginfo_SDL_Surface_SaveBMP_RW)
 	PHP_FALIAS(SaveBMP,          SDL_SaveBMP,               arginfo_SDL_Surface_SaveBMP)
+	PHP_FALIAS(SetRLE,           SDL_SetSurfaceRLE,         arginfo_SDL_Surface_SetRLE)
+	PHP_FALIAS(SetColorKey,      SDL_SetColorKey,           arginfo_SDL_Surface_SetColorKey)
+	PHP_FALIAS(GetColorKey,      SDL_GetColorKey,           arginfo_SDL_Surface_GetColorKey)
 	PHP_FE_END
 };
 

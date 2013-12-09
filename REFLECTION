@@ -665,6 +665,28 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $path ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetSurfaceRLE ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $flag ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetColorKey ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $flag ]
+        Parameter #2 [ <required> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetColorKey ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> &$key ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1358,7 +1380,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [11] {
+      - Methods [14] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1444,6 +1466,28 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $path ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetRLE ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $flag ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetColorKey ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $flag ]
+            Parameter #1 [ <required> $key ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetColorKey ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$key ]
           }
         }
       }
