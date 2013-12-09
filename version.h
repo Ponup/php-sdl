@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_array);
+
 PHP_MINIT_FUNCTION(sdl_version);
 
 #ifdef  __cplusplus

@@ -23,11 +23,18 @@
 
 #include "php_sdl.h"
 
-void convert_sdl_version_to_php_array(SDL_version *version, zval *version_array) {
-	array_init(version_array);
-	add_assoc_long(version_array, "major", version->major);
-	add_assoc_long(version_array, "minor", version->minor);
-	add_assoc_long(version_array, "patch", version->patch);
+zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_array) {
+
+	if (version) {
+		array_init(version_array);
+		add_assoc_long(version_array, "major", version->major);
+		add_assoc_long(version_array, "minor", version->minor);
+		add_assoc_long(version_array, "patch", version->patch);
+
+		return 1;
+	}
+	ZVAL_NULL(version_array);
+	return 0;
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_version_none, 0, 0, 0)
