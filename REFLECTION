@@ -652,10 +652,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
-      - Parameters [3] {
-        Parameter #0 [ <required> $srcrect ]
-        Parameter #1 [ <required> $dstsurface ]
-        Parameter #2 [ <optional> &$dstrect ]
+      - Parameters [4] {
+        Parameter #0 [ <required> $srcsurface ]
+        Parameter #1 [ <required> $srcrect ]
+        Parameter #2 [ <required> $dstsurface ]
+        Parameter #3 [ <optional> &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_GetRevision ] {

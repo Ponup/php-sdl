@@ -577,7 +577,7 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
 	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
 	/* Aliases */
-	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_Surface_Blit)
+	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
 };
 /* }}} */
