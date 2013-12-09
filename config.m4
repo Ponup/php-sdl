@@ -51,6 +51,7 @@ pixels.c
 rect.c
 rwops.c
 surface.c
+platform.c
 power.c
 video.c
 window.c
