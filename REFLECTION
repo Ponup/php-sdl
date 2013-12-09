@@ -691,6 +691,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> &$key ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetSurfaceColorMod ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $red ]
+        Parameter #2 [ <required> $green ]
+        Parameter #3 [ <required> $blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceColorMod ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> &$red ]
+        Parameter #2 [ <required> &$green ]
+        Parameter #3 [ <required> &$blue ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1384,7 +1402,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [14] {
+      - Methods [16] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1492,6 +1510,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> &$key ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetColorMod ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $red ]
+            Parameter #1 [ <required> $green ]
+            Parameter #2 [ <required> $blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetColorMod ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$red ]
+            Parameter #1 [ <required> &$green ]
+            Parameter #2 [ <required> &$blue ]
           }
         }
       }

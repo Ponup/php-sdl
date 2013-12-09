@@ -700,7 +700,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 2)
        ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
+/* {{{ proto void SDL_SetColorKey(SDL_Surface src, int flag, int key)
 
  *  \brief Sets the color key (transparent pixel) in a blittable surface.
  *
@@ -738,7 +738,8 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorKey, 0, 0, 1)
        ZEND_ARG_INFO(1, key)
 ZEND_END_ARG_INFO()
-/* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
+
+/* {{{ proto void SDL_GetColorKey(SDL_Surface src, int &key)
 
  *  \brief Gets the color key (transparent pixel) in a blittable surface.
  *
@@ -773,6 +774,105 @@ PHP_FUNCTION(SDL_GetColorKey)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceColorMod, 0, 0, 4)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, red)
+       ZEND_ARG_INFO(0, green)
+       ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorMod, 0, 0, 3)
+       ZEND_ARG_INFO(0, red)
+       ZEND_ARG_INFO(0, green)
+       ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetSurfaceColorMod(SDL_Surface src, int r, int g, int b)
+
+ *  \brief Set an additional color value used in blit operations.
+ *
+ *  \param surface The surface to update.
+ *  \param r The red color value multiplied into blit operations.
+ *  \param g The green color value multiplied into blit operations.
+ *  \param b The blue color value multiplied into blit operations.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid.
+ *
+ *  \sa SDL_GetSurfaceColorMod()
+ extern DECLSPEC int SDLCALL SDL_SetSurfaceColorMod(SDL_Surface * surface,
+                                                    Uint8 r, Uint8 g, Uint8 b);
+ */
+PHP_FUNCTION(SDL_SetSurfaceColorMod)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	long r, g, b;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &r, &g, &b)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	RETURN_LONG(SDL_SetSurfaceColorMod(surface, (Uint8)r, (Uint8)g, (Uint8)b));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceColorMod, 0, 0, 4)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, red)
+       ZEND_ARG_INFO(1, green)
+       ZEND_ARG_INFO(1, blue)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorMod, 0, 0, 3)
+       ZEND_ARG_INFO(1, red)
+       ZEND_ARG_INFO(1, green)
+       ZEND_ARG_INFO(1, blue)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetSurfaceColorMod(SDL_Surface src, int &r, int &g, int&b)
+
+ *  \brief Get the additional color value used in blit operations.
+ *
+ *  \param surface The surface to query.
+ *  \param r A pointer filled in with the current red color value.
+ *  \param g A pointer filled in with the current green color value.
+ *  \param b A pointer filled in with the current blue color value.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid.
+ *
+ *  \sa SDL_SetSurfaceColorMod()
+ extern DECLSPEC int SDLCALL SDL_GetSurfaceColorMod(SDL_Surface * surface,
+                                                    Uint8 * r, Uint8 * g,
+                                                    Uint8 * b);
+ */
+PHP_FUNCTION(SDL_GetSurfaceColorMod)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_r, *z_g, *z_b;
+	Uint8 r, g, b;
+	SDL_Surface *surface;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_r, &z_g, &z_b)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	result = SDL_GetSurfaceColorMod(surface, &r, &g, &b);
+	if (result == 0) {
+		zval_dtor(z_r);
+		ZVAL_LONG(z_r, (long)r);
+		zval_dtor(z_g);
+		ZVAL_LONG(z_g, (long)g);
+		zval_dtor(z_b);
+		ZVAL_LONG(z_g, (long)b);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -801,6 +901,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_SetSurfaceRLE,				arginfo_SDL_SetSurfaceRLE)
 	ZEND_FE(SDL_SetColorKey,				arginfo_SDL_SetColorKey)
 	ZEND_FE(SDL_GetColorKey,				arginfo_SDL_GetColorKey)
+	ZEND_FE(SDL_SetSurfaceColorMod,			arginfo_SDL_SetSurfaceColorMod)
+	ZEND_FE(SDL_GetSurfaceColorMod,			arginfo_SDL_GetSurfaceColorMod)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -823,6 +925,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(SetRLE,           SDL_SetSurfaceRLE,         arginfo_SDL_Surface_SetRLE)
 	PHP_FALIAS(SetColorKey,      SDL_SetColorKey,           arginfo_SDL_Surface_SetColorKey)
 	PHP_FALIAS(GetColorKey,      SDL_GetColorKey,           arginfo_SDL_Surface_GetColorKey)
+	PHP_FALIAS(SetColorMod,      SDL_SetSurfaceColorMod,    arginfo_SDL_Surface_SetColorMod)
+	PHP_FALIAS(GetColorMod,      SDL_GetSurfaceColorMod,    arginfo_SDL_Surface_GetColorMod)
 	PHP_FE_END
 };
 
