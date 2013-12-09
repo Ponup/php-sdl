@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 zend_class_entry *get_php_sdl_color_ce(void);
-void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC);
-void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC);
+zend_bool sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC);
+zend_bool zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC);
 
 zend_class_entry *get_php_sdl_pixelformat_ce(void);
 zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags TSRMLS_DC);

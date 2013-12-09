@@ -37,27 +37,33 @@ zend_class_entry *get_php_sdl_window_ce(void)
 }
 
 /* {{{ sdl_window_to_zval */
-void sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRMLS_DC)
+zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRMLS_DC)
 {
-	struct php_sdl_window *intern;
 	if (window) {
+		struct php_sdl_window *intern;
+
 		object_init_ex(z_val, php_sdl_window_ce);
 		intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->window = window;
 		intern->flags  = flags;
-	} else {
-		ZVAL_NULL(z_val);
+
+		return 1;
 	}
+	ZVAL_NULL(z_val);
+	return 0;
 }
 /* }}} */
 
 /* {{{ zval_to_sdl_window */
 SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 {
-	struct php_sdl_window *intern;
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_window_ce) {
+		struct php_sdl_window *intern;
 
-	intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
-	return intern->window;
+		intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->window;
+		}
+	return NULL;
 }
 /* }}} */
 

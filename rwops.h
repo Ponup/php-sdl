@@ -27,11 +27,11 @@ extern "C" {
 #endif
 
 zend_class_entry *get_php_sdl_rwops_ce(void);
-void sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC);
+zend_bool  sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC);
 SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC);
 void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose);
 
-int php_sdl_check_overflow(int a, int b);
+zend_bool php_sdl_check_overflow(int a, int b);
 
 PHP_MINIT_FUNCTION(sdl_rwops);
 

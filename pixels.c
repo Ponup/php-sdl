@@ -78,7 +78,7 @@ zend_class_entry *get_php_sdl_palette_ce(void)
         }\
 }
 
-void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC)
+zend_bool sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC)
 {
 	if (color) {
 		object_init_ex(value, php_sdl_color_ce);
@@ -86,74 +86,95 @@ void sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC)
 		zend_update_property_long(php_sdl_color_ce, value, "g", 1, color->g TSRMLS_CC);
 		zend_update_property_long(php_sdl_color_ce, value, "b", 1, color->b TSRMLS_CC);
 		zend_update_property_long(php_sdl_color_ce, value, "a", 1, color->a TSRMLS_CC);
-	} else {
-		ZVAL_NULL(value);
+
+		return 1;
 	}
+	ZVAL_NULL(value);
+	return 0;
 }
 
-void zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC)
+zend_bool zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC)
 {
-	zval *val;
+	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_color_ce) {
+		zval *val;
 
-	val = zend_read_property(php_sdl_color_ce, value, "r", 1, 0 TSRMLS_CC);
-	color->r = (Uint8)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_color_ce, value, "g", 1, 0 TSRMLS_CC);
-	color->g = (Uint8)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_color_ce, value, "b", 1, 0 TSRMLS_CC);
-	color->b = (Uint8)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_color_ce, value, "a", 1, 0 TSRMLS_CC);
-	color->a = (Uint8)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_color_ce, value, "r", 1, 0 TSRMLS_CC);
+		color->r = (Uint8)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_color_ce, value, "g", 1, 0 TSRMLS_CC);
+		color->g = (Uint8)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_color_ce, value, "b", 1, 0 TSRMLS_CC);
+		color->b = (Uint8)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_color_ce, value, "a", 1, 0 TSRMLS_CC);
+		color->a = (Uint8)Z_LVAL_P(val);
+
+		return 1;
+	}
+	/* create an empty color */
+	memset(color, 0, sizeof(SDL_Color));
+	return 0;
 }
 
 
 /* {{{ sdl_palette_to_zval */
-void sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC)
+zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC)
 {
-	struct php_sdl_palette *intern;
 	if (palette) {
+		struct php_sdl_palette *intern;
+
 		object_init_ex(z_val, php_sdl_palette_ce);
 		intern = (struct php_sdl_palette *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->palette = palette;
 		intern->flags = flags;
-	} else {
-		ZVAL_NULL(z_val);
+
+		return 1;
 	}
+	ZVAL_NULL(z_val);
+	return 0;
 }
 /* }}} */
 
 
 /* {{{ sdl_pixelformat_to_zval */
-void sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags TSRMLS_DC)
+zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags TSRMLS_DC)
 {
-	struct php_sdl_pixelformat *intern;
 	if (format) {
+		struct php_sdl_pixelformat *intern;
+
 		object_init_ex(z_val, php_sdl_pixelformat_ce);
 		intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->format = format;
 		intern->flags = flags;
-	} else {
-		ZVAL_NULL(z_val);
+
+		return 1;
 	}
+	ZVAL_NULL(z_val);
+	return 0;
 }
 /* }}} */
 
 /* {{{ zval_to_sdl_pixelformat */
 SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC)
 {
-	struct php_sdl_pixelformat *intern;
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_pixelformat_ce) {
+		struct php_sdl_pixelformat *intern;
 
-	intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(z_val TSRMLS_CC);
-	return intern->format;
+		intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->format;
+		}
+	return NULL;
 }
 /* }}} */
 
 /* {{{ zval_to_sdl_palette */
 SDL_Palette *zval_to_sdl_palette(zval *z_val TSRMLS_DC)
 {
-	struct php_sdl_palette *intern;
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_palette_ce) {
+		struct php_sdl_palette *intern;
 
-	intern = (struct php_sdl_palette *)zend_object_store_get_object(z_val TSRMLS_CC);
-	return intern->palette;
+		intern = (struct php_sdl_palette *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->palette;
+		}
+	return NULL;
 }
 /* }}} */
 

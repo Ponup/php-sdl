@@ -36,13 +36,19 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 #define update_displaymode_prop(z_value, name, value) \
 	zend_update_property_long(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, value TSRMLS_CC)
 
-void sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
+zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
 {
-	object_init_ex(value, php_sdl_displaymode_ce);
-	update_displaymode_prop(value, "format",       display->format);
-	update_displaymode_prop(value, "w",            display->w);
-	update_displaymode_prop(value, "h",            display->h);
-	update_displaymode_prop(value, "refresh_rate", display->refresh_rate);
+	if (display) {
+		object_init_ex(value, php_sdl_displaymode_ce);
+		update_displaymode_prop(value, "format",       display->format);
+		update_displaymode_prop(value, "w",            display->w);
+		update_displaymode_prop(value, "h",            display->h);
+		update_displaymode_prop(value, "refresh_rate", display->refresh_rate);
+
+		return 1;
+		}
+	ZVAL_NULL(value);
+	return 0;
 }
 
 #define read_displaymode_prop(z_value, name, value) \
@@ -52,12 +58,19 @@ void sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
 	value = (int)Z_LVAL_P(val); \
 }
 
-void zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC)
+zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC)
 {
-	read_displaymode_prop(value, "format",       display->format);
-	read_displaymode_prop(value, "w",            display->w);
-	read_displaymode_prop(value, "h",            display->h);
-	read_displaymode_prop(value, "refresh_rate", display->refresh_rate);
+	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_displaymode_ce) {
+		read_displaymode_prop(value, "format",       display->format);
+		read_displaymode_prop(value, "w",            display->w);
+		read_displaymode_prop(value, "h",            display->h);
+		read_displaymode_prop(value, "refresh_rate", display->refresh_rate);
+
+		return 1;
+		}
+	/* create an empty rect */
+	memset(display, 0, sizeof(SDL_DisplayMode));
+	return 0;
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DisplayMode__construct, 0, 0, 4)

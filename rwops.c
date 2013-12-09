@@ -33,7 +33,7 @@ struct php_sdl_rwops {
 
 
 /* {{{ php_sdl_check_overflow */
-int php_sdl_check_overflow(int a, int b)
+zend_bool php_sdl_check_overflow(int a, int b)
 {
 	TSRMLS_FETCH();
 
@@ -69,18 +69,21 @@ zend_class_entry *get_php_sdl_rwops_ce(void)
 }
 
 /* {{{ sdl_rwops_to_zval */
-void sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC)
+zend_bool sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC)
 {
-	struct php_sdl_rwops *intern;
 	if (rwops) {
+		struct php_sdl_rwops *intern;
+
 		object_init_ex(z_val, php_sdl_rwops_ce);
 		intern = (struct php_sdl_rwops *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->rwops = rwops;
 		intern->flags = flags;
 		intern->buf   = buf;
-	} else {
-		ZVAL_NULL(z_val);
+
+		return 1;
 	}
+	ZVAL_NULL(z_val);
+	return 0;
 }
 /* }}} */
 

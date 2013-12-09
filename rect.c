@@ -42,27 +42,39 @@ zend_class_entry *get_php_sdl_rect_ce(void)
 	return php_sdl_rect_ce;
 }
 
-void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
+zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
 {
-	object_init_ex(value, php_sdl_rect_ce);
-	zend_update_property_long(php_sdl_rect_ce, value, "x", 1, rect->x TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h TSRMLS_CC);
+	if (rect) {
+		object_init_ex(value, php_sdl_rect_ce);
+		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, rect->x TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h TSRMLS_CC);
+
+		return 1;
+	}
+	ZVAL_NULL(value);
+	return 0;
 }
 
-void sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
+zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
 {
-	object_init_ex(value, php_sdl_rect_ce);
-	zend_update_property_long(php_sdl_rect_ce, value, "x", 1, pt->x TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y TSRMLS_CC);
+	if (pt) {
+		object_init_ex(value, php_sdl_rect_ce);
+		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, pt->x TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y TSRMLS_CC);
+
+		return 1;
+	}
+	ZVAL_NULL(value);
+	return 0;
 }
 
 zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 {
-	zval *val;
-
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
+		zval *val;
+
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
 		rect->x = (int)Z_LVAL_P(val);
 		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
@@ -71,22 +83,29 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 		rect->w = (int)Z_LVAL_P(val);
 		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_CC);
 		rect->h = (int)Z_LVAL_P(val);
+
 		return 1;
-	} else {
-		/* create an empty rect */
-		memset(rect, 0, sizeof(SDL_Rect));
-		return 0;
 	}
+	/* create an empty rect */
+	memset(rect, 0, sizeof(SDL_Rect));
+	return 0;
 }
 
-void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
+zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 {
-	zval *val;
+	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_point_ce) {
+		zval *val;
 
-	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
-	pt->x = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
-	pt->y = (int)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
+		pt->x = (int)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
+		pt->y = (int)Z_LVAL_P(val);
+
+		return 1;
+	}
+	/* create an empty point */
+	memset(pt, 0, sizeof(SDL_Point));
+	return 0;
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 4)

@@ -48,18 +48,21 @@ zend_class_entry *get_php_sdl_surface_ce(void)
 }
 
 /* {{{ sdl_surface_to_zval */
-void sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
+zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 {
-	struct php_sdl_surface *intern;
 	if (surface) {
+		struct php_sdl_surface *intern;
+
 		object_init_ex(z_val, php_sdl_surface_ce);
 		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->surface = surface;
 		/* copy flags to be able to check before access to surface */
 		intern->flags = surface->flags;
-	} else {
-		ZVAL_NULL(z_val);
+
+		return 1;
 	}
+	ZVAL_NULL(z_val);
+	return 0;
 }
 /* }}} */
 
@@ -68,8 +71,11 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val TSRMLS_DC)
 {
 	struct php_sdl_surface *intern;
 
-	intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
-	return intern->surface;
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_surface_ce) {
+		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->surface;
+		}
+	return NULL;
 }
 /* }}} */
 

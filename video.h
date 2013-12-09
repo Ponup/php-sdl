@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 zend_class_entry *get_php_sdl_displaymode_ce(void);
-void sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC);
-void zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC);
+zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC);
+zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC);
 
 PHP_MINIT_FUNCTION(sdl_video);
 
