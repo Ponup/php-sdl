@@ -22,6 +22,7 @@
 #include <SDL_revision.h>
 
 #include "php_sdl.h"
+#include "version.h"
 
 zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_array) {
 

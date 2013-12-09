@@ -20,6 +20,8 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "rect.h"
+
 static zend_class_entry *php_sdl_rect_ce;
 static zend_object_handlers php_sdl_rect_handlers;
 struct php_sdl_rect {

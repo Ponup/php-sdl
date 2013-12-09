@@ -20,6 +20,7 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "power.h"
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 0)
 	ZEND_ARG_INFO(1, secs)

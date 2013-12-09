@@ -20,6 +20,7 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "pixels.h"
 
 static zend_class_entry *php_sdl_color_ce;
 static zend_object_handlers php_sdl_color_handlers;

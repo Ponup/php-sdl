@@ -20,6 +20,7 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "cpuinfo.h"
 
 /* {{{ proto void SDL_GetCPUCount(void )
 

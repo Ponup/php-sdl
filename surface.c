@@ -23,6 +23,7 @@
 #include "pixels.h"
 #include "rect.h"
 #include "rwops.h"
+#include "surface.h"
 
 static zend_class_entry *php_sdl_surface_ce;
 static zend_object_handlers php_sdl_surface_handlers;
