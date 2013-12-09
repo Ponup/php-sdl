@@ -650,6 +650,21 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <optional> &$dstrect ]
       }
     }
+    Function [ <internal:SDL> function SDL_SaveBMP_RW ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> &$rwops ]
+        Parameter #2 [ <optional> $freedst ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SaveBMP ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $path ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1343,7 +1358,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [9] {
+      - Methods [11] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1414,6 +1429,21 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> $srcrect ]
             Parameter #1 [ <required> $dstsurface ]
             Parameter #2 [ <optional> &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SaveBMP_RW ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> &$rwops ]
+            Parameter #1 [ <optional> $freedst ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SaveBMP ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $path ]
           }
         }
       }

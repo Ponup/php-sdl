@@ -207,7 +207,6 @@ PHP_FUNCTION(SDL_LoadBMP)
 /* }}} */
 
 
-
 /* {{{ proto SDL_Surface, __construct(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
  */
 static PHP_METHOD(SDL_Surface, __construct)
@@ -232,6 +231,106 @@ static PHP_METHOD(SDL_Surface, __construct)
 	} else {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
 	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP_RW, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, rwops)
+       ZEND_ARG_INFO(0, freedst)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP_RW, 0, 0, 1)
+       ZEND_ARG_INFO(1, rwops)
+       ZEND_ARG_INFO(0, freedst)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SaveBMP_RW(SDL_Surface surface, SDL_RWops &dst, int freedst)
+
+ *  Save a surface to a seekable SDL data stream (memory or file).
+ *
+ *  If \c freedst is non-zero, the stream will be closed after being written.
+ *
+ *  \return 0 if successful or -1 if there was an error.
+ extern DECLSPEC int SDLCALL SDL_SaveBMP_RW
+     (SDL_Surface * surface, SDL_RWops * dst, int freedst);
+ */
+PHP_FUNCTION(SDL_SaveBMP_RW)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_rwops;
+	long freedst=0;
+	SDL_Surface *surface;
+	SDL_RWops *rwops;
+	int result;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO|l", &z_surface, php_sdl_surface_ce, &z_rwops, get_php_sdl_rwops_ce(), &freedst) == FAILURE) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	rwops = zval_to_sdl_rwops(z_rwops);
+
+	if (!rwops) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_RWops object");
+		RETURN_LONG(-1);
+	}
+
+	result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+
+	if (freedst) {
+		/* we close the SDL_RWops ourself, to free the PHP object */
+		zval_dtor(z_rwops);
+		ZVAL_NULL(z_rwops);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, path)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP, 0, 0, 1)
+       ZEND_ARG_INFO(0, path)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SaveBMP(SDL_Surface surface, string path)
+
+	PHP note: stream are "partially" supported (only when PHP_STREAM_AS_STDIO)
+
+ define SDL_SaveBMP(surface, file) \
+         SDL_SaveBMP_RW(surface, SDL_RWFromFile(file, "wb"), 1)
+
+ */
+PHP_FUNCTION(SDL_SaveBMP)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_rwops;
+	char *path;
+	SDL_Surface *surface;
+	SDL_RWops *rwops;
+	int path_len, result=-1;
+	php_stream *stream;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O" ARG_PATH, &z_surface, php_sdl_surface_ce, &path, &path_len) == FAILURE) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+
+	stream = php_stream_open_wrapper(path, "wb", REPORT_ERRORS, NULL);
+	MAKE_STD_ZVAL(z_rwops);
+	php_stream_to_zval_rwops(stream, z_rwops, 0);
+
+	rwops = zval_to_sdl_rwops(z_rwops);
+	if (rwops) {
+		result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+	}
+	zval_dtor(z_rwops);
+
+	RETURN_LONG(result);
 }
 /* }}} */
 
@@ -576,6 +675,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_LoadBMP_RW,					arginfo_SDL_LoadBMP_RW)
 	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
 	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
+	ZEND_FE(SDL_SaveBMP_RW,					arginfo_SDL_SaveBMP_RW)
+	ZEND_FE(SDL_SaveBMP,					arginfo_SDL_SaveBMP)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -593,6 +694,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(Unlock,           SDL_UnlockSurface,         arginfo_surface_none)
 	PHP_FALIAS(Blit,             SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
 	PHP_FALIAS(UpperBlit,        SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
+	PHP_FALIAS(SaveBMP_RW,       SDL_SaveBMP_RW,            arginfo_SDL_Surface_SaveBMP_RW)
+	PHP_FALIAS(SaveBMP,          SDL_SaveBMP,               arginfo_SDL_Surface_SaveBMP)
 	PHP_FE_END
 };
 

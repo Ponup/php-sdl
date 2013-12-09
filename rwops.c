@@ -351,7 +351,7 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 
 		buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 0);
 		if (!buff_size) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING,"Cannot read data");
+			php_error_docref(NULL TSRMLS_CC, E_WARNING,"Cannot map data to memory");
 			RETURN_NULL();
 		}
 		rwops = SDL_RWFromMem(buff, (int)buff_size);
