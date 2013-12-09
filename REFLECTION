@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [115] {
+  - Constants [119] {
     Constant [ integer SDL_INIT_TIMER ] { 1 }
     Constant [ integer SDL_INIT_AUDIO ] { 16 }
     Constant [ integer SDL_INIT_VIDEO ] { 32 }
@@ -10,6 +10,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_INIT_EVENTS ] { 16384 }
     Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
     Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
+    Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
+    Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
+    Constant [ integer SDL_BLENDMODE_MOD ] { 4 }
     Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
     Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
     Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }

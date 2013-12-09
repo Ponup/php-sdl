@@ -44,6 +44,7 @@ if test "$PHP_SDL" != "no"; then
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
   sources="
+blendmode.c
 cpuinfo.c
 error.c
 pixels.c

@@ -20,6 +20,7 @@
 /* $ Id: $ */ 
 
 #include "php_sdl.h"
+#include "blendmode.h"
 #include "cpuinfo.h"
 #include "error.h"
 #include "power.h"
@@ -54,7 +55,8 @@ PHP_MINIT_FUNCTION(sdl)
 	REGISTER_LONG_CONSTANT("SDL_INIT_NOPARACHUTE",     SDL_INIT_NOPARACHUTE,       CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
 
-	if (   SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
+	if (   SUCCESS == PHP_MINIT_CALL(sdl_blendmode)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)

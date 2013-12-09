@@ -54,6 +54,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='config.m4'/>
       <file role='src' name='sdl.c'/>
       <file role='src' name='php_sdl.h'/>
+      <file role='src' name='blendmode.c'/>
+      <file role='src' name='blendmode.h'/>
       <file role='src' name='cpuinfo.c'/>
       <file role='src' name='cpuinfo.h'/>
       <file role='src' name='rect.c'/>
