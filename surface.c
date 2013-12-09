@@ -555,7 +555,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface, 0, 0, 1)
        ZEND_ARG_INFO(0, surface)
 ZEND_END_ARG_INFO()
 
-
+/* we need to undefine this macros to avoid substitution in list behind */
 #undef SDL_BlitSurface
 
 /* {{{ sdl_surface_functions[] */
