@@ -32,7 +32,7 @@ void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC);
 
 zend_class_entry *get_php_sdl_point_ce(void);
 void sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
-void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
+zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
 
 PHP_MINIT_FUNCTION(sdl_rect);
 

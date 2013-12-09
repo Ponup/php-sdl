@@ -58,18 +58,25 @@ void sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
 	zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y TSRMLS_CC);
 }
 
-void zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
+zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 {
 	zval *val;
 
-	val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
-	rect->x = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
-	rect->y = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0 TSRMLS_CC);
-	rect->w = (int)Z_LVAL_P(val);
-	val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_CC);
-	rect->h = (int)Z_LVAL_P(val);
+	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
+		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
+		rect->x = (int)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
+		rect->y = (int)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0 TSRMLS_CC);
+		rect->w = (int)Z_LVAL_P(val);
+		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_CC);
+		rect->h = (int)Z_LVAL_P(val);
+		return 1;
+	} else {
+		/* create an empty rect */
+		memset(rect, 0, sizeof(SDL_Rect));
+		return 0;
+	}
 }
 
 void zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)

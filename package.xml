@@ -74,6 +74,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='window.h'/>
       <dir name="examples">
         <file role='doc' name='window.php'/>
+        <file role='doc' name='php.bmp.gz'/>
       </dir> <!-- examples -->
       <dir name="tests">
         <file role='test' name='001-load.phpt'/>

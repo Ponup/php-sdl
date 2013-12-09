@@ -641,6 +641,23 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $path ]
       }
     }
+    Function [ <internal:SDL> function SDL_UpperBlit ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $srcsurface ]
+        Parameter #1 [ <required> $srcrect ]
+        Parameter #2 [ <required> $dstsurface ]
+        Parameter #3 [ <optional> &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_BlitSurface ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $srcrect ]
+        Parameter #1 [ <required> $dstsurface ]
+        Parameter #2 [ <optional> &$dstrect ]
+      }
+    }
     Function [ <internal:SDL> function SDL_GetRevision ] {
 
       - Parameters [0] {
@@ -1325,7 +1342,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [7] {
+      - Methods [9] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1378,6 +1395,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Unlock ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Blit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $srcrect ]
+            Parameter #1 [ <required> $dstsurface ]
+            Parameter #2 [ <optional> &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpperBlit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $srcrect ]
+            Parameter #1 [ <required> $dstsurface ]
+            Parameter #2 [ <optional> &$dstrect ]
           }
         }
       }

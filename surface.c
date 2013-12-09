@@ -433,6 +433,119 @@ PHP_FUNCTION(SDL_UnlockSurface)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpperBlit, 0, 0, 3)
+       ZEND_ARG_INFO(0, srcsurface)
+       ZEND_ARG_INFO(0, srcrect)
+       ZEND_ARG_INFO(0, dstsurface)
+       ZEND_ARG_INFO(1, dstrect)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_Blit, 0, 0, 2)
+       ZEND_ARG_INFO(0, srcrect)
+       ZEND_ARG_INFO(0, dstsurface)
+       ZEND_ARG_INFO(1, dstrect)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_UpperBlit(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst [, SDL_rect &dstrect])
+
+ *  Performs a fast blit from the source surface to the destination surface.
+ *
+ *  This assumes that the source and destination rectangles are
+ *  the same size.  If either \c srcrect or \c dstrect are NULL, the entire
+ *  surface (\c src or \c dst) is copied.  The final blit rectangles are saved
+ *  in \c srcrect and \c dstrect after all clipping is performed.
+ *
+ *  \return If the blit is successful, it returns 0, otherwise it returns -1.
+ *
+ *  The blit function should not be called on a locked surface.
+ *
+ *  The blit semantics for surfaces with and without blending and colorkey
+ *  are defined as follows:
+ *  \verbatim
+    RGBA->RGB:
+      Source surface blend mode set to SDL_BLENDMODE_BLEND:
+        alpha-blend (using the source alpha-channel and per-surface alpha)
+        SDL_SRCCOLORKEY ignored.
+      Source surface blend mode set to SDL_BLENDMODE_NONE:
+        copy RGB.
+        if SDL_SRCCOLORKEY set, only copy the pixels matching the
+        RGB values of the source color key, ignoring alpha in the
+        comparison.
+
+    RGB->RGBA:
+      Source surface blend mode set to SDL_BLENDMODE_BLEND:
+        alpha-blend (using the source per-surface alpha)
+      Source surface blend mode set to SDL_BLENDMODE_NONE:
+        copy RGB, set destination alpha to source per-surface alpha value.
+      both:
+        if SDL_SRCCOLORKEY set, only copy the pixels matching the
+        source color key.
+
+    RGBA->RGBA:
+      Source surface blend mode set to SDL_BLENDMODE_BLEND:
+        alpha-blend (using the source alpha-channel and per-surface alpha)
+        SDL_SRCCOLORKEY ignored.
+      Source surface blend mode set to SDL_BLENDMODE_NONE:
+        copy all of RGBA to the destination.
+        if SDL_SRCCOLORKEY set, only copy the pixels matching the
+        RGB values of the source color key, ignoring alpha in the
+        comparison.
+
+    RGB->RGB:
+      Source surface blend mode set to SDL_BLENDMODE_BLEND:
+        alpha-blend (using the source per-surface alpha)
+      Source surface blend mode set to SDL_BLENDMODE_NONE:
+        copy RGB.
+      both:
+        if SDL_SRCCOLORKEY set, only copy the pixels matching the
+        source color key.
+    \endverbatim
+
+ *
+ *  You should call SDL_BlitSurface() unless you know exactly how SDL
+ *  blitting works internally and how to use the other blit functions.
+ define SDL_BlitSurface SDL_UpperBlit
+
+ *  This is the public blit function, SDL_BlitSurface(), and it performs
+ *  rectangle validation and clipping before passing it to SDL_LowerBlit()
+ extern DECLSPEC int SDLCALL SDL_UpperBlit
+     (SDL_Surface * src, const SDL_Rect * srcrect,
+      SDL_Surface * dst, SDL_Rect * dstrect);
+ */
+PHP_FUNCTION(SDL_UpperBlit)
+{
+	struct php_sdl_surface *intern;
+	zval *z_src, *z_dst, *z_srect, *z_drect = NULL;
+	SDL_Surface *src, *dst;
+	SDL_Rect srect, drect;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OzO|z", &z_src, php_sdl_surface_ce, &z_srect, &z_dst, php_sdl_surface_ce, &z_drect)) {
+		return;
+	}
+	FETCH_SURFACE(src, z_src, 1);
+	FETCH_SURFACE(dst, z_dst, 1);
+	if (!(Z_TYPE_P(z_srect)==IS_NULL || zval_to_sdl_rect(z_srect, &srect))) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "srcrect is not a SDL_Rect object");
+		return;
+	}
+	if (z_drect && !(Z_TYPE_P(z_drect)==IS_NULL || zval_to_sdl_rect(z_drect, &drect))) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "dstrect is not a SDL_Rect object");
+		return;
+	} else if (z_drect && Z_TYPE_P(z_drect)==IS_NULL) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "dstrect is not a SDL_Rect object, so is ignored");
+	}
+
+	result = SDL_UpperBlit(src, (Z_TYPE_P(z_srect)==IS_NULL ? NULL : &srect),
+	                       dst, (z_drect==NULL || Z_TYPE_P(z_drect)==IS_NULL ? NULL : &drect));
+
+	if (result==0 && z_drect && Z_TYPE_P(z_drect)==IS_OBJECT) {
+		sdl_rect_to_zval(&drect, z_drect);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
@@ -442,6 +555,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface, 0, 0, 1)
        ZEND_ARG_INFO(0, surface)
 ZEND_END_ARG_INFO()
 
+
+#undef SDL_BlitSurface
 
 /* {{{ sdl_surface_functions[] */
 zend_function_entry sdl_surface_functions[] = {
@@ -454,20 +569,24 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_UnlockSurface,				arginfo_SDL_Surface)
 	ZEND_FE(SDL_LoadBMP_RW,					arginfo_SDL_LoadBMP_RW)
 	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
+	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
+	/* Aliases */
+	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_Surface_Blit)
 	ZEND_FE_END
 };
 /* }}} */
 
 static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateRGBSurface, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-
+	/* Aliases */
 	PHP_FALIAS(Free,             SDL_FreeSurface,           arginfo_surface_none)
 	PHP_FALIAS(FillRect,         SDL_FillRect,              arginfo_SDL_Surface_FillRect)
 	PHP_FALIAS(FillRects,        SDL_FillRects,             arginfo_SDL_Surface_FillRects)
 	PHP_FALIAS(MustLock,         SDL_MUSTLOCK,              arginfo_surface_none)
 	PHP_FALIAS(Lock,             SDL_LockSurface,           arginfo_surface_none)
 	PHP_FALIAS(Unlock,           SDL_UnlockSurface,         arginfo_surface_none)
-
+	PHP_FALIAS(Blit,             SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
+	PHP_FALIAS(UpperBlit,        SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
 	PHP_FE_END
 };
 
