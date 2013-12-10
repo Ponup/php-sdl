@@ -728,6 +728,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> &$alpha ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetSurfaceBlendMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $blendmmode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceBlendMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> &$blendmode ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1421,7 +1435,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [18] {
+      - Methods [20] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1561,6 +1575,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> &$alpha ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetBlendMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $blendmmode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetBlendMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$blendmode ]
           }
         }
       }

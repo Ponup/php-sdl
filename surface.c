@@ -902,7 +902,7 @@ PHP_FUNCTION(SDL_SetSurfaceAlphaMod)
 	long a;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &a)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_surface, php_sdl_surface_ce, &a)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -941,7 +941,7 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_a)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_a)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -949,6 +949,86 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
 	if (result == 0) {
 		zval_dtor(z_a);
 		ZVAL_LONG(z_a, (long)a);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceBlendMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, blendmmode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetBlendMode, 0, 0, 1)
+       ZEND_ARG_INFO(0, blendmmode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetSurfaceBlendMode(SDL_Surface src, int blendmode)
+ *  \brief Set the blend mode used for blit operations.
+ *
+ *  \param surface The surface to update.
+ *  \param blendMode ::SDL_BlendMode to use for blit blending.
+ *
+ *  \return 0 on success, or -1 if the parameters are not valid.
+ *
+ *  \sa SDL_GetSurfaceBlendMode()
+ extern DECLSPEC int SDLCALL SDL_SetSurfaceBlendMode(SDL_Surface * surface,
+                                                     SDL_BlendMode blendMode);
+ */
+PHP_FUNCTION(SDL_SetSurfaceBlendMode)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface;
+	long mode;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_surface, php_sdl_surface_ce, &mode)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	RETURN_LONG(SDL_SetSurfaceBlendMode(surface, (SDL_BlendMode)mode));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceBlendMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, blendmode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetBlendMode, 0, 0, 1)
+       ZEND_ARG_INFO(1, blendmode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
+
+ *  \brief Get the blend mode used for blit operations.
+ *
+ *  \param surface   The surface to query.
+ *  \param blendMode A pointer filled in with the current blend mode.
+ *
+ *  \return 0 on success, or -1 if the surface is not valid.
+ *
+ *  \sa SDL_SetSurfaceBlendMode()
+ extern DECLSPEC int SDLCALL SDL_GetSurfaceBlendMode(SDL_Surface * surface,
+                                                     SDL_BlendMode *blendMode);
+ */
+PHP_FUNCTION(SDL_GetSurfaceBlendMode)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_mode;
+	SDL_BlendMode mode;
+	SDL_Surface *surface;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_mode)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	result = SDL_GetSurfaceBlendMode(surface, &mode);
+	if (result == 0) {
+		zval_dtor(z_mode);
+		ZVAL_LONG(z_mode, (long)mode);
 	}
 	RETURN_LONG(result);
 }
@@ -988,6 +1068,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_GetSurfaceColorMod,			arginfo_SDL_GetSurfaceColorMod)
 	ZEND_FE(SDL_SetSurfaceAlphaMod,			arginfo_SDL_SetSurfaceAlphaMod)
 	ZEND_FE(SDL_GetSurfaceAlphaMod,			arginfo_SDL_GetSurfaceAlphaMod)
+	ZEND_FE(SDL_SetSurfaceBlendMode,		arginfo_SDL_SetSurfaceBlendMode)
+	ZEND_FE(SDL_GetSurfaceBlendMode,		arginfo_SDL_GetSurfaceBlendMode)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -1014,6 +1096,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetColorMod,      SDL_GetSurfaceColorMod,    arginfo_SDL_Surface_GetColorMod)
 	PHP_FALIAS(SetAlphaMod,      SDL_SetSurfaceAlphaMod,    arginfo_SDL_Surface_SetAlphaMod)
 	PHP_FALIAS(GetAlphaMod,      SDL_GetSurfaceAlphaMod,    arginfo_SDL_Surface_GetAlphaMod)
+	PHP_FALIAS(SetBlendMode,     SDL_SetSurfaceBlendMode,   arginfo_SDL_Surface_SetBlendMode)
+	PHP_FALIAS(GetBlendMode,     SDL_GetSurfaceBlendMode,   arginfo_SDL_Surface_GetBlendMode)
 	PHP_FE_END
 };
 
