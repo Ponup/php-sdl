@@ -700,7 +700,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 2)
        ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetColorKey(SDL_Surface src, int flag, int key)
+/* {{{ proto int SDL_SetColorKey(SDL_Surface src, int flag, int key)
 
  *  \brief Sets the color key (transparent pixel) in a blittable surface.
  *
@@ -739,7 +739,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorKey, 0, 0, 1)
        ZEND_ARG_INFO(1, key)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_GetColorKey(SDL_Surface src, int &key)
+/* {{{ proto int SDL_GetColorKey(SDL_Surface src, int &key)
 
  *  \brief Gets the color key (transparent pixel) in a blittable surface.
  *
@@ -787,7 +787,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorMod, 0, 0, 3)
        ZEND_ARG_INFO(0, blue)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetSurfaceColorMod(SDL_Surface src, int r, int g, int b)
+/* {{{ proto int SDL_SetSurfaceColorMod(SDL_Surface src, int r, int g, int b)
 
  *  \brief Set an additional color value used in blit operations.
  *
@@ -831,7 +831,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorMod, 0, 0, 3)
        ZEND_ARG_INFO(1, blue)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_GetSurfaceColorMod(SDL_Surface src, int &r, int &g, int&b)
+/* {{{ proto int SDL_GetSurfaceColorMod(SDL_Surface src, int &r, int &g, int&b)
 
  *  \brief Get the additional color value used in blit operations.
  *
@@ -882,7 +882,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetAlphaMod, 0, 0, 1)
        ZEND_ARG_INFO(0, alpha)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetSurfaceColorMod(SDL_Surface src, int alpha)
+/* {{{ proto int SDL_SetSurfaceColorMod(SDL_Surface src, int alpha)
 
  *  \brief Set an additional alpha value used in blit operations.
  *
@@ -920,7 +920,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetAlphaMod, 0, 0, 1)
        ZEND_ARG_INFO(1, alpha)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
+/* {{{ proto int SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
 
  *  \brief Get the additional alpha value used in blit operations.
  *
@@ -954,6 +954,7 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
 }
 /* }}} */
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceBlendMode, 0, 0, 2)
        ZEND_ARG_INFO(0, surface)
        ZEND_ARG_INFO(0, blendmmode)
@@ -963,7 +964,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetBlendMode, 0, 0, 1)
        ZEND_ARG_INFO(0, blendmmode)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetSurfaceBlendMode(SDL_Surface src, int blendmode)
+/* {{{ proto int SDL_SetSurfaceBlendMode(SDL_Surface src, int blendmode)
  *  \brief Set the blend mode used for blit operations.
  *
  *  \param surface The surface to update.
@@ -1000,7 +1001,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetBlendMode, 0, 0, 1)
        ZEND_ARG_INFO(1, blendmode)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
+/* {{{ proto int SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
 
  *  \brief Get the blend mode used for blit operations.
  *
@@ -1021,7 +1022,7 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_mode)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_mode)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -1034,6 +1035,86 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode)
 }
 /* }}} */
 
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetClipRect, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, cliprect)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetClipRect, 0, 0, 1)
+       ZEND_ARG_INFO(0, cliprect)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetClipRect(SDL_Surface src, SDL_Rect cliprect)
+
+ *  Sets the clipping rectangle for the destination surface in a blit.
+ *
+ *  If the clip rectangle is NULL, clipping will be disabled.
+ *
+ *  If the clip rectangle doesn't intersect the surface, the function will
+ *  return SDL_FALSE and blits will be completely clipped.  Otherwise the
+ *  function returns SDL_TRUE and blits to the surface will be clipped to
+ *  the intersection of the surface area and the clipping rectangle.
+ *
+ *  Note that blits are automatically clipped to the edges of the source
+ *  and destination surfaces.
+ extern DECLSPEC SDL_bool SDLCALL SDL_SetClipRect(SDL_Surface * surface,
+                                                  const SDL_Rect * rect);
+ */
+PHP_FUNCTION(SDL_SetClipRect)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_rect;
+	SDL_Rect rect;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_surface, php_sdl_surface_ce, &z_rect, get_php_sdl_rect_ce())) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	if (zval_to_sdl_rect(z_rect, &rect)) {
+		RETURN_BOOL(SDL_SetClipRect(surface, &rect));
+	}
+	php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Rect object");
+	RETURN_FALSE;
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClipRect, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(1, cliprect)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetClipRect, 0, 0, 1)
+       ZEND_ARG_INFO(1, cliprect)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetClipRect(SDL_Surface src, SDL_Rect &rect)
+
+ *  Gets the clipping rectangle for the destination surface in a blit.
+ *
+ *  \c rect must be a pointer to a valid rectangle which will be filled
+ *  with the correct values.
+ extern DECLSPEC void SDLCALL SDL_GetClipRect(SDL_Surface * surface,
+                                              SDL_Rect * rect);
+ */
+PHP_FUNCTION(SDL_GetClipRect)
+{
+	struct php_sdl_surface *intern;
+	zval *z_surface, *z_rect;
+	SDL_Rect rect;
+	SDL_Surface *surface;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_rect)) {
+		return;
+	}
+	FETCH_SURFACE(surface, z_surface, 1);
+	SDL_GetClipRect(surface, &rect);
+	zval_dtor(z_rect);
+	sdl_rect_to_zval(&rect, z_rect);
+}
+/* }}} */
 
 
 /* generic arginfo */
@@ -1070,6 +1151,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_GetSurfaceAlphaMod,			arginfo_SDL_GetSurfaceAlphaMod)
 	ZEND_FE(SDL_SetSurfaceBlendMode,		arginfo_SDL_SetSurfaceBlendMode)
 	ZEND_FE(SDL_GetSurfaceBlendMode,		arginfo_SDL_GetSurfaceBlendMode)
+	ZEND_FE(SDL_SetClipRect,				arginfo_SDL_SetClipRect)
+	ZEND_FE(SDL_GetClipRect,				arginfo_SDL_GetClipRect)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -1098,6 +1181,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetAlphaMod,      SDL_GetSurfaceAlphaMod,    arginfo_SDL_Surface_GetAlphaMod)
 	PHP_FALIAS(SetBlendMode,     SDL_SetSurfaceBlendMode,   arginfo_SDL_Surface_SetBlendMode)
 	PHP_FALIAS(GetBlendMode,     SDL_GetSurfaceBlendMode,   arginfo_SDL_Surface_GetBlendMode)
+	PHP_FALIAS(SetClipRect,      SDL_SetClipRect,           arginfo_SDL_Surface_SetClipRect)
+	PHP_FALIAS(GetClipRect,      SDL_GetClipRect,           arginfo_SDL_Surface_GetClipRect)
 	PHP_FE_END
 };
 
