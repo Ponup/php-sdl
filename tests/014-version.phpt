@@ -4,6 +4,8 @@ SDL_version test suite
 <?php
 extension_loaded('sdl') or die('skip SDL extension not loaded');
 ?>
+--INI--
+error_reporting = 32767;
 --FILE--
 <?php
 echo '= Constants', PHP_EOL;
@@ -19,7 +21,7 @@ var_dump(empty(SDL_REVISION));
 var_dump(is_string(SDL_REVISION));
 
 echo '= Functions', PHP_EOL;
-SDL_VERSION($version = null);
+SDL_VERSION($version);
 var_dump(array_key_exists('major', $version) && array_key_exists('minor', $version) && array_key_exists('patch', $version));
 var_dump(12030 === SDL_VERSIONNUM(10,20,30));
 var_dump(SDL_VERSION_ATLEAST(2,0,0));

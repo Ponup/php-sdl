@@ -64,6 +64,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='error.h'/>
       <file role='src' name='pixels.c'/>
       <file role='src' name='pixels.h'/>
+      <file role='src' name='platform.c'/>
+      <file role='src' name='platform.h'/>
+      <file role='src' name='power.c'/>
+      <file role='src' name='power.h'/>
       <file role='src' name='rwops.c'/>
       <file role='src' name='rwops.h'/>
       <file role='src' name='surface.c'/>
@@ -96,6 +100,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='015-rwops.phpt'/>
         <file role='test' name='016-rwops-oo.phpt'/>
         <file role='test' name='017-rwops-stream.phpt'/>
+        <file role='test' name='018-power.phpt'/>
+        <file role='test' name='019-platform.phpt'/>
+        <file role='test' name='020-surface.phpt'/>
+        <file role='test' name='021-surface-oo.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>

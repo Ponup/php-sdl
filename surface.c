@@ -336,7 +336,7 @@ PHP_FUNCTION(SDL_SaveBMP)
 /* }}} */
 
 
-/* {{{ proto SDL_FreeSurface(SDL_Surface surface)
+/* {{{ proto void SDL_FreeSurface(SDL_Surface surface)
 
  *  \brief Destroy a window.
  extern DECLSPEC void SDLCALL SDL_FreeSurface(SDL_Surface * surface);
@@ -462,7 +462,7 @@ PHP_FUNCTION(SDL_FillRects)
 /* }}} */
 
 
-/* {{{ proto bool SDL_LockSurface(SDL_Surface surface)
+/* {{{ proto bool SDL_MUSTLOCK(SDL_Surface surface)
 
  *  Evaluates to true if the surface needs to be locked before access.
  define SDL_MUSTLOCK(S) (((S)->flags & SDL_RLEACCEL) != 0)
@@ -689,18 +689,18 @@ PHP_FUNCTION(SDL_SetSurfaceRLE)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetColorKey, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetColorKey, 0, 0, 2)
        ZEND_ARG_INFO(0, surface)
        ZEND_ARG_INFO(0, flag)
        ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 1)
        ZEND_ARG_INFO(0, flag)
        ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDL_SetColorKey(SDL_Surface src, int flag, int key)
+/* {{{ proto int SDL_SetColorKey(SDL_Surface src, int flag [, int key ])
 
  *  \brief Sets the color key (transparent pixel) in a blittable surface.
  *
@@ -718,10 +718,10 @@ PHP_FUNCTION(SDL_SetColorKey)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long flag, key;
+	long flag, key=0;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &flag, &key)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol|l", &z_surface, php_sdl_surface_ce, &flag, &key)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -809,7 +809,7 @@ PHP_FUNCTION(SDL_SetSurfaceColorMod)
 	long r, g, b;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_surface, php_sdl_surface_ce, &r, &g, &b)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olll", &z_surface, php_sdl_surface_ce, &r, &g, &b)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -866,7 +866,7 @@ PHP_FUNCTION(SDL_GetSurfaceColorMod)
 		zval_dtor(z_g);
 		ZVAL_LONG(z_g, (long)g);
 		zval_dtor(z_b);
-		ZVAL_LONG(z_g, (long)b);
+		ZVAL_LONG(z_b, (long)b);
 	}
 	RETURN_LONG(result);
 }
