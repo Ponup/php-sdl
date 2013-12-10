@@ -228,6 +228,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [0] {
       }
     }
+    Function [ <internal:SDL> function SDL_GetPlatform ] {
+
+      - Parameters [0] {
+      }
+    }
     Function [ <internal:SDL> function SDL_GetPowerInfo ] {
 
       - Parameters [2] {
