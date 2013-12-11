@@ -19,6 +19,14 @@
 
 /* $ Id: $ */ 
 
+/*
+  +----------------------------------------------------------------------+
+  | wrapper for SDL2/SDL_surface.h                                       |
+  +----------------------------------------------------------------------+
+  | class SDL_Surface                                                    |
+  +----------------------------------------------------------------------+
+*/
+
 #include "php_sdl.h"
 #include "pixels.h"
 #include "rect.h"
@@ -1195,6 +1203,19 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 }
 /* }}} */
 
+
+/**
+	TODO: don't know yet if it make sense to wrap this one
+
+ * \brief Copy a block of pixels of one format to another format
+ *
+ *  \return 0 on success, or -1 if there was an error
+ extern DECLSPEC int SDLCALL SDL_ConvertPixels(int width, int height,
+                                               Uint32 src_format,
+                                               const void * src, int src_pitch,
+                                               Uint32 dst_format,
+                                               void * dst, int dst_pitch);
+ */
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)

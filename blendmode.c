@@ -22,6 +22,12 @@
 #include "php_sdl.h"
 #include "blendmode.h"
 
+/*
+  +----------------------------------------------------------------------+
+  | wrapper for SDL2/SDL_blendmode.h                                     |
+  +----------------------------------------------------------------------+
+*/
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_blendmode)
 {
