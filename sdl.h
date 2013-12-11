@@ -19,72 +19,21 @@
 
 /* $ Id: $ */ 
 
-#ifndef PHP_PHPSDL_H
-#define PHP_PHPSDL_H
+#ifndef PHP_SDL_H
+#define PHP_SDL_H
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <php.h>
-#include <zend_exceptions.h>
-
-#define PHP_SDL_VERSION "2.0.0-dev"
-
-#include <SDL.h>
-
-#include <php_ini.h>
-#include <SAPI.h>
-#include <ext/standard/info.h>
-#include <Zend/zend_extensions.h>
-#ifdef  __cplusplus
-} // extern "C" 
-#endif
-#ifdef  __cplusplus
-extern "C" {
-#endif
-
-extern zend_module_entry sdl_module_entry;
-#define phpext_sdl_ptr &sdl_module_entry
-
-#ifdef PHP_WIN32
-#define PHP_SDL_API __declspec(dllexport)
-#else
-#define PHP_SDL_API
-#endif
-
-PHP_MINIT_FUNCTION(sdl);
-PHP_MSHUTDOWN_FUNCTION(sdl);
-PHP_RINIT_FUNCTION(sdl);
-PHP_RSHUTDOWN_FUNCTION(sdl);
-PHP_MINFO_FUNCTION(sdl);
-
-#ifdef ZTS
-#include "TSRM.h"
-#endif
-
-/* ZEND_FE_END exists only in PHP >= 5.3.7 */
-#ifndef ZEND_FE_END
-#define ZEND_FE_END { NULL, NULL, NULL, 0, 0 }
-#endif
-
-/* Arginfo PATH exists only in php >= 5.4.0 */
-#if PHP_VERSION_ID < 50400
-#define ARG_PATH "s"
-#else
-#define ARG_PATH "p"
-#endif
+PHP_MINIT_FUNCTION(sdl_sdl);
 
 #ifdef  __cplusplus
 } // extern "C" 
 #endif
 
 
-#endif /* PHP_PHPSDL_H */
+#endif /* PHP_SDL_H */
 
 
 /*

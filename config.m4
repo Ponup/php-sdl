@@ -48,14 +48,15 @@ blendmode.c
 cpuinfo.c
 error.c
 pixels.c
-rect.c
-rwops.c
-surface.c
 platform.c
 power.c
+rect.c
+rwops.c
+sdl.c
+surface.c
+version.c
 video.c
 window.c
-version.c
 "
-  PHP_NEW_EXTENSION(sdl, sdl.c $sources, $ext_shared)
+  PHP_NEW_EXTENSION(sdl, php_sdl.c $sources, $ext_shared)
 fi
