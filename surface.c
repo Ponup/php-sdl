@@ -1116,6 +1116,85 @@ PHP_FUNCTION(SDL_GetClipRect)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertSurface, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_Convert, 0, 0, 1)
+       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_ConvertSurface(SDL_Surface src, SDL_PixelFormat format, int flag)
+
+ *  Creates a new surface of the specified format, and then copies and maps
+ *  the given surface to it so the blit of the converted surface will be as
+ *  fast as possible.  If this function fails, it returns NULL.
+ *
+ *  The \c flags parameter is passed to SDL_CreateRGBSurface() and has those
+ *  semantics.  You can also pass ::SDL_RLEACCEL in the flags parameter and
+ *  SDL will try to RLE accelerate colorkey and alpha blits in the resulting
+ *  surface.
+ extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurface
+     (SDL_Surface * src, const SDL_PixelFormat * fmt, Uint32 flags);
+ */
+PHP_FUNCTION(SDL_ConvertSurface)
+{
+	struct php_sdl_surface *intern;
+	zval *z_src, *z_format;
+	long flags = 0;
+	SDL_Surface *src, *dst;
+	SDL_PixelFormat *format;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO|l", &z_src, php_sdl_surface_ce, &z_format, get_php_sdl_pixelformat_ce(), &flags)) {
+		return;
+	}
+	FETCH_SURFACE(src, z_src, 1);
+	format = zval_to_sdl_pixelformat(z_format);
+	if (format) {
+		dst = SDL_ConvertSurface(src, format, (Uint32)flags);
+		sdl_surface_to_zval(dst, return_value TSRMLS_CC);
+	} else {
+		RETVAL_NULL();
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertSurfaceFormat, 0, 0, 2)
+       ZEND_ARG_INFO(0, surface)
+       ZEND_ARG_INFO(0, format)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_ConvertFormat, 0, 0, 1)
+       ZEND_ARG_INFO(0, format)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_ConvertSurface(SDL_Surface src, SDL_PixelFormat format, int flag)
+
+ extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurfaceFormat
+     (SDL_Surface * src, Uint32 pixel_format, Uint32 flags);
+ */
+PHP_FUNCTION(SDL_ConvertSurfaceFormat)
+{
+	struct php_sdl_surface *intern;
+	zval *z_src;
+	long format, flags = 0;
+	SDL_Surface *src, *dst;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol|l", &z_src, php_sdl_surface_ce, &format, &flags)) {
+		return;
+	}
+	FETCH_SURFACE(src, z_src, 1);
+	dst = SDL_ConvertSurfaceFormat(src, (Uint32)format, (Uint32)flags);
+	sdl_surface_to_zval(dst, return_value TSRMLS_CC);
+}
+/* }}} */
+
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
@@ -1153,6 +1232,8 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_GetSurfaceBlendMode,		arginfo_SDL_GetSurfaceBlendMode)
 	ZEND_FE(SDL_SetClipRect,				arginfo_SDL_SetClipRect)
 	ZEND_FE(SDL_GetClipRect,				arginfo_SDL_GetClipRect)
+	ZEND_FE(SDL_ConvertSurface,				arginfo_SDL_ConvertSurface)
+	ZEND_FE(SDL_ConvertSurfaceFormat,		arginfo_SDL_ConvertSurfaceFormat)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
@@ -1183,6 +1264,8 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetBlendMode,     SDL_GetSurfaceBlendMode,   arginfo_SDL_Surface_GetBlendMode)
 	PHP_FALIAS(SetClipRect,      SDL_SetClipRect,           arginfo_SDL_Surface_SetClipRect)
 	PHP_FALIAS(GetClipRect,      SDL_GetClipRect,           arginfo_SDL_Surface_GetClipRect)
+	PHP_FALIAS(Convert,          SDL_ConvertSurface,        arginfo_SDL_Surface_Convert)
+	PHP_FALIAS(ConvertFormat,    SDL_ConvertSurfaceFormat,  arginfo_SDL_Surface_ConvertFormat)
 	PHP_FE_END
 };
 

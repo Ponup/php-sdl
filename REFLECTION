@@ -756,6 +756,22 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> &$cliprect ]
       }
     }
+    Function [ <internal:SDL> function SDL_ConvertSurface ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $pixelformat ]
+        Parameter #2 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ConvertSurfaceFormat ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $surface ]
+        Parameter #1 [ <required> $format ]
+        Parameter #2 [ <optional> $flags ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
@@ -1449,7 +1465,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $clip_rect ]
       }
 
-      - Methods [22] {
+      - Methods [24] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1617,6 +1633,22 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> &$cliprect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Convert ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $pixelformat ]
+            Parameter #1 [ <optional> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method ConvertFormat ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $format ]
+            Parameter #1 [ <optional> $flags ]
           }
         }
       }

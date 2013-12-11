@@ -41,6 +41,13 @@ echo "= ClipRect\n";
 var_dump($scol->SetClipRect(new SDL_Rect(10,20,30,40)));
 var_dump($scol->GetClipRect($rect), $rect);
 var_dump($scol->clip_rect);
+
+echo "= Convert\n";
+$conv = $spal->Convert($scol->format);
+var_dump($scol->format->format == $conv->format->format);
+$conv = $spal->ConvertFormat($scol->format->format);
+var_dump($scol->format->format == $conv->format->format);
+
 echo "= Free\n";
 $scol->Free()
 ?>
@@ -101,5 +108,8 @@ object(SDL_Rect)#%d (4) {
   ["h"]=>
   int(40)
 }
+= Convert
+bool(true)
+bool(true)
 = Free
 = Done

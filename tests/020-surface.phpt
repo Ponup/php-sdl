@@ -41,6 +41,12 @@ echo "= ClipRect\n";
 var_dump(SDL_SetClipRect($scol, new SDL_Rect(10,20,30,40)));
 var_dump(SDL_GetClipRect($scol, $rect), $rect);
 
+echo "= Convert\n";
+$conv = SDL_ConvertSurface($spal, $scol->format);
+var_dump($scol->format->format == $conv->format->format);
+$conv = SDL_ConvertSurfaceFormat($spal, $scol->format->format);
+var_dump($scol->format->format == $conv->format->format);
+
 echo "= Free\n";
 SDL_FreeSurface($spal);
 SDL_FreeSurface($scol);
@@ -92,5 +98,8 @@ object(SDL_Rect)#6 (4) {
   ["h"]=>
   int(40)
 }
+= Convert
+bool(true)
+bool(true)
 = Free
 = Done
