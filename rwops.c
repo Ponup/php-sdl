@@ -164,7 +164,7 @@ zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_l
 		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
 	}
 
-	if (member->type != IS_STRING) {
+	if (Z_TYPE_P(member) != IS_STRING) {
 		tmp_member = *member;
 		zval_copy_ctor(&tmp_member);
 		convert_to_string(&tmp_member);
