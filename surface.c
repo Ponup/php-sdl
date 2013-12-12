@@ -1336,8 +1336,6 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
 	zval *retval, tmp_member;
 
-	convert_to_string(member);
-
 	if (!intern->surface) {
 		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
 	}
@@ -1381,7 +1379,6 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
-		printf("unkown\n");
 		return retval;
 	}
 

@@ -158,17 +158,38 @@ static zend_object_value php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_D
 zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
 {
 	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval;
+	zval *retval, tmp_member;
 
-	convert_to_string(member);
+	if (!intern->rwops) {
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+	}
 
-	MAKE_STD_ZVAL(retval);
-	ZVAL_FALSE(retval);
+	if (member->type != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		key = NULL;
+	}
 
-	if (intern->rwops) {
-		if (!strcmp(Z_STRVAL_P(member), "type")) {
-			ZVAL_LONG(retval, intern->rwops->type);
+	ALLOC_INIT_ZVAL(retval);
+	Z_SET_REFCOUNT_P(retval, 0);
+
+	if (!strcmp(Z_STRVAL_P(member), "type")) {
+		ZVAL_LONG(retval, intern->rwops->type);
+
+	} else {
+		FREE_ZVAL(retval);
+
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		if (member == &tmp_member) {
+			zval_dtor(member);
 		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
 	}
 	return retval;
 }

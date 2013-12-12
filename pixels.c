@@ -899,33 +899,54 @@ static zend_object_value php_sdl_palette_new(zend_class_entry *class_type TSRMLS
 zval *sdl_palette_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
 {
 	struct php_sdl_palette *intern = (struct php_sdl_palette *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval;
+	zval *retval, tmp_member;
 
-	convert_to_string(member);
+	if (!intern->palette) {
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+	}
 
-	MAKE_STD_ZVAL(retval);
-	ZVAL_FALSE(retval);
+	if (member->type != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		key = NULL;
+	}
 
-	if (intern->palette) {
-		if (!strcmp(Z_STRVAL_P(member), "ncolors")) {
-			ZVAL_LONG(retval, intern->palette->ncolors);
+	ALLOC_INIT_ZVAL(retval);
+	Z_SET_REFCOUNT_P(retval, 0);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "version")) {
-			ZVAL_LONG(retval, intern->palette->version);
+	if (!strcmp(Z_STRVAL_P(member), "ncolors")) {
+		ZVAL_LONG(retval, intern->palette->ncolors);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "refcount")) {
-			ZVAL_LONG(retval, intern->palette->refcount);
+	} else if (!strcmp(Z_STRVAL_P(member), "version")) {
+		ZVAL_LONG(retval, intern->palette->version);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
-			int i;
-			zval *z_color;
-			array_init(retval);
-			for (i=0 ; i<intern->palette->ncolors ; i++) {
-				MAKE_STD_ZVAL(z_color);
-				sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
-				add_next_index_zval(retval, z_color);
-			}
+	} else if (!strcmp(Z_STRVAL_P(member), "refcount")) {
+		ZVAL_LONG(retval, intern->palette->refcount);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
+		int i;
+		zval *z_color;
+		array_init(retval);
+		for (i=0 ; i<intern->palette->ncolors ; i++) {
+			MAKE_STD_ZVAL(z_color);
+			sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
+			add_next_index_zval(retval, z_color);
 		}
+
+	} else {
+		FREE_ZVAL(retval);
+
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		if (member == &tmp_member) {
+			zval_dtor(member);
+		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
 	}
 	return retval;
 }
@@ -1015,62 +1036,83 @@ static zend_object_value php_sdl_pixelformat_new(zend_class_entry *class_type TS
 zval *sdl_pixelformat_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
 {
 	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval;
+	zval *retval, tmp_member;
 
-	convert_to_string(member);
+	if (!intern->format) {
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+	}
 
-	MAKE_STD_ZVAL(retval);
-	ZVAL_FALSE(retval);
+	if (member->type != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		key = NULL;
+	}
 
-	if (intern->format) {
-		if (!strcmp(Z_STRVAL_P(member), "format")) {
-			ZVAL_LONG(retval, intern->format->format);
+	ALLOC_INIT_ZVAL(retval);
+	Z_SET_REFCOUNT_P(retval, 0);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "BitsPerPixel")) {
-			ZVAL_LONG(retval, intern->format->BitsPerPixel);
+	if (!strcmp(Z_STRVAL_P(member), "format")) {
+		ZVAL_LONG(retval, intern->format->format);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "BytesPerPixel")) {
-			ZVAL_LONG(retval, intern->format->BytesPerPixel);
+	} else if (!strcmp(Z_STRVAL_P(member), "BitsPerPixel")) {
+		ZVAL_LONG(retval, intern->format->BitsPerPixel);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Rmask")) {
-			ZVAL_LONG(retval, intern->format->Rmask);
+	} else if (!strcmp(Z_STRVAL_P(member), "BytesPerPixel")) {
+		ZVAL_LONG(retval, intern->format->BytesPerPixel);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Gmask")) {
-			ZVAL_LONG(retval, intern->format->Gmask);
+	} else if (!strcmp(Z_STRVAL_P(member), "Rmask")) {
+		ZVAL_LONG(retval, intern->format->Rmask);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Bmask")) {
-			ZVAL_LONG(retval, intern->format->Bmask);
+	} else if (!strcmp(Z_STRVAL_P(member), "Gmask")) {
+		ZVAL_LONG(retval, intern->format->Gmask);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Amask")) {
-			ZVAL_LONG(retval, intern->format->Amask);
+	} else if (!strcmp(Z_STRVAL_P(member), "Bmask")) {
+		ZVAL_LONG(retval, intern->format->Bmask);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Rloss")) {
-			ZVAL_LONG(retval, intern->format->Rloss);
+	} else if (!strcmp(Z_STRVAL_P(member), "Amask")) {
+		ZVAL_LONG(retval, intern->format->Amask);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Gloss")) {
-			ZVAL_LONG(retval, intern->format->Gloss);
+	} else if (!strcmp(Z_STRVAL_P(member), "Rloss")) {
+		ZVAL_LONG(retval, intern->format->Rloss);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Bloss")) {
-			ZVAL_LONG(retval, intern->format->Bloss);
+	} else if (!strcmp(Z_STRVAL_P(member), "Gloss")) {
+		ZVAL_LONG(retval, intern->format->Gloss);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Aloss")) {
-			ZVAL_LONG(retval, intern->format->Aloss);
+	} else if (!strcmp(Z_STRVAL_P(member), "Bloss")) {
+		ZVAL_LONG(retval, intern->format->Bloss);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Rshift")) {
-			ZVAL_LONG(retval, intern->format->Rshift);
+	} else if (!strcmp(Z_STRVAL_P(member), "Aloss")) {
+		ZVAL_LONG(retval, intern->format->Aloss);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Gshift")) {
-			ZVAL_LONG(retval, intern->format->Gshift);
+	} else if (!strcmp(Z_STRVAL_P(member), "Rshift")) {
+		ZVAL_LONG(retval, intern->format->Rshift);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Bshift")) {
-			ZVAL_LONG(retval, intern->format->Bshift);
+	} else if (!strcmp(Z_STRVAL_P(member), "Gshift")) {
+		ZVAL_LONG(retval, intern->format->Gshift);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "Ashift")) {
-			ZVAL_LONG(retval, intern->format->Ashift);
+	} else if (!strcmp(Z_STRVAL_P(member), "Bshift")) {
+		ZVAL_LONG(retval, intern->format->Bshift);
 
-		} else if (!strcmp(Z_STRVAL_P(member), "palette")) {
-			sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE);
+	} else if (!strcmp(Z_STRVAL_P(member), "Ashift")) {
+		ZVAL_LONG(retval, intern->format->Ashift);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "palette")) {
+		sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE);
+
+	} else {
+		FREE_ZVAL(retval);
+
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		if (member == &tmp_member) {
+			zval_dtor(member);
 		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
 	}
 	return retval;
 }

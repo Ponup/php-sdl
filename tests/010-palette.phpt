@@ -60,7 +60,7 @@ object(SDL_Color)#%d (4) {
 %s: SDL_SetPaletteColors(): Invalid first color index, 2 >= 1 in %s/010-palette.php on line 9
 int(-1)
 int(0)
-object(SDL_Color)#5 (4) {
+object(SDL_Color)#%d (4) {
   ["r"]=>
   int(1)
   ["g"]=>

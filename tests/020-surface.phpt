@@ -91,7 +91,7 @@ bool(true)
 = ClipRect
 bool(true)
 NULL
-object(SDL_Rect)#6 (4) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(10)
   ["y"]=>
