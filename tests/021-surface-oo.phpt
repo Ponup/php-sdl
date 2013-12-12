@@ -15,9 +15,9 @@ $scol = new SDL_Surface(0, 150, 100, 32, 0xff000000, 0xff0000, 0xff00, 0xff);
 var_dump($scol->w, $scol->h, $scol->format->palette);
 
 echo "= Lock\n";
-var_dump($spal->MustLock());
-var_dump($spal->Lock());
-var_dump($spal->Unlock());
+var_dump($spal->MustLock(), $spal->locked);
+var_dump($spal->Lock(), $spal->locked);
+var_dump($spal->Unlock(), $spal->locked);
 
 echo "= ColorKey\n";
 var_dump($spal->SetColorKey(1, 127));
@@ -64,7 +64,10 @@ NULL
 = Lock
 bool(false)
 int(0)
+int(0)
+int(1)
 NULL
+int(0)
 = ColorKey
 int(0)
 int(0)

@@ -15,9 +15,9 @@ $scol = SDL_CreateRGBSurface(0, 150, 100, 32, 0xff000000, 0xff0000, 0xff00, 0xff
 var_dump($scol->w, $scol->h, $scol->format->palette);
 
 echo "= Lock\n";
-var_dump(SDL_MustLock($spal));
-var_dump(SDL_LockSurface($spal));
-var_dump(SDL_UnlockSurface($spal));
+var_dump(SDL_MustLock($spal), $spal->locked);
+var_dump(SDL_LockSurface($spal), $spal->locked);
+var_dump(SDL_UnlockSurface($spal), $spal->locked);
 
 echo "= ColorKey\n";
 var_dump(SDL_SetColorKey($spal, 1, 127));
@@ -64,7 +64,10 @@ NULL
 = Lock
 bool(false)
 int(0)
+int(0)
+int(1)
 NULL
+int(0)
 = ColorKey
 int(0)
 int(0)
