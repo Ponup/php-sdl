@@ -63,6 +63,8 @@ PHP_RINIT_FUNCTION(sdl);
 PHP_RSHUTDOWN_FUNCTION(sdl);
 PHP_MINFO_FUNCTION(sdl);
 
+zend_bool php_sdl_check_overflow(int a, int b, int silent);
+
 #ifdef ZTS
 #include "TSRM.h"
 #endif

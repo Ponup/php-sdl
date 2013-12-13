@@ -40,24 +40,6 @@ struct php_sdl_rwops {
 };
 
 
-/* {{{ php_sdl_check_overflow */
-zend_bool php_sdl_check_overflow(int a, int b)
-{
-	TSRMLS_FETCH();
-
-	if(a <= 0 || b <= 0) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully");
-		return 1;
-	}
-	if(a > INT_MAX / b) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully");
-		return 1;
-	}
-	return 0;
-}
-/* }}} */
-
-
 /* {{{ get_php_sdl_rwops_ce */
 zend_class_entry *get_php_sdl_rwops_ce(void)
 {
@@ -572,7 +554,7 @@ PHP_FUNCTION(SDL_RWread)
 		n = size;
 		size = 1;
 	}
-	if (php_sdl_check_overflow(size, n)) {
+	if (php_sdl_check_overflow(size, n, 0)) {
 		return;
 	}
 
@@ -629,7 +611,7 @@ PHP_FUNCTION(SDL_RWwrite)
 		n = size;
 		size = 1;
 	}
-	if (php_sdl_check_overflow(size, n)) {
+	if (php_sdl_check_overflow(size, n, 0)) {
 		return;
 	}
 	if (buf_len < (size * n)) {
