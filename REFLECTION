@@ -1166,7 +1166,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       }
     }
 
-    Class [ <internal:SDL> class SDL_Pixels ] {
+    Class [ <internal:SDL> class SDL_Pixels implements ArrayAccess ] {
 
       - Constants [0] {
       }
@@ -1177,12 +1177,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static methods [0] {
       }
 
-      - Properties [2] {
+      - Properties [3] {
         Property [ <default> public $pitch ]
         Property [ <default> public $h ]
+        Property [ <default> public $count ]
       }
 
-      - Methods [4] {
+      - Methods [8] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [2] {
@@ -1194,6 +1195,35 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method count ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetExists ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetGet ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetSet ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetUnset ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
           }
         }
 
