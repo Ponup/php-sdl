@@ -57,21 +57,25 @@ $scol->Free()
 int(150)
 int(100)
 int(256)
-object(SDL_Pixels)#%d (2) {
+object(SDL_Pixels)#%d (3) {
   ["pitch"]=>
   int(152)
   ["h"]=>
   int(100)
+  ["count"]=>
+  int(15200)
 }
 = Create True colors
 int(150)
 int(100)
 NULL
-object(SDL_Pixels)#%d (2) {
+object(SDL_Pixels)#%d (3) {
   ["pitch"]=>
   int(600)
   ["h"]=>
   int(100)
+  ["count"]=>
+  int(60000)
 }
 = Lock
 bool(false)
