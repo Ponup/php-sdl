@@ -772,6 +772,19 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #2 [ <optional> $flags ]
       }
     }
+    Function [ <internal:SDL> function SDL_ConvertPixels ] {
+
+      - Parameters [8] {
+        Parameter #0 [ <required> $height ]
+        Parameter #1 [ <required> $width ]
+        Parameter #2 [ <required> $src_format ]
+        Parameter #3 [ <required> $src_pixels ]
+        Parameter #4 [ <required> $src_pitch ]
+        Parameter #5 [ <required> $dst_format ]
+        Parameter #6 [ <required> $dst_pixel ]
+        Parameter #7 [ <required> $dst_pitch ]
+      }
+    }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {

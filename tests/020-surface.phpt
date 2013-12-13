@@ -47,6 +47,12 @@ var_dump($scol->format->format == $conv->format->format);
 $conv = SDL_ConvertSurfaceFormat($spal, $scol->format->format);
 var_dump($scol->format->format == $conv->format->format);
 
+echo "= ConvertPixels\n";
+var_dump(SDL_ConvertPixels(
+	150,100,
+	$scol->format->format, $scol->pixels, $scol->pitch,
+	$conv->format->format, $conv->pixels, $conv->pitch
+), SDL_GetError());
 echo "= Free\n";
 SDL_FreeSurface($spal);
 SDL_FreeSurface($scol);
@@ -104,5 +110,8 @@ object(SDL_Rect)#%d (4) {
 = Convert
 bool(true)
 bool(true)
+= ConvertPixels
+int(0)
+string(0) ""
 = Free
 = Done

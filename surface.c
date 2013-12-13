@@ -1204,8 +1204,18 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 /* }}} */
 
 
-/**
-	TODO: don't know yet if it make sense to wrap this one
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertPixels, 0, 0, 8)
+       ZEND_ARG_INFO(0, height)
+       ZEND_ARG_INFO(0, width)
+       ZEND_ARG_INFO(0, src_format)
+       ZEND_ARG_INFO(0, src_pixels)
+       ZEND_ARG_INFO(0, src_pitch)
+       ZEND_ARG_INFO(0, dst_format)
+       ZEND_ARG_INFO(0, dst_pixel)
+       ZEND_ARG_INFO(0, dst_pitch)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_ConvertPixels(int width, int height, int src_format, SDL_Pixels src, int src_pitch, int dst_format, SDL_Pixels dst, int dst_pitch)
 
  * \brief Copy a block of pixels of one format to another format
  *
@@ -1216,6 +1226,32 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
                                                Uint32 dst_format,
                                                void * dst, int dst_pitch);
  */
+PHP_FUNCTION(SDL_ConvertPixels)
+{
+	zval *z_src, *z_dst;
+	long w, h, sf, sp, df, dp;
+	SDL_Pixels *src, *dst;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lllOllOl", &w, &h, &sf, &z_src, get_php_sdl_pixels_ce(), &sp, &df, &z_dst, get_php_sdl_pixels_ce(), &dp)) {
+		return;
+	}
+	if (!(src = zval_to_sdl_pixels(z_src))) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid source SDL_Pixels object");
+	}
+	if (!(dst = zval_to_sdl_pixels(z_dst))) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid destination SDL_Pixels object");
+	}
+	if (sp != src->pitch) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Bad value for source pitch, will use %d", src->pitch);\
+		sp = src->pitch;
+	}
+	if (dp != dst->pitch) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Bad value for destination pitch, will use %d", src->pitch);\
+		dp = dst->pitch;
+	}
+	RETVAL_LONG(SDL_ConvertPixels(w, h, sf, src->pixels, sp, df, src->pixels, dp));
+}
+/* }}} */
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
@@ -1255,6 +1291,7 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_GetClipRect,				arginfo_SDL_GetClipRect)
 	ZEND_FE(SDL_ConvertSurface,				arginfo_SDL_ConvertSurface)
 	ZEND_FE(SDL_ConvertSurfaceFormat,		arginfo_SDL_ConvertSurfaceFormat)
+	ZEND_FE(SDL_ConvertPixels,				arginfo_SDL_ConvertPixels)
 	/* Aliases */
 	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,    arginfo_SDL_UpperBlit)
 	ZEND_FE_END
