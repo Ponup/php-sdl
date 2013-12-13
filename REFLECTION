@@ -1500,13 +1500,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static methods [0] {
       }
 
-      - Properties [6] {
+      - Properties [7] {
         Property [ <default> public $flags ]
         Property [ <default> public $w ]
         Property [ <default> public $h ]
         Property [ <default> public $pitch ]
         Property [ <default> public $format ]
         Property [ <default> public $clip_rect ]
+        Property [ <default> public $pixels ]
       }
 
       - Methods [24] {

@@ -8,11 +8,11 @@ if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
 <?php
 echo "= Create Palette\n";
 $spal = new SDL_Surface(0, 150, 100, 8, 0, 0, 0, 0);
-var_dump($spal->w, $spal->h, $spal->format->palette->ncolors);
+var_dump($spal->w, $spal->h, $spal->format->palette->ncolors, $spal->pixels);
 
 echo "= Create True colors\n";
 $scol = new SDL_Surface(0, 150, 100, 32, 0xff000000, 0xff0000, 0xff00, 0xff);
-var_dump($scol->w, $scol->h, $scol->format->palette);
+var_dump($scol->w, $scol->h, $scol->format->palette, $scol->pixels);
 
 echo "= Lock\n";
 var_dump($spal->MustLock(), $spal->locked);
@@ -57,10 +57,22 @@ $scol->Free()
 int(150)
 int(100)
 int(256)
+object(SDL_Pixels)#%d (2) {
+  ["pitch"]=>
+  int(152)
+  ["h"]=>
+  int(100)
+}
 = Create True colors
 int(150)
 int(100)
 NULL
+object(SDL_Pixels)#%d (2) {
+  ["pitch"]=>
+  int(600)
+  ["h"]=>
+  int(100)
+}
 = Lock
 bool(false)
 int(0)
