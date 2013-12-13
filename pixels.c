@@ -32,6 +32,10 @@
 
 #include "php_sdl.h"
 #include "pixels.h"
+#include "zend_interfaces.h"
+
+/* Need more work */
+#define WITH_ARRAY 0
 
 static zend_class_entry *php_sdl_color_ce;
 static zend_object_handlers php_sdl_color_handlers;
@@ -936,6 +940,111 @@ static PHP_METHOD(SDL_Pixels, __construct)
 }
 /* }}} */
 
+/* {{{ proto SDL_Pixels, count(void)
+ */
+static PHP_METHOD(SDL_Pixels, count)
+{
+	struct php_sdl_pixels *intern;
+
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_LONG(intern->pixels.h * intern->pixels.pitch);
+}
+/* }}} */
+
+#if WITH_ARRAY
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_offset, 0, 0, 1)
+       ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Pixels, offsetExists(int offset)
+ */
+PHP_METHOD(SDL_Pixels, offsetExists)
+{
+	struct php_sdl_pixels *intern;
+	long offset;
+
+printf("SDL_Pixels, offsetExists\n");
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto SDL_Pixels, offsetGet(int offset)
+ */
+PHP_METHOD(SDL_Pixels, offsetGet)
+{
+	struct php_sdl_pixels *intern;
+	long offset;
+
+printf("SDL_Pixels, offsetGet\n");
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETVAL_LONG(intern->pixels.pixels[offset]);
+}
+/* }}} */
+
+/* {{{ proto SDL_Pixels, offsetUnset(int offset)
+ */
+PHP_METHOD(SDL_Pixels, offsetUnset)
+{
+	struct php_sdl_pixels *intern;
+	long offset;
+
+printf("SDL_Pixels, offsetUnset\n");
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	intern->pixels.pixels[offset] = 0;
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_offsetSet, 0, 0, 2)
+       ZEND_ARG_INFO(0, offset)
+       ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Pixels, offsetSet(int offset, int value)
+ */
+PHP_METHOD(SDL_Pixels, offsetSet)
+{
+	struct php_sdl_pixels *intern;
+	long offset, value;
+
+printf("SDL_Pixels, offsetSet\n");
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &offset, &value) == FAILURE) {
+		return;
+	}
+	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	intern->pixels.pixels[offset] = (Uint8)value;
+}
+/* }}} */
+#endif
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_GetByte, 0, 0, 2)
        ZEND_ARG_INFO(0, x)
@@ -1464,6 +1573,13 @@ static const zend_function_entry php_sdl_pixelformat_methods[] = {
 /* {{{ php_sdl_pixels_methods[] */
 static const zend_function_entry php_sdl_pixels_methods[] = {
 	PHP_ME(SDL_Pixels,    __construct,   arginfo_SDL_Pixels__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    count,         arginfo_format_none,               ZEND_ACC_PUBLIC)
+#if WITH_ARRAY
+	PHP_ME(SDL_Pixels,    offsetExists,  arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetGet,     arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetSet,     arginfo_SDL_Pixels_offsetSet,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetUnset,   arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(SDL_Pixels,    GetByte,       arginfo_SDL_Pixels_GetByte,        ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    SetByte,       arginfo_SDL_Pixels_SetByte,        ZEND_ACC_PUBLIC)
 	PHP_FE_END
@@ -1559,6 +1675,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	INIT_CLASS_ENTRY(ce_pixels, "SDL_Pixels", php_sdl_pixels_methods);
 	ce_pixels.create_object = php_sdl_pixels_new;
 	php_sdl_pixels_ce = zend_register_internal_class(&ce_pixels TSRMLS_CC);
+#if WITH_ARRAY
+	zend_class_implements(&ce_pixels TSRMLS_CC, 1, zend_ce_arrayaccess);
+#endif
 	memcpy(&php_sdl_pixels_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_pixels_handlers.read_property  = sdl_pixels_read_property;
 	php_sdl_pixels_handlers.get_properties = sdl_pixels_get_properties;

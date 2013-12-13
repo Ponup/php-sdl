@@ -1182,12 +1182,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $h ]
       }
 
-      - Methods [3] {
+      - Methods [4] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [2] {
             Parameter #0 [ <required> $pitch ]
             Parameter #1 [ <required> $h ]
+          }
+        }
+
+        Method [ <internal:SDL> public method count ] {
+
+          - Parameters [0] {
           }
         }
 
