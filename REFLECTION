@@ -998,7 +998,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [9] {
+  - Classes [10] {
     Class [ <internal:SDL> class SDL_Color ] {
 
       - Constants [0] {
@@ -1161,6 +1161,50 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #1 [ <required> $g ]
             Parameter #2 [ <required> $b ]
             Parameter #3 [ <required> $a ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Pixels ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [2] {
+        Property [ <default> public $pitch ]
+        Property [ <default> public $h ]
+      }
+
+      - Methods [3] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $pitch ]
+            Parameter #1 [ <required> $h ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetByte ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetByte ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+            Parameter #2 [ <required> $byte ]
           }
         }
       }

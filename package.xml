@@ -40,6 +40,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   SDL_DisplayMode
   SDL_Palette
   SDL_PixelFormat
+  SDL_Pixels (PHP specific)
   SDL_Point
   SDL_Rect
   SDL_RWops
@@ -106,6 +107,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='019-platform.phpt'/>
         <file role='test' name='020-surface.phpt'/>
         <file role='test' name='021-surface-oo.phpt'/>
+        <file role='test' name='022-pixels.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>

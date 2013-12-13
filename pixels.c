@@ -26,6 +26,7 @@
   | class SDL_Color                                                      |
   | class SDL_Palette                                                    |
   | class SDL_PixelFormat                                                |
+  | class SDL_Pixels (PHP specific for memory access)                    |
   +----------------------------------------------------------------------+
 */
 
@@ -54,6 +55,14 @@ struct php_sdl_pixelformat {
 	Uint32           flags;
 };
 
+static zend_class_entry *php_sdl_pixels_ce;
+static zend_object_handlers php_sdl_pixels_handlers;
+struct php_sdl_pixels {
+	zend_object      zo;
+	SDL_Pixels       pixels;
+	Uint32           flags;
+};
+
 zend_class_entry *get_php_sdl_color_ce(void)
 {
 	return php_sdl_color_ce;
@@ -67,6 +76,11 @@ zend_class_entry *get_php_sdl_pixelformat_ce(void)
 zend_class_entry *get_php_sdl_palette_ce(void)
 {
 	return php_sdl_palette_ce;
+}
+
+zend_class_entry *get_php_sdl_pixels_ce(void)
+{
+	return php_sdl_pixels_ce;
 }
 
 #define FETCH_PALETTE(__ptr, __id, __check) \
@@ -163,6 +177,24 @@ zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 f
 }
 /* }}} */
 
+/* {{{ sdl_pixels_to_zval */
+zend_bool sdl_pixels_to_zval(SDL_Pixels *pixels, zval *z_val, Uint32 flags TSRMLS_DC)
+{
+	if (pixels) {
+		struct php_sdl_pixels *intern;
+
+		object_init_ex(z_val, php_sdl_pixels_ce);
+		intern = (struct php_sdl_pixels *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->pixels = *pixels;
+		intern->flags  = flags;
+
+		return 1;
+	}
+	ZVAL_NULL(z_val);
+	return 0;
+}
+/* }}} */
+
 /* {{{ zval_to_sdl_pixelformat */
 SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC)
 {
@@ -171,6 +203,19 @@ SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC)
 
 		intern = (struct php_sdl_pixelformat *)zend_object_store_get_object(z_val TSRMLS_CC);
 		return intern->format;
+		}
+	return NULL;
+}
+/* }}} */
+
+/* {{{ zval_to_sdl_pixels */
+SDL_Pixels *zval_to_sdl_pixels(zval *z_val TSRMLS_DC)
+{
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_pixels_ce) {
+		struct php_sdl_pixels *intern;
+
+		intern = (struct php_sdl_pixels *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return &intern->pixels;
 		}
 	return NULL;
 }
@@ -855,6 +900,100 @@ PHP_FUNCTION(SDL_CalculateGammaRamp)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels__construct, 0, 0, 2)
+       ZEND_ARG_INFO(0, pitch)
+       ZEND_ARG_INFO(0, h)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Pixels, __construct(int pitch, int h)
+ */
+static PHP_METHOD(SDL_Pixels, __construct)
+{
+	struct php_sdl_pixels *intern;
+	long pitch, h;
+	zend_error_handling error_handling;
+
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &pitch, &h)) {
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		return;
+	}
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+
+	if (php_sdl_check_overflow(pitch, h, 1)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid size", 0 TSRMLS_CC);
+	} else {
+		if (pitch & 3) {
+			pitch = (pitch + 3) & ~3;
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Pitch set to %ld", pitch);
+		}
+		intern->pixels.pixels = ecalloc(pitch, h);
+		intern->pixels.pitch  = pitch;
+		intern->pixels.h      = h;
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_GetByte, 0, 0, 2)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_Pixels::GetByte(int x, int y)
+*/
+PHP_METHOD(SDL_Pixels, GetByte)
+{
+	struct php_sdl_pixels *intern;
+	zval *z_pixels;
+	long x, y;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_pixels, php_sdl_pixels_ce, &x, &y) == FAILURE) {
+		return;
+	}
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(z_pixels TSRMLS_CC);\
+
+	if (x < 0 || x >= intern->pixels.pitch || y < 0 || y >= intern->pixels.h) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Invalid position (%ld,%ld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
+		RETURN_FALSE;
+	}
+	RETVAL_LONG(intern->pixels.pixels[y*intern->pixels.pitch+x]);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_SetByte, 0, 0, 3)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+       ZEND_ARG_INFO(0, byte)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_Pixels::SetByte(int x, int y, int byte)
+*/
+PHP_METHOD(SDL_Pixels, SetByte)
+{
+	struct php_sdl_pixels *intern;
+	zval *z_pixels;
+	long x, y, v;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Olll", &z_pixels, php_sdl_pixels_ce, &x, &y, &v) == FAILURE) {
+		return;
+	}
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(z_pixels TSRMLS_CC);\
+
+	if (x < 0 || x >= intern->pixels.pitch || y < 0 || y >= intern->pixels.h) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Invalid position (%ld,%ld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
+		RETURN_FALSE;
+	}
+	RETVAL_LONG(intern->pixels.pixels[y*intern->pixels.pitch+x]);
+	intern->pixels.pixels[y*intern->pixels.pitch+x] = (Uint8)v;
+}
+/* }}} */
+
+
+
 /* {{{ php_sdl_palette_free
 	 */
 static void php_sdl_palette_free(void *object TSRMLS_DC)
@@ -1137,7 +1276,7 @@ static HashTable *sdl_pixelformat_get_properties(zval *object TSRMLS_DC)
 		SDL_PIXELFORMAT_ADD_PROPERTY("BitsPerPixel",  intern->format->BitsPerPixel);
 		SDL_PIXELFORMAT_ADD_PROPERTY("BytesPerPixel", intern->format->BytesPerPixel);
 		SDL_PIXELFORMAT_ADD_PROPERTY("Rmask",         intern->format->Rmask);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Bmask",         intern->format->Gmask);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Gmask",         intern->format->Gmask);
 		SDL_PIXELFORMAT_ADD_PROPERTY("Bmask",         intern->format->Bmask);
 		SDL_PIXELFORMAT_ADD_PROPERTY("Amask",         intern->format->Amask);
 		SDL_PIXELFORMAT_ADD_PROPERTY("Rloss",         intern->format->Rloss);
@@ -1164,6 +1303,117 @@ void sdl_pixelformat_write_property(zval *object, zval *member, zval *value, con
 }
 /* }}} */
 
+/* {{{ php_sdl_pixels_free
+	 */
+static void php_sdl_pixels_free(void *object TSRMLS_DC)
+{
+	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) object;
+
+	if (intern->pixels.pixels) {
+		if (!(intern->flags & SDL_DONTFREE)) {
+			efree(intern->pixels.pixels);
+		}
+	}
+
+	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	efree(intern);
+}
+/* }}} */
+
+/* {{{ php_sdl_pixels_new
+ */
+static zend_object_value php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	zend_object_value retval;
+	struct php_sdl_pixels *intern;
+
+	intern = emalloc(sizeof(*intern));
+	memset(intern, 0, sizeof(*intern));
+
+	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	object_properties_init(&intern->zo, class_type);
+
+	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_pixels_free, NULL TSRMLS_CC);
+	retval.handlers = (zend_object_handlers *) &php_sdl_pixels_handlers;
+
+	return retval;
+}
+/* }}} */
+
+
+/* {{{ sdl_pixels_read_property*/
+zval *sdl_pixels_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+{
+	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) zend_objects_get_address(object TSRMLS_CC);
+	zval *retval, tmp_member;
+
+	if (!intern->pixels.pixels) {
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+	}
+
+	if (Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		key = NULL;
+	}
+
+	ALLOC_INIT_ZVAL(retval);
+	Z_SET_REFCOUNT_P(retval, 0);
+
+	if (!strcmp(Z_STRVAL_P(member), "h")) {
+		ZVAL_LONG(retval, intern->pixels.h);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
+		ZVAL_LONG(retval, intern->pixels.pitch);
+
+	} else {
+		FREE_ZVAL(retval);
+
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		if (member == &tmp_member) {
+			zval_dtor(member);
+		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
+	}
+	return retval;
+}
+/* }}} */
+
+#define SDL_PIXELS_ADD_PROPERTY(n,f) \
+	MAKE_STD_ZVAL(zv); \
+	ZVAL_LONG(zv, (long)f); \
+	zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
+
+/* {{{ sdl_pixels_read_properties */
+static HashTable *sdl_pixels_get_properties(zval *object TSRMLS_DC)
+{
+	HashTable *props;
+	zval *zv;
+	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) zend_objects_get_address(object TSRMLS_CC);
+
+	props = zend_std_get_properties(object TSRMLS_CC);
+
+	if (intern->pixels.pixels) {
+		SDL_PIXELS_ADD_PROPERTY("pitch",  intern->pixels.pitch);
+		SDL_PIXELS_ADD_PROPERTY("h",      intern->pixels.h);
+	}
+	return props;
+}
+/* }}} */
+
+/* {{{ sdl_pixels_write_property */
+void sdl_pixels_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+{
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Pixels is read-only");
+}
+/* }}} */
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_palette_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -1187,6 +1437,7 @@ static const zend_function_entry php_sdl_color_methods[] = {
 };
 /* }}} */
 
+/* {{{ php_sdl_palette_methods[] */
 static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_ME(SDL_Palette, __construct,  arginfo_SDL_AllocPalette, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
@@ -1194,7 +1445,9 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_FALIAS(SetColors,        SDL_SetPaletteColors,      arginfo_SDL_Palette_SetColors)
 	PHP_FE_END
 };
+/* }}} */
 
+/* {{{ php_sdl_pixelformat_methods[] */
 static const zend_function_entry php_sdl_pixelformat_methods[] = {
 	PHP_ME(SDL_PixelFormat, __construct,  arginfo_SDL_AllocFormat,            ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_PixelFormat, GetRGB,       arginfo_SDL_PixelFormat_GetRGB,     ZEND_ACC_PUBLIC)
@@ -1206,6 +1459,16 @@ static const zend_function_entry php_sdl_pixelformat_methods[] = {
 	PHP_FALIAS(MapRGBA,          SDL_MapRGBA,                arginfo_SDL_PixelFormat_MapRGBA)
 	PHP_FE_END
 };
+/* }}} */
+
+/* {{{ php_sdl_pixels_methods[] */
+static const zend_function_entry php_sdl_pixels_methods[] = {
+	PHP_ME(SDL_Pixels,    __construct,   arginfo_SDL_Pixels__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    GetByte,       arginfo_SDL_Pixels_GetByte,        ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    SetByte,       arginfo_SDL_Pixels_SetByte,        ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};
+/* }}} */
 
 /* {{{ sdl_pixels_functions[] */
 zend_function_entry sdl_pixels_functions[] = {
@@ -1238,10 +1501,13 @@ zend_function_entry sdl_pixels_functions[] = {
 #define REGISTER_FORMAT_PROP(name) \
 	zend_declare_property_long(php_sdl_pixelformat_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
+#define REGISTER_PIXELS_PROP(name) \
+	zend_declare_property_long(php_sdl_pixels_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_pixels)
 {
-	zend_class_entry ce_color, ce_palette, ce_format;
+	zend_class_entry ce_color, ce_palette, ce_format, ce_pixels;
 
 	INIT_CLASS_ENTRY(ce_color, "SDL_Color", php_sdl_color_methods);
 	php_sdl_color_ce = zend_register_internal_class(&ce_color TSRMLS_CC);
@@ -1289,6 +1555,17 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_FORMAT_PROP("Bshift");
 	REGISTER_FORMAT_PROP("Ashift");
 	zend_declare_property_null(php_sdl_pixelformat_ce, "palette", sizeof("palette")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
+
+	INIT_CLASS_ENTRY(ce_pixels, "SDL_Pixels", php_sdl_pixels_methods);
+	ce_pixels.create_object = php_sdl_pixels_new;
+	php_sdl_pixels_ce = zend_register_internal_class(&ce_pixels TSRMLS_CC);
+	memcpy(&php_sdl_pixels_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_pixels_handlers.read_property  = sdl_pixels_read_property;
+	php_sdl_pixels_handlers.get_properties = sdl_pixels_get_properties;
+	php_sdl_pixels_handlers.write_property = sdl_pixels_write_property;
+
+	REGISTER_PIXELS_PROP("pitch");
+	REGISTER_PIXELS_PROP("h");
 
 	/* Pixel type. */
 	REGISTER_LONG_CONSTANT("SDL_PIXELTYPE_UNKNOWN",          SDL_PIXELTYPE_UNKNOWN,            CONST_CS | CONST_PERSISTENT);
