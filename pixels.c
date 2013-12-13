@@ -1616,10 +1616,10 @@ zend_function_entry sdl_pixels_functions[] = {
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_pixels)
 {
-	zend_class_entry ce_color, ce_palette, ce_format, ce_pixels;
+	zend_class_entry ce;
 
-	INIT_CLASS_ENTRY(ce_color, "SDL_Color", php_sdl_color_methods);
-	php_sdl_color_ce = zend_register_internal_class(&ce_color TSRMLS_CC);
+	INIT_CLASS_ENTRY(ce, "SDL_Color", php_sdl_color_methods);
+	php_sdl_color_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_color_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	REGISTER_COLOR_PROP("r");
@@ -1627,9 +1627,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_COLOR_PROP("b");
 	REGISTER_COLOR_PROP("a");
 
-	INIT_CLASS_ENTRY(ce_palette, "SDL_Palette", php_sdl_palette_methods);
-	ce_palette.create_object = php_sdl_palette_new;
-	php_sdl_palette_ce = zend_register_internal_class(&ce_palette TSRMLS_CC);
+	INIT_CLASS_ENTRY(ce, "SDL_Palette", php_sdl_palette_methods);
+	ce.create_object = php_sdl_palette_new;
+	php_sdl_palette_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
 	php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;
@@ -1640,9 +1640,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_PALETTE_PROP("refcount");
 	zend_declare_property_null(php_sdl_palette_ce, "colors", sizeof("colors")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
 
-	INIT_CLASS_ENTRY(ce_format, "SDL_PixelFormat", php_sdl_pixelformat_methods);
-	ce_format.create_object = php_sdl_pixelformat_new;
-	php_sdl_pixelformat_ce = zend_register_internal_class(&ce_format TSRMLS_CC);
+	INIT_CLASS_ENTRY(ce, "SDL_PixelFormat", php_sdl_pixelformat_methods);
+	ce.create_object = php_sdl_pixelformat_new;
+	php_sdl_pixelformat_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_pixelformat_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_pixelformat_handlers.read_property  = sdl_pixelformat_read_property;
 	php_sdl_pixelformat_handlers.get_properties = sdl_pixelformat_get_properties;
@@ -1665,9 +1665,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_FORMAT_PROP("Ashift");
 	zend_declare_property_null(php_sdl_pixelformat_ce, "palette", sizeof("palette")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
 
-	INIT_CLASS_ENTRY(ce_pixels, "SDL_Pixels", php_sdl_pixels_methods);
-	ce_pixels.create_object = php_sdl_pixels_new;
-	php_sdl_pixels_ce = zend_register_internal_class(&ce_pixels TSRMLS_CC);
+	INIT_CLASS_ENTRY(ce, "SDL_Pixels", php_sdl_pixels_methods);
+	ce.create_object = php_sdl_pixels_new;
+	php_sdl_pixels_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_sdl_pixels_ce TSRMLS_CC, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_pixels_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_pixels_handlers.read_property  = sdl_pixels_read_property;
