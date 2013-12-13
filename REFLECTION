@@ -1030,7 +1030,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       }
     }
 
-    Class [ <internal:SDL> class SDL_Palette ] {
+    Class [ <internal:SDL> class SDL_Palette implements ArrayAccess ] {
 
       - Constants [0] {
       }
@@ -1048,11 +1048,46 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $colors ]
       }
 
-      - Methods [3] {
+      - Methods [8] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $ncolors ]
+          }
+        }
+
+        Method [ <internal:SDL> public method count ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetExists ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetGet ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetSet ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $color ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetUnset ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
           }
         }
 

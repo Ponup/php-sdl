@@ -264,7 +264,6 @@ static PHP_METHOD(SDL_Color, __construct)
 /* }}} */
 
 
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPixelFormatName, 0, 0, 1)
        ZEND_ARG_INFO(0, format)
 ZEND_END_ARG_INFO()
@@ -498,6 +497,111 @@ static PHP_METHOD(SDL_Palette, __construct)
 	} else {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
 	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Palette, count(void)
+ */
+static PHP_METHOD(SDL_Palette, count)
+{
+	struct php_sdl_palette *intern;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	RETURN_LONG(intern->palette ? intern->palette->ncolors : 0);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_offset, 0, 0, 1)
+       ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Palette, offsetExists(int offset)
+ */
+PHP_METHOD(SDL_Palette, offsetExists)
+{
+	struct php_sdl_palette *intern;
+	long offset;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors)) {
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto SDL_Palette, offsetGet(int offset)
+ */
+PHP_METHOD(SDL_Palette, offsetGet)
+{
+	struct php_sdl_palette *intern;
+	long offset;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	sdl_color_to_zval(intern->palette->colors+offset, return_value);
+}
+/* }}} */
+
+/* {{{ proto SDL_Palette, offsetUnset(int offset)
+ */
+PHP_METHOD(SDL_Palette, offsetUnset)
+{
+	struct php_sdl_palette *intern;
+	long offset;
+	SDL_Color color;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
+		return;
+	}
+	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	memset(&color, 0, sizeof(color));
+	SDL_SetPaletteColors(intern->palette, &color, (int)offset, 1);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_offsetSet, 0, 0, 2)
+       ZEND_ARG_INFO(0, offset)
+       ZEND_ARG_INFO(0, color)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Palette, offsetSet(int offset, int value)
+ */
+PHP_METHOD(SDL_Palette, offsetSet)
+{
+	struct php_sdl_palette *intern;
+	long offset;
+	zval *z_color;
+	SDL_Color color;
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lO", &offset, &z_color, php_sdl_color_ce) == FAILURE) {
+		return;
+	}
+	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors)) {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	zval_to_sdl_color(z_color, &color);
+	SDL_SetPaletteColors(intern->palette, &color, (int)offset, 1);
 }
 /* }}} */
 
@@ -967,7 +1071,7 @@ PHP_METHOD(SDL_Pixels, offsetExists)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
 		return;
 	}
-	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+	if (offset < 0 || offset >= (intern->pixels.h * intern->pixels.pitch)) {
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -985,7 +1089,7 @@ PHP_METHOD(SDL_Pixels, offsetGet)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
 		return;
 	}
-	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+	if (offset < 0 || offset >= (intern->pixels.h * intern->pixels.pitch)) {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
 		RETURN_FALSE;
 	}
@@ -1004,7 +1108,7 @@ PHP_METHOD(SDL_Pixels, offsetUnset)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &offset) == FAILURE) {
 		return;
 	}
-	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+	if (offset < 0 || offset >= (intern->pixels.h * intern->pixels.pitch)) {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
 		RETURN_FALSE;
 	}
@@ -1028,7 +1132,7 @@ PHP_METHOD(SDL_Pixels, offsetSet)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &offset, &value) == FAILURE) {
 		return;
 	}
-	if (offset < 0 || offset > (intern->pixels.h * intern->pixels.pitch)) {
+	if (offset < 0 || offset >= (intern->pixels.h * intern->pixels.pitch)) {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
 		RETURN_FALSE;
 	}
@@ -1543,7 +1647,12 @@ static const zend_function_entry php_sdl_color_methods[] = {
 
 /* {{{ php_sdl_palette_methods[] */
 static const zend_function_entry php_sdl_palette_methods[] = {
-	PHP_ME(SDL_Palette, __construct,  arginfo_SDL_AllocPalette, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, __construct,   arginfo_SDL_AllocPalette,        ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, count,         arginfo_palette_none,            ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetExists,  arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetGet,     arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetSet,     arginfo_SDL_Palette_offsetSet,   ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetUnset,   arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Free,             SDL_FreePalette,           arginfo_palette_none)
 	PHP_FALIAS(SetColors,        SDL_SetPaletteColors,      arginfo_SDL_Palette_SetColors)
@@ -1630,6 +1739,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	INIT_CLASS_ENTRY(ce, "SDL_Palette", php_sdl_palette_methods);
 	ce.create_object = php_sdl_palette_new;
 	php_sdl_palette_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	zend_class_implements(php_sdl_palette_ce TSRMLS_CC, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
 	php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;

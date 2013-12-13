@@ -20,6 +20,12 @@ $colors = array(new SDL_Color(1,2,3,4));
 var_dump($p2->SetColors($colors, 2));
 var_dump($p2->SetColors($colors, 0));
 var_dump($p2->colors[0]);
+echo "= Array\n";
+var_dump($p2->count());
+$p2[0] = new SDL_Color(7,8,9,0);
+var_dump($p2[0]);
+unset($p2[0]);
+var_dump($p2[0]);
 echo "= Free\n";
 $p2->Free()
 ?>
@@ -73,6 +79,28 @@ object(SDL_Color)#%d (4) {
   int(3)
   ["a"]=>
   int(4)
+}
+= Array
+int(1)
+object(SDL_Color)#%d (4) {
+  ["r"]=>
+  int(7)
+  ["g"]=>
+  int(8)
+  ["b"]=>
+  int(9)
+  ["a"]=>
+  int(0)
+}
+object(SDL_Color)#%d (4) {
+  ["r"]=>
+  int(0)
+  ["g"]=>
+  int(0)
+  ["b"]=>
+  int(0)
+  ["a"]=>
+  int(0)
 }
 = Free
 = Done
