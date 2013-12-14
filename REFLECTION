@@ -668,6 +668,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <required> &$dstrect ]
       }
     }
+    Function [ <internal:SDL> function SDL_UpperBlitScaled ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $srcsurface ]
+        Parameter #1 [ <required> $srcrect ]
+        Parameter #2 [ <required> $dstsurface ]
+        Parameter #3 [ <optional> &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LowerBlitScaled ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $srcsurface ]
+        Parameter #1 [ <required> &$srcrect ]
+        Parameter #2 [ <required> $dstsurface ]
+        Parameter #3 [ <required> &$dstrect ]
+      }
+    }
     Function [ <internal:SDL> function SDL_SaveBMP_RW ] {
 
       - Parameters [3] {
@@ -795,6 +813,15 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       }
     }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $srcsurface ]
+        Parameter #1 [ <required> $srcrect ]
+        Parameter #2 [ <required> $dstsurface ]
+        Parameter #3 [ <optional> &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_BlitScaled ] {
 
       - Parameters [4] {
         Parameter #0 [ <required> $srcsurface ]
@@ -1603,7 +1630,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $pixels ]
       }
 
-      - Methods [25] {
+      - Methods [28] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [8] {
@@ -1678,6 +1705,33 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method LowerBlit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$srcrect ]
+            Parameter #1 [ <required> $dstsurface ]
+            Parameter #2 [ <required> &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method BlitScaled ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $srcrect ]
+            Parameter #1 [ <required> $dstsurface ]
+            Parameter #2 [ <optional> &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpperBlitScaled ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $srcrect ]
+            Parameter #1 [ <required> $dstsurface ]
+            Parameter #2 [ <optional> &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method LowerBlitScaled ] {
 
           - Parameters [3] {
             Parameter #0 [ <required> &$srcrect ]
