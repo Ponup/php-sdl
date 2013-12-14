@@ -793,6 +793,50 @@ PHP_FUNCTION(SDL_LowerBlitScaled)
 /* }}} */
 
 
+/* {{{ proto void SDL_SoftStretch(SDL_Surface src, SDL_rect srcrect, SDL_Surface dst [, SDL_rect dstrect])
+
+ *  \brief Perform a fast, low quality, stretch blit between two surfaces of the
+ *         same pixel format.
+ *
+ *  \note This function uses a static buffer, and is not thread-safe.
+ extern DECLSPEC int SDLCALL SDL_SoftStretch(SDL_Surface * src,
+                                             const SDL_Rect * srcrect,
+                                             SDL_Surface * dst,
+                                             const SDL_Rect * dstrect);
+
+ */
+PHP_FUNCTION(SDL_SoftStretch)
+{
+	struct php_sdl_surface *intern;
+	zval *z_src, *z_dst, *z_srect, *z_drect = NULL;
+	SDL_Surface *src, *dst;
+	SDL_Rect srect, drect;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OzO|z", &z_src, php_sdl_surface_ce, &z_srect, &z_dst, php_sdl_surface_ce, &z_drect)) {
+		return;
+	}
+	FETCH_SURFACE(src, z_src, 1);
+	FETCH_SURFACE(dst, z_dst, 1);
+	if (!(Z_TYPE_P(z_srect)==IS_NULL || zval_to_sdl_rect(z_srect, &srect))) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "srcrect is not a SDL_Rect object");
+		return;
+	}
+	if (z_drect && !(Z_TYPE_P(z_drect)==IS_NULL || zval_to_sdl_rect(z_drect, &drect))) {
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "dstrect is not a SDL_Rect object");
+		return;
+	} else if (z_drect && Z_TYPE_P(z_drect)==IS_NULL) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "dstrect is not a SDL_Rect object, so is ignored");
+	}
+
+	result = SDL_SoftStretch(src, (Z_TYPE_P(z_srect)==IS_NULL ? NULL : &srect),
+	                         dst, (z_drect==NULL || Z_TYPE_P(z_drect)==IS_NULL ? NULL : &drect));
+
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceRLE, 0, 0, 2)
        ZEND_ARG_INFO(0, surface)
        ZEND_ARG_INFO(0, flag)
@@ -1416,6 +1460,7 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_LowerBlit,					arginfo_SDL_LowerBlit)
 	ZEND_FE(SDL_UpperBlitScaled,			arginfo_SDL_UpperBlit)
 	ZEND_FE(SDL_LowerBlitScaled,			arginfo_SDL_LowerBlit)
+	ZEND_FE(SDL_SoftStretch,				arginfo_SDL_UpperBlit)
 	ZEND_FE(SDL_SaveBMP_RW,					arginfo_SDL_SaveBMP_RW)
 	ZEND_FE(SDL_SaveBMP,					arginfo_SDL_SaveBMP)
 	ZEND_FE(SDL_SetSurfaceRLE,				arginfo_SDL_SetSurfaceRLE)
@@ -1454,6 +1499,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(BlitScaled,       SDL_UpperBlitScaled,       arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(UpperBlitScaled,  SDL_UpperBlitScaled,       arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(LowerBlitScaled,  SDL_LowerBlitScaled,       arginfo_SDL_Surface_LowerBlit)
+	PHP_FALIAS(SoftStretch,      SDL_SoftStretch,           arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(SaveBMP_RW,       SDL_SaveBMP_RW,            arginfo_SDL_Surface_SaveBMP_RW)
 	PHP_FALIAS(SaveBMP,          SDL_SaveBMP,               arginfo_SDL_Surface_SaveBMP)
 	PHP_FALIAS(SetRLE,           SDL_SetSurfaceRLE,         arginfo_SDL_Surface_SetRLE)
