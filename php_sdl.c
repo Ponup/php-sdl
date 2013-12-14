@@ -29,6 +29,7 @@
 #include "blendmode.h"
 #include "cpuinfo.h"
 #include "error.h"
+#include "messagebox.h"
 #include "platform.h"
 #include "power.h"
 #include "pixels.h"
@@ -74,6 +75,7 @@ PHP_MINIT_FUNCTION(sdl)
 	if (   SUCCESS == PHP_MINIT_CALL(sdl_blendmode)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_messagebox)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_platform)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)

@@ -64,7 +64,7 @@ zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRML
 /* {{{ zval_to_sdl_window */
 SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 {
-	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_window_ce) {
+	if (z_val && Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_window_ce) {
 		struct php_sdl_window *intern;
 
 		intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);

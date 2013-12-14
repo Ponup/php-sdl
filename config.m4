@@ -47,6 +47,7 @@ if test "$PHP_SDL" != "no"; then
 blendmode.c
 cpuinfo.c
 error.c
+messagebox.c
 pixels.c
 platform.c
 power.c
