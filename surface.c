@@ -547,6 +547,7 @@ PHP_FUNCTION(SDL_UnlockSurface)
 }
 /* }}} */
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpperBlit, 0, 0, 3)
        ZEND_ARG_INFO(0, srcsurface)
        ZEND_ARG_INFO(0, srcrect)
@@ -554,7 +555,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpperBlit, 0, 0, 3)
        ZEND_ARG_INFO(1, dstrect)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_Blit, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_UpperBlit, 0, 0, 2)
        ZEND_ARG_INFO(0, srcrect)
        ZEND_ARG_INFO(0, dstsurface)
        ZEND_ARG_INFO(1, dstrect)
@@ -654,6 +655,56 @@ PHP_FUNCTION(SDL_UpperBlit)
 	                       dst, (z_drect==NULL || Z_TYPE_P(z_drect)==IS_NULL ? NULL : &drect));
 
 	if (result==0 && z_drect && Z_TYPE_P(z_drect)==IS_OBJECT) {
+		sdl_rect_to_zval(&drect, z_drect);
+	}
+	RETURN_LONG(result);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LowerBlit, 0, 0, 4)
+       ZEND_ARG_INFO(0, srcsurface)
+       ZEND_ARG_INFO(1, srcrect)
+       ZEND_ARG_INFO(0, dstsurface)
+       ZEND_ARG_INFO(1, dstrect)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_LowerBlit, 0, 0, 3)
+       ZEND_ARG_INFO(1, srcrect)
+       ZEND_ARG_INFO(0, dstsurface)
+       ZEND_ARG_INFO(1, dstrect)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_LowerBlit(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst , SDL_rect &dstrect)
+
+ *  This is a semi-private blit function and it performs low-level surface
+ *  blitting only.
+ extern DECLSPEC int SDLCALL SDL_LowerBlit
+     (SDL_Surface * src, SDL_Rect * srcrect,
+      SDL_Surface * dst, SDL_Rect * dstrect);
+ */
+PHP_FUNCTION(SDL_LowerBlit)
+{
+	struct php_sdl_surface *intern;
+	zval *z_src, *z_dst, *z_srect, *z_drect = NULL;
+	SDL_Surface *src, *dst;
+	SDL_Rect srect, drect;
+	int result;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOOO", &z_src, php_sdl_surface_ce, &z_srect, get_php_sdl_rect_ce(), &z_dst, php_sdl_surface_ce, &z_drect, get_php_sdl_rect_ce())) {
+		return;
+	}
+	FETCH_SURFACE(src, z_src, 1);
+	FETCH_SURFACE(dst, z_dst, 1);
+	zval_to_sdl_rect(z_srect, &srect);
+	zval_to_sdl_rect(z_srect, &srect);
+
+	result = SDL_LowerBlit(src, &srect, dst, &drect);
+
+	if (result==0) {
+		zval_dtor(z_srect);
+		sdl_rect_to_zval(&srect, z_srect);
+		zval_dtor(z_drect);
 		sdl_rect_to_zval(&drect, z_drect);
 	}
 	RETURN_LONG(result);
@@ -1280,6 +1331,7 @@ zend_function_entry sdl_surface_functions[] = {
 	ZEND_FE(SDL_LoadBMP_RW,					arginfo_SDL_LoadBMP_RW)
 	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
 	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
+	ZEND_FE(SDL_LowerBlit,					arginfo_SDL_LowerBlit)
 	ZEND_FE(SDL_SaveBMP_RW,					arginfo_SDL_SaveBMP_RW)
 	ZEND_FE(SDL_SaveBMP,					arginfo_SDL_SaveBMP)
 	ZEND_FE(SDL_SetSurfaceRLE,				arginfo_SDL_SetSurfaceRLE)
@@ -1311,8 +1363,9 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(MustLock,         SDL_MUSTLOCK,              arginfo_surface_none)
 	PHP_FALIAS(Lock,             SDL_LockSurface,           arginfo_surface_none)
 	PHP_FALIAS(Unlock,           SDL_UnlockSurface,         arginfo_surface_none)
-	PHP_FALIAS(Blit,             SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
-	PHP_FALIAS(UpperBlit,        SDL_UpperBlit,             arginfo_SDL_Surface_Blit)
+	PHP_FALIAS(Blit,             SDL_UpperBlit,             arginfo_SDL_Surface_UpperBlit)
+	PHP_FALIAS(UpperBlit,        SDL_UpperBlit,             arginfo_SDL_Surface_UpperBlit)
+	PHP_FALIAS(LowerBlit,        SDL_LowerBlit,             arginfo_SDL_Surface_LowerBlit)
 	PHP_FALIAS(SaveBMP_RW,       SDL_SaveBMP_RW,            arginfo_SDL_Surface_SaveBMP_RW)
 	PHP_FALIAS(SaveBMP,          SDL_SaveBMP,               arginfo_SDL_Surface_SaveBMP)
 	PHP_FALIAS(SetRLE,           SDL_SetSurfaceRLE,         arginfo_SDL_Surface_SetRLE)
