@@ -10,7 +10,7 @@ echo "= SDL_MessageBoxColor\n";
 $c = new SDL_MessageBoxColor(1,2,3);
 var_dump($c, "$c");
 $c->r = "123";
-$c->g = 45.6;
+$c->g = 345.6;
 $c->b = -5;
 var_dump($c); /* string, float, int */
 var_dump("$c");
@@ -32,17 +32,17 @@ object(SDL_MessageBoxColor)#1 (3) {
   ["r"]=>
   string(3) "123"
   ["g"]=>
-  float(45.6)
+  float(345.6)
   ["b"]=>
   int(-5)
 }
-string(31) "SDL_MessageBoxColor(123,45,251)"
+string(31) "SDL_MessageBoxColor(123,89,251)"
 object(SDL_MessageBoxColor)#1 (3) {
   ["r"]=>
   int(123)
   ["g"]=>
-  int(45)
+  int(89)
   ["b"]=>
-  int(-5)
+  int(251)
 }
 = Done

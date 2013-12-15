@@ -70,15 +70,15 @@ zend_bool zval_to_sdl_messageboxcolor(zval *value, SDL_MessageBoxColor *color TS
 
 		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "r", 1, 0 TSRMLS_CC);
 		convert_to_long(val);
-		color->r = (Uint8)Z_LVAL_P(val);
+		Z_LVAL_P(val) = color->r = (Uint8)Z_LVAL_P(val);
 
 		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "g", 1, 0 TSRMLS_CC);
 		convert_to_long(val);
-		color->g = (Uint8)Z_LVAL_P(val);
+		Z_LVAL_P(val) = color->g = (Uint8)Z_LVAL_P(val);
 
 		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "b", 1, 0 TSRMLS_CC);
 		convert_to_long(val);
-		color->b = (Uint8)Z_LVAL_P(val);
+		Z_LVAL_P(val) = color->b = (Uint8)Z_LVAL_P(val);
 
 		return 1;
 	}
