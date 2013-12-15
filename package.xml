@@ -38,6 +38,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 - implemented classes:
   SDL_Color
   SDL_DisplayMode
+  SDL_MessageBoxColor
   SDL_Palette
   SDL_PixelFormat
   SDL_Pixels (PHP specific)
@@ -110,6 +111,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='020-surface.phpt'/>
         <file role='test' name='021-surface-oo.phpt'/>
         <file role='test' name='022-pixels.phpt'/>
+        <file role='test' name='023-messagebox.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>
