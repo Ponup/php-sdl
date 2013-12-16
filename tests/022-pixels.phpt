@@ -14,7 +14,7 @@ try {
 } catch (Exception $e) {
 	echo "Exception: " . $e->getMessage() . "\n";
 }
-var_dump($pix = new SDL_Pixels(10, 10));
+var_dump($pix = new SDL_Pixels(10, 10), "$pix");
 echo "= Get/Set\n";
 var_dump($pix->GetByte(15,15));
 var_dump($pix->SetByte(0,0,1));
@@ -43,6 +43,7 @@ object(SDL_Pixels)#%d (3) {
   ["count"]=>
   int(120)
 }
+string(17) "SDL_Pixels(12,10)"
 = Get/Set
 
 Notice: SDL_Pixels::GetByte(): Invalid position (15,15) in SDL_Pixels (12,10) in %s%e022-pixels.php on line 10

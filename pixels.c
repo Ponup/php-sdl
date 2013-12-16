@@ -1103,6 +1103,25 @@ static PHP_METHOD(SDL_Pixels, __construct)
 }
 /* }}} */
 
+
+/* {{{ proto SDL_Pixels::__toString()
+*/
+static PHP_METHOD(SDL_Pixels, __toString)
+{
+	struct php_sdl_pixels *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_pixels *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	spprintf(&buf, 100, "SDL_Pixels(%d,%d)", intern->pixels.pitch, intern->pixels.h);
+	RETVAL_STRING(buf, 0);
+}
+/* }}} */
+
+
 /* {{{ proto SDL_Pixels, count(void)
  */
 static PHP_METHOD(SDL_Pixels, count)
@@ -1742,6 +1761,7 @@ static const zend_function_entry php_sdl_pixelformat_methods[] = {
 /* {{{ php_sdl_pixels_methods[] */
 static const zend_function_entry php_sdl_pixels_methods[] = {
 	PHP_ME(SDL_Pixels,    __construct,   arginfo_SDL_Pixels__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    __toString,    arginfo_format_none,               ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    count,         arginfo_format_none,               ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    offsetExists,  arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    offsetGet,     arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)

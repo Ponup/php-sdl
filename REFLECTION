@@ -1349,12 +1349,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $count ]
       }
 
-      - Methods [8] {
+      - Methods [9] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [2] {
             Parameter #0 [ <required> $pitch ]
             Parameter #1 [ <required> $h ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
 
