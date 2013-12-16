@@ -229,6 +229,42 @@ static PHP_METHOD(SDL_RWops, __construct)
 }
 /* }}} */
 
+/* {{{ proto SDL_RWops::__toString()
+*/
+static PHP_METHOD(SDL_RWops, __toString)
+{
+	struct php_sdl_rwops *intern;
+	char *buf, *t=NULL;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	intern = (struct php_sdl_rwops *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->rwops) {
+		switch (intern->rwops->type) {
+			case SDL_RWOPS_WINFILE:
+				t="\"Win32 file\"";
+				break;
+			case SDL_RWOPS_STDFILE:
+				t="\"Stdio file\"";
+				break;
+			case SDL_RWOPS_JNIFILE:
+				t="\"Androit asset\"";
+				break;
+			case SDL_RWOPS_MEMORY:
+				t="\"Memory stream\"";
+				break;
+			case SDL_RWOPS_MEMORY_RO:
+				t="\"Read only memory stream\"";
+				break;
+		}
+	}
+	spprintf(&buf, 100, "SDL_RWops(%s)", t ? t : "");
+	RETVAL_STRING(buf, 0);
+}
+/* }}} */
+
+
 /* {{{ proto SDL_RWops SDL_AllocRW(void)
 
 extern DECLSPEC SDL_RWops *SDLCALL SDL_AllocRW(void);
@@ -945,6 +981,7 @@ ZEND_END_ARG_INFO()
 /* {{{ sdl_rwops_methods[] */
 static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_ME(SDL_RWops,        __construct,       arginfo_rwops_none,    ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_RWops,        __toString,        arginfo_rwops_none,    ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Free,         SDL_FreeRW,        arginfo_rwops_none)
 	PHP_FALIAS(Size,         SDL_RWsize,        arginfo_rwops_none)

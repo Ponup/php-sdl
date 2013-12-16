@@ -1555,8 +1555,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $type ]
       }
 
-      - Methods [22] {
+      - Methods [23] {
         Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
 
           - Parameters [0] {
           }
