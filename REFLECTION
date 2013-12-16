@@ -1257,11 +1257,17 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $palette ]
       }
 
-      - Methods [7] {
+      - Methods [8] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $format ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
 

@@ -20,6 +20,7 @@ var_dump($p->SetColors($colors));
 
 echo "= PixelFormat\n";
 $f = new SDL_PixelFormat(SDL_PIXELFORMAT_INDEX4LSB);
+var_dump("$f");
 
 echo "= PixelFormatPalette\n";
 var_dump($f->SetPalette($p));
@@ -42,6 +43,7 @@ string(22) "SDL_Color(85,85,85,85)"
 = PaletteColors
 int(0)
 = PixelFormat
+string(42) "SDL_PixelFormat(SDL_PIXELFORMAT_INDEX4LSB)"
 = PixelFormatPalette
 int(0)
 = Result
