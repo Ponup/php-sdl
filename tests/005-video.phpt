@@ -22,7 +22,7 @@ echo "SDL_GetDisplayBounds(0):"; var_dump(SDL_GetDisplayBounds(0,$rect)); var_du
 echo "SDL_GetNumDisplayModes(0):"; var_dump(SDL_GetNumDisplayModes(0));
 echo "SDL_GetDisplayMode(0,0):"; var_dump(SDL_GetDisplayMode(0,0));
 echo "SDL_GetDesktopDisplayMode(0):"; var_dump(SDL_GetDesktopDisplayMode(0));
-echo "SDL_GetCurrentDisplayMode(0):"; var_dump(SDL_GetCurrentDisplayMode(0));
+echo "SDL_GetCurrentDisplayMode(0):"; var_dump($x=SDL_GetCurrentDisplayMode(0), "$x");
 
 var_dump(SDL_VideoQuit());
 var_dump(SDL_VideoInit($d));
@@ -86,6 +86,7 @@ SDL_GetCurrentDisplayMode(0):object(SDL_DisplayMode)#2 (4) {
   ["refresh_rate"]=>
   int(%d)
 }
+string(%d) "SDL_DisplayMode(%s,%d,%d,%d)"
 NULL
 int(0)
 NULL

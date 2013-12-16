@@ -63,7 +63,8 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_D
 { \
 	zval *val; \
 	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0 TSRMLS_CC); \
-	value = (int)Z_LVAL_P(val); \
+	convert_to_long(val); \
+	Z_LVAL_P(val) = value = (int)Z_LVAL_P(val); \
 }
 
 zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC)
@@ -108,6 +109,23 @@ static PHP_METHOD(SDL_DisplayMode, __construct)
 	update_displaymode_prop(getThis(), "w",            w);
 	update_displaymode_prop(getThis(), "h",            h);
 	update_displaymode_prop(getThis(), "refresh_rate", rate);
+}
+/* }}} */
+
+/* {{{ proto SDL_DisplayMode::__toString()
+*/
+static PHP_METHOD(SDL_DisplayMode, __toString)
+{
+	char *buf;
+	SDL_DisplayMode mode;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_displaymode(getThis(), &mode);
+	spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
+	RETVAL_STRING(buf, 0);
 }
 /* }}} */
 
@@ -562,6 +580,7 @@ zend_function_entry sdl_video_functions[] = {
 /* {{{ php_sdl_displaymode_methods[] */
 static const zend_function_entry php_sdl_displaymode_methods[] = {
 	PHP_ME(SDL_DisplayMode, __construct, arginfo_SDL_DisplayMode__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_DisplayMode, __toString,  arginfo_video_none,                 ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 /* }}} */
