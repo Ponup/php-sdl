@@ -115,9 +115,12 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 		zval *val;
 
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
-		pt->x = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = pt->x = (int)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
-		pt->y = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = pt->y = (int)Z_LVAL_P(val);
 
 		return 1;
 	}
@@ -155,6 +158,7 @@ static PHP_METHOD(SDL_Rect, __construct)
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h TSRMLS_CC);
 }
 /* }}} */
+
 
 /* {{{ proto SDL_Rect::__toString()
 */
@@ -197,6 +201,24 @@ static PHP_METHOD(SDL_Point, __construct)
 
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Point::__toString()
+*/
+static PHP_METHOD(SDL_Point, __toString)
+{
+	char *buf;
+	SDL_Point point;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_point(getThis(), &point);
+	spprintf(&buf, 100, "SDL_Point(%d,%d)", point.x, point.y);
+	RETVAL_STRING(buf, 0);
 }
 /* }}} */
 
@@ -476,6 +498,7 @@ static const zend_function_entry php_sdl_rect_methods[] = {
 /* {{{ php_sdl_point_methods[] */
 static const zend_function_entry php_sdl_point_methods[] = {
 	PHP_ME(SDL_Point, __construct,     arginfo_SDL_Point__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Point, __toString,      arginfo_none,                 ZEND_ACC_PUBLIC)
 
 	PHP_FE_END
 };

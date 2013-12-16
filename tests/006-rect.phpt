@@ -38,7 +38,7 @@ var_dump(SDL_HasIntersection($r2, $r4));
 var_dump(SDL_IntersectRect($r2, $r4, $x));
 var_dump($x); unset($x);
 
-echo "+++ Uninon\n";
+echo "+++ Union\n";
 var_dump(SDL_UnionRect($r2, $r3, $x));
 var_dump($x); unset($x);
 var_dump(SDL_UnionRect($r2, $r4, $x));
@@ -58,6 +58,7 @@ $pts = array(
 	new SDL_Point(24,20),
 	new SDL_Point(20,28),
 );
+var_dump($pts[0]." ".$pts[1]." ".$pts[2]." ".$pts[3]);
 var_dump(SDL_EnclosePoints($pts, 0, $r1, $res1), $res1);
 $pts[]="foo";
 var_dump(SDL_EnclosePoints($pts, 6, $r4, $res2), $res2);
@@ -111,7 +112,7 @@ object(SDL_Rect)#6 (4) {
 bool(false)
 bool(false)
 NULL
-+++ Uninon
++++ Union
 NULL
 object(SDL_Rect)#6 (4) {
   ["x"]=>
@@ -142,6 +143,7 @@ int(29)
 int(24)
 bool(false)
 +++ EnclosePoints
+string(67) "SDL_Point(20,14) SDL_Point(13,20) SDL_Point(24,20) SDL_Point(20,28)"
 bool(true)
 object(SDL_Rect)#%d (4) {
   ["x"]=>
@@ -154,9 +156,9 @@ object(SDL_Rect)#%d (4) {
   int(15)
 }
 
-Warning: SDL_EnclosePoints(): point #4 is not a SDL_Point object in %s/006-rect.php on line 56
+Warning: SDL_EnclosePoints(): point #4 is not a SDL_Point object in %s/006-rect.php on line %d
 
-Warning: SDL_EnclosePoints(): point #5 missing in %s/006-rect.php on line 56
+Warning: SDL_EnclosePoints(): point #5 missing in %s/006-rect.php on line %d
 bool(false)
 NULL
 Done
