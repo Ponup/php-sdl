@@ -244,6 +244,31 @@ static PHP_METHOD(SDL_Surface, __construct)
 /* }}} */
 
 
+/* {{{ proto SDL_Surface::__toString()
+*/
+static PHP_METHOD(SDL_Surface, __toString)
+{
+	struct php_sdl_surface *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_surface *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->surface) {
+		spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
+			intern->surface->flags, intern->surface->w, intern->surface->h,
+			intern->surface->format->BitsPerPixel, intern->surface->format->Rmask,
+			intern->surface->format->Gmask, intern->surface->format->Bmask, intern->surface->format->Amask);
+		RETVAL_STRING(buf, 0);
+	} else {
+		RETVAL_STRING("SDL_Surface()", 1);
+	}
+}
+/* }}} */
+
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP_RW, 0, 0, 2)
        ZEND_ARG_INFO(0, surface)
        ZEND_ARG_INFO(1, rwops)
@@ -1486,6 +1511,7 @@ zend_function_entry sdl_surface_functions[] = {
 
 static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateRGBSurface, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Surface, __toString,  arginfo_surface_none,         ZEND_ACC_PUBLIC)
 	/* Aliases */
 	PHP_FALIAS(Free,             SDL_FreeSurface,           arginfo_surface_none)
 	PHP_FALIAS(FillRect,         SDL_FillRect,              arginfo_SDL_Surface_FillRect)

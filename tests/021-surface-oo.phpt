@@ -8,10 +8,12 @@ if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
 <?php
 echo "= Create Palette\n";
 $spal = new SDL_Surface(0, 150, 100, 8, 0, 0, 0, 0);
+var_dump("$spal");
 var_dump($spal->w, $spal->h, $spal->format->palette->ncolors, $spal->pixels);
 
 echo "= Create True colors\n";
 $scol = new SDL_Surface(0, 150, 100, 32, 0xff000000, 0xff0000, 0xff00, 0xff);
+var_dump("$scol");
 var_dump($scol->w, $scol->h, $scol->format->palette, $scol->pixels);
 
 echo "= Lock\n";
@@ -54,6 +56,7 @@ $scol->Free()
 = Done
 --EXPECTF--
 = Create Palette
+string(40) "SDL_Surface(0,150,100,8,0x0,0x0,0x0,0x0)"
 int(150)
 int(100)
 int(256)
@@ -66,6 +69,7 @@ object(SDL_Pixels)#%d (3) {
   int(15200)
 }
 = Create True colors
+string(57) "SDL_Surface(0,150,100,32,0xff000000,0xff0000,0xff00,0xff)"
 int(150)
 int(100)
 NULL
