@@ -8,12 +8,12 @@ if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
 <?php
 echo "+++ Empty (true)\n";
 $r = new SDL_Rect(0,0,0,0);
-var_dump($r);
+var_dump($r, "$r");
 var_dump(SDL_RectEmpty($r));
 
 echo "+++ Empty (false)\n";
 $r = new SDL_Rect(1,2,3,4);
-var_dump($r);
+var_dump($r, "$r");
 var_dump($r->Empty());
 
 $r1 = new SDL_Rect(10,10,20,20);
@@ -64,6 +64,7 @@ object(SDL_Rect)#1 (4) {
   ["h"]=>
   int(0)
 }
+string(17) "SDL_Rect(0,0,0,0)"
 bool(true)
 +++ Empty (false)
 object(SDL_Rect)#2 (4) {
@@ -76,6 +77,7 @@ object(SDL_Rect)#2 (4) {
   ["h"]=>
   int(4)
 }
+string(17) "SDL_Rect(1,2,3,4)"
 bool(false)
 +++ Equal (true)
 bool(true)

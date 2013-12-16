@@ -1412,7 +1412,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $h ]
       }
 
-      - Methods [7] {
+      - Methods [8] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [4] {
@@ -1420,6 +1420,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #1 [ <required> $y ]
             Parameter #2 [ <required> $w ]
             Parameter #3 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
 

@@ -87,13 +87,20 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 		zval *val;
 
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0 TSRMLS_CC);
-		rect->x = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->x = (int)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0 TSRMLS_CC);
-		rect->y = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->y = (int)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0 TSRMLS_CC);
-		rect->w = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->w = (int)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0 TSRMLS_CC);
-		rect->h = (int)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->h = (int)Z_LVAL_P(val);
 
 		return 1;
 	}
@@ -126,7 +133,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_Rect, __construct(, int x, int y, int w, int h)
+/* {{{ proto SDL_Rect::__construct(, int x, int y, int w, int h)
 
  *  \brief A rectangle, with the origin at the upper left.
 */
@@ -146,6 +153,23 @@ static PHP_METHOD(SDL_Rect, __construct)
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "w", 1, w TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h TSRMLS_CC);
+}
+/* }}} */
+
+/* {{{ proto SDL_Rect::__toString()
+*/
+static PHP_METHOD(SDL_Rect, __toString)
+{
+	char *buf;
+	SDL_Rect rect;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_rect(getThis(), &rect);
+	spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
+	RETVAL_STRING(buf, 0);
 }
 /* }}} */
 
@@ -436,6 +460,7 @@ ZEND_END_ARG_INFO()
 /* {{{ php_sdl_rect_methods[] */
 static const zend_function_entry php_sdl_rect_methods[] = {
 	PHP_ME(SDL_Rect, __construct,     arginfo_SDL_Rect__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Rect, __toString,      arginfo_none,                ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Empty,            SDL_RectEmpty,            arginfo_none)
 	PHP_FALIAS(Equal,            SDL_RectEquals,           arginfo_SDL_Rect)
