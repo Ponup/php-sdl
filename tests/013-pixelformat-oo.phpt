@@ -14,6 +14,7 @@ $colors = array();
 for ($i=0, $j=0 ; $i<16 ; $i++, $j+=17) {
 	$colors[] = new SDL_Color($j, $j, $j, $j);
 }
+var_dump("".$colors[5]);
 echo "= PaletteColors\n";
 var_dump($p->SetColors($colors));
 
@@ -37,6 +38,7 @@ var_dump($f->GetRGBA(10, $r, $g, $b, $a), $r, $g, $b, $a);
 --EXPECTF--
 = Palette
 = Color
+string(22) "SDL_Color(85,85,85,85)"
 = PaletteColors
 int(0)
 = PixelFormat

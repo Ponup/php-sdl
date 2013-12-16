@@ -125,13 +125,20 @@ zend_bool zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC)
 		zval *val;
 
 		val = zend_read_property(php_sdl_color_ce, value, "r", 1, 0 TSRMLS_CC);
-		color->r = (Uint8)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = color->r = (Uint8)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_color_ce, value, "g", 1, 0 TSRMLS_CC);
-		color->g = (Uint8)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = color->g = (Uint8)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_color_ce, value, "b", 1, 0 TSRMLS_CC);
-		color->b = (Uint8)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = color->b = (Uint8)Z_LVAL_P(val);
+
 		val = zend_read_property(php_sdl_color_ce, value, "a", 1, 0 TSRMLS_CC);
-		color->a = (Uint8)Z_LVAL_P(val);
+		convert_to_long(val);
+		Z_LVAL_P(val) = color->a = (Uint8)Z_LVAL_P(val);
 
 		return 1;
 	}
@@ -260,6 +267,24 @@ static PHP_METHOD(SDL_Color, __construct)
 	zend_update_property_long(php_sdl_color_ce, getThis(), "g", 1, g&255 TSRMLS_CC);
 	zend_update_property_long(php_sdl_color_ce, getThis(), "b", 1, b&255 TSRMLS_CC);
 	zend_update_property_long(php_sdl_color_ce, getThis(), "a", 1, a&255 TSRMLS_CC);
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Color::__toString()
+*/
+static PHP_METHOD(SDL_Color, __toString)
+{
+	char *buf;
+	SDL_Color color;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_color(getThis(), &color);
+	spprintf(&buf, 100, "SDL_Color(%u,%u,%u,%u)", color.r, color.g, color.b, color.a);
+	RETVAL_STRING(buf, 0);
 }
 /* }}} */
 
@@ -1641,6 +1666,7 @@ ZEND_END_ARG_INFO()
 /* {{{ php_sdl_color_methods[] */
 static const zend_function_entry php_sdl_color_methods[] = {
 	PHP_ME(SDL_Color, __construct,     arginfo_SDL_Color__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Color, __toString,      arginfo_palette_none,         ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 /* }}} */
