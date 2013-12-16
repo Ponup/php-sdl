@@ -8,6 +8,7 @@ if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
 <?php
 echo "= Palette\n";
 $p = new SDL_Palette(16);
+var_dump("$p");
 
 echo "= Color\n";
 $colors = array();
@@ -38,6 +39,7 @@ var_dump($f->GetRGBA(10, $r, $g, $b, $a), $r, $g, $b, $a);
 = Done
 --EXPECTF--
 = Palette
+string(15) "SDL_Palette(16)"
 = Color
 string(22) "SDL_Color(85,85,85,85)"
 = PaletteColors

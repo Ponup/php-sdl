@@ -545,6 +545,24 @@ static PHP_METHOD(SDL_Palette, __construct)
 /* }}} */
 
 
+/* {{{ proto SDL_Palette::__toString()
+*/
+static PHP_METHOD(SDL_Palette, __toString)
+{
+	struct php_sdl_palette *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_palette *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	spprintf(&buf, 100, "SDL_Palette(%d)", intern->palette ? intern->palette->ncolors : 0);
+	RETVAL_STRING(buf, 0);
+}
+/* }}} */
+
+
 /* {{{ proto SDL_Palette, count(void)
  */
 static PHP_METHOD(SDL_Palette, count)
@@ -1693,6 +1711,7 @@ static const zend_function_entry php_sdl_color_methods[] = {
 /* {{{ php_sdl_palette_methods[] */
 static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_ME(SDL_Palette, __construct,   arginfo_SDL_AllocPalette,        ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, __toString,    arginfo_palette_none,            ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, count,         arginfo_palette_none,            ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, offsetExists,  arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, offsetGet,     arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
