@@ -837,6 +837,33 @@ static PHP_METHOD(SDL_Window, __construct)
 /* }}} */
 
 
+/* {{{ proto SDL_Window::__toString()
+*/
+static PHP_METHOD(SDL_Window, __toString)
+{
+	struct php_sdl_window *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_window *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->window) {
+		int x, y, w, h;
+
+		SDL_GetWindowPosition(intern->window, &x, &y);
+		SDL_GetWindowSize(intern->window, &w, &h);
+		spprintf(&buf, 100, "SDL_Window(\"%s\",%d,%d,%d,%d,%u)",
+			SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
+		RETVAL_STRING(buf, 0);
+	} else {
+		RETVAL_STRING("SDL_Window()", 1);
+	}
+}
+/* }}} */
+
+
 /* {{{ proto SDL_UpdateWindowSurface(SDL_Window window)
 
  *  \brief Copy the window surface to the screen.
@@ -970,6 +997,7 @@ zend_function_entry sdl_window_functions[] = {
 
 static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_ME(SDL_Window, __construct,     arginfo_SDL_CreateWindow, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Window, __toString,      arginfo_window_none,      ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(UpdateSurface,    SDL_UpdateWindowSurface,     arginfo_window_none)
 	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_window_none)

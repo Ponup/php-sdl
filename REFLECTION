@@ -2041,7 +2041,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [13] {
+      - Methods [14] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2051,6 +2051,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #3 [ <required> $w ]
             Parameter #4 [ <required> $y ]
             Parameter #5 [ <required> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
 

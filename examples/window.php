@@ -11,6 +11,7 @@ $logo = SDL_LoadBMP('compress.zlib://'.__DIR__.'/php.bmp.gz');
 
 SDL_GetVersion($version);
 
+printf("Window:  $wind\n");
 printf("Surface: %dx%d\n", $surf->clip_rect->w, $surf->clip_rect->h);
 printf("Title:   %s\n", $wind->GetTitle());
 printf("Logo:    %dx%d\n", $logo->clip_rect->w, $logo->clip_rect->h);
