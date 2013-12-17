@@ -29,8 +29,6 @@
   +----------------------------------------------------------------------+
 */
 
-/* TODO : read properties of SDL_MessageBoxData */
-
 #include "php_sdl.h"
 #include "messagebox.h"
 #include "window.h"
@@ -288,7 +286,7 @@ static PHP_METHOD(SDL_MessageBoxColor, __toString)
 		return;
 	}
 
-	zval_to_sdl_messageboxcolor(getThis(), &color);
+	zval_to_sdl_messageboxcolor(getThis(), &color TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_MessageBoxColor(%u,%u,%u)", color.r, color.g, color.b);
 	RETVAL_STRING(buf, 0);
 }
@@ -342,7 +340,7 @@ static PHP_METHOD(SDL_MessageBoxButtonData, __toString)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	zval_to_sdl_messageboxbuttondata(getThis(), &data);
+	zval_to_sdl_messageboxbuttondata(getThis(), &data TSRMLS_CC);
 	spprintf(&buf, 1000, "SDL_MessageBoxButtonData(%lu,%d,\"%s\")", (long)data.flags, data.buttonid, data.text);
 	RETVAL_STRING(buf, 0);
 }
@@ -397,7 +395,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 	intern->data->title       = estrdup(title);
 	intern->data->message     = estrdup(text);
 	intern->data->flags       = (Uint32)flags;
-	intern->data->window      = zval_to_sdl_window(z_window);
+	intern->data->window      = zval_to_sdl_window(z_window TSRMLS_CC);
 	intern->data->numbuttons  = 0;
 	intern->data->buttons     = NULL;
 	intern->data->colorScheme = NULL;
@@ -415,7 +413,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 			for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_buttons)) ;
 				zend_hash_get_current_data(Z_ARRVAL_P(z_buttons), (void **) &ppzval) == SUCCESS ;
 				zend_hash_move_forward(Z_ARRVAL_P(z_buttons))) {
-					if (zval_to_sdl_messageboxbuttondata(*ppzval, buttons+n)) {
+					if (zval_to_sdl_messageboxbuttondata(*ppzval, buttons+n TSRMLS_CC)) {
 						n++;
 					} else {
 						php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Ignore button, not a SDL_MessageBoxButtonData object");
@@ -443,7 +441,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 			zend_hash_move_forward(Z_ARRVAL_P(z_colors))) {
 				if (SDL_MESSAGEBOX_COLOR_MAX == n) {
 					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Ignore button, only %d accepted", SDL_MESSAGEBOX_COLOR_MAX);
-				} else if (zval_to_sdl_messageboxcolor(*ppzval, &colors->colors[n])) {
+				} else if (zval_to_sdl_messageboxcolor(*ppzval, &colors->colors[n] TSRMLS_CC)) {
 					n++;
 				} else {
 					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Ignore button, not a SDL_MessageBoxColor object");
@@ -727,7 +725,7 @@ static PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 		return;
 	}
 
-	window = zval_to_sdl_window(z_window);
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
 	RETVAL_LONG(SDL_ShowSimpleMessageBox(flags, title, msg, window));
 }
 /* }}} */

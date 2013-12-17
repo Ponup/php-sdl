@@ -282,7 +282,7 @@ static PHP_METHOD(SDL_Color, __toString)
 		return;
 	}
 
-	zval_to_sdl_color(getThis(), &color);
+	zval_to_sdl_color(getThis(), &color TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_Color(%u,%u,%u,%u)", color.r, color.g, color.b, color.a);
 	RETVAL_STRING(buf, 0);
 }
@@ -615,7 +615,7 @@ PHP_METHOD(SDL_Palette, offsetGet)
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-	sdl_color_to_zval(intern->palette->colors+offset, return_value);
+	sdl_color_to_zval(intern->palette->colors+offset, return_value TSRMLS_CC);
 }
 /* }}} */
 
@@ -662,7 +662,7 @@ PHP_METHOD(SDL_Palette, offsetSet)
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid offset in SDL_Pixels", 0 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-	zval_to_sdl_color(z_color, &color);
+	zval_to_sdl_color(z_color, &color TSRMLS_CC);
 	SDL_SetPaletteColors(intern->palette, &color, (int)offset, 1);
 }
 /* }}} */
@@ -694,7 +694,7 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 		return;
 	}
 	FETCH_PALETTE(palette, z_palette, 1);
-	format = zval_to_sdl_pixelformat(z_format);
+	format = zval_to_sdl_pixelformat(z_format TSRMLS_CC);
 
 	RETURN_LONG(SDL_SetPixelFormatPalette(format, palette));
 }
@@ -1523,7 +1523,7 @@ zval *sdl_pixelformat_read_property(zval *object, zval *member, int type, const 
 		ZVAL_LONG(retval, intern->format->Ashift);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "palette")) {
-		sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE);
+		sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE TSRMLS_CC);
 
 	} else {
 		FREE_ZVAL(retval);
@@ -1574,7 +1574,7 @@ static HashTable *sdl_pixelformat_get_properties(zval *object TSRMLS_DC)
 		SDL_PIXELFORMAT_ADD_PROPERTY("Ashift",        intern->format->Rshift);
 
 		MAKE_STD_ZVAL(zv);
-		sdl_palette_to_zval(intern->format->palette, zv, SDL_DONTFREE);
+		sdl_palette_to_zval(intern->format->palette, zv, SDL_DONTFREE TSRMLS_CC);
 		zend_hash_update(props, "palette", sizeof("palette"), &zv, sizeof(zv), NULL);
 	}
 	return props;
@@ -1833,7 +1833,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_PALETTE_PROP("ncolors");
 	REGISTER_PALETTE_PROP("version");
 	REGISTER_PALETTE_PROP("refcount");
-	zend_declare_property_null(php_sdl_palette_ce, "colors", sizeof("colors")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
+	zend_declare_property_null(php_sdl_palette_ce, "colors", sizeof("colors")-1, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	INIT_CLASS_ENTRY(ce, "SDL_PixelFormat", php_sdl_pixelformat_methods);
 	ce.create_object = php_sdl_pixelformat_new;
@@ -1858,7 +1858,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_FORMAT_PROP("Gshift");
 	REGISTER_FORMAT_PROP("Bshift");
 	REGISTER_FORMAT_PROP("Ashift");
-	zend_declare_property_null(php_sdl_pixelformat_ce, "palette", sizeof("palette")-1, ZEND_ACC_PUBLIC TSRMLS_DC);
+	zend_declare_property_null(php_sdl_pixelformat_ce, "palette", sizeof("palette")-1, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	INIT_CLASS_ENTRY(ce, "SDL_Pixels", php_sdl_pixels_methods);
 	ce.create_object = php_sdl_pixels_new;

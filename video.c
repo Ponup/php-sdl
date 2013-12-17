@@ -123,7 +123,7 @@ static PHP_METHOD(SDL_DisplayMode, __toString)
 		return;
 	}
 
-	zval_to_sdl_displaymode(getThis(), &mode);
+	zval_to_sdl_displaymode(getThis(), &mode TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
 	RETVAL_STRING(buf, 0);
 }

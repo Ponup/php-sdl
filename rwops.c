@@ -371,7 +371,7 @@ PHP_FUNCTION(SDL_RWFromMem)
 
 
 /* {{{ php_stream_to_zval_rwops */
-void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose)
+void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose  TSRMLS_DC)
 {
 	SDL_RWops *rwops;
 	FILE * fp = NULL;
@@ -432,7 +432,7 @@ PHP_FUNCTION(SDL_RWFromFP)
 		return;
 	}
 	php_stream_from_zval(stream, &z_stream);
-	php_stream_to_zval_rwops(stream, return_value, autoclose);
+	php_stream_to_zval_rwops(stream, return_value, autoclose TSRMLS_CC);
 }
 /* }}} */
 

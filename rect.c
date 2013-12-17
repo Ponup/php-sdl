@@ -171,7 +171,7 @@ static PHP_METHOD(SDL_Rect, __toString)
 		return;
 	}
 
-	zval_to_sdl_rect(getThis(), &rect);
+	zval_to_sdl_rect(getThis(), &rect TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
 	RETVAL_STRING(buf, 0);
 }
@@ -216,7 +216,7 @@ static PHP_METHOD(SDL_Point, __toString)
 		return;
 	}
 
-	zval_to_sdl_point(getThis(), &point);
+	zval_to_sdl_point(getThis(), &point TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_Point(%d,%d)", point.x, point.y);
 	RETVAL_STRING(buf, 0);
 }
