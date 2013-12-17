@@ -219,6 +219,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <optional> $window ]
       }
     }
+    Function [ <internal:SDL> function SDL_ShowMessageBox ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $messageboxdata ]
+        Parameter #1 [ <required> &$buttonid ]
+      }
+    }
     Function [ <internal:SDL> function SDL_GetPlatform ] {
 
       - Parameters [0] {
@@ -1076,10 +1083,16 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [12] {
+  - Classes [13] {
     Class [ <internal:SDL> class SDL_MessageBoxColor ] {
 
-      - Constants [0] {
+      - Constants [6] {
+        Constant [ integer BACKGROUND ] { 0 }
+        Constant [ integer TEXT ] { 1 }
+        Constant [ integer BUTTON_BORDER ] { 2 }
+        Constant [ integer BUTTON_BACKGROUND ] { 3 }
+        Constant [ integer BUTTON_SELECTED ] { 4 }
+        Constant [ integer MAX ] { 5 }
       }
 
       - Static properties [0] {
@@ -1114,7 +1127,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
     Class [ <internal:SDL> class SDL_MessageBoxButtonData ] {
 
-      - Constants [0] {
+      - Constants [2] {
+        Constant [ integer RETURNKEY_DEFAULT ] { 1 }
+        Constant [ integer ESCAPEKEY_DEFAULT ] { 2 }
       }
 
       - Static properties [0] {
@@ -1142,6 +1157,51 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method __toString ] {
 
           - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_MessageBoxData ] {
+
+      - Constants [3] {
+        Constant [ integer ERROR ] { 16 }
+        Constant [ integer WARNING ] { 32 }
+        Constant [ integer INFORMATION ] { 64 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [3] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $title ]
+            Parameter #2 [ <required> $message ]
+            Parameter #3 [ <optional> $buttons ]
+            Parameter #4 [ <optional> $colors ]
+            Parameter #5 [ <optional> $parentwindow ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Show ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$buttonid ]
           }
         }
       }

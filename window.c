@@ -26,6 +26,9 @@
   | class SDL_Window                                                     |
   +----------------------------------------------------------------------+
 */
+
+/* TODO : read properties of SDL_Window */
+
 #include "php_sdl.h"
 #include "rect.h"
 #include "surface.h"
