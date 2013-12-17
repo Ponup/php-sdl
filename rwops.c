@@ -136,7 +136,7 @@ static zend_object_value php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_D
 /* }}} */
 
 
-/* {{{ sdl_rwops_read_property*/
+/* {{{ sdl_rwops_read_property */
 zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
 {
 	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) zend_objects_get_address(object TSRMLS_CC);
@@ -178,7 +178,7 @@ zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_l
 /* }}} */
 
 
-/* {{{ sdl_rwops_read_property*/
+/* {{{ sdl_rwops_get_properties */
 static HashTable *sdl_rwops_get_properties(zval *object TSRMLS_DC)
 {
 	HashTable *props;

@@ -21,7 +21,7 @@ $b = new SDL_MessageBoxButtonData(0,1,"Foo button");
 var_dump($b, "$b");
 
 echo "= SDL_MessageBoxData\n";
-$d = new SDL_MessageBoxData(0,"Foo title","Foo message");
+$d = new SDL_MessageBoxData(0,"Foo title 1","Foo message");
 var_dump($d, "$d");
 
 $buttons = array(
@@ -35,7 +35,7 @@ $colors = array(
 	SDL_MessageBoxColor::BUTTON_BACKGROUND => new SDL_MessageBoxColor(0,255,0),
 	SDL_MessageBoxColor::BUTTON_SELECTED   => new SDL_MessageBoxColor(0,0,255),
 );
-$d = new SDL_MessageBoxData(0,"Foo title","Foo message", $buttons, $colors);
+$d = new SDL_MessageBoxData(0,"Foo title 2","Foo message", $buttons, $colors);
 var_dump($d, "$d");
 ?>
 = Done
@@ -78,10 +78,115 @@ object(SDL_MessageBoxButtonData)#%d (3) {
 }
 string(42) "SDL_MessageBoxButtonData(0,1,"Foo button")"
 = SDL_MessageBoxData
-object(SDL_MessageBoxData)#%d (0) {
+object(SDL_MessageBoxData)#%d (7) {
+  ["flags"]=>
+  int(0)
+  ["title"]=>
+  string(11) "Foo title 1"
+  ["message"]=>
+  string(11) "Foo message"
+  ["window"]=>
+  bool(false)
+  ["numbuttons"]=>
+  int(0)
+  ["buttons"]=>
+  NULL
+  ["colors"]=>
+  NULL
 }
-string(31) "SDL_MessageBoxData("Foo title")"
-object(SDL_MessageBoxData)#%d (0) {
+string(33) "SDL_MessageBoxData("Foo title 1")"
+object(SDL_MessageBoxData)#%d (7) {
+  ["flags"]=>
+  int(0)
+  ["title"]=>
+  string(11) "Foo title 2"
+  ["message"]=>
+  string(11) "Foo message"
+  ["window"]=>
+  bool(false)
+  ["numbuttons"]=>
+  int(2)
+  ["buttons"]=>
+  array(2) {
+    [0]=>
+    object(SDL_MessageBoxColor)#%d (6) {
+      ["r"]=>
+      int(0)
+      ["g"]=>
+      int(0)
+      ["b"]=>
+      int(0)
+      ["flags"]=>
+      int(1)
+      ["buttonid"]=>
+      int(1)
+      ["text"]=>
+      string(3) "Yes"
+    }
+    [1]=>
+    object(SDL_MessageBoxColor)#%d (6) {
+      ["r"]=>
+      int(0)
+      ["g"]=>
+      int(0)
+      ["b"]=>
+      int(0)
+      ["flags"]=>
+      int(2)
+      ["buttonid"]=>
+      int(0)
+      ["text"]=>
+      string(2) "No"
+    }
+  }
+  ["colors"]=>
+  array(5) {
+    [0]=>
+    object(SDL_MessageBoxColor)#%d (3) {
+      ["r"]=>
+      int(0)
+      ["g"]=>
+      int(0)
+      ["b"]=>
+      int(0)
+    }
+    [1]=>
+    object(SDL_MessageBoxColor)#%d (3) {
+      ["r"]=>
+      int(255)
+      ["g"]=>
+      int(255)
+      ["b"]=>
+      int(255)
+    }
+    [2]=>
+    object(SDL_MessageBoxColor)#%d (3) {
+      ["r"]=>
+      int(255)
+      ["g"]=>
+      int(0)
+      ["b"]=>
+      int(0)
+    }
+    [3]=>
+    object(SDL_MessageBoxColor)#%d (3) {
+      ["r"]=>
+      int(0)
+      ["g"]=>
+      int(255)
+      ["b"]=>
+      int(0)
+    }
+    [4]=>
+    object(SDL_MessageBoxColor)#%d (3) {
+      ["r"]=>
+      int(0)
+      ["g"]=>
+      int(0)
+      ["b"]=>
+      int(255)
+    }
+  }
 }
-string(31) "SDL_MessageBoxData("Foo title")"
+string(33) "SDL_MessageBoxData("Foo title 2")"
 = Done

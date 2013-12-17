@@ -1176,7 +1176,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static methods [0] {
       }
 
-      - Properties [0] {
+      - Properties [6] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $title ]
+        Property [ <default> public $message ]
+        Property [ <default> public $window ]
+        Property [ <default> public $numbuttons ]
+        Property [ <default> public $buttons ]
       }
 
       - Methods [3] {
