@@ -87,9 +87,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='window.c'/>
       <file role='src' name='window.h'/>
       <dir name="examples">
+        <file role='doc' name='eop.php'/>
         <file role='doc' name='msgbox.php'/>
-        <file role='doc' name='window.php'/>
         <file role='doc' name='php.bmp.gz'/>
+        <file role='doc' name='window.php'/>
       </dir> <!-- examples -->
       <dir name="tests">
         <file role='test' name='001-load.phpt'/>
