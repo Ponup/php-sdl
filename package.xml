@@ -38,6 +38,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 - implemented classes:
   SDL_Color
   SDL_DisplayMode
+  SDL_MessageBoxButtonData
   SDL_MessageBoxColor
   SDL_Palette
   SDL_PixelFormat

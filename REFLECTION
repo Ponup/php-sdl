@@ -1076,7 +1076,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [11] {
+  - Classes [12] {
     Class [ <internal:SDL> class SDL_MessageBoxColor ] {
 
       - Constants [0] {
@@ -1101,6 +1101,41 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> $r ]
             Parameter #1 [ <required> $g ]
             Parameter #2 [ <required> $b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_MessageBoxButtonData ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $buttonid ]
+        Property [ <default> public $text ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $buttonid ]
+            Parameter #2 [ <required> $text ]
           }
         }
 
