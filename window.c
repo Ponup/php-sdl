@@ -474,7 +474,19 @@ static PHP_FUNCTION(SDL_GetWindowData)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowPosition, 0, 0, 3)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetPosition, 0, 0, 2)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetWindowPosition(SDL Window window, int x, int y)
+
  *  \brief Set the position of a window.
  *
  *  \param window   The window to reposition.
@@ -489,8 +501,70 @@ static PHP_FUNCTION(SDL_GetWindowData)
  extern DECLSPEC void SDLCALL SDL_SetWindowPosition(SDL_Window * window,
                                                     int x, int y);
  */
+static PHP_FUNCTION(SDL_SetWindowPosition)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	long x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowPosition(window, x, y);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WINDOWPOS_DISPLAY, 0, 0, 1)
+       ZEND_ARG_INFO(0, display)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_WINDOWPOS_CENTERED_DISPLAY(int)
+
+ define SDL_WINDOWPOS_CENTERED_DISPLAY(X)  (SDL_WINDOWPOS_CENTERED_MASK|(X))
+*/
+static PHP_FUNCTION(SDL_WINDOWPOS_CENTERED_DISPLAY)
+{
+	long display;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "l", &display)) {
+		return;
+	}
+	RETVAL_LONG(SDL_WINDOWPOS_CENTERED_DISPLAY(display));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_WINDOWPOS_UNDEFINED_DISPLAY(int)
+
+ define SDL_WINDOWPOS_UNDEFINED_DISPLAY(X)  (SDL_WINDOWPOS_UNDEFINED_MASK|(X))
+*/
+static PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY)
+{
+	long display;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "l", &display)) {
+		return;
+	}
+	RETVAL_LONG(SDL_WINDOWPOS_UNDEFINED_DISPLAY(display));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowPosition, 0, 0, 1)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(1, x)
+       ZEND_ARG_INFO(1, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetPosition, 0, 0, 0)
+       ZEND_ARG_INFO(1, x)
+       ZEND_ARG_INFO(1, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GetWindowPosition(SDL Window window, int &x, int &y)
  *  \brief Get the position of a window.
  *
  *  \param window   The window to query.
@@ -501,6 +575,28 @@ static PHP_FUNCTION(SDL_GetWindowData)
  extern DECLSPEC void SDLCALL SDL_GetWindowPosition(SDL_Window * window,
                                                     int *x, int *y);
  */
+static PHP_FUNCTION(SDL_GetWindowPosition)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_x=NULL, *z_y=NULL;
+	int x, y;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_GetWindowPosition(window, &x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+}
+/* }}} */
 
 /**
  *  \brief Set the size of a window's client area.
@@ -1270,6 +1366,11 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_SetWindowData,				arginfo_SDL_SetWindowData)
 	ZEND_FE(SDL_GetWindowData,				arginfo_SDL_GetWindowData)
 	ZEND_FE(SDL_SetWindowIcon,				arginfo_SDL_SetWindowIcon)
+	ZEND_FE(SDL_SetWindowPosition,			arginfo_SDL_SetWindowPosition)
+	ZEND_FE(SDL_GetWindowPosition,			arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
+	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
+
 	ZEND_FE_END
 };
 /* }}} */
@@ -1298,6 +1399,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(SetData,          SDL_SetWindowData,           arginfo_SDL_Window_SetData)
 	PHP_FALIAS(GetData,          SDL_GetWindowData,           arginfo_SDL_Window_GetData)
 	PHP_FALIAS(SetIcon,          SDL_SetWindowIcon,           arginfo_SDL_Window_SetIcon)
+	PHP_FALIAS(SetPosition,      SDL_SetWindowPosition,       arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetPosition,      SDL_GetWindowPosition,       arginfo_SDL_Window_GetPosition)
 
 	PHP_FE_END
 };
@@ -1353,6 +1456,10 @@ static zend_object_value php_sdl_window_new(zend_class_entry *class_type TSRMLS_
 	REGISTER_LONG_CONSTANT("SDL_WINDOW_" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_window_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
 
+#define REGISTER_WINDOWPOS_CLASS_CONST_LONG(const_name, value) \
+	REGISTER_LONG_CONSTANT("SDL_WINDOWPOS_" const_name, value, CONST_CS | CONST_PERSISTENT); \
+	zend_declare_class_constant_long(php_sdl_window_ce, "POS_" const_name, sizeof("POS_" const_name)-1, value TSRMLS_CC); \
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_window)
 {
@@ -1379,6 +1486,10 @@ PHP_MINIT_FUNCTION(sdl_window)
 #if SDL_COMPILEDVERSION > 2000
 	REGISTER_WINDOW_CLASS_CONST_LONG("ALLOW_HIGHDPI",      SDL_WINDOW_ALLOW_HIGHDPI);
 #endif
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED_MASK",  SDL_WINDOWPOS_UNDEFINED_MASK);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED",       SDL_WINDOWPOS_UNDEFINED);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED_MASK",   SDL_WINDOWPOS_CENTERED_MASK);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED",        SDL_WINDOWPOS_CENTERED);
 
 	return (zend_register_functions(NULL, sdl_window_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

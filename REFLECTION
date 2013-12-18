@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [130] {
+  - Constants [134] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -131,6 +131,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_WINDOW_FULLSCREEN_DESKTOP ] { 4097 }
     Constant [ integer SDL_WINDOW_FOREIGN ] { 2048 }
     Constant [ integer SDL_WINDOW_ALLOW_HIGHDPI ] { 8192 }
+    Constant [ integer SDL_WINDOWPOS_UNDEFINED_MASK ] { 536805376 }
+    Constant [ integer SDL_WINDOWPOS_UNDEFINED ] { 536805376 }
+    Constant [ integer SDL_WINDOWPOS_CENTERED_MASK ] { 805240832 }
+    Constant [ integer SDL_WINDOWPOS_CENTERED ] { 805240832 }
   }
 
   - Functions {
@@ -1139,6 +1143,34 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [2] {
         Parameter #0 [ <required> $window ]
         Parameter #1 [ <required> $icon ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowPosition ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowPosition ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $display ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WINDOWPOS_CENTERED_DISPLAY ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $display ]
       }
     }
   }
@@ -2177,7 +2209,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
     Class [ <internal:SDL> class SDL_Window ] {
 
-      - Constants [14] {
+      - Constants [18] {
         Constant [ integer FULLSCREEN ] { 1 }
         Constant [ integer OPENGL ] { 2 }
         Constant [ integer SHOWN ] { 4 }
@@ -2192,6 +2224,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Constant [ integer FULLSCREEN_DESKTOP ] { 4097 }
         Constant [ integer FOREIGN ] { 2048 }
         Constant [ integer ALLOW_HIGHDPI ] { 8192 }
+        Constant [ integer POS_UNDEFINED_MASK ] { 536805376 }
+        Constant [ integer POS_UNDEFINED ] { 536805376 }
+        Constant [ integer POS_CENTERED_MASK ] { 805240832 }
+        Constant [ integer POS_CENTERED ] { 805240832 }
       }
 
       - Static properties [0] {
@@ -2203,7 +2239,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [22] {
+      - Methods [24] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2346,6 +2382,22 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $icon ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetPosition ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetPosition ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
           }
         }
       }
