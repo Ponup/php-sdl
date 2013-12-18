@@ -27,11 +27,10 @@
   +----------------------------------------------------------------------+
 */
 
-/* TODO : read properties of SDL_Window */
-
 #include "php_sdl.h"
 #include "rect.h"
 #include "surface.h"
+#include "video.h"
 
 static zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
@@ -97,7 +96,7 @@ SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
  *          window, or -1 on error.
  extern DECLSPEC int SDLCALL SDL_GetWindowDisplayIndex(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_GetWindowDisplayIndex)
+static PHP_FUNCTION(SDL_GetWindowDisplayIndex)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -112,7 +111,18 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
 }
 /* }}} */
 
-/**
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, displaymode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetDisplayMode, 0, 0, 1)
+       ZEND_ARG_INFO(0, displaymode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
+
  *  \brief Set the display mode used when a fullscreen window is visible.
  *
  *  By default the window's dimensions and the desktop format and refresh rate
@@ -129,8 +139,35 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
                                                       const SDL_DisplayMode
                                                           * mode);
  */
+static PHP_FUNCTION(SDL_SetWindowDisplayMode)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_mode;
+	SDL_Window *window;
+	SDL_DisplayMode mode;
 
-/**
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_window, php_sdl_window_ce, &z_mode, get_php_sdl_displaymode_ce()) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	if (zval_to_sdl_displaymode(z_mode, &mode TSRMLS_CC)) {
+		RETVAL_LONG(SDL_SetWindowDisplayMode(window, &mode));
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(1, displaymode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetDisplayMode, 0, 0, 1)
+       ZEND_ARG_INFO(1, displaymode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_GetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
+
  *  \brief Fill in information about the display mode used when a fullscreen
  *         window is visible.
  *
@@ -139,6 +176,27 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
  extern DECLSPEC int SDLCALL SDL_GetWindowDisplayMode(SDL_Window * window,
                                                       SDL_DisplayMode * mode);
  */
+static PHP_FUNCTION(SDL_GetWindowDisplayMode)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_mode;
+	SDL_Window *window;
+	SDL_DisplayMode mode;
+	int res;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_window, php_sdl_window_ce, &z_mode) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	res = SDL_GetWindowDisplayMode(window, &mode);
+	if (0==res) {
+		zval_dtor(z_mode);
+		sdl_displaymode_to_zval(&mode, z_mode TSRMLS_CC);
+	}
+	RETVAL_LONG(res);
+}
+/* }}} */
+
 
 /**
  *  \brief Get the pixel format associated with the window.
@@ -349,7 +407,7 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
  *  \sa SDL_HideWindow()
  extern DECLSPEC void SDLCALL SDL_ShowWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_ShowWindow)
+static PHP_FUNCTION(SDL_ShowWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -372,7 +430,7 @@ PHP_FUNCTION(SDL_ShowWindow)
  *  \sa SDL_ShowWindow()
  extern DECLSPEC void SDLCALL SDL_HideWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_HideWindow)
+static PHP_FUNCTION(SDL_HideWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -393,7 +451,7 @@ PHP_FUNCTION(SDL_HideWindow)
  *  \brief Raise a window above other windows and set the input focus.
  extern DECLSPEC void SDLCALL SDL_RaiseWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_RaiseWindow)
+static PHP_FUNCTION(SDL_RaiseWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -416,7 +474,7 @@ PHP_FUNCTION(SDL_RaiseWindow)
  *  \sa SDL_RestoreWindow()
  extern DECLSPEC void SDLCALL SDL_MaximizeWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_MaximizeWindow)
+static PHP_FUNCTION(SDL_MaximizeWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -439,7 +497,7 @@ PHP_FUNCTION(SDL_MaximizeWindow)
  *  \sa SDL_RestoreWindow()
  extern DECLSPEC void SDLCALL SDL_MinimizeWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_MinimizeWindow)
+static PHP_FUNCTION(SDL_MinimizeWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -463,7 +521,7 @@ PHP_FUNCTION(SDL_MinimizeWindow)
  *  \sa SDL_MinimizeWindow()
  extern DECLSPEC void SDLCALL SDL_RestoreWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_RestoreWindow)
+static PHP_FUNCTION(SDL_RestoreWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -505,7 +563,7 @@ PHP_FUNCTION(SDL_RestoreWindow)
  *  \sa SDL_UpdateWindowSurfaceRects()
  extern DECLSPEC SDL_Surface * SDLCALL SDL_GetWindowSurface(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_GetWindowSurface)
+static PHP_FUNCTION(SDL_GetWindowSurface)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -791,7 +849,7 @@ ZEND_END_ARG_INFO()
                                                        int x, int y, int w,
                                                        int h, Uint32 flags);
 */
-PHP_FUNCTION(SDL_CreateWindow)
+static PHP_FUNCTION(SDL_CreateWindow)
 {
 	struct php_sdl_window *intern;
 	long x, y, w, h, flags;
@@ -877,7 +935,7 @@ static PHP_METHOD(SDL_Window, __toString)
  *  \sa SDL_UpdateWindowSurfaceRects()
  extern DECLSPEC int SDLCALL SDL_UpdateWindowSurface(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_UpdateWindowSurface)
+static PHP_FUNCTION(SDL_UpdateWindowSurface)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -897,7 +955,7 @@ PHP_FUNCTION(SDL_UpdateWindowSurface)
  *  \brief Destroy a window.
  extern DECLSPEC void SDLCALL SDL_DestroyWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_DestroyWindow)
+static PHP_FUNCTION(SDL_DestroyWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -921,7 +979,7 @@ PHP_FUNCTION(SDL_DestroyWindow)
  *  \sa SDL_SetWindowTitle()
  extern DECLSPEC const char *SDLCALL SDL_GetWindowTitle(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_GetWindowTitle)
+static PHP_FUNCTION(SDL_GetWindowTitle)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -953,7 +1011,7 @@ ZEND_END_ARG_INFO()
  extern DECLSPEC void SDLCALL SDL_SetWindowTitle(SDL_Window * window,
                                                  const char *title);
  */
-PHP_FUNCTION(SDL_SetWindowTitle)
+static PHP_FUNCTION(SDL_SetWindowTitle)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -994,6 +1052,8 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_MinimizeWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_RestoreWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowSurface,			arginfo_SDL_Window)
+	ZEND_FE(SDL_SetWindowDisplayMode,		arginfo_SDL_SetWindowDisplayMode)
+	ZEND_FE(SDL_GetWindowDisplayMode,		arginfo_SDL_GetWindowDisplayMode)
 	ZEND_FE_END
 };
 /* }}} */
@@ -1014,6 +1074,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(Minimize,         SDL_MinimizeWindow,          arginfo_window_none)
 	PHP_FALIAS(Restore,          SDL_RestoreWindow,           arginfo_window_none)
 	PHP_FALIAS(GetSurface,       SDL_GetWindowSurface,        arginfo_window_none)
+	PHP_FALIAS(SetDisplayMode,   SDL_SetWindowDisplayMode,    arginfo_SDL_Window_SetDisplayMode)
+	PHP_FALIAS(GetDisplayMode,   SDL_GetWindowDisplayMode,    arginfo_SDL_Window_GetDisplayMode)
 
 	PHP_FE_END
 };
