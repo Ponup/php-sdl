@@ -27,6 +27,11 @@
   +----------------------------------------------------------------------+
 */
 
+/* Functions not wrapped
+
+ extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindowFrom(const void *data);
+*/
+
 #include "php_sdl.h"
 #include "rect.h"
 #include "surface.h"
@@ -198,37 +203,72 @@ static PHP_FUNCTION(SDL_GetWindowDisplayMode)
 /* }}} */
 
 
-/**
+/* {{{ proto int SDL_GetWindowPixelFormat(SDL_Window window)
+
  *  \brief Get the pixel format associated with the window.
  extern DECLSPEC Uint32 SDLCALL SDL_GetWindowPixelFormat(SDL_Window * window);
  */
+static PHP_FUNCTION(SDL_GetWindowPixelFormat)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_LONG(SDL_GetWindowPixelFormat(window));
+}
+/* }}} */
 
 
-/**
- *  \brief Create an SDL window from an existing native window.
- *
- *  \param data A pointer to driver-dependent window creation data
- *
- *  \return The id of the window created, or zero if window creation failed.
- *
- *  \sa SDL_DestroyWindow()
- extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindowFrom(const void *data);
- */
+/* {{{ proto int SDL_GetWindowID(SDL_Window window)
 
-/**
  *  \brief Get the numeric ID of a window, for logging purposes.
  extern DECLSPEC Uint32 SDLCALL SDL_GetWindowID(SDL_Window * window);
  */
+static PHP_FUNCTION(SDL_GetWindowID)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_LONG(SDL_GetWindowID(window));
+}
+/* }}} */
+
+
 
 /**
  *  \brief Get a window from a stored ID, or NULL if it doesn't exist.
  extern DECLSPEC SDL_Window * SDLCALL SDL_GetWindowFromID(Uint32 id);
  */
 
-/**
+/* {{{ proto int SDL_GetWindowFlags(SDL_Window window)
+
  *  \brief Get the window flags.
  extern DECLSPEC Uint32 SDLCALL SDL_GetWindowFlags(SDL_Window * window);
  */
+static PHP_FUNCTION(SDL_GetWindowFlags)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_LONG(SDL_GetWindowFlags(window));
+}
+/* }}} */
+
+
 
 /**
  *  \brief Set the icon for a window.
@@ -1054,6 +1094,9 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowSurface,			arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowDisplayMode,		arginfo_SDL_SetWindowDisplayMode)
 	ZEND_FE(SDL_GetWindowDisplayMode,		arginfo_SDL_GetWindowDisplayMode)
+	ZEND_FE(SDL_GetWindowPixelFormat,		arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowID,				arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowFlags,				arginfo_SDL_Window)
 	ZEND_FE_END
 };
 /* }}} */
@@ -1076,6 +1119,9 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetSurface,       SDL_GetWindowSurface,        arginfo_window_none)
 	PHP_FALIAS(SetDisplayMode,   SDL_SetWindowDisplayMode,    arginfo_SDL_Window_SetDisplayMode)
 	PHP_FALIAS(GetDisplayMode,   SDL_GetWindowDisplayMode,    arginfo_SDL_Window_GetDisplayMode)
+	PHP_FALIAS(GetPixelFormat,   SDL_GetWindowPixelFormat,    arginfo_window_none)
+	PHP_FALIAS(GetID,            SDL_GetWindowID,             arginfo_window_none)
+	PHP_FALIAS(GetFlags,         SDL_GetWindowFlags,          arginfo_window_none)
 
 	PHP_FE_END
 };

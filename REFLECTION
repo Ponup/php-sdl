@@ -1095,6 +1095,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> &$displaymode ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetWindowPixelFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowID ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowFlags ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
   }
 
   - Classes [13] {
@@ -2157,7 +2175,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [16] {
+      - Methods [19] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2260,6 +2278,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> &$displaymode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetPixelFormat ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetID ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetFlags ] {
+
+          - Parameters [0] {
           }
         }
       }
