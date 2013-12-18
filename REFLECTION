@@ -1161,6 +1161,54 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #2 [ <optional> &$y ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowMinimumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowMinimumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowMaximumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowMaximumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -2239,7 +2287,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [24] {
+      - Methods [30] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2394,6 +2442,54 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method GetPosition ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetMinimumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetMinimumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetMaximumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetMaximumSize ] {
 
           - Parameters [2] {
             Parameter #0 [ <optional> &$x ]

@@ -565,6 +565,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetPosition, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_GetWindowPosition(SDL Window window, int &x, int &y)
+
  *  \brief Get the position of a window.
  *
  *  \param window   The window to query.
@@ -598,7 +599,9 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
 }
 /* }}} */
 
-/**
+
+/* {{{ proto void SDL_SetWindowSize(SDL Window window, int x, int y)
+
  *  \brief Set the size of a window's client area.
  *
  *  \param window   The window to resize.
@@ -612,8 +615,23 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_SetWindowSize(SDL_Window * window, int w,
                                                 int h);
  */
+static PHP_FUNCTION(SDL_SetWindowSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	long x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowPosition(window, x, y);
+}
+/* }}} */
+
+/* {{{ proto void SDL_GetWindowSize(SDL Window window, int &x, int &y)
+
  *  \brief Get the size of a window's client area.
  *
  *  \param window   The window to query.
@@ -624,8 +642,32 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_GetWindowSize(SDL_Window * window, int *w,
                                                 int *h);
  */
+static PHP_FUNCTION(SDL_GetWindowSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_x=NULL, *z_y=NULL;
+	int x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_GetWindowSize(window, &x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_SetWindowMinimumSize(SDL Window window, int x, int y)
+
  *  \brief Set the minimum size of a window's client area.
  *
  *  \param window    The window to set a new minimum size.
@@ -640,8 +682,23 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_SetWindowMinimumSize(SDL_Window * window,
                                                        int min_w, int min_h);
  */
+static PHP_FUNCTION(SDL_SetWindowMinimumSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	long x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowMinimumSize(window, x, y);
+}
+/* }}} */
+
+/* {{{ proto void SDL_GetWindowMinimumSize(SDL Window window, int &x, int &y)
+
  *  \brief Get the minimum size of a window's client area.
  *
  *  \param window   The window to query.
@@ -653,8 +710,32 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_GetWindowMinimumSize(SDL_Window * window,
                                                        int *w, int *h);
  */
+static PHP_FUNCTION(SDL_GetWindowMinimumSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_x=NULL, *z_y=NULL;
+	int x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_GetWindowMinimumSize(window, &x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_SetWindowMaximumSize(SDL Window window, int x, int y)
+
  *  \brief Set the maximum size of a window's client area.
  *
  *  \param window    The window to set a new maximum size.
@@ -669,8 +750,23 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_SetWindowMaximumSize(SDL_Window * window,
                                                        int max_w, int max_h);
  */
+static PHP_FUNCTION(SDL_SetWindowMaximumSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	long x, y;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowMaximumSize(window, x, y);
+}
+/* }}} */
+
+/* {{{ proto void SDL_GetWindowMaximumSize(SDL Window window, int &x, int &y)
+
  *  \brief Get the maximum size of a window's client area.
  *
  *  \param window   The window to query.
@@ -682,6 +778,29 @@ static PHP_FUNCTION(SDL_GetWindowPosition)
  extern DECLSPEC void SDLCALL SDL_GetWindowMaximumSize(SDL_Window * window,
                                                        int *w, int *h);
  */
+static PHP_FUNCTION(SDL_GetWindowMaximumSize)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_x=NULL, *z_y=NULL;
+	int x, y;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_GetWindowMaximumSize(window, &x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+}
+/* }}} */
+
 
 /**
  *  \brief Set the border state of a window.
@@ -1368,6 +1487,12 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_SetWindowIcon,				arginfo_SDL_SetWindowIcon)
 	ZEND_FE(SDL_SetWindowPosition,			arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowPosition,			arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_SetWindowSize,				arginfo_SDL_SetWindowPosition)
+	ZEND_FE(SDL_GetWindowSize,				arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_SetWindowMinimumSize,		arginfo_SDL_SetWindowPosition)
+	ZEND_FE(SDL_GetWindowMinimumSize,		arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_SetWindowMaximumSize,		arginfo_SDL_SetWindowPosition)
+	ZEND_FE(SDL_GetWindowMaximumSize,		arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 
@@ -1401,6 +1526,12 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(SetIcon,          SDL_SetWindowIcon,           arginfo_SDL_Window_SetIcon)
 	PHP_FALIAS(SetPosition,      SDL_SetWindowPosition,       arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(GetPosition,      SDL_GetWindowPosition,       arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetSize,          SDL_SetWindowSize,           arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetSize,          SDL_GetWindowSize,           arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetMinimumSize,   SDL_SetWindowMinimumSize,    arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetMinimumSize,   SDL_GetWindowMinimumSize,    arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetMaximumSize,   SDL_SetWindowMaximumSize,    arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetMaximumSize,   SDL_GetWindowMaximumSize,    arginfo_SDL_Window_GetPosition)
 
 	PHP_FE_END
 };
