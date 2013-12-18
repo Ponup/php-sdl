@@ -802,7 +802,17 @@ static PHP_FUNCTION(SDL_GetWindowMaximumSize)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowBordered, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, bordered)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetBordered, 0, 0, 1)
+       ZEND_ARG_INFO(0, bordered)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetWindowBordered(SDL Window window, bool bordered)
+
  *  \brief Set the border state of a window.
  *
  *  This will add or remove the window's SDL_WINDOW_BORDERLESS flag and
@@ -818,6 +828,21 @@ static PHP_FUNCTION(SDL_GetWindowMaximumSize)
  extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window * window,
                                                     SDL_bool bordered);
  */
+static PHP_FUNCTION(SDL_SetWindowBordered)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	zend_bool bordered;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ob", &z_window, php_sdl_window_ce, &bordered)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowBordered(window, (bordered ? SDL_TRUE : SDL_FALSE));
+}
+/* }}} */
+
 
 
 /* {{{ proto void SDL_ShowWindow(SDL_Window window)
@@ -1493,6 +1518,7 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowMinimumSize,		arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_SetWindowMaximumSize,		arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowMaximumSize,		arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_SetWindowBordered,			arginfo_SDL_SetWindowBordered)
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 
@@ -1532,6 +1558,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetMinimumSize,   SDL_GetWindowMinimumSize,    arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(SetMaximumSize,   SDL_SetWindowMaximumSize,    arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(GetMaximumSize,   SDL_GetWindowMaximumSize,    arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetBordered,      SDL_SetWindowBordered,       arginfo_SDL_Window_SetBordered)
 
 	PHP_FE_END
 };

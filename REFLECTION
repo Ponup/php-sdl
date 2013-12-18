@@ -1209,6 +1209,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #2 [ <optional> &$y ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowBordered ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $bordered ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -2287,7 +2294,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [30] {
+      - Methods [31] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2494,6 +2501,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
           - Parameters [2] {
             Parameter #0 [ <optional> &$x ]
             Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetBordered ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $bordered ]
           }
         }
       }
