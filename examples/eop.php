@@ -55,8 +55,12 @@ if ($w>$mw || $h>$mh) {
 $wx = round(($max->w - $ww) / 2);
 $wy = round(($max->h - $wh) / 2);
 
+/* Load PHP Logo */
+$logo = SDL_LoadBMP('compress.zlib://'.__DIR__.'/php.bmp.gz');
+
 /* Display */
 $wind = new SDL_Window("EOP - $path - ${w}x{$h}", $wx, $wy, $ww, $wh, SDL_Window::SHOWN);
+$wind->SetIcon($logo);
 $sdlim->Blit(NULL, $wind->GetSurface());
 $wind->UpdateSurface();
 

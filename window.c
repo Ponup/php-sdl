@@ -328,7 +328,17 @@ static PHP_FUNCTION(SDL_GetWindowFlags)
 
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowIcon, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, icon)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetIcon, 0, 0, 1)
+       ZEND_ARG_INFO(0, icon)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetWindowIcon(SDL Window window, SDL_Surface icon)
+
  *  \brief Set the icon for a window.
  *
  *  \param window The window for which the icon should be set.
@@ -336,6 +346,26 @@ static PHP_FUNCTION(SDL_GetWindowFlags)
  extern DECLSPEC void SDLCALL SDL_SetWindowIcon(SDL_Window * window,
                                                 SDL_Surface * icon);
  */
+static PHP_FUNCTION(SDL_SetWindowIcon)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_icon;
+	SDL_Window *window;
+	SDL_Surface *icon;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_window, php_sdl_window_ce, &z_icon, get_php_sdl_surface_ce())) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	icon = zval_to_sdl_surface(z_icon);
+
+	if (icon) {
+		SDL_SetWindowIcon(window, icon);
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Surface object");
+	}
+}
+/* }}} */
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowData, 0, 0, 3)
@@ -1239,6 +1269,7 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowFlags,				arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowData,				arginfo_SDL_SetWindowData)
 	ZEND_FE(SDL_GetWindowData,				arginfo_SDL_GetWindowData)
+	ZEND_FE(SDL_SetWindowIcon,				arginfo_SDL_SetWindowIcon)
 	ZEND_FE_END
 };
 /* }}} */
@@ -1266,6 +1297,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetFlags,         SDL_GetWindowFlags,          arginfo_window_none)
 	PHP_FALIAS(SetData,          SDL_SetWindowData,           arginfo_SDL_Window_SetData)
 	PHP_FALIAS(GetData,          SDL_GetWindowData,           arginfo_SDL_Window_GetData)
+	PHP_FALIAS(SetIcon,          SDL_SetWindowIcon,           arginfo_SDL_Window_SetIcon)
 
 	PHP_FE_END
 };

@@ -1134,6 +1134,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $name ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowIcon ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $icon ]
+      }
+    }
   }
 
   - Classes [13] {
@@ -2196,7 +2203,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [21] {
+      - Methods [22] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2332,6 +2339,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $name ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetIcon ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $icon ]
           }
         }
       }
