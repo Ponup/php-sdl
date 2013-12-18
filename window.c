@@ -357,7 +357,7 @@ static PHP_FUNCTION(SDL_SetWindowIcon)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	icon = zval_to_sdl_surface(z_icon);
+	icon = zval_to_sdl_surface(z_icon TSRMLS_CC);
 
 	if (icon) {
 		SDL_SetWindowIcon(window, icon);
