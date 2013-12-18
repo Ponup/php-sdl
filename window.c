@@ -37,6 +37,9 @@
 #include "surface.h"
 #include "video.h"
 
+/* used to associate PHP object handle to SDL_Window */
+#define PHP_SDL_MAGICDATA "__php__handle"
+
 static zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
 struct php_sdl_window {
@@ -244,10 +247,35 @@ static PHP_FUNCTION(SDL_GetWindowID)
 
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowFromID, 0, 0, 1)
+       ZEND_ARG_INFO(0, id)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Window SDL_GetWindowFromID(int id)
+
  *  \brief Get a window from a stored ID, or NULL if it doesn't exist.
  extern DECLSPEC SDL_Window * SDLCALL SDL_GetWindowFromID(Uint32 id);
  */
+static PHP_FUNCTION(SDL_GetWindowFromID)
+{
+	long id;
+	zend_object_handle h;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id)) {
+		return;
+	}
+	window = SDL_GetWindowFromID((Uint32)id);
+	if (window) {
+		h = (zend_object_handle)(unsigned long)SDL_GetWindowData(window, PHP_SDL_MAGICDATA);
+		if (h) {
+			Z_TYPE_P(return_value) = IS_OBJECT;
+			Z_OBJ_HANDLE_P(return_value) = h;
+			Z_OBJ_HT_P(return_value) = (zend_object_handlers *) &php_sdl_window_handlers;
+			zend_objects_store_add_ref(return_value TSRMLS_CC);
+		}
+	}
+}
 
 /* {{{ proto int SDL_GetWindowFlags(SDL_Window window)
 
@@ -906,6 +934,8 @@ static PHP_FUNCTION(SDL_CreateWindow)
 		intern = (struct php_sdl_window *)zend_object_store_get_object(return_value TSRMLS_CC);
 		intern->window = window;
 		intern->flags  = 0;
+
+		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
 	}
 }
 /* }}} */
@@ -931,7 +961,9 @@ static PHP_METHOD(SDL_Window, __construct)
 
 	intern->window = SDL_CreateWindow(title, x, y, w, h, flags);
 	intern->flags  = 0;
-	if (!intern->window) {
+	if (intern->window) {
+		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
+	} else {
 		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Can't create window", 0 TSRMLS_CC);
 	}
 }
@@ -1096,6 +1128,7 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowDisplayMode,		arginfo_SDL_GetWindowDisplayMode)
 	ZEND_FE(SDL_GetWindowPixelFormat,		arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowID,				arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowFromID,			arginfo_SDL_GetWindowFromID)
 	ZEND_FE(SDL_GetWindowFlags,				arginfo_SDL_Window)
 	ZEND_FE_END
 };
