@@ -1216,6 +1216,21 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #1 [ <required> $bordered ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowFullscreen ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpdateWindowSurfaceRects ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $rects ]
+        Parameter #2 [ <optional> $numrect ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -2294,7 +2309,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [31] {
+      - Methods [33] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2508,6 +2523,22 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $bordered ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetFullscreen ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpdateSurfaceRects ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <optional> $rects ]
+            Parameter #2 [ <optional> $numrect ]
           }
         }
       }

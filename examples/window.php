@@ -35,6 +35,8 @@ $drect->x = ($surf->clip_rect->w - $logo->w )/2;
 $drect->y = 10;
 $logo->Blit(NULL, $surf, $drect);
 
+$wind->UpdateSurface();
+
 $color = SDL_MapRGB($surf->format, 0xef, 0xff, 0x87);
 for ($t=$time*$step ; $t ; $t--) {
 
@@ -44,7 +46,7 @@ for ($t=$time*$step ; $t ; $t--) {
 	
 	// Display 1 rect in ~red
 	$surf->FillRect($rects[$time*$step-$t], $color);
-	$wind->UpdateSurface();
+	$wind->UpdateSurfaceRects(array($rects[$time*$step-$t]));
 
 	usleep(1000000/$step);
 }

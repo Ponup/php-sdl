@@ -982,7 +982,17 @@ static PHP_FUNCTION(SDL_RestoreWindow)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowFullscreen, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetFullscreen, 0, 0, 1)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetWindowFullscreen(SDL Window window, int flags)
+
  *  \brief Set a window's fullscreen state.
  *
  *  \return 0 on success, or -1 if setting the display mode failed.
@@ -992,6 +1002,22 @@ static PHP_FUNCTION(SDL_RestoreWindow)
  extern DECLSPEC int SDLCALL SDL_SetWindowFullscreen(SDL_Window * window,
                                                      Uint32 flags);
  */
+static PHP_FUNCTION(SDL_SetWindowFullscreen)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+	long flags;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &object, php_sdl_window_ce, &flags) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	RETVAL_LONG(SDL_SetWindowFullscreen(window, (Uint32)flags));
+}
+/* }}} */
+
 
 /* {{{ proto void SDL_GetWindowSurface(SDL_Window window)
 
@@ -1026,7 +1052,20 @@ static PHP_FUNCTION(SDL_GetWindowSurface)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpdateWindowSurfaceRects, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_INFO(0, numrect)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_UpdateSurfaceRects, 0, 0, 1)
+       ZEND_ARG_INFO(0, flags)
+       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_INFO(0, numrect)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_UpdateWindowSurfaceRects(SDL Window window, array rects [, int numrect])
+
  *  \brief Copy a number of rectangles on the window surface to the screen.
  *
  *  \return 0 on success, or -1 on error.
@@ -1037,6 +1076,50 @@ static PHP_FUNCTION(SDL_GetWindowSurface)
                                                           const SDL_Rect * rects,
                                                           int numrects);
  */
+static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_array;
+	long num=0;
+	int nb, max;
+	SDL_Window *window;
+	SDL_Rect *rects;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oa|l", &z_window, php_sdl_window_ce, &z_array, &num)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+
+	nb  = 0;
+	max = (int)(num ? num : zend_hash_num_elements(Z_ARRVAL_P(z_array)));
+	if (max) {
+		zval **ppzval;
+		rects = emalloc(max * sizeof(SDL_Rect));
+
+		for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_array)) ;
+			zend_hash_get_current_data(Z_ARRVAL_P(z_array), (void **) &ppzval) == SUCCESS ;
+			zend_hash_move_forward(Z_ARRVAL_P(z_array))) {
+				if (zval_to_sdl_rect(*ppzval, rects+nb TSRMLS_CC)) {
+					nb++;
+				} else {
+					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Ignore rect, not a SDL_Rect object");
+				}
+		}
+	}
+	if (!nb) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "No SDL_Rect provided");
+	} else {
+		if (num && nb<max) {
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Only %d SDL_Rect provided, %d expected", nb, max);
+		}
+		RETVAL_LONG(SDL_UpdateWindowSurfaceRects(window, rects, nb));
+	}
+	if (max) {
+		efree(rects);
+	}
+}
+/* }}} */
+
 
 /**
  *  \brief Set a window's input grab mode.
@@ -1519,6 +1602,9 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_SetWindowMaximumSize,		arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowMaximumSize,		arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_SetWindowBordered,			arginfo_SDL_SetWindowBordered)
+	ZEND_FE(SDL_SetWindowFullscreen,		arginfo_SDL_SetWindowFullscreen)
+	ZEND_FE(SDL_UpdateWindowSurfaceRects,	arginfo_SDL_UpdateWindowSurfaceRects)
+
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 
@@ -1530,35 +1616,37 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_ME(SDL_Window, __construct,     arginfo_SDL_CreateWindow, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Window, __toString,      arginfo_window_none,      ZEND_ACC_PUBLIC)
 
-	PHP_FALIAS(UpdateSurface,    SDL_UpdateWindowSurface,     arginfo_window_none)
-	PHP_FALIAS(Destroy,          SDL_DestroyWindow,           arginfo_window_none)
-	PHP_FALIAS(GetTitle,         SDL_GetWindowTitle,          arginfo_window_none)
-	PHP_FALIAS(SetTitle,         SDL_SetWindowTitle,          arginfo_SDL_Window_SetTitle)
-	PHP_FALIAS(GetDisplayIndex,  SDL_GetWindowDisplayIndex,   arginfo_window_none)
-	PHP_FALIAS(Show,             SDL_ShowWindow,              arginfo_window_none)
-	PHP_FALIAS(Hide,             SDL_HideWindow,              arginfo_window_none)
-	PHP_FALIAS(Raise,            SDL_RaiseWindow,             arginfo_window_none)
-	PHP_FALIAS(Maximize,         SDL_MaximizeWindow,          arginfo_window_none)
-	PHP_FALIAS(Minimize,         SDL_MinimizeWindow,          arginfo_window_none)
-	PHP_FALIAS(Restore,          SDL_RestoreWindow,           arginfo_window_none)
-	PHP_FALIAS(GetSurface,       SDL_GetWindowSurface,        arginfo_window_none)
-	PHP_FALIAS(SetDisplayMode,   SDL_SetWindowDisplayMode,    arginfo_SDL_Window_SetDisplayMode)
-	PHP_FALIAS(GetDisplayMode,   SDL_GetWindowDisplayMode,    arginfo_SDL_Window_GetDisplayMode)
-	PHP_FALIAS(GetPixelFormat,   SDL_GetWindowPixelFormat,    arginfo_window_none)
-	PHP_FALIAS(GetID,            SDL_GetWindowID,             arginfo_window_none)
-	PHP_FALIAS(GetFlags,         SDL_GetWindowFlags,          arginfo_window_none)
-	PHP_FALIAS(SetData,          SDL_SetWindowData,           arginfo_SDL_Window_SetData)
-	PHP_FALIAS(GetData,          SDL_GetWindowData,           arginfo_SDL_Window_GetData)
-	PHP_FALIAS(SetIcon,          SDL_SetWindowIcon,           arginfo_SDL_Window_SetIcon)
-	PHP_FALIAS(SetPosition,      SDL_SetWindowPosition,       arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetPosition,      SDL_GetWindowPosition,       arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetSize,          SDL_SetWindowSize,           arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetSize,          SDL_GetWindowSize,           arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetMinimumSize,   SDL_SetWindowMinimumSize,    arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetMinimumSize,   SDL_GetWindowMinimumSize,    arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetMaximumSize,   SDL_SetWindowMaximumSize,    arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetMaximumSize,   SDL_GetWindowMaximumSize,    arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetBordered,      SDL_SetWindowBordered,       arginfo_SDL_Window_SetBordered)
+	PHP_FALIAS(UpdateSurface,      SDL_UpdateWindowSurface,      arginfo_window_none)
+	PHP_FALIAS(Destroy,            SDL_DestroyWindow,            arginfo_window_none)
+	PHP_FALIAS(GetTitle,           SDL_GetWindowTitle,           arginfo_window_none)
+	PHP_FALIAS(SetTitle,           SDL_SetWindowTitle,           arginfo_SDL_Window_SetTitle)
+	PHP_FALIAS(GetDisplayIndex,    SDL_GetWindowDisplayIndex,    arginfo_window_none)
+	PHP_FALIAS(Show,               SDL_ShowWindow,               arginfo_window_none)
+	PHP_FALIAS(Hide,               SDL_HideWindow,               arginfo_window_none)
+	PHP_FALIAS(Raise,              SDL_RaiseWindow,              arginfo_window_none)
+	PHP_FALIAS(Maximize,           SDL_MaximizeWindow,           arginfo_window_none)
+	PHP_FALIAS(Minimize,           SDL_MinimizeWindow,           arginfo_window_none)
+	PHP_FALIAS(Restore,            SDL_RestoreWindow,            arginfo_window_none)
+	PHP_FALIAS(GetSurface,         SDL_GetWindowSurface,         arginfo_window_none)
+	PHP_FALIAS(SetDisplayMode,     SDL_SetWindowDisplayMode,     arginfo_SDL_Window_SetDisplayMode)
+	PHP_FALIAS(GetDisplayMode,     SDL_GetWindowDisplayMode,     arginfo_SDL_Window_GetDisplayMode)
+	PHP_FALIAS(GetPixelFormat,     SDL_GetWindowPixelFormat,     arginfo_window_none)
+	PHP_FALIAS(GetID,              SDL_GetWindowID,              arginfo_window_none)
+	PHP_FALIAS(GetFlags,           SDL_GetWindowFlags,           arginfo_window_none)
+	PHP_FALIAS(SetData,            SDL_SetWindowData,            arginfo_SDL_Window_SetData)
+	PHP_FALIAS(GetData,            SDL_GetWindowData,            arginfo_SDL_Window_GetData)
+	PHP_FALIAS(SetIcon,            SDL_SetWindowIcon,            arginfo_SDL_Window_SetIcon)
+	PHP_FALIAS(SetPosition,        SDL_SetWindowPosition,        arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetPosition,        SDL_GetWindowPosition,        arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetSize,            SDL_SetWindowSize,            arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetSize,            SDL_GetWindowSize,            arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetMinimumSize,     SDL_SetWindowMinimumSize,     arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetMinimumSize,     SDL_GetWindowMinimumSize,     arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetMaximumSize,     SDL_SetWindowMaximumSize,     arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(GetMaximumSize,     SDL_GetWindowMaximumSize,     arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetBordered,        SDL_SetWindowBordered,        arginfo_SDL_Window_SetBordered)
+	PHP_FALIAS(SetFullscreen,      SDL_SetWindowFullscreen,      arginfo_SDL_Window_SetFullscreen)
+	PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
 
 	PHP_FE_END
 };
