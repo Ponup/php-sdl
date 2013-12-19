@@ -1231,6 +1231,19 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #2 [ <optional> $numrect ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowGrab ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $window ]
+        Parameter #1 [ <required> $grabbed ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowGrab ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $window ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -2309,7 +2322,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [33] {
+      - Methods [35] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2539,6 +2552,19 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> $flags ]
             Parameter #1 [ <optional> $rects ]
             Parameter #2 [ <optional> $numrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetGrab ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $grabbed ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetGrab ] {
+
+          - Parameters [0] {
           }
         }
       }

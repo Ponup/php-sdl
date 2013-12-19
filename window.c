@@ -844,7 +844,6 @@ static PHP_FUNCTION(SDL_SetWindowBordered)
 /* }}} */
 
 
-
 /* {{{ proto void SDL_ShowWindow(SDL_Window window)
 
  *  \brief Show a window.
@@ -1121,7 +1120,17 @@ static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 /* }}} */
 
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowGrab, 0, 0, 2)
+       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_INFO(0, grabbed)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetGrab, 0, 0, 1)
+       ZEND_ARG_INFO(0, grabbed)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetWindowGrab(SDL Window window, bool grabbed)
+
  *  \brief Set a window's input grab mode.
  *
  *  \param window The window for which the input grab mode should be set.
@@ -1131,8 +1140,23 @@ static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
  extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window * window,
                                                 SDL_bool grabbed);
  */
+static PHP_FUNCTION(SDL_SetWindowGrab)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	zend_bool grabbed;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ob", &z_window, php_sdl_window_ce, &grabbed)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	SDL_SetWindowGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
+}
+/* }}} */
+
+/* {{{ proto bool SDL_GetWindowGrab(SDL Window window)
+
  *  \brief Get a window's input grab mode.
  *
  *  \return This returns SDL_TRUE if input is grabbed, and SDL_FALSE otherwise.
@@ -1140,6 +1164,19 @@ static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
  *  \sa SDL_SetWindowGrab()
  extern DECLSPEC SDL_bool SDLCALL SDL_GetWindowGrab(SDL_Window * window);
  */
+static PHP_FUNCTION(SDL_GetWindowGrab)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_BOOL(SDL_GetWindowGrab(window));
+}
+/* }}} */
 
 /**
  *  \brief Set the brightness (gamma correction) for a window.
@@ -1604,6 +1641,8 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_SetWindowBordered,			arginfo_SDL_SetWindowBordered)
 	ZEND_FE(SDL_SetWindowFullscreen,		arginfo_SDL_SetWindowFullscreen)
 	ZEND_FE(SDL_UpdateWindowSurfaceRects,	arginfo_SDL_UpdateWindowSurfaceRects)
+	ZEND_FE(SDL_SetWindowGrab,				arginfo_SDL_SetWindowGrab)
+	ZEND_FE(SDL_GetWindowGrab,				arginfo_SDL_Window)
 
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
@@ -1647,6 +1686,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(SetBordered,        SDL_SetWindowBordered,        arginfo_SDL_Window_SetBordered)
 	PHP_FALIAS(SetFullscreen,      SDL_SetWindowFullscreen,      arginfo_SDL_Window_SetFullscreen)
 	PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
+	PHP_FALIAS(SetGrab,            SDL_SetWindowGrab,            arginfo_SDL_Window_SetGrab)
+	PHP_FALIAS(GetGrab,            SDL_GetWindowGrab,            arginfo_window_none)
 
 	PHP_FE_END
 };
