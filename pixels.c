@@ -669,12 +669,12 @@ PHP_METHOD(SDL_Palette, offsetSet)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPixelFormatPalette, 0, 0, 2)
-       ZEND_ARG_INFO(0, pixelformat)
-       ZEND_ARG_INFO(0, palette)
+       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
+       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_SetPalette, 0, 0, 1)
-       ZEND_ARG_INFO(0, palette)
+       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SetPixelFormatPalette(SDL_PixelFormat format, SDL_Palette palette);
@@ -702,14 +702,14 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 2)
-       ZEND_ARG_INFO(0, palette)
-       ZEND_ARG_INFO(0, colors)
+       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette palette, 0)
+       ZEND_ARG_ARRAY_INFO(0, colors, 0)
        ZEND_ARG_INFO(0, first)
        ZEND_ARG_INFO(0, ncolors)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_SetColors, 0, 0, 1)
-       ZEND_ARG_INFO(0, colors)
+       ZEND_ARG_ARRAY_INFO(0, colors, 0)
        ZEND_ARG_INFO(0, first)
        ZEND_ARG_INFO(0, ncolors)
 ZEND_END_ARG_INFO()
@@ -805,7 +805,7 @@ PHP_FUNCTION(SDL_FreePalette)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGB, 0, 0, 4)
-       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
        ZEND_ARG_INFO(0, r)
        ZEND_ARG_INFO(0, g)
        ZEND_ARG_INFO(0, b)
@@ -843,7 +843,7 @@ PHP_FUNCTION(SDL_MapRGB)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGBA, 0, 0, 5)
-       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
        ZEND_ARG_INFO(0, r)
        ZEND_ARG_INFO(0, g)
        ZEND_ARG_INFO(0, b)
@@ -884,7 +884,7 @@ PHP_FUNCTION(SDL_MapRGBA)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGB, 0, 0, 5)
        ZEND_ARG_INFO(0, pixel)
-       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
        ZEND_ARG_INFO(1, r)
        ZEND_ARG_INFO(1, g)
        ZEND_ARG_INFO(1, b)
@@ -957,7 +957,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGB)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGBA, 0, 0, 6)
        ZEND_ARG_INFO(0, pixel)
-       ZEND_ARG_INFO(0, pixelformat)
+       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
        ZEND_ARG_INFO(1, r)
        ZEND_ARG_INFO(1, g)
        ZEND_ARG_INFO(1, b)
@@ -1037,7 +1037,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CalculateGammaRamp, 0, 0, 2)
        ZEND_ARG_INFO(0, gamma)
-       ZEND_ARG_INFO(1, ramp)
+       ZEND_ARG_ARRAY_INFO(1, ramp, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_CalculateGammaRamp(float gamma, array &ramp)
@@ -1708,14 +1708,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_palette_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette, 0, 0, 1)
-       ZEND_ARG_INFO(0, palette)
+       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_format_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat, 0, 0, 1)
-       ZEND_ARG_INFO(0, format)
+       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
 ZEND_END_ARG_INFO()
 
 

@@ -220,7 +220,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $flags ]
         Parameter #1 [ <required> $title ]
         Parameter #2 [ <required> $message ]
-        Parameter #3 [ <optional> $window ]
+        Parameter #3 [ <optional> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_ShowMessageBox ] {
@@ -278,14 +278,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_FreePalette ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $palette ]
+        Parameter #0 [ <required> SDL_Palette $palette ]
       }
     }
     Function [ <internal:SDL> function SDL_SetPaletteColors ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $palette ]
-        Parameter #1 [ <required> $colors ]
+        Parameter #0 [ <required> SDL_Palette palette $palette ]
+        Parameter #1 [ <required> array $colors ]
         Parameter #2 [ <optional> $first ]
         Parameter #3 [ <optional> $ncolors ]
       }
@@ -299,20 +299,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_FreeFormat ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $format ]
+        Parameter #0 [ <required> SDL_PixelFormat $format ]
       }
     }
     Function [ <internal:SDL> function SDL_SetPixelFormatPalette ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $pixelformat ]
-        Parameter #1 [ <required> $palette ]
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
+        Parameter #1 [ <required> SDL_Palette $palette ]
       }
     }
     Function [ <internal:SDL> function SDL_MapRGB ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $pixelformat ]
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
         Parameter #1 [ <required> $r ]
         Parameter #2 [ <required> $g ]
         Parameter #3 [ <required> $b ]
@@ -321,7 +321,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_MapRGBA ] {
 
       - Parameters [5] {
-        Parameter #0 [ <required> $pixelformat ]
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
         Parameter #1 [ <required> $r ]
         Parameter #2 [ <required> $g ]
         Parameter #3 [ <required> $b ]
@@ -332,7 +332,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [5] {
         Parameter #0 [ <required> $pixel ]
-        Parameter #1 [ <required> $pixelformat ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
         Parameter #2 [ <required> &$r ]
         Parameter #3 [ <required> &$g ]
         Parameter #4 [ <required> &$b ]
@@ -342,7 +342,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [6] {
         Parameter #0 [ <required> $pixel ]
-        Parameter #1 [ <required> $pixelformat ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
         Parameter #2 [ <required> &$r ]
         Parameter #3 [ <required> &$g ]
         Parameter #4 [ <required> &$b ]
@@ -353,7 +353,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> $gamma ]
-        Parameter #1 [ <required> &$ramp ]
+        Parameter #1 [ <required> array &$ramp ]
       }
     }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
@@ -1368,9 +1368,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> $flags ]
             Parameter #1 [ <required> $title ]
             Parameter #2 [ <required> $message ]
-            Parameter #3 [ <optional> $buttons ]
-            Parameter #4 [ <optional> $colors ]
-            Parameter #5 [ <optional> $parentwindow ]
+            Parameter #3 [ <optional> array $buttons ]
+            Parameter #4 [ <optional> array $colors ]
+            Parameter #5 [ <optional> SDL_Window $parentwindow ]
           }
         }
 
@@ -1502,7 +1502,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method SetColors ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $colors ]
+            Parameter #0 [ <required> array $colors ]
             Parameter #1 [ <optional> $first ]
             Parameter #2 [ <optional> $ncolors ]
           }
@@ -1584,7 +1584,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method SetPalette ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> $palette ]
+            Parameter #0 [ <required> SDL_Palette $palette ]
           }
         }
 
