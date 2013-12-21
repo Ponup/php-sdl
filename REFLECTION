@@ -359,43 +359,43 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_RectEmpty ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $rect ]
+        Parameter #0 [ <required> SDL_Rect $rect ]
       }
     }
     Function [ <internal:SDL> function SDL_RectEquals ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $rectA ]
-        Parameter #1 [ <required> $rectB ]
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
       }
     }
     Function [ <internal:SDL> function SDL_HasIntersection ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $rectA ]
-        Parameter #1 [ <required> $rectB ]
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
       }
     }
     Function [ <internal:SDL> function SDL_IntersectRect ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $rectA ]
-        Parameter #1 [ <required> $rectB ]
-        Parameter #2 [ <required> &$result ]
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+        Parameter #2 [ <required> SDL_Rect &$result ]
       }
     }
     Function [ <internal:SDL> function SDL_UnionRect ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $rectA ]
-        Parameter #1 [ <required> $rectB ]
-        Parameter #2 [ <required> &$result ]
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+        Parameter #2 [ <required> SDL_Rect &$result ]
       }
     }
     Function [ <internal:SDL> function SDL_IntersectRectAndLine ] {
 
       - Parameters [5] {
-        Parameter #0 [ <required> $rect ]
+        Parameter #0 [ <required> SDL_Rect $rect ]
         Parameter #1 [ <required> &$X1 ]
         Parameter #2 [ <required> &$Y1 ]
         Parameter #3 [ <required> &$X2 ]
@@ -405,10 +405,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_EnclosePoints ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $point ]
+        Parameter #0 [ <required> array $point ]
         Parameter #1 [ <required> $count ]
-        Parameter #2 [ <required> $clip ]
-        Parameter #3 [ <required> &$rect ]
+        Parameter #2 [ <required> SDL_Rect $clip ]
+        Parameter #3 [ <required> SDL_Rect &$rect ]
       }
     }
     Function [ <internal:SDL> function SDL_AllocRW ] {
@@ -1739,30 +1739,30 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Equal ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> $rect ]
+            Parameter #0 [ <required> SDL_Rect $rect ]
           }
         }
 
         Method [ <internal:SDL> public method HasIntersection ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> $rect ]
+            Parameter #0 [ <required> SDL_Rect $rect ]
           }
         }
 
         Method [ <internal:SDL> public method Intersect ] {
 
           - Parameters [2] {
-            Parameter #0 [ <required> $rect ]
-            Parameter #1 [ <required> &$result ]
+            Parameter #0 [ <required> SDL_Rect $rect ]
+            Parameter #1 [ <required> SDL_Rect &$result ]
           }
         }
 
         Method [ <internal:SDL> public method Union ] {
 
           - Parameters [2] {
-            Parameter #0 [ <required> $rect ]
-            Parameter #1 [ <required> &$result ]
+            Parameter #0 [ <required> SDL_Rect $rect ]
+            Parameter #1 [ <required> SDL_Rect &$result ]
           }
         }
 

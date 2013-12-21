@@ -33,8 +33,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 0)
 	ZEND_ARG_INFO(1, pct)
 ZEND_END_ARG_INFO()
 
-/**
- *  \brief Get the current power supply details.
+/* {{{ proto string SDL_GetPowerInfo(int &sec, int &pct)
+
+  *  \brief Get the current power supply details.
  *
  *  \param secs Seconds of battery life left. You can pass a NULL here if
  *              you don't care. Will return -1 if we can't determine a
@@ -73,6 +74,7 @@ PHP_FUNCTION(SDL_GetPowerInfo)
 
 	RETURN_LONG(power_state);
 }
+/* }}} */
 
 
 /* {{{ sdl_power_functions[] */

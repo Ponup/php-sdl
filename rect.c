@@ -224,7 +224,7 @@ static PHP_METHOD(SDL_Point, __toString)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
-       ZEND_ARG_INFO(0, rect)
+       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_RectEmpty(SDL_Rect rect)
@@ -247,8 +247,8 @@ PHP_FUNCTION(SDL_RectEmpty)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect2, 0, 0, 2)
-       ZEND_ARG_INFO(0, rectA)
-       ZEND_ARG_INFO(0, rectB)
+       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -297,14 +297,14 @@ PHP_FUNCTION(SDL_HasIntersection)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
-       ZEND_ARG_INFO(0, rectA)
-       ZEND_ARG_INFO(0, rectB)
-       ZEND_ARG_INFO(1, result)
+       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
-       ZEND_ARG_INFO(0, rect)
-       ZEND_ARG_INFO(1, result)
+       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
@@ -359,10 +359,10 @@ PHP_FUNCTION(SDL_UnionRect)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
-       ZEND_ARG_INFO(0, point)
+       ZEND_ARG_ARRAY_INFO(0, point, 0)
        ZEND_ARG_INFO(0, count)
-       ZEND_ARG_INFO(0, clip)
-       ZEND_ARG_INFO(1, rect)
+       ZEND_ARG_OBJ_INFO(0, clip, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, rect, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -421,7 +421,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
-       ZEND_ARG_INFO(0, rect)
+       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
        ZEND_ARG_INFO(1, X1)
        ZEND_ARG_INFO(1, Y1)
        ZEND_ARG_INFO(1, X2)
