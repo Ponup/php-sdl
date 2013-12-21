@@ -294,6 +294,31 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [0] {
       }
     }
+    Function [ <internal:SDL> function SDL_GL_GetDrawableSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$w ]
+        Parameter #2 [ <required> &$h ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SwapWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SetSwapInterval ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $interval ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetSwapInterval ] {
+
+      - Parameters [0] {
+      }
+    }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
 
       - Parameters [4] {
@@ -1415,11 +1440,17 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [3] {
+      - Methods [4] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> SDL_Window $window ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
 
@@ -2500,7 +2531,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [42] {
+      - Methods [44] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2790,6 +2821,20 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method GL_GetCurrent ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_GetDrawableSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_Swap ] {
 
           - Parameters [0] {
           }

@@ -250,6 +250,28 @@ static PHP_METHOD(SDL_GLContext, __construct)
 /* }}} */
 
 
+/* {{{ proto SDL_GLContext::__toString()
+*/
+static PHP_METHOD(SDL_GLContext, __toString)
+{
+	struct php_sdl_glcontext *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_glcontext *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->glcontext) {
+		spprintf(&buf, 100, "SDL_GLContext(%lx)", (long)intern->glcontext);
+		RETVAL_STRING(buf, 0);
+	} else {
+		RETVAL_STRING("SDL_GLContext()", 1);
+	}
+}
+/* }}} */
+
+
 /* {{{ proto SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window window)
 
  *  \brief Create an OpenGL context for use with an OpenGL window, and make it
@@ -365,6 +387,130 @@ static PHP_FUNCTION(SDL_GL_GetCurrentContext)
 }
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_GetDrawableSize, 0, 0, 3)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_INFO(1, w)
+       ZEND_ARG_INFO(1, h)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_GL_GetDrawableSize(SDL_Window window, int &w, int &h)
+
+ *  \brief Get the size of a window's underlying drawable (for use with glViewport).
+ *
+ *  \param window   Window from which the drawable size should be queried
+ *  \param w        Pointer to variable for storing the width, may be NULL
+ *  \param h        Pointer to variable for storing the height, may be NULL
+ *
+ * This may differ from SDL_GetWindowSize if we're rendering to a high-DPI
+ * drawable, i.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
+ * platform with high-DPI support (Apple calls this "Retina"), and not disabled
+ * by the SDL_HINT_VIDEO_HIGHDPI_DISABLED hint.
+ *
+ *  \sa SDL_GetWindowSize()
+ *  \sa SDL_CreateWindow()
+ extern DECLSPEC void SDLCALL SDL_GL_GetDrawableSize(SDL_Window * window, int *w,
+                                                     int *h);
+ */
+PHP_FUNCTION(SDL_GL_GetDrawableSize)
+{
+	zval *z_w, *z_h, *z_window;
+	SDL_Window *window;
+	int w, h;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, get_php_sdl_window_ce(), &z_w, &z_h)) {
+		return;
+	}
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if (window) {
+		SDL_GL_GetDrawableSize(window, &w, &h);
+		zval_dtor(z_w);
+		ZVAL_LONG(z_w, w);
+		zval_dtor(z_h);
+		ZVAL_LONG(z_h, h);
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+	}
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_GL_SwapWindow(SDL_Window window)
+
+ * \brief Swap the OpenGL buffers for a window, if double-buffering is
+ *        supported.
+ extern DECLSPEC void SDLCALL SDL_GL_SwapWindow(SDL_Window * window);
+ */
+PHP_FUNCTION(SDL_GL_SwapWindow)
+{
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, get_php_sdl_window_ce())) {
+		return;
+	}
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if (window) {
+		SDL_GL_SwapWindow(window);
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_SetSwapInterval, 0, 0, 1)
+       ZEND_ARG_INFO(0, interval)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_GL_SetSwapInterval(int interval)
+
+ *  \brief Set the swap interval for the current OpenGL context.
+ *
+ *  \param interval 0 for immediate updates, 1 for updates synchronized with the
+ *                  vertical retrace. If the system supports it, you may
+ *                  specify -1 to allow late swaps to happen immediately
+ *                  instead of waiting for the next retrace.
+ *
+ *  \return 0 on success, or -1 if setting the swap interval is not supported.
+ *
+ *  \sa SDL_GL_GetSwapInterval()
+ extern DECLSPEC int SDLCALL SDL_GL_SetSwapInterval(int interval);
+ */
+static PHP_FUNCTION(SDL_GL_SetSwapInterval)
+{
+	long value;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &value)) {
+		return;
+	}
+	RETVAL_LONG(SDL_GL_SetSwapInterval((int)value));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_GL_GetSwapInterval()
+
+ *  \brief Get the swap interval for the current OpenGL context.
+ *
+ *  \return 0 if there is no vertical retrace synchronization, 1 if the buffer
+ *          swap is synchronized with the vertical retrace, and -1 if late
+ *          swaps happen immediately instead of waiting for the next retrace.
+ *          If the system can't determine the swap interval, or there isn't a
+ *          valid current context, this will return 0 as a safe default.
+ *
+ *  \sa SDL_GL_SetSwapInterval()
+ extern DECLSPEC int SDLCALL SDL_GL_GetSwapInterval(void);
+ */
+static PHP_FUNCTION(SDL_GL_GetSwapInterval)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	RETVAL_LONG(SDL_GL_GetSwapInterval());
+}
+/* }}} */
+
+
 
 /* generic arginfo */
 
@@ -375,9 +521,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ sdl_glcontext_methods[] */
 static const zend_function_entry php_sdl_glcontext_methods[] = {
 	PHP_ME(SDL_GLContext,       __construct,                arginfo_SDL_GLContext__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_GLContext,       __toString,                 arginfo_none,                         ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Delete,          SDL_GL_DeleteContext,       arginfo_none)
 	PHP_FALIAS(GL_GetCurrent,   SDL_GL_GetCurrentContext,   arginfo_none)
@@ -396,6 +547,10 @@ zend_function_entry sdl_glcontext_functions[] = {
 	ZEND_FE(SDL_GL_MakeCurrent,                          arginfo_SDL_GL_MakeCurrent)
 	ZEND_FE(SDL_GL_GetCurrentWindow,                     arginfo_none)
 	ZEND_FE(SDL_GL_GetCurrentContext,                    arginfo_none)
+	ZEND_FE(SDL_GL_GetDrawableSize,                      arginfo_SDL_GL_GetDrawableSize)
+	ZEND_FE(SDL_GL_SwapWindow,                           arginfo_SDL_Window)
+	ZEND_FE(SDL_GL_SetSwapInterval,                      arginfo_SDL_GL_SetSwapInterval)
+	ZEND_FE(SDL_GL_GetSwapInterval,                      arginfo_none)
 	ZEND_FE_END
 };
 /* }}} */
