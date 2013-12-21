@@ -630,13 +630,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_FreeSurface ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
       }
     }
     Function [ <internal:SDL> function SDL_FillRect ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $rect ]
         Parameter #2 [ <required> $color ]
       }
@@ -644,7 +644,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_FillRects ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $rects ]
         Parameter #2 [ <required> $count ]
         Parameter #3 [ <required> $color ]
@@ -653,25 +653,25 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_MUSTLOCK ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
       }
     }
     Function [ <internal:SDL> function SDL_LockSurface ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
       }
     }
     Function [ <internal:SDL> function SDL_UnlockSurface ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
       }
     }
     Function [ <internal:SDL> function SDL_LoadBMP_RW ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> &$RWops ]
+        Parameter #0 [ <required> SDL_RWops &$RWops ]
         Parameter #1 [ <required> $freesrc ]
       }
     }
@@ -684,74 +684,74 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_UpperBlit ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> $srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <optional> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_LowerBlit ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> &$srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <required> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect &$srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <required> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_UpperBlitScaled ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> $srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <optional> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_LowerBlitScaled ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> &$srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <required> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect &$srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <required> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_SoftStretch ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> $srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <optional> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_SaveBMP_RW ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $surface ]
-        Parameter #1 [ <required> &$rwops ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> SDL_RWops &$rwops ]
         Parameter #2 [ <optional> $freedst ]
       }
     }
     Function [ <internal:SDL> function SDL_SaveBMP ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $path ]
       }
     }
     Function [ <internal:SDL> function SDL_SetSurfaceRLE ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $flag ]
       }
     }
     Function [ <internal:SDL> function SDL_SetColorKey ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $flag ]
         Parameter #2 [ <optional> $key ]
       }
@@ -759,14 +759,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetColorKey ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> &$key ]
       }
     }
     Function [ <internal:SDL> function SDL_SetSurfaceColorMod ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $red ]
         Parameter #2 [ <required> $green ]
         Parameter #3 [ <required> $blue ]
@@ -775,7 +775,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetSurfaceColorMod ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> &$red ]
         Parameter #2 [ <required> &$green ]
         Parameter #3 [ <required> &$blue ]
@@ -784,57 +784,57 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_SetSurfaceAlphaMod ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $alpha ]
       }
     }
     Function [ <internal:SDL> function SDL_GetSurfaceAlphaMod ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> &$alpha ]
       }
     }
     Function [ <internal:SDL> function SDL_SetSurfaceBlendMode ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $blendmmode ]
       }
     }
     Function [ <internal:SDL> function SDL_GetSurfaceBlendMode ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> &$blendmode ]
       }
     }
     Function [ <internal:SDL> function SDL_SetClipRect ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $cliprect ]
       }
     }
     Function [ <internal:SDL> function SDL_GetClipRect ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> &$cliprect ]
       }
     }
     Function [ <internal:SDL> function SDL_ConvertSurface ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $surface ]
-        Parameter #1 [ <required> $pixelformat ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
         Parameter #2 [ <optional> $flags ]
       }
     }
     Function [ <internal:SDL> function SDL_ConvertSurfaceFormat ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $surface ]
+        Parameter #0 [ <required> SDL_Surface $surface ]
         Parameter #1 [ <required> $format ]
         Parameter #2 [ <optional> $flags ]
       }
@@ -845,29 +845,29 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $height ]
         Parameter #1 [ <required> $width ]
         Parameter #2 [ <required> $src_format ]
-        Parameter #3 [ <required> $src_pixels ]
+        Parameter #3 [ <required> SDL_Pixels $src ]
         Parameter #4 [ <required> $src_pitch ]
         Parameter #5 [ <required> $dst_format ]
-        Parameter #6 [ <required> $dst_pixel ]
+        Parameter #6 [ <required> SDL_Pixels $dst ]
         Parameter #7 [ <required> $dst_pitch ]
       }
     }
     Function [ <internal:SDL> function SDL_BlitSurface ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> $srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <optional> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_BlitScaled ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $srcsurface ]
-        Parameter #1 [ <required> $srcrect ]
-        Parameter #2 [ <required> $dstsurface ]
-        Parameter #3 [ <optional> &$dstrect ]
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect &$dstrect ]
       }
     }
     Function [ <internal:SDL> function SDL_GetRevision ] {
@@ -2078,70 +2078,70 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Blit ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <optional> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method UpperBlit ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <optional> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method LowerBlit ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> &$srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <required> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect &$srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <required> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method BlitScaled ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <optional> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method UpperBlitScaled ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <optional> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method LowerBlitScaled ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> &$srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <required> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect &$srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <required> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method SoftStretch ] {
 
           - Parameters [3] {
-            Parameter #0 [ <required> $srcrect ]
-            Parameter #1 [ <required> $dstsurface ]
-            Parameter #2 [ <optional> &$dstrect ]
+            Parameter #0 [ <required> SDL_rect $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect &$dstrect ]
           }
         }
 
         Method [ <internal:SDL> public method SaveBMP_RW ] {
 
           - Parameters [2] {
-            Parameter #0 [ <required> &$rwops ]
+            Parameter #0 [ <required> SDL_RWops &$rwops ]
             Parameter #1 [ <optional> $freedst ]
           }
         }
@@ -2238,7 +2238,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Convert ] {
 
           - Parameters [2] {
-            Parameter #0 [ <required> $pixelformat ]
+            Parameter #0 [ <required> SDL_PixelFormat $format ]
             Parameter #1 [ <optional> $flags ]
           }
         }
