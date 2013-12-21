@@ -262,11 +262,6 @@ PHP_FUNCTION(SDL_GetCurrentVideoDriver)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(1, rect)
-ZEND_END_ARG_INFO()
-
 
 /* {{{ proto int SDL_GetNumVideoDisplays(void)
 
@@ -310,6 +305,12 @@ PHP_FUNCTION(SDL_GetDisplayName)
 	RETURN_STRING(name, 1);
 }
 /* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_OBJ_INFO(1, rect, SDL_Rect, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto array SDL_GetDisplayBounds(int displayIndex, SDL_Rect &rect)
 
@@ -437,8 +438,8 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
        ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(0, desired_displaymode)
-       ZEND_ARG_INFO(1, closest_displaymode)
+       ZEND_ARG_OBJ_INFO(0, desired, SDL_DisplayMode, 0)
+       ZEND_ARG_OBJ_INFO(1, closest, SDL_DisplayMode, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_DisplayMode SDL_GetClosestDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])

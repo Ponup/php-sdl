@@ -950,7 +950,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> $displayIndex ]
-        Parameter #1 [ <required> &$rect ]
+        Parameter #1 [ <required> SDL_Rect &$rect ]
       }
     }
     Function [ <internal:SDL> function SDL_GetNumDisplayModes ] {
@@ -982,8 +982,8 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [3] {
         Parameter #0 [ <required> $displayIndex ]
-        Parameter #1 [ <required> $desired_displaymode ]
-        Parameter #2 [ <optional> &$closest_displaymode ]
+        Parameter #1 [ <required> SDL_DisplayMode $desired ]
+        Parameter #2 [ <optional> SDL_DisplayMode &$closest ]
       }
     }
     Function [ <internal:SDL> function SDL_IsScreenSaverEnabled ] {
