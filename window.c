@@ -1168,7 +1168,17 @@ static PHP_FUNCTION(SDL_GetWindowGrab)
 }
 /* }}} */
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowBrightness, 0, 0, 2)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_INFO(0, brightness)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetBrightness, 0, 0, 1)
+       ZEND_ARG_INFO(0, brightness)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetWindowBrightness(SDL Window window, float brightness)
+
  *  \brief Set the brightness (gamma correction) for a window.
  *
  *  \return 0 on success, or -1 if setting the brightness isn't supported.
@@ -1177,8 +1187,24 @@ static PHP_FUNCTION(SDL_GetWindowGrab)
  *  \sa SDL_SetWindowGammaRamp()
  extern DECLSPEC int SDLCALL SDL_SetWindowBrightness(SDL_Window * window, float brightness);
  */
+static PHP_FUNCTION(SDL_SetWindowBrightness)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	double brightness;
+	SDL_Window *window;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Od", &z_window, php_sdl_window_ce, &brightness)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_LONG(SDL_SetWindowBrightness(window, (float)brightness));
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_GetWindowBrightness(SDL Window window)
+
  *  \brief Get the brightness (gamma correction) for a window.
  *
  *  \return The last brightness value passed to SDL_SetWindowBrightness()
@@ -1186,6 +1212,19 @@ static PHP_FUNCTION(SDL_GetWindowGrab)
  *  \sa SDL_SetWindowBrightness()
  extern DECLSPEC float SDLCALL SDL_GetWindowBrightness(SDL_Window * window);
  */
+static PHP_FUNCTION(SDL_GetWindowBrightness)
+{
+	struct php_sdl_window *intern;
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	RETVAL_DOUBLE(SDL_GetWindowBrightness(window));
+}
+/* }}} */
 
 /**
  *  \brief Set the gamma ramp for a window.
@@ -1633,6 +1672,8 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_UpdateWindowSurfaceRects,	arginfo_SDL_UpdateWindowSurfaceRects)
 	ZEND_FE(SDL_SetWindowGrab,				arginfo_SDL_SetWindowGrab)
 	ZEND_FE(SDL_GetWindowGrab,				arginfo_SDL_Window)
+	ZEND_FE(SDL_SetWindowBrightness,		arginfo_SDL_SetWindowBrightness)
+	ZEND_FE(SDL_GetWindowBrightness,		arginfo_SDL_Window)
 
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
@@ -1678,6 +1719,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
 	PHP_FALIAS(SetGrab,            SDL_SetWindowGrab,            arginfo_SDL_Window_SetGrab)
 	PHP_FALIAS(GetGrab,            SDL_GetWindowGrab,            arginfo_window_none)
+	PHP_FALIAS(SetBrightness,      SDL_SetWindowBrightness,      arginfo_SDL_Window_SetBrightness)
+	PHP_FALIAS(GetBrightness,      SDL_GetWindowBrightness,      arginfo_window_none)
 
 	PHP_FE_END
 };
