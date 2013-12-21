@@ -47,7 +47,8 @@ zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_a
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_version_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto string SDL_GetRevision()
+
  *  \brief Get the code revision of SDL that is linked against your program.
  *
  *  Returns an arbitrary string (a hash value) uniquely identifying the
@@ -62,8 +63,10 @@ PHP_FUNCTION(SDL_GetRevision)
 
 	RETURN_STRING(SDL_GetRevision(), 1);
 }
+/* }}} */
 
-/**
+/* {{{ proto int SDL_GetRevisionNumber()
+
  *  \brief Get the revision number of SDL that is linked against your program.
  *
  *  Returns a number uniquely identifying the exact revision of the SDL
@@ -78,12 +81,14 @@ PHP_FUNCTION(SDL_GetRevisionNumber)
 
 	RETURN_LONG(SDL_GetRevisionNumber());
 }
+/* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVersion, 0, 0, 1)
-	ZEND_ARG_INFO(1, version_array)
+	ZEND_ARG_ARRAY_INFO(1, version, 0)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto void SDL_GetVersion(array &version)
+
  *  \brief Get the version of SDL that is linked against your program.
  *
  *  If you are linking to SDL dynamically, then it is possible that the
@@ -120,12 +125,16 @@ PHP_FUNCTION(SDL_GetVersion)
 	zval_dtor(version_array);
 	convert_sdl_version_to_php_array(&version, version_array);
 }
+/* }}} */
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION, 0, 0, 1)
-	ZEND_ARG_INFO(1, version_array)
+	ZEND_ARG_ARRAY_INFO(1, version, 0)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto void SDL_VERSION(array &version)
+
+ *
  *  \brief Macro to determine SDL version program was compiled against.
  *
  *  This macro fills in a SDL_version structure with the version of the
@@ -152,6 +161,8 @@ PHP_FUNCTION(SDL_VERSION)
 	zval_dtor(version_array);
 	convert_sdl_version_to_php_array(&version, version_array);
 }
+/* }}} */
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSIONNUM, 0, 0, 3)
 	ZEND_ARG_INFO(0, x)
@@ -159,7 +170,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSIONNUM, 0, 0, 3)
 	ZEND_ARG_INFO(0, z)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto long SDL_VERSIONNUM(int x, int y, int z)
+
  *  This macro turns the version numbers into a numeric value:
  *  \verbatim
     (1,2,3) -> (1203)
@@ -177,6 +189,8 @@ PHP_FUNCTION(SDL_VERSIONNUM)
 
 	RETURN_LONG(SDL_VERSIONNUM((Uint8)x, (Uint8)y, (Uint8)z));
 }
+/* }}} */
+
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION_ATLEAST, 0, 0, 3)
 	ZEND_ARG_INFO(0, x)
@@ -184,7 +198,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION_ATLEAST, 0, 0, 3)
 	ZEND_ARG_INFO(0, z)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto bool SDL_VERSION_ATLEAST(int x, int y, int z)
+
  *  This macro will evaluate to true if compiled with SDL at least X.Y.Z.
  */
 PHP_FUNCTION(SDL_VERSION_ATLEAST)
@@ -197,6 +212,7 @@ PHP_FUNCTION(SDL_VERSION_ATLEAST)
 
 	RETURN_BOOL(SDL_VERSION_ATLEAST((Uint8)x, (Uint8)y, (Uint8)z));
 }
+/* }}} */
 
 
 /* {{{ sdl_version_functions[] */

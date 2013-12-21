@@ -883,13 +883,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetVersion ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> &$version_array ]
+        Parameter #0 [ <required> array &$version ]
       }
     }
     Function [ <internal:SDL> function SDL_VERSION ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> &$version_array ]
+        Parameter #0 [ <required> array &$version ]
       }
     }
     Function [ <internal:SDL> function SDL_VERSIONNUM ] {
