@@ -38,6 +38,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 - implemented classes:
   SDL_Color
   SDL_DisplayMode
+  SDL_GLContext
   SDL_MessageBoxButtonData
   SDL_MessageBoxColor
   SDL_MessageBoxData
@@ -66,6 +67,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='rect.h'/>
       <file role='src' name='error.c'/>
       <file role='src' name='error.h'/>
+      <file role='src' name='glcontext.c'/>
+      <file role='src' name='glcontext.h'/>
       <file role='src' name='messagebox.c'/>
       <file role='src' name='messagebox.h'/>
       <file role='src' name='pixels.c'/>

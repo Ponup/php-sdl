@@ -1,10 +1,41 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [134] {
+  - Constants [165] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
     Constant [ integer SDL_BLENDMODE_MOD ] { 4 }
+    Constant [ integer SDL_GL_RED_SIZE ] { 0 }
+    Constant [ integer SDL_GL_GREEN_SIZE ] { 1 }
+    Constant [ integer SDL_GL_BLUE_SIZE ] { 2 }
+    Constant [ integer SDL_GL_ALPHA_SIZE ] { 3 }
+    Constant [ integer SDL_GL_BUFFER_SIZE ] { 4 }
+    Constant [ integer SDL_GL_DOUBLEBUFFER ] { 5 }
+    Constant [ integer SDL_GL_DEPTH_SIZE ] { 6 }
+    Constant [ integer SDL_GL_STENCIL_SIZE ] { 7 }
+    Constant [ integer SDL_GL_ACCUM_RED_SIZE ] { 8 }
+    Constant [ integer SDL_GL_ACCUM_GREEN_SIZE ] { 9 }
+    Constant [ integer SDL_GL_ACCUM_BLUE_SIZE ] { 10 }
+    Constant [ integer SDL_GL_ACCUM_ALPHA_SIZE ] { 11 }
+    Constant [ integer SDL_GL_STEREO ] { 12 }
+    Constant [ integer SDL_GL_MULTISAMPLEBUFFERS ] { 13 }
+    Constant [ integer SDL_GL_MULTISAMPLESAMPLES ] { 14 }
+    Constant [ integer SDL_GL_ACCELERATED_VISUAL ] { 15 }
+    Constant [ integer SDL_GL_RETAINED_BACKING ] { 16 }
+    Constant [ integer SDL_GL_SHARE_WITH_CURRENT_CONTEXT ] { 22 }
+    Constant [ integer SDL_GL_FRAMEBUFFER_SRGB_CAPABLE ] { 23 }
+    Constant [ integer SDL_GL_CONTEXT_MAJOR_VERSION ] { 17 }
+    Constant [ integer SDL_GL_CONTEXT_MINOR_VERSION ] { 18 }
+    Constant [ integer SDL_GL_CONTEXT_EGL ] { 19 }
+    Constant [ integer SDL_GL_CONTEXT_FLAGS ] { 20 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_MASK ] { 21 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_CORE ] { 1 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_COMPATIBILITY ] { 2 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_ES ] { 4 }
+    Constant [ integer SDL_GL_CONTEXT_DEBUG_FLAG ] { 1 }
+    Constant [ integer SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG ] { 2 }
+    Constant [ integer SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG ] { 4 }
+    Constant [ integer SDL_GL_CONTEXT_RESET_ISOLATION_FLAG ] { 8 }
     Constant [ integer SDL_MESSAGEBOX_ERROR ] { 16 }
     Constant [ integer SDL_MESSAGEBOX_WARNING ] { 32 }
     Constant [ integer SDL_MESSAGEBOX_INFORMATION ] { 64 }
@@ -212,6 +243,38 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_ClearError ] {
 
       - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_ExtensionSupported ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $extension ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SetAttribute ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $attr ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetAttribute ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $attr ]
+        Parameter #1 [ <required> &$value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_CreateContext ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_DeleteContext ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_GLContext $GLcontext ]
       }
     }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
@@ -1289,7 +1352,68 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [13] {
+  - Classes [14] {
+    Class [ <internal:SDL> class SDL_GLContext ] {
+
+      - Constants [31] {
+        Constant [ integer RED_SIZE ] { 0 }
+        Constant [ integer GREEN_SIZE ] { 1 }
+        Constant [ integer BLUE_SIZE ] { 2 }
+        Constant [ integer ALPHA_SIZE ] { 3 }
+        Constant [ integer BUFFER_SIZE ] { 4 }
+        Constant [ integer DOUBLEBUFFER ] { 5 }
+        Constant [ integer DEPTH_SIZE ] { 6 }
+        Constant [ integer STENCIL_SIZE ] { 7 }
+        Constant [ integer ACCUM_RED_SIZE ] { 8 }
+        Constant [ integer ACCUM_GREEN_SIZE ] { 9 }
+        Constant [ integer ACCUM_BLUE_SIZE ] { 10 }
+        Constant [ integer ACCUM_ALPHA_SIZE ] { 11 }
+        Constant [ integer STEREO ] { 12 }
+        Constant [ integer MULTISAMPLEBUFFERS ] { 13 }
+        Constant [ integer MULTISAMPLESAMPLES ] { 14 }
+        Constant [ integer ACCELERATED_VISUAL ] { 15 }
+        Constant [ integer RETAINED_BACKING ] { 16 }
+        Constant [ integer SHARE_WITH_CURRENT_CONTEXT ] { 22 }
+        Constant [ integer FRAMEBUFFER_SRGB_CAPABLE ] { 23 }
+        Constant [ integer MAJOR_VERSION ] { 17 }
+        Constant [ integer MINOR_VERSION ] { 18 }
+        Constant [ integer EGL ] { 19 }
+        Constant [ integer FLAGS ] { 20 }
+        Constant [ integer PROFILE_MASK ] { 21 }
+        Constant [ integer PROFILE_CORE ] { 1 }
+        Constant [ integer PROFILE_COMPATIBILITY ] { 2 }
+        Constant [ integer PROFILE_ES ] { 4 }
+        Constant [ integer DEBUG_FLAG ] { 1 }
+        Constant [ integer FORWARD_COMPATIBLE_FLAG ] { 2 }
+        Constant [ integer ROBUST_ACCESS_FLAG ] { 4 }
+        Constant [ integer RESET_ISOLATION_FLAG ] { 8 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Window $window ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Delete ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
     Class [ <internal:SDL> class SDL_MessageBoxColor ] {
 
       - Constants [6] {
