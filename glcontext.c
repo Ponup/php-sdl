@@ -417,7 +417,7 @@ PHP_FUNCTION(SDL_GL_GetDrawableSize)
 	SDL_Window *window;
 	int w, h;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, get_php_sdl_window_ce(), &z_w, &z_h)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozz", &z_window, get_php_sdl_window_ce(), &z_w, &z_h)) {
 		return;
 	}
 	window = zval_to_sdl_window(z_window TSRMLS_CC);
