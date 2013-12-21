@@ -356,7 +356,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MessageBoxData__construct, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, parentwindow, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_MessageBoxData, __construct(int flags, string title, string text [, array buttons [, arrar colors [, SDL_Window window ]]])
+/* {{{ proto SDL_MessageBoxData, __construct(int flags, string title, string text [, array buttons [, array colors [, SDL_Window window ]]])
 
  *  \brief MessageBox structure containing title, text, window, etc.
  typedef struct

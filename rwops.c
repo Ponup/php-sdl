@@ -612,7 +612,7 @@ PHP_FUNCTION(SDL_RWread)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWwrite, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
        ZEND_ARG_INFO(0, buffer)
        ZEND_ARG_INFO(0, size)
        ZEND_ARG_INFO(0, number)
@@ -809,7 +809,7 @@ PHP_FUNCTION(SDL_ReadBE64)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_write, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
        ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -975,7 +975,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_rwops_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ sdl_rwops_methods[] */

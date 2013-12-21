@@ -299,12 +299,12 @@ PHP_FUNCTION(SDL_HasIntersection)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
        ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 1)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
@@ -362,7 +362,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
        ZEND_ARG_ARRAY_INFO(0, point, 0)
        ZEND_ARG_INFO(0, count)
        ZEND_ARG_OBJ_INFO(0, clip, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(1, rect, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(1, rect, SDL_Rect, 1)
 ZEND_END_ARG_INFO()
 
 

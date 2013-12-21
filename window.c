@@ -58,17 +58,19 @@ zend_class_entry *get_php_sdl_window_ce(void)
 }
 
 /* {{{ sdl_window_to_zval */
-zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, Uint32 flags TSRMLS_DC)
+zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val TSRMLS_DC)
 {
 	if (window) {
-		struct php_sdl_window *intern;
+		zend_object_handle h;
 
-		object_init_ex(z_val, php_sdl_window_ce);
-		intern = (struct php_sdl_window *)zend_object_store_get_object(z_val TSRMLS_CC);
-		intern->window = window;
-		intern->flags  = flags;
-
-		return 1;
+		h = (zend_object_handle)(unsigned long)SDL_GetWindowData(window, PHP_SDL_MAGICDATA);
+		if (h) {
+			Z_TYPE_P(z_val) = IS_OBJECT;
+			Z_OBJ_HANDLE_P(z_val) = h;
+			Z_OBJ_HT_P(z_val) = (zend_object_handlers *) &php_sdl_window_handlers;
+			zend_objects_store_add_ref(z_val TSRMLS_CC);
+			return 1;
+		}
 	}
 	ZVAL_NULL(z_val);
 	return 0;
@@ -197,11 +199,11 @@ static PHP_FUNCTION(SDL_SetWindowDisplayMode)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowDisplayMode, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 0)
+       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetDisplayMode, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 0)
+       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 1)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
@@ -289,22 +291,11 @@ ZEND_END_ARG_INFO()
 static PHP_FUNCTION(SDL_GetWindowFromID)
 {
 	long id;
-	zend_object_handle h;
-	SDL_Window *window;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id)) {
 		return;
 	}
-	window = SDL_GetWindowFromID((Uint32)id);
-	if (window) {
-		h = (zend_object_handle)(unsigned long)SDL_GetWindowData(window, PHP_SDL_MAGICDATA);
-		if (h) {
-			Z_TYPE_P(return_value) = IS_OBJECT;
-			Z_OBJ_HANDLE_P(return_value) = h;
-			Z_OBJ_HT_P(return_value) = (zend_object_handlers *) &php_sdl_window_handlers;
-			zend_objects_store_add_ref(return_value TSRMLS_CC);
-		}
-	}
+	sdl_window_to_zval(SDL_GetWindowFromID((Uint32)id), return_value TSRMLS_CC);
 }
 
 /* {{{ proto int SDL_GetWindowFlags(SDL_Window window)

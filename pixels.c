@@ -702,7 +702,7 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette palette, 0)
+       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
        ZEND_ARG_ARRAY_INFO(0, colors, 0)
        ZEND_ARG_INFO(0, first)
        ZEND_ARG_INFO(0, ncolors)
@@ -1037,7 +1037,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CalculateGammaRamp, 0, 0, 2)
        ZEND_ARG_INFO(0, gamma)
-       ZEND_ARG_ARRAY_INFO(1, ramp, 0)
+       ZEND_ARG_ARRAY_INFO(1, ramp, 1)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_CalculateGammaRamp(float gamma, array &ramp)
