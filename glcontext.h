@@ -27,8 +27,12 @@ extern "C" {
 #endif
 
 zend_class_entry *get_php_sdl_glcontext_ce(void);
-zend_bool  sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags, char *buf TSRMLS_DC);
+zend_bool  sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags TSRMLS_DC);
 SDL_GLContext zval_to_sdl_glcontext(zval *z_val TSRMLS_DC);
+
+PHP_FUNCTION(SDL_GL_CreateContext);
+PHP_FUNCTION(SDL_GL_MakeCurrent);
+PHP_FUNCTION(SDL_GL_GetCurrentWindow);
 
 PHP_MINIT_FUNCTION(sdl_glcontext);
 

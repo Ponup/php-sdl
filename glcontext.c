@@ -66,7 +66,7 @@ zend_class_entry *get_php_sdl_glcontext_ce(void)
 }
 
 /* {{{ sdl_glcontext_to_zval */
-zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags, char *buf TSRMLS_DC)
+zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags TSRMLS_DC)
 {
 	if (glcontext) {
 		struct php_sdl_glcontext *intern;
@@ -259,7 +259,7 @@ static PHP_METHOD(SDL_GLContext, __construct)
  extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window *
                                                             window);
  */
-static PHP_FUNCTION(SDL_GL_CreateContext)
+PHP_FUNCTION(SDL_GL_CreateContext)
 {
 	SDL_GLContext context;
 	zval *z_window;
@@ -271,7 +271,7 @@ static PHP_FUNCTION(SDL_GL_CreateContext)
 	window = zval_to_sdl_window(z_window TSRMLS_CC);
 	if (window) {
 		context = SDL_GL_CreateContext(window);
-		sdl_glcontext_to_zval(context, return_value, 0, NULL TSRMLS_CC);
+		sdl_glcontext_to_zval(context, return_value, 0 TSRMLS_CC);
 	} else {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
 	}
@@ -281,7 +281,7 @@ static PHP_FUNCTION(SDL_GL_CreateContext)
 
 /* {{{ proto void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context)
 
-  *  \brief Delete an OpenGL context.
+ *  \brief Delete an OpenGL context.
  *
  *  \sa SDL_GL_CreateContext()
  extern DECLSPEC void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context);
@@ -303,6 +303,71 @@ static PHP_FUNCTION(SDL_GL_DeleteContext)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_MakeCurrent, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(0, context, SDL_GLContext, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDLCALL SDL_GL_MakeCurrent(SDL_Window window, SDL_GLContext context)
+
+ *  \brief Set up an OpenGL context for rendering into an OpenGL window.
+ *
+ *  \note The context must have been created with a compatible window.
+ extern DECLSPEC int SDLCALL SDL_GL_MakeCurrent(SDL_Window * window,
+                                                SDL_GLContext context);
+ */
+PHP_FUNCTION(SDL_GL_MakeCurrent)
+{
+	struct php_sdl_glcontext *intern;
+	zval *z_context, *z_window;
+	SDL_GLContext context;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_window, get_php_sdl_window_ce(), &z_context, php_sdl_glcontext_ce)) {
+		return;
+	}
+	FETCH_GLCONTEXT(context, z_context, 1);
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if (window) {
+		RETVAL_LONG(SDL_GL_MakeCurrent(window, context));
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Window SDLCALL SDL_GL_GetCurrentWindow(void)
+
+ *  \brief Get the currently active OpenGL window.
+ extern DECLSPEC SDL_Window* SDLCALL SDL_GL_GetCurrentWindow(void);
+ */
+PHP_FUNCTION(SDL_GL_GetCurrentWindow)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value TSRMLS_CC);
+}
+
+
+/* {{{ proto SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void)
+
+ *  \brief Get the currently active OpenGL context.
+ extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void);
+ */
+static PHP_FUNCTION(SDL_GL_GetCurrentContext)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, SDL_DONTFREE TSRMLS_CC);
+}
+
+
+
+/* generic arginfo */
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
@@ -315,6 +380,7 @@ static const zend_function_entry php_sdl_glcontext_methods[] = {
 	PHP_ME(SDL_GLContext,       __construct,                arginfo_SDL_GLContext__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 
 	PHP_FALIAS(Delete,          SDL_GL_DeleteContext,       arginfo_none)
+	PHP_FALIAS(GL_GetCurrent,   SDL_GL_GetCurrentContext,   arginfo_none)
 	ZEND_FE_END
 };
 /* }}} */
@@ -327,6 +393,9 @@ zend_function_entry sdl_glcontext_functions[] = {
 	ZEND_FE(SDL_GL_GetAttribute,                         arginfo_SDL_GL_GetAttribute)
 	ZEND_FE(SDL_GL_CreateContext,                        arginfo_SDL_GLContext__construct)
 	ZEND_FE(SDL_GL_DeleteContext,                        arginfo_SDL_GLContext)
+	ZEND_FE(SDL_GL_MakeCurrent,                          arginfo_SDL_GL_MakeCurrent)
+	ZEND_FE(SDL_GL_GetCurrentWindow,                     arginfo_none)
+	ZEND_FE(SDL_GL_GetCurrentContext,                    arginfo_none)
 	ZEND_FE_END
 };
 /* }}} */

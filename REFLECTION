@@ -277,6 +277,23 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> SDL_GLContext $GLcontext ]
       }
     }
+    Function [ <internal:SDL> function SDL_GL_MakeCurrent ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> SDL_GLContext $context ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetCurrentWindow ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetCurrentContext ] {
+
+      - Parameters [0] {
+      }
+    }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
 
       - Parameters [4] {
@@ -1398,7 +1415,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [2] {
+      - Methods [3] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
@@ -1407,6 +1424,12 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method Delete ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_GetCurrent ] {
 
           - Parameters [0] {
           }
@@ -2477,7 +2500,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [39] {
+      - Methods [42] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2750,6 +2773,25 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
             Parameter #0 [ <required> &$red ]
             Parameter #1 [ <required> &$green ]
             Parameter #2 [ <required> &$blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_CreateContext ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_MakeCurrent ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_GLContext $context ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_GetCurrent ] {
+
+          - Parameters [0] {
           }
         }
       }

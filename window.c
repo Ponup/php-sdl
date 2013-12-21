@@ -33,9 +33,11 @@
 */
 
 #include "php_sdl.h"
+#include "glcontext.h"
 #include "rect.h"
 #include "surface.h"
 #include "video.h"
+#include "window.h"
 
 /* used to associate PHP object handle to SDL_Window */
 #define PHP_SDL_MAGICDATA "__php__handle"
@@ -1627,6 +1629,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, context, SDL_GLContext, 0)
+ZEND_END_ARG_INFO()
+
 
 /* {{{ sdl_window_functions[] */
 zend_function_entry sdl_window_functions[] = {
@@ -1718,6 +1724,9 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetBrightness,      SDL_GetWindowBrightness,      arginfo_window_none)
 	PHP_FALIAS(SetGammaRamp,       SDL_SetWindowGammaRamp,       arginfo_SDL_Window_SetGammaRamp)
 	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
+	PHP_FALIAS(GL_CreateContext,   SDL_GL_CreateContext,         arginfo_window_none)
+	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
+	PHP_FALIAS(GL_GetCurrent,      SDL_GL_GetCurrentWindow,      arginfo_window_none)
 
 	PHP_FE_END
 };
