@@ -84,7 +84,7 @@ PHP_FUNCTION(SDL_GetRevisionNumber)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVersion, 0, 0, 1)
-	ZEND_ARG_ARRAY_INFO(1, version, 1)
+	ZEND_ARG_INFO(1, version)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_GetVersion(array &version)
@@ -129,7 +129,7 @@ PHP_FUNCTION(SDL_GetVersion)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION, 0, 0, 1)
-	ZEND_ARG_ARRAY_INFO(1, version, 1)
+	ZEND_ARG_INFO(1, version)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_VERSION(array &version)

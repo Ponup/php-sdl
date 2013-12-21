@@ -353,7 +353,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> $gamma ]
-        Parameter #1 [ <required> array or NULL &$ramp ]
+        Parameter #1 [ <required> &$ramp ]
       }
     }
     Function [ <internal:SDL> function SDL_RectEmpty ] {
@@ -381,7 +381,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [3] {
         Parameter #0 [ <required> SDL_Rect $rectA ]
         Parameter #1 [ <required> SDL_Rect $rectB ]
-        Parameter #2 [ <required> SDL_Rect or NULL &$result ]
+        Parameter #2 [ <required> &$result ]
       }
     }
     Function [ <internal:SDL> function SDL_UnionRect ] {
@@ -389,7 +389,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [3] {
         Parameter #0 [ <required> SDL_Rect $rectA ]
         Parameter #1 [ <required> SDL_Rect $rectB ]
-        Parameter #2 [ <required> SDL_Rect or NULL &$result ]
+        Parameter #2 [ <required> &$result ]
       }
     }
     Function [ <internal:SDL> function SDL_IntersectRectAndLine ] {
@@ -408,7 +408,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> array $point ]
         Parameter #1 [ <required> $count ]
         Parameter #2 [ <required> SDL_Rect $clip ]
-        Parameter #3 [ <required> SDL_Rect or NULL &$rect ]
+        Parameter #3 [ <required> &$rect ]
       }
     }
     Function [ <internal:SDL> function SDL_AllocRW ] {
@@ -883,13 +883,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetVersion ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> array or NULL &$version ]
+        Parameter #0 [ <required> &$version ]
       }
     }
     Function [ <internal:SDL> function SDL_VERSION ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> array or NULL &$version ]
+        Parameter #0 [ <required> &$version ]
       }
     }
     Function [ <internal:SDL> function SDL_VERSIONNUM ] {
@@ -950,7 +950,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> $displayIndex ]
-        Parameter #1 [ <required> SDL_Rect or NULL &$rect ]
+        Parameter #1 [ <required> &$rect ]
       }
     }
     Function [ <internal:SDL> function SDL_GetNumDisplayModes ] {
@@ -983,7 +983,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [3] {
         Parameter #0 [ <required> $displayIndex ]
         Parameter #1 [ <required> SDL_DisplayMode $desired ]
-        Parameter #2 [ <optional> SDL_DisplayMode or NULL &$closest ]
+        Parameter #2 [ <optional> &$closest ]
       }
     }
     Function [ <internal:SDL> function SDL_IsScreenSaverEnabled ] {
@@ -1096,7 +1096,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> SDL_Window $window ]
-        Parameter #1 [ <required> SDL_DisplayMode or NULL &$displaymode ]
+        Parameter #1 [ <required> &$displaymode ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowPixelFormat ] {
@@ -1767,7 +1767,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [2] {
             Parameter #0 [ <required> SDL_Rect $rect ]
-            Parameter #1 [ <required> SDL_Rect or NULL &$result ]
+            Parameter #1 [ <required> &$result ]
           }
         }
 
@@ -1775,7 +1775,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [2] {
             Parameter #0 [ <required> SDL_Rect $rect ]
-            Parameter #1 [ <required> SDL_Rect or NULL &$result ]
+            Parameter #1 [ <required> &$result ]
           }
         }
 
@@ -2437,7 +2437,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method GetDisplayMode ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> SDL_DisplayMode or NULL &$displaymode ]
+            Parameter #0 [ <required> &$displaymode ]
           }
         }
 

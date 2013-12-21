@@ -199,11 +199,11 @@ static PHP_FUNCTION(SDL_SetWindowDisplayMode)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowDisplayMode, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 1)
+       ZEND_ARG_INFO(1, displaymode)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetDisplayMode, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 1)
+       ZEND_ARG_INFO(1, displaymode)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)

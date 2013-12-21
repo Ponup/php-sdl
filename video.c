@@ -309,7 +309,7 @@ PHP_FUNCTION(SDL_GetDisplayName)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
        ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_OBJ_INFO(1, rect, SDL_Rect, 1)
+       ZEND_ARG_INFO(1, rect)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array SDL_GetDisplayBounds(int displayIndex, SDL_Rect &rect)
@@ -439,7 +439,7 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
        ZEND_ARG_INFO(0, displayIndex)
        ZEND_ARG_OBJ_INFO(0, desired, SDL_DisplayMode, 0)
-       ZEND_ARG_OBJ_INFO(1, closest, SDL_DisplayMode, 1)
+       ZEND_ARG_INFO(1, closest)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_DisplayMode SDL_GetClosestDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])

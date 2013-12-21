@@ -1037,7 +1037,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CalculateGammaRamp, 0, 0, 2)
        ZEND_ARG_INFO(0, gamma)
-       ZEND_ARG_ARRAY_INFO(1, ramp, 1)
+       ZEND_ARG_INFO(1, ramp)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_CalculateGammaRamp(float gamma, array &ramp)
