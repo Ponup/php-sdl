@@ -483,7 +483,7 @@ PHP_FUNCTION(SDL_RWsize)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWseek, 0, 0, 3)
-       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
        ZEND_ARG_INFO(0, offset)
        ZEND_ARG_INFO(0, whence)
 ZEND_END_ARG_INFO()
@@ -493,7 +493,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_seek, 0, 0, 2)
        ZEND_ARG_INFO(0, whence)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDL_RWsize(SDL_RWops area)
+/* {{{ proto int SDL_RWseek(SDL_RWops area, int offset, int whence)
 
  define SDL_RWseek(ctx, offset, whence) (ctx)->seek(ctx, offset, whence)
  */
@@ -559,7 +559,7 @@ PHP_FUNCTION(SDL_RWclose)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWread, 0, 0, 3)
-       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
        ZEND_ARG_INFO(1, buffer)
        ZEND_ARG_INFO(0, size)
        ZEND_ARG_INFO(0, number)
@@ -571,7 +571,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_read, 0, 0, 2)
        ZEND_ARG_INFO(0, number)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDL_RWread(SDL_RWops arean string, &buf, [ int size=1 ,] int n)
+/* {{{ proto int SDL_RWread(SDL_RWops area, string, &buf, [ int size=1 ,] int n)
 
  define SDL_RWread(ctx, ptr, size, n)   (ctx)->read(ctx, ptr, size, n)
  */
@@ -612,7 +612,7 @@ PHP_FUNCTION(SDL_RWread)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWwrite, 0, 0, 2)
-       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
        ZEND_ARG_INFO(0, buffer)
        ZEND_ARG_INFO(0, size)
        ZEND_ARG_INFO(0, number)
@@ -809,7 +809,7 @@ PHP_FUNCTION(SDL_ReadBE64)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_write, 0, 0, 2)
-       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
        ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
@@ -975,7 +975,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_rwops_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops, 0, 0, 1)
-       ZEND_ARG_INFO(0, RWops)
+       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWseek, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ sdl_rwops_methods[] */
