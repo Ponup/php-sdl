@@ -1257,6 +1257,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> SDL_Window $window ]
       }
     }
+    Function [ <internal:SDL> function SDL_SetWindowGammaRamp ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> array $red ]
+        Parameter #2 [ <required> array $green ]
+        Parameter #3 [ <required> array $blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowGammaRamp ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$red ]
+        Parameter #2 [ <required> &$green ]
+        Parameter #3 [ <required> &$blue ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -2335,7 +2353,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Properties [0] {
       }
 
-      - Methods [37] {
+      - Methods [39] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2590,6 +2608,24 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method GetBrightness ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetGammaRamp ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> array $red ]
+            Parameter #1 [ <required> array $green ]
+            Parameter #2 [ <required> array $blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetGammaRamp ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$red ]
+            Parameter #1 [ <required> &$green ]
+            Parameter #2 [ <required> &$blue ]
           }
         }
       }

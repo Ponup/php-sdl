@@ -1226,7 +1226,21 @@ static PHP_FUNCTION(SDL_GetWindowBrightness)
 }
 /* }}} */
 
-/**
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowGammaRamp, 0, 0, 4)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_ARRAY_INFO(0, red, 0)
+       ZEND_ARG_ARRAY_INFO(0, green, 0)
+       ZEND_ARG_ARRAY_INFO(0, blue, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetGammaRamp, 0, 0, 3)
+       ZEND_ARG_ARRAY_INFO(0, red, 0)
+       ZEND_ARG_ARRAY_INFO(0, green, 0)
+       ZEND_ARG_ARRAY_INFO(0, blue, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetWindowGammaRamp(SDL Window window, array red, array green, array blue)
+
  *  \brief Set the gamma ramp for a window.
  *
  *  \param window The window for which the gamma ramp should be set.
@@ -1248,8 +1262,86 @@ static PHP_FUNCTION(SDL_GetWindowBrightness)
                                                     const Uint16 * green,
                                                     const Uint16 * blue);
  */
+static PHP_FUNCTION(SDL_SetWindowGammaRamp)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_r, *z_g, *z_b;
+	SDL_Window *window;
+	Uint16 r[256], g[256], b[256];
+	zval **ppzval, tmp;
+	int i;
 
-/**
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oaaa", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+
+	if (zend_hash_num_elements(Z_ARRVAL_P(z_r))<256
+	    || zend_hash_num_elements(Z_ARRVAL_P(z_g))<256
+	    || zend_hash_num_elements(Z_ARRVAL_P(z_b))<256) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Each array must contains 256 value");
+		return;
+	}
+	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_r));
+	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_g));
+	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_b));
+	for (i=0 ; i<256 ; i++) {
+		zend_hash_get_current_data(Z_ARRVAL_P(z_r), (void **) &ppzval);
+		if (Z_TYPE_PP(ppzval) == IS_LONG) {
+			r[i] = Z_LVAL_PP(ppzval);
+		} else {
+			tmp = **ppzval;
+			zval_copy_ctor(&tmp);
+			convert_to_long(&tmp);
+			r[i] = Z_LVAL(tmp);
+			zval_dtor(&tmp);
+		}
+		zend_hash_move_forward(Z_ARRVAL_P(z_r));
+
+		zend_hash_get_current_data(Z_ARRVAL_P(z_g), (void **) &ppzval);
+		if (Z_TYPE_PP(ppzval) == IS_LONG) {
+			g[i] = Z_LVAL_PP(ppzval);
+		} else {
+			tmp = **ppzval;
+			zval_copy_ctor(&tmp);
+			convert_to_long(&tmp);
+			g[i] = Z_LVAL(tmp);
+			zval_dtor(&tmp);
+		}
+		zend_hash_move_forward(Z_ARRVAL_P(z_g));
+
+		zend_hash_get_current_data(Z_ARRVAL_P(z_b), (void **) &ppzval);
+		if (Z_TYPE_PP(ppzval) == IS_LONG) {
+			b[i] = Z_LVAL_PP(ppzval);
+		} else {
+			tmp = **ppzval;
+			zval_copy_ctor(&tmp);
+			convert_to_long(&tmp);
+			b[i] = Z_LVAL(tmp);
+			zval_dtor(&tmp);
+		}
+		zend_hash_move_forward(Z_ARRVAL_P(z_b));
+	}
+	RETVAL_LONG(SDL_SetWindowGammaRamp(window, r, g, b));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowGammaRamp, 0, 0, 4)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_INFO(1, red)
+       ZEND_ARG_INFO(1, green)
+       ZEND_ARG_INFO(1, blue)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetGammaRamp, 0, 0, 3)
+       ZEND_ARG_INFO(1, red)
+       ZEND_ARG_INFO(1, green)
+       ZEND_ARG_INFO(1, blue)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_GetWindowGammaRamp(SDL Window window, array &red, array &green, array &blue)
+
  *  \brief Get the gamma ramp for a window.
  *
  *  \param window The window from which the gamma ramp should be queried.
@@ -1268,6 +1360,46 @@ static PHP_FUNCTION(SDL_GetWindowBrightness)
                                                     Uint16 * green,
                                                     Uint16 * blue);
  */
+static PHP_FUNCTION(SDL_GetWindowGammaRamp)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_r, *z_g, *z_b;
+	SDL_Window *window;
+	Uint16 r[256], g[256], b[256];
+	zval *tmp;
+	int i, ret;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b)) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+
+	ret = SDL_GetWindowGammaRamp(window, r, g, b);
+	if (ret == 0) {
+		zval_dtor(z_r);
+		array_init(z_r);
+		zval_dtor(z_g);
+		array_init(z_g);
+		zval_dtor(z_b);
+		array_init(z_b);
+
+		for (i=0 ; i<256 ; i++) {
+			MAKE_STD_ZVAL(tmp);
+			ZVAL_LONG(tmp, r[i]);
+			add_next_index_zval(z_r, tmp);
+
+			MAKE_STD_ZVAL(tmp);
+			ZVAL_LONG(tmp, g[i]);
+			add_next_index_zval(z_g, tmp);
+
+			MAKE_STD_ZVAL(tmp);
+			ZVAL_LONG(tmp, b[i]);
+			add_next_index_zval(z_b, tmp);
+		}
+	}
+	RETVAL_LONG(ret);
+}
+/* }}} */
 
 
 /**
@@ -1674,6 +1806,8 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowGrab,				arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowBrightness,		arginfo_SDL_SetWindowBrightness)
 	ZEND_FE(SDL_GetWindowBrightness,		arginfo_SDL_Window)
+	ZEND_FE(SDL_SetWindowGammaRamp, 		arginfo_SDL_SetWindowGammaRamp)
+	ZEND_FE(SDL_GetWindowGammaRamp, 		arginfo_SDL_GetWindowGammaRamp)
 
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
@@ -1721,6 +1855,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetGrab,            SDL_GetWindowGrab,            arginfo_window_none)
 	PHP_FALIAS(SetBrightness,      SDL_SetWindowBrightness,      arginfo_SDL_Window_SetBrightness)
 	PHP_FALIAS(GetBrightness,      SDL_GetWindowBrightness,      arginfo_window_none)
+	PHP_FALIAS(SetGammaRamp,       SDL_SetWindowGammaRamp,       arginfo_SDL_Window_SetGammaRamp)
+	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
 
 	PHP_FE_END
 };
