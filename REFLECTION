@@ -1015,100 +1015,100 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_DestroyWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_UpdateWindowSurface ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowTitle ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowTitle ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $title ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowDisplayIndex ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_ShowWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_HideWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_RaiseWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_MaximizeWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_MinimizeWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_RestoreWindow ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowSurface ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowDisplayMode ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
-        Parameter #1 [ <required> $displaymode ]
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_DisplayMode $displaymode ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowDisplayMode ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
-        Parameter #1 [ <required> &$displaymode ]
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_DisplayMode &$displaymode ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowPixelFormat ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowID ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowFromID ] {
@@ -1120,13 +1120,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowFlags ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowData ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $name ]
         Parameter #2 [ <required> $value ]
       }
@@ -1134,21 +1134,21 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowData ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $name ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowIcon ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
-        Parameter #1 [ <required> $icon ]
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_Surface $icon ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowPosition ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $x ]
         Parameter #2 [ <required> $y ]
       }
@@ -1156,7 +1156,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowPosition ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <optional> &$x ]
         Parameter #2 [ <optional> &$y ]
       }
@@ -1164,7 +1164,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_SetWindowSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $x ]
         Parameter #2 [ <required> $y ]
       }
@@ -1172,7 +1172,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <optional> &$x ]
         Parameter #2 [ <optional> &$y ]
       }
@@ -1180,7 +1180,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_SetWindowMinimumSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $x ]
         Parameter #2 [ <required> $y ]
       }
@@ -1188,7 +1188,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowMinimumSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <optional> &$x ]
         Parameter #2 [ <optional> &$y ]
       }
@@ -1196,7 +1196,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_SetWindowMaximumSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $x ]
         Parameter #2 [ <required> $y ]
       }
@@ -1204,7 +1204,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetWindowMaximumSize ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <optional> &$x ]
         Parameter #2 [ <optional> &$y ]
       }
@@ -1212,36 +1212,36 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_SetWindowBordered ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $bordered ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowFullscreen ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $flags ]
       }
     }
     Function [ <internal:SDL> function SDL_UpdateWindowSurfaceRects ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $window ]
-        Parameter #1 [ <required> $rects ]
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> array $rects ]
         Parameter #2 [ <optional> $numrect ]
       }
     }
     Function [ <internal:SDL> function SDL_SetWindowGrab ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
         Parameter #1 [ <required> $grabbed ]
       }
     }
     Function [ <internal:SDL> function SDL_GetWindowGrab ] {
 
       - Parameters [1] {
-        Parameter #0 [ <required> $window ]
+        Parameter #0 [ <required> SDL_Window $window ]
       }
     }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
@@ -2417,14 +2417,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method SetDisplayMode ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> $displaymode ]
+            Parameter #0 [ <required> SDL_DisplayMode $displaymode ]
           }
         }
 
         Method [ <internal:SDL> public method GetDisplayMode ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> &$displaymode ]
+            Parameter #0 [ <required> SDL_DisplayMode &$displaymode ]
           }
         }
 
@@ -2464,7 +2464,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method SetIcon ] {
 
           - Parameters [1] {
-            Parameter #0 [ <required> $icon ]
+            Parameter #0 [ <required> SDL_Surface $icon ]
           }
         }
 
@@ -2548,10 +2548,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
         Method [ <internal:SDL> public method UpdateSurfaceRects ] {
 
-          - Parameters [3] {
-            Parameter #0 [ <required> $flags ]
-            Parameter #1 [ <optional> $rects ]
-            Parameter #2 [ <optional> $numrect ]
+          - Parameters [2] {
+            Parameter #0 [ <required> array $rects ]
+            Parameter #1 [ <optional> $numrect ]
           }
         }
 

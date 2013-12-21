@@ -151,12 +151,12 @@ static PHP_FUNCTION(SDL_GetWindowDisplayIndex)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
-       ZEND_ARG_INFO(0, displaymode)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(0, displaymode, SDL_DisplayMode, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetDisplayMode, 0, 0, 1)
-       ZEND_ARG_INFO(0, displaymode)
+       ZEND_ARG_OBJ_INFO(0, displaymode, SDL_DisplayMode, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
@@ -196,12 +196,12 @@ static PHP_FUNCTION(SDL_SetWindowDisplayMode)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
-       ZEND_ARG_INFO(1, displaymode)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetDisplayMode, 0, 0, 1)
-       ZEND_ARG_INFO(1, displaymode)
+       ZEND_ARG_OBJ_INFO(1, displaymode, SDL_DisplayMode, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
@@ -329,15 +329,15 @@ static PHP_FUNCTION(SDL_GetWindowFlags)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowIcon, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
-       ZEND_ARG_INFO(0, icon)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(0, icon, SDL_Surface, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetIcon, 0, 0, 1)
-       ZEND_ARG_INFO(0, icon)
+       ZEND_ARG_OBJ_INFO(0, icon, SDL_Surface, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDL_SetWindowIcon(SDL Window window, SDL_Surface icon)
+/* {{{ proto void SDL_SetWindowIcon(SDL_Window window, SDL_Surface icon)
 
  *  \brief Set the icon for a window.
  *
@@ -369,7 +369,7 @@ static PHP_FUNCTION(SDL_SetWindowIcon)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowData, 0, 0, 3)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, name)
        ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
@@ -426,7 +426,7 @@ static PHP_FUNCTION(SDL_SetWindowData)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowData, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, name)
 ZEND_END_ARG_INFO()
 
@@ -475,7 +475,7 @@ static PHP_FUNCTION(SDL_GetWindowData)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowPosition, 0, 0, 3)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, x)
        ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
@@ -554,7 +554,7 @@ static PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowPosition, 0, 0, 1)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(1, x)
        ZEND_ARG_INFO(1, y)
 ZEND_END_ARG_INFO()
@@ -803,7 +803,7 @@ static PHP_FUNCTION(SDL_GetWindowMaximumSize)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowBordered, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, bordered)
 ZEND_END_ARG_INFO()
 
@@ -982,7 +982,7 @@ static PHP_FUNCTION(SDL_RestoreWindow)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowFullscreen, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
@@ -1052,14 +1052,13 @@ static PHP_FUNCTION(SDL_GetWindowSurface)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpdateWindowSurfaceRects, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
-       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_ARRAY_INFO(0, rects, 0)
        ZEND_ARG_INFO(0, numrect)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_UpdateSurfaceRects, 0, 0, 1)
-       ZEND_ARG_INFO(0, flags)
-       ZEND_ARG_INFO(0, rects)
+       ZEND_ARG_ARRAY_INFO(0, rects, 0)
        ZEND_ARG_INFO(0, numrect)
 ZEND_END_ARG_INFO()
 
@@ -1121,7 +1120,7 @@ static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowGrab, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, grabbed)
 ZEND_END_ARG_INFO()
 
@@ -1564,7 +1563,7 @@ static PHP_FUNCTION(SDL_GetWindowTitle)
 /* }}} */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowTitle, 0, 0, 2)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, title)
 ZEND_END_ARG_INFO()
 
@@ -1602,7 +1601,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_window_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
-       ZEND_ARG_INFO(0, window)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
 
