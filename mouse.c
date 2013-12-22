@@ -29,6 +29,7 @@
 
 #include "php_sdl.h"
 #include "mouse.h"
+#include "surface.h"
 
 static zend_class_entry *php_sdl_cursor_ce;
 static zend_object_handlers php_sdl_cursor_handlers;
@@ -241,7 +242,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSystemCursor, 0, 0, 1)
        ZEND_ARG_INFO(0, id)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_Cursor *SDLCALL SDL_CreateSystemCursor(int id)
+/* {{{ proto SDL_Cursor SDL_CreateSystemCursor(int id)
 
  *  \brief Create a system cursor.
  *
@@ -262,7 +263,43 @@ static PHP_FUNCTION(SDL_CreateSystemCursor)
 /* }}} */
 
 
-/* {{{ proto void SDLCALL SDL_FreeCursor(SDL_Cursor cursor)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateColorCursor, 0, 0, 3)
+       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
+       ZEND_ARG_INFO(0, hot_x)
+       ZEND_ARG_INFO(0, hot_y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Cursor SDL_CreateSystemCursor(int id)
+
+ *  \brief Create a color cursor.
+ *
+ *  \sa SDL_FreeCursor()
+ extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateColorCursor(SDL_Surface *surface,
+                                                           int hot_x,
+                                                           int hot_y);
+ */
+static PHP_FUNCTION(SDL_CreateColorCursor)
+{
+	long x, y;
+	zval *z_surface;
+	SDL_Surface *surface;
+	SDL_Cursor *cursor;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &z_surface, get_php_sdl_surface_ce(), &x, &y)) {
+		return;
+	}
+	surface = zval_to_sdl_surface(z_surface TSRMLS_CC);
+	if (surface) {
+		cursor = SDL_CreateColorCursor(surface, (int)x, (int)y);
+		sdl_cursor_to_zval(cursor, return_value, 0 TSRMLS_CC);
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+	}
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_FreeCursor(SDL_Cursor cursor)
 
  *  \brief Frees a cursor created with SDL_CreateCursor().
  *
@@ -285,6 +322,87 @@ static PHP_FUNCTION(SDL_FreeCursor)
 }
 /* }}} */
 
+/* {{{ proto void SDL_SetCursor(SDL_Cursor cursor)
+
+ *  \brief Set the active cursor.
+ extern DECLSPEC void SDLCALL SDL_SetCursor(SDL_Cursor * cursor);
+ */
+static PHP_FUNCTION(SDL_SetCursor)
+{
+	struct php_sdl_cursor *intern;
+	zval *z_cursor;
+	SDL_Cursor *cursor;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cursor, php_sdl_cursor_ce) == FAILURE) {
+		return;
+	}
+	FETCH_CURSOR(cursor, z_cursor, 1);
+
+	SDL_SetCursor(intern->cursor);
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Cursor SDL_GetCursor(void)
+
+ *  \brief Return the active cursor.
+ extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetCursor(void);
+ */
+static PHP_FUNCTION(SDL_GetCursor)
+{
+	SDL_Cursor *cursor;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	cursor = SDL_GetCursor();
+	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE TSRMLS_CC);
+}
+/* }}} */
+
+
+/* {{{ proto SDL_Cursor SDL_GetDefaultCursor(void)
+
+ *  \brief Return the default cursor.
+ extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetDefaultCursor(void);
+ */
+static PHP_FUNCTION(SDL_GetDefaultCursor)
+{
+	SDL_Cursor *cursor;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	cursor = SDL_GetDefaultCursor();
+	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE TSRMLS_CC);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowCursor, 0, 0, 1)
+       ZEND_ARG_INFO(0, toggle)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_ShowCursor(bool toogle)
+
+ *  \brief Toggle whether or not the cursor is shown.
+ *
+ *  \param toggle 1 to show the cursor, 0 to hide it, -1 to query the current
+ *                state.
+ *
+ *  \return 1 if the cursor is shown, or 0 if the cursor is hidden.
+ extern DECLSPEC int SDLCALL SDL_ShowCursor(int toggle);
+ */
+static PHP_FUNCTION(SDL_ShowCursor)
+{
+	zend_bool toggle;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &toggle)) {
+		return;
+	}
+	RETVAL_BOOL(SDL_ShowCursor(toggle));
+}
+/* }}} */
 
 
 /* generic arginfo */
@@ -301,7 +419,12 @@ ZEND_END_ARG_INFO()
 static zend_function_entry sdl_mouse_functions[] = {
 	ZEND_FE(SDL_CreateCursor,                   arginfo_SDL_Cursor__construct)
 	ZEND_FE(SDL_CreateSystemCursor,             arginfo_SDL_CreateSystemCursor)
+	ZEND_FE(SDL_CreateColorCursor,              arginfo_SDL_CreateColorCursor)
 	ZEND_FE(SDL_FreeCursor,                     arginfo_SDL_Cursor)
+	ZEND_FE(SDL_SetCursor,                      arginfo_SDL_Cursor)
+	ZEND_FE(SDL_GetCursor,                      arginfo_none)
+	ZEND_FE(SDL_GetDefaultCursor,               arginfo_none)
+	ZEND_FE(SDL_ShowCursor,                     arginfo_SDL_ShowCursor)
 
 	ZEND_FE_END
 };
@@ -313,9 +436,17 @@ static const zend_function_entry php_sdl_cursor_methods[] = {
 	PHP_ME(SDL_Cursor,       __construct,                arginfo_SDL_Cursor__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Cursor,       __toString,                 arginfo_none,                      ZEND_ACC_PUBLIC)
 
+	/* non-static methods */
 	PHP_FALIAS(Free,          SDL_FreeCursor,            arginfo_none)
+
+	/* static methods */
 	PHP_FALIAS(Create,        SDL_CreateCursor,          arginfo_SDL_Cursor__construct)
 	PHP_FALIAS(CreateSystem,  SDL_CreateSystemCursor,    arginfo_SDL_CreateSystemCursor)
+	PHP_FALIAS(CreateColor,   SDL_CreateColorCursor,     arginfo_SDL_CreateColorCursor)
+	PHP_FALIAS(Set,           SDL_SetCursor,             arginfo_none)
+	PHP_FALIAS(Get,           SDL_GetCursor,             arginfo_none)
+	PHP_FALIAS(GetDefault,    SDL_GetDefaultCursor,      arginfo_none)
+	PHP_FALIAS(Show,          SDL_ShowCursor,            arginfo_SDL_ShowCursor)
 
 	ZEND_FE_END
 };
