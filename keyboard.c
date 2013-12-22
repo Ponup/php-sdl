@@ -30,7 +30,7 @@
 #include "window.h"
 
 
-/* {{{ proto SDL_Window SDLCALL SDL_GetKeyboardFocus(void)
+/* {{{ proto SDL_Window SDL_GetKeyboardFocus(void)
 
  *  \brief Get the window which currently has keyboard focus.
 extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
@@ -50,7 +50,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetKeyboardState, 0, 0, 0)
        ZEND_ARG_INFO(0, allkeys)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array SDL_GL_SetSwapInterval([int &numkeys [, bool allkeys=true ]])
+/* {{{ proto array SDL_GetKeyboardState([int &numkeys [, bool allkeys=true ]])
 
 	Standard SDL API
 		with allkeys=true  return an array of scancode => state array
@@ -101,7 +101,7 @@ static PHP_FUNCTION(SDL_GetKeyboardState)
 /* }}} */
 
 
-/* {{{ proto int SDLCALL SDL_GetModState(void)
+/* {{{ proto int SDL_GetModState(void)
 
  *  \brief Get the current key modifier state for the keyboard.
  extern DECLSPEC SDL_Keymod SDLCALL SDL_GetModState(void);
@@ -120,7 +120,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetModState, 0, 0, 1)
        ZEND_ARG_INFO(0, modstate)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto void SDLCALL SDL_SetModState(int modstate)
+/* {{{ proto void SDL_SetModState(int modstate)
 
  *  \brief Set the current key modifier state for the keyboard.
  *
@@ -139,8 +139,155 @@ static PHP_FUNCTION(SDL_SetModState)
 /* }}} */
 
 
+/* {{{ proto int SDL_GetKeyFromScancode(int scancode)
+
+ *  \brief Get the key code corresponding to the given scancode according
+ *         to the current keyboard layout.
+ *
+ *  See ::SDL_Keycode for details.
+ *
+ *  \sa SDL_GetKeyName()
+ extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromScancode(SDL_Scancode scancode);
+ */
+static PHP_FUNCTION(SDL_GetKeyFromScancode)
+{
+	long scancode;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scancode)) {
+		return;
+	}
+	RETVAL_LONG(SDL_GetKeyFromScancode(scancode));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_GetScancodeFromKey(int key)
+ *  \brief Get the scancode corresponding to the given key code according to the
+ *         current keyboard layout.
+ *
+ *  See ::SDL_Scancode for details.
+ *
+ *  \sa SDL_GetScancodeName()
+ extern DECLSPEC SDL_Scancode SDLCALL SDL_GetScancodeFromKey(SDL_Keycode key);
+ */
+static PHP_FUNCTION(SDL_GetScancodeFromKey)
+{
+	long key;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &key)) {
+		return;
+	}
+	RETVAL_LONG(SDL_GetScancodeFromKey(key));
+}
+/* }}} */
+
+
+/* {{{ proto string SDL_GetScancodeName(int scancode)
+
+ *  \brief Get a human-readable name for a scancode.
+ *
+ *  \return A pointer to the name for the scancode.
+ *          If the scancode doesn't have a name, this function returns
+ *          an empty string ("").
+ *
+ *  \sa SDL_Scancode
+ extern DECLSPEC const char *SDLCALL SDL_GetScancodeName(SDL_Scancode scancode);
+ */
+static PHP_FUNCTION(SDL_GetScancodeName)
+{
+	long scancode;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scancode)) {
+		return;
+	}
+	RETVAL_STRING(SDL_GetScancodeName(scancode), 1);
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_GetScancodeFromName(string name)
+
+ *  \brief Get a scancode from a human-readable name
+ *
+ *  \return scancode, or SDL_SCANCODE_UNKNOWN if the name wasn't recognized
+ *
+ *  \sa SDL_Scancode
+ extern DECLSPEC SDL_Scancode SDLCALL SDL_GetScancodeFromName(const char *name);
+ */
+static PHP_FUNCTION(SDL_GetScancodeFromName)
+{
+	char *name;
+	int name_len;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len)) {
+		return;
+	}
+	RETVAL_LONG(SDL_GetScancodeFromName(name));
+}
+/* }}} */
+
+
+/* {{{ proto string SDL_GetKeyName(int key)
+
+ *  \brief Get a human-readable name for a key.
+ *
+ *  \return A pointer to a UTF-8 string that stays valid at least until the next
+ *          call to this function. If you need it around any longer, you must
+ *          copy it.  If the key doesn't have a name, this function returns an
+ *          empty string ("").
+ *
+ *  \sa SDL_Key
+ extern DECLSPEC const char *SDLCALL SDL_GetKeyName(SDL_Keycode key);
+ */
+static PHP_FUNCTION(SDL_GetKeyName)
+{
+	long key;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &key)) {
+		return;
+	}
+	RETVAL_STRING(SDL_GetKeyName(key), 1);
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_GetKeyFromName(string name)
+
+ *  \brief Get a key code from a human-readable name
+ *
+ *  \return key code, or SDLK_UNKNOWN if the name wasn't recognized
+ *
+ *  \sa SDL_Keycode
+ extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromName(const char *name);
+ */
+static PHP_FUNCTION(SDL_GetKeyFromName)
+{
+	char *name;
+	int name_len;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len)) {
+		return;
+	}
+	RETVAL_LONG(SDL_GetKeyFromName(name));
+}
+/* }}} */
+
+
+/* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_scancode, 0, 0, 1)
+       ZEND_ARG_INFO(0, scancode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_key, 0, 0, 1)
+       ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_name, 0, 0, 1)
+       ZEND_ARG_INFO(0, name)
 ZEND_END_ARG_INFO()
 
 /* {{{ sdl_keyboard_functions[] */
@@ -149,6 +296,12 @@ static zend_function_entry sdl_keyboard_functions[] = {
 	ZEND_FE(SDL_GetKeyboardState,                     arginfo_SDL_GetKeyboardState)
 	ZEND_FE(SDL_GetModState,                          arginfo_none)
 	ZEND_FE(SDL_SetModState,                          arginfo_SDL_SetModState)
+	ZEND_FE(SDL_GetKeyFromScancode,                   arginfo_scancode)
+	ZEND_FE(SDL_GetScancodeFromKey,                   arginfo_key)
+	ZEND_FE(SDL_GetScancodeName,                      arginfo_scancode)
+	ZEND_FE(SDL_GetScancodeFromName,                  arginfo_name)
+	ZEND_FE(SDL_GetKeyName,                           arginfo_key)
+	ZEND_FE(SDL_GetKeyFromName,                       arginfo_name)
 
 	ZEND_FE_END
 };

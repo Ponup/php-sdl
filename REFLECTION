@@ -837,6 +837,42 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $modstate ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetKeyFromScancode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $scancode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeFromKey ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $scancode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeFromName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $name ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyFromName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $name ]
+      }
+    }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
 
       - Parameters [4] {
