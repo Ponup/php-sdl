@@ -814,6 +814,29 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [0] {
       }
     }
+    Function [ <internal:SDL> function SDL_GetKeyboardFocus ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyboardState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$numkeys ]
+        Parameter #1 [ <optional> $allkeys ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetModState ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetModState ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $modstate ]
+      }
+    }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
 
       - Parameters [4] {

@@ -27,10 +27,129 @@
 
 #include "php_sdl.h"
 #include "keyboard.h"
+#include "window.h"
 
+
+/* {{{ proto SDL_Window SDLCALL SDL_GetKeyboardFocus(void)
+
+ *  \brief Get the window which currently has keyboard focus.
+extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
+ */
+static PHP_FUNCTION(SDL_GetKeyboardFocus)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value TSRMLS_CC);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetKeyboardState, 0, 0, 0)
+       ZEND_ARG_INFO(1, numkeys)
+       ZEND_ARG_INFO(0, allkeys)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto array SDL_GL_SetSwapInterval([int &numkeys [, bool allkeys=true ]])
+
+	Standard SDL API
+		with allkeys=true  return an array of scancode => state array
+	PHP Specific, (to reduce memory)
+		with allkeys=false return an array of scancode (which are set)
+
+ *  \brief Get a snapshot of the current state of the keyboard.
+ *
+ *  \param numkeys if non-NULL, receives the length of the returned array.
+ *
+ *  \return An array of key states. Indexes into this array are obtained by using ::SDL_Scancode values.
+ *
+ *  \b Example:
+ *  \code
+ *  const Uint8 *state = SDL_GetKeyboardState(NULL);
+ *  if ( state[SDL_SCANCODE_RETURN] )   {
+ *      printf("<RETURN> is pressed.\n");
+ *  }
+ *  \endcode
+ extern DECLSPEC const Uint8 *SDLCALL SDL_GetKeyboardState(int *numkeys);
+ */
+static PHP_FUNCTION(SDL_GetKeyboardState)
+{
+	zval *z_numkeys = NULL;
+	int i, nb, numkeys;
+	zend_bool allkeys=1;
+	const Uint8 *state;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zb", &z_numkeys, &allkeys)) {
+		return;
+	}
+	state = SDL_GetKeyboardState(&numkeys);
+	array_init(return_value);
+	for (nb=i=0 ; i<numkeys ; i++) {
+		if (allkeys) {
+			add_next_index_long(return_value, state[i]);
+			nb++;
+		} else if (state[i]) {
+			add_next_index_long(return_value, i);
+			nb++;
+		}
+	}
+	if (z_numkeys) {
+		zval_dtor(z_numkeys);
+		ZVAL_LONG(z_numkeys, nb);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto int SDLCALL SDL_GetModState(void)
+
+ *  \brief Get the current key modifier state for the keyboard.
+ extern DECLSPEC SDL_Keymod SDLCALL SDL_GetModState(void);
+ */
+static PHP_FUNCTION(SDL_GetModState)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	RETVAL_LONG(SDL_GetModState());
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetModState, 0, 0, 1)
+       ZEND_ARG_INFO(0, modstate)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDLCALL SDL_SetModState(int modstate)
+
+ *  \brief Set the current key modifier state for the keyboard.
+ *
+ *  \note This does not change the keyboard state, only the key modifier flags.
+ extern DECLSPEC void SDLCALL SDL_SetModState(SDL_Keymod modstate);
+ */
+static PHP_FUNCTION(SDL_SetModState)
+{
+	long modstate;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &modstate)) {
+		return;
+	}
+	SDL_SetModState(modstate);
+}
+/* }}} */
+
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ sdl_keyboard_functions[] */
 static zend_function_entry sdl_keyboard_functions[] = {
+	ZEND_FE(SDL_GetKeyboardFocus,                     arginfo_none)
+	ZEND_FE(SDL_GetKeyboardState,                     arginfo_SDL_GetKeyboardState)
+	ZEND_FE(SDL_GetModState,                          arginfo_none)
+	ZEND_FE(SDL_SetModState,                          arginfo_SDL_SetModState)
+
 	ZEND_FE_END
 };
 /* }}} */
@@ -286,6 +405,7 @@ PHP_MINIT_FUNCTION(sdl_keyboard)
 	REGISTER_LONG_CONSTANT("SDL_NUM_SCANCODES", SDL_NUM_SCANCODES, CONST_CS | CONST_PERSISTENT);
 
 	/* From SDL_keycode.h */
+
 	REGISTER_LONG_CONSTANT("SDLK_UNKNOWN", SDLK_UNKNOWN, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDLK_RETURN", SDLK_RETURN, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDLK_ESCAPE", SDLK_ESCAPE, CONST_CS | CONST_PERSISTENT);
@@ -523,7 +643,7 @@ PHP_MINIT_FUNCTION(sdl_keyboard)
 	REGISTER_LONG_CONSTANT("SDLK_EJECT", SDLK_EJECT, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDLK_SLEEP", SDLK_SLEEP, CONST_CS | CONST_PERSISTENT);
 
-	/* enum SDL_Keymod; */
+	/* enum SDL_Keymod */
 	REGISTER_LONG_CONSTANT("KMOD_NONE", KMOD_NONE, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("KMOD_LSHIFT", KMOD_LSHIFT, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("KMOD_RSHIFT", KMOD_RSHIFT, CONST_CS | CONST_PERSISTENT);
