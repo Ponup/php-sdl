@@ -2271,13 +2271,59 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [0] {
+      - Static methods [6] {
+        Method [ <internal:SDL> static public method Create ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $data ]
+            Parameter #1 [ <required> $mask ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $h ]
+            Parameter #4 [ <required> $hot_x ]
+            Parameter #5 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method CreateSystem ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $id ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method CreateColor ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_Surface $surface ]
+            Parameter #1 [ <required> $hot_x ]
+            Parameter #2 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method Get ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetDefault ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method Show ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $toggle ]
+          }
+        }
       }
 
       - Properties [0] {
       }
 
-      - Methods [10] {
+      - Methods [4] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -2302,56 +2348,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
           }
         }
 
-        Method [ <internal:SDL> public method Create ] {
-
-          - Parameters [6] {
-            Parameter #0 [ <required> $data ]
-            Parameter #1 [ <required> $mask ]
-            Parameter #2 [ <required> $w ]
-            Parameter #3 [ <required> $h ]
-            Parameter #4 [ <required> $hot_x ]
-            Parameter #5 [ <required> $hot_y ]
-          }
-        }
-
-        Method [ <internal:SDL> public method CreateSystem ] {
-
-          - Parameters [1] {
-            Parameter #0 [ <required> $id ]
-          }
-        }
-
-        Method [ <internal:SDL> public method CreateColor ] {
-
-          - Parameters [3] {
-            Parameter #0 [ <required> SDL_Surface $surface ]
-            Parameter #1 [ <required> $hot_x ]
-            Parameter #2 [ <required> $hot_y ]
-          }
-        }
-
         Method [ <internal:SDL> public method Set ] {
 
           - Parameters [0] {
-          }
-        }
-
-        Method [ <internal:SDL> public method Get ] {
-
-          - Parameters [0] {
-          }
-        }
-
-        Method [ <internal:SDL> public method GetDefault ] {
-
-          - Parameters [0] {
-          }
-        }
-
-        Method [ <internal:SDL> public method Show ] {
-
-          - Parameters [1] {
-            Parameter #0 [ <required> $toggle ]
           }
         }
       }

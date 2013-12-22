@@ -37,6 +37,9 @@ $logo->Blit(NULL, $surf, $drect);
 
 $wind->UpdateSurface();
 
+$cursor = SDL_Cursor::CreateSystem(SDL_Cursor::WAITARROW);
+$cursor->Set();
+
 $color = SDL_MapRGB($surf->format, 0xef, 0xff, 0x87);
 for ($t=$time*$step ; $t ; $t--) {
 

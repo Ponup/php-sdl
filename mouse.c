@@ -438,15 +438,15 @@ static const zend_function_entry php_sdl_cursor_methods[] = {
 
 	/* non-static methods */
 	PHP_FALIAS(Free,          SDL_FreeCursor,            arginfo_none)
+	PHP_FALIAS(Set,           SDL_SetCursor,             arginfo_none)
 
 	/* static methods */
-	PHP_FALIAS(Create,        SDL_CreateCursor,          arginfo_SDL_Cursor__construct)
-	PHP_FALIAS(CreateSystem,  SDL_CreateSystemCursor,    arginfo_SDL_CreateSystemCursor)
-	PHP_FALIAS(CreateColor,   SDL_CreateColorCursor,     arginfo_SDL_CreateColorCursor)
-	PHP_FALIAS(Set,           SDL_SetCursor,             arginfo_none)
-	PHP_FALIAS(Get,           SDL_GetCursor,             arginfo_none)
-	PHP_FALIAS(GetDefault,    SDL_GetDefaultCursor,      arginfo_none)
-	PHP_FALIAS(Show,          SDL_ShowCursor,            arginfo_SDL_ShowCursor)
+	ZEND_FENTRY(Create,       ZEND_FN(SDL_CreateCursor),        arginfo_SDL_Cursor__construct,  ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(CreateSystem, ZEND_FN(SDL_CreateSystemCursor),  arginfo_SDL_CreateSystemCursor, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(CreateColor,  ZEND_FN(SDL_CreateColorCursor),   arginfo_SDL_CreateColorCursor,  ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(Get,          ZEND_FN(SDL_GetCursor),           arginfo_none,                   ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(GetDefault,   ZEND_FN(SDL_GetDefaultCursor),    arginfo_none,                   ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(Show,         ZEND_FN(SDL_ShowCursor),          arginfo_SDL_ShowCursor,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 	ZEND_FE_END
 };
