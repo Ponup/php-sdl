@@ -34,6 +34,7 @@
 
 #include "php_sdl.h"
 #include "glcontext.h"
+#include "mouse.h"
 #include "rect.h"
 #include "surface.h"
 #include "video.h"
@@ -1791,6 +1792,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_ME(SDL_Window, __construct,     arginfo_SDL_CreateWindow, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Window, __toString,      arginfo_window_none,      ZEND_ACC_PUBLIC)
 
+	/* non-static functions */
 	PHP_FALIAS(UpdateSurface,      SDL_UpdateWindowSurface,      arginfo_window_none)
 	PHP_FALIAS(Destroy,            SDL_DestroyWindow,            arginfo_window_none)
 	PHP_FALIAS(GetTitle,           SDL_GetWindowTitle,           arginfo_window_none)
@@ -1830,9 +1832,12 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
 	PHP_FALIAS(GL_CreateContext,   SDL_GL_CreateContext,         arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
-	PHP_FALIAS(GL_GetCurrent,      SDL_GL_GetCurrentWindow,      arginfo_window_none)
 	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize,       arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
+
+	/* static functions */
+	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(GetMouseFocus,      ZEND_FN(SDL_GetMouseFocus),          arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 	PHP_FE_END
 };

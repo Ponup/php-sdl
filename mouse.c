@@ -30,6 +30,7 @@
 #include "php_sdl.h"
 #include "mouse.h"
 #include "surface.h"
+#include "window.h"
 
 static zend_class_entry *php_sdl_cursor_ce;
 static zend_object_handlers php_sdl_cursor_handlers;
@@ -405,6 +406,20 @@ static PHP_FUNCTION(SDL_ShowCursor)
 /* }}} */
 
 
+/* {{{ proto SDL_Window SDL_GetMouseFocus(void)
+
+ *  \brief Get the window which currently has mouse focus.
+ extern DECLSPEC SDL_Window * SDLCALL SDL_GetMouseFocus(void);
+ */
+PHP_FUNCTION(SDL_GetMouseFocus)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	sdl_window_to_zval(SDL_GetMouseFocus(), return_value TSRMLS_CC);
+}
+
+
 /* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
@@ -425,6 +440,7 @@ static zend_function_entry sdl_mouse_functions[] = {
 	ZEND_FE(SDL_GetCursor,                      arginfo_none)
 	ZEND_FE(SDL_GetDefaultCursor,               arginfo_none)
 	ZEND_FE(SDL_ShowCursor,                     arginfo_SDL_ShowCursor)
+	ZEND_FE(SDL_GetMouseFocus,                  arginfo_none)
 
 	ZEND_FE_END
 };

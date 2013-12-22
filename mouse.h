@@ -26,6 +26,12 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_cursor_ce(void);
+zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC);
+
+PHP_FUNCTION(SDL_GetMouseFocus);
+
 PHP_MINIT_FUNCTION(sdl_mouse);
 
 #ifdef  __cplusplus

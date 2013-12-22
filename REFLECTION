@@ -987,6 +987,11 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $toggle ]
       }
     }
+    Function [ <internal:SDL> function SDL_GetMouseFocus ] {
+
+      - Parameters [0] {
+      }
+    }
     Function [ <internal:SDL> function SDL_GetPlatform ] {
 
       - Parameters [0] {
@@ -3283,7 +3288,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [0] {
+      - Static methods [2] {
+        Method [ <internal:SDL> static public method GL_GetCurrent ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetMouseFocus ] {
+
+          - Parameters [0] {
+          }
+        }
       }
 
       - Properties [7] {
@@ -3296,7 +3312,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $title ]
       }
 
-      - Methods [44] {
+      - Methods [43] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -3582,12 +3598,6 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> SDL_GLContext $context ]
-          }
-        }
-
-        Method [ <internal:SDL> public method GL_GetCurrent ] {
-
-          - Parameters [0] {
           }
         }
 
