@@ -1737,3 +1737,4 @@ PHP_MINIT_FUNCTION(sdl_surface)
 
 	return (zend_register_functions(NULL, sdl_surface_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
+/* }}} */

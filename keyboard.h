@@ -19,23 +19,18 @@
 
 /* $Id$ */ 
 
-#include "php_sdl.h"
-#include "blendmode.h"
+#ifndef PHP_SDL_KEYBOARD_H
+#define PHP_SDL_KEYBOARD_H
 
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_blendmode.h                                     |
-  +----------------------------------------------------------------------+
-*/
+#ifdef  __cplusplus
+extern "C" {
+#endif
 
-/* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl_blendmode)
-{
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_NONE",  SDL_BLENDMODE_NONE,  CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_BLEND", SDL_BLENDMODE_BLEND, CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_ADD",   SDL_BLENDMODE_ADD,   CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_MOD",   SDL_BLENDMODE_MOD,   CONST_CS | CONST_PERSISTENT); \
+PHP_MINIT_FUNCTION(sdl_keyboard);
 
-	return SUCCESS;
-}
-/* }}} */
+#ifdef  __cplusplus
+} // extern "C" 
+#endif
+
+#endif /* PHP_SDL_KEYBOARD_H */
+

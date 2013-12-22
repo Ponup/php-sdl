@@ -19,23 +19,26 @@
 
 /* $Id$ */ 
 
-#include "php_sdl.h"
-#include "blendmode.h"
-
 /*
   +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_blendmode.h                                     |
+  | wrapper for SDL2/SDL_keyboard.h, SDL_keycode.h, SDL_scancode.h       |
   +----------------------------------------------------------------------+
 */
 
-/* {{{ MINIT */
-PHP_MINIT_FUNCTION(sdl_blendmode)
-{
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_NONE",  SDL_BLENDMODE_NONE,  CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_BLEND", SDL_BLENDMODE_BLEND, CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_ADD",   SDL_BLENDMODE_ADD,   CONST_CS | CONST_PERSISTENT); \
-	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_MOD",   SDL_BLENDMODE_MOD,   CONST_CS | CONST_PERSISTENT); \
+#include "php_sdl.h"
+#include "keyboard.h"
 
-	return SUCCESS;
+
+/* {{{ sdl_keyboard_functions[] */
+static zend_function_entry sdl_keyboard_functions[] = {
+	ZEND_FE_END
+};
+/* }}} */
+
+
+/* {{{ MINIT */
+PHP_MINIT_FUNCTION(sdl_keyboard)
+{
+	return (zend_register_functions(NULL, sdl_keyboard_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */

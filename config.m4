@@ -48,6 +48,7 @@ blendmode.c
 cpuinfo.c
 error.c
 glcontext.c
+keyboard.c
 messagebox.c
 pixels.c
 platform.c

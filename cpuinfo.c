@@ -247,4 +247,3 @@ PHP_MINIT_FUNCTION(sdl_cpuinfo)
 	return (zend_register_functions(NULL, sdl_cpuinfo_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
-

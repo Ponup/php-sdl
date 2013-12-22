@@ -613,3 +613,4 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 
 	return (zend_register_functions(NULL, sdl_glcontext_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
+/* }}} */

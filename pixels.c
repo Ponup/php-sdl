@@ -1955,4 +1955,3 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	return (zend_register_functions(NULL, sdl_pixels_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
-

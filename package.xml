@@ -63,12 +63,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='blendmode.h'/>
       <file role='src' name='cpuinfo.c'/>
       <file role='src' name='cpuinfo.h'/>
-      <file role='src' name='rect.c'/>
-      <file role='src' name='rect.h'/>
       <file role='src' name='error.c'/>
       <file role='src' name='error.h'/>
       <file role='src' name='glcontext.c'/>
       <file role='src' name='glcontext.h'/>
+      <file role='src' name='keyboard.c'/>
+      <file role='src' name='keyboard.h'/>
       <file role='src' name='messagebox.c'/>
       <file role='src' name='messagebox.h'/>
       <file role='src' name='pixels.c'/>
@@ -77,6 +77,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='platform.h'/>
       <file role='src' name='power.c'/>
       <file role='src' name='power.h'/>
+      <file role='src' name='rect.c'/>
+      <file role='src' name='rect.h'/>
       <file role='src' name='rwops.c'/>
       <file role='src' name='rwops.h'/>
       <file role='src' name='sdl.c'/>

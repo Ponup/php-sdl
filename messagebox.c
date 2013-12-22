@@ -835,4 +835,3 @@ PHP_MINIT_FUNCTION(sdl_messagebox)
 	return (zend_register_functions(NULL, sdl_messagebox_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
 /* }}} */
-
