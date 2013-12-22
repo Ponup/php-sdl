@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [660] {
+  - Constants [673] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -542,6 +542,19 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND ] { 3 }
     Constant [ integer SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED ] { 4 }
     Constant [ integer SDL_MESSAGEBOX_COLOR_MAX ] { 5 }
+    Constant [ integer SDL_SYSTEM_CURSOR_ARROW ] { 0 }
+    Constant [ integer SDL_SYSTEM_CURSOR_IBEAM ] { 1 }
+    Constant [ integer SDL_SYSTEM_CURSOR_WAIT ] { 2 }
+    Constant [ integer SDL_SYSTEM_CURSOR_CROSSHAIR ] { 3 }
+    Constant [ integer SDL_SYSTEM_CURSOR_WAITARROW ] { 4 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENWSE ] { 5 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENESW ] { 6 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZEWE ] { 7 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENS ] { 8 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZEALL ] { 9 }
+    Constant [ integer SDL_SYSTEM_CURSOR_NO ] { 10 }
+    Constant [ integer SDL_SYSTEM_CURSOR_HAND ] { 11 }
+    Constant [ integer SDL_NUM_SYSTEM_CURSORS ] { 12 }
     Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
     Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
     Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
@@ -919,6 +932,29 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Parameters [2] {
         Parameter #0 [ <required> $messageboxdata ]
         Parameter #1 [ <required> &$buttonid ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateCursor ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $data ]
+        Parameter #1 [ <required> $mask ]
+        Parameter #2 [ <required> $w ]
+        Parameter #3 [ <required> $h ]
+        Parameter #4 [ <required> $hot_x ]
+        Parameter #5 [ <required> $hot_y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateSystemCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $id ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Cursor $cursor ]
       }
     }
     Function [ <internal:SDL> function SDL_GetPlatform ] {
@@ -1980,7 +2016,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [14] {
+  - Classes [15] {
     Class [ <internal:SDL> class SDL_GLContext ] {
 
       - Constants [31] {
@@ -2179,6 +2215,79 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> &$buttonid ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Cursor ] {
+
+      - Constants [13] {
+        Constant [ integer ARROW ] { 0 }
+        Constant [ integer IBEAM ] { 1 }
+        Constant [ integer WAIT ] { 2 }
+        Constant [ integer CROSSHAIR ] { 3 }
+        Constant [ integer WAITARROW ] { 4 }
+        Constant [ integer SIZENWSE ] { 5 }
+        Constant [ integer SIZENESW ] { 6 }
+        Constant [ integer SIZEWE ] { 7 }
+        Constant [ integer SIZENS ] { 8 }
+        Constant [ integer SIZEALL ] { 9 }
+        Constant [ integer NO ] { 10 }
+        Constant [ integer HAND ] { 11 }
+        Constant [ integer NUM_SYSTEM ] { 12 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [5] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $data ]
+            Parameter #1 [ <required> $mask ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $h ]
+            Parameter #4 [ <required> $hot_x ]
+            Parameter #5 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Create ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $data ]
+            Parameter #1 [ <required> $mask ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $h ]
+            Parameter #4 [ <required> $hot_x ]
+            Parameter #5 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method CreateSystem ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $id ]
           }
         }
       }
