@@ -1048,7 +1048,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_CalculateGammaRamp)
 {
 	double gamma;
-	zval *z_ramp, *zv;
+	zval *z_ramp;
 	Uint16 ramp[256];
 	int i;
 
@@ -1059,9 +1059,7 @@ PHP_FUNCTION(SDL_CalculateGammaRamp)
 	zval_dtor(z_ramp);
 	array_init(z_ramp);
 	for (i=0 ; i<256 ; i++) {
-		MAKE_STD_ZVAL(zv);
-		ZVAL_LONG(zv, ramp[i]);
-		add_next_index_zval(z_ramp, zv);
+		add_next_index_long(z_ramp, ramp[i]);
 	}
 }
 /* }}} */

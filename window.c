@@ -1368,7 +1368,7 @@ static PHP_FUNCTION(SDL_GetWindowGammaRamp)
 	zval *z_window, *z_r, *z_g, *z_b;
 	SDL_Window *window;
 	Uint16 r[256], g[256], b[256];
-	zval *tmp;
+// 	zval *tmp;
 	int i, ret;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzz", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b)) {
@@ -1386,17 +1386,9 @@ static PHP_FUNCTION(SDL_GetWindowGammaRamp)
 		array_init(z_b);
 
 		for (i=0 ; i<256 ; i++) {
-			MAKE_STD_ZVAL(tmp);
-			ZVAL_LONG(tmp, r[i]);
-			add_next_index_zval(z_r, tmp);
-
-			MAKE_STD_ZVAL(tmp);
-			ZVAL_LONG(tmp, g[i]);
-			add_next_index_zval(z_g, tmp);
-
-			MAKE_STD_ZVAL(tmp);
-			ZVAL_LONG(tmp, b[i]);
-			add_next_index_zval(z_b, tmp);
+			add_next_index_long(z_r, r[i]);
+			add_next_index_long(z_g, g[i]);
+			add_next_index_long(z_b, b[i]);
 		}
 	}
 	RETVAL_LONG(ret);
