@@ -119,6 +119,118 @@ static void php_del_window_data(struct php_sdl_window *intern, void *data) {
 	}
 }
 
+/* {{{ sdl_window_read_property*/
+zval *sdl_window_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+{
+	struct php_sdl_window *intern = (struct php_sdl_window *) zend_objects_get_address(object TSRMLS_CC);
+	zval *retval, tmp_member;
+
+	if (!intern->window) {
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+	}
+
+	if (Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+		key = NULL;
+	}
+
+	ALLOC_INIT_ZVAL(retval);
+	Z_SET_REFCOUNT_P(retval, 0);
+
+	if (!strcmp(Z_STRVAL_P(member), "id")) {
+		ZVAL_LONG(retval, SDL_GetWindowID(intern->window));
+
+	} else if (!strcmp(Z_STRVAL_P(member), "flags")) {
+		ZVAL_LONG(retval, SDL_GetWindowFlags(intern->window));
+
+	} else if (!strcmp(Z_STRVAL_P(member), "x")) {
+		int x, y;
+
+		SDL_GetWindowPosition(intern->window, &x, &y);
+		ZVAL_LONG(retval, x);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "y")) {
+		int x, y;
+
+		SDL_GetWindowPosition(intern->window, &x, &y);
+		ZVAL_LONG(retval, y);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "w")) {
+		int w, h;
+
+		SDL_GetWindowSize(intern->window, &w, &h);
+		ZVAL_LONG(retval, w);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "h")) {
+		int w, h;
+
+		SDL_GetWindowSize(intern->window, &w, &h);
+		ZVAL_LONG(retval, h);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "title")) {
+		ZVAL_STRING(retval, SDL_GetWindowTitle(intern->window), 1);
+
+	} else {
+		FREE_ZVAL(retval);
+
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		if (member == &tmp_member) {
+			zval_dtor(member);
+		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
+	}
+	return retval;
+}
+/* }}} */
+
+#define SDL_WINDOW_ADD_PROPERTY(n,f) \
+	MAKE_STD_ZVAL(zv); \
+	ZVAL_LONG(zv, (long)f); \
+	zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
+
+/* {{{ sdl_window_read_property*/
+static HashTable *sdl_window_get_properties(zval *object TSRMLS_DC)
+{
+	HashTable *props;
+	zval *zv;
+	struct php_sdl_window *intern = (struct php_sdl_window *) zend_objects_get_address(object TSRMLS_CC);
+
+	props = zend_std_get_properties(object TSRMLS_CC);
+
+	if (intern->window) {
+		int w, h, x, y;
+
+		SDL_GetWindowSize(intern->window, &w, &h);
+		SDL_GetWindowPosition(intern->window, &x, &y);
+		SDL_WINDOW_ADD_PROPERTY("id",    SDL_GetWindowID(intern->window));
+		SDL_WINDOW_ADD_PROPERTY("flags", SDL_GetWindowFlags(intern->window));
+		SDL_WINDOW_ADD_PROPERTY("x",     x);
+		SDL_WINDOW_ADD_PROPERTY("y",     y);
+		SDL_WINDOW_ADD_PROPERTY("w",     w);
+		SDL_WINDOW_ADD_PROPERTY("h",     h);
+		MAKE_STD_ZVAL(zv);
+		ZVAL_STRING(zv, SDL_GetWindowTitle(intern->window), 1);
+		zend_hash_update(props, "title", sizeof("title"), &zv, sizeof(zv), NULL);
+	}
+	return props;
+}
+/* }}} */
+
+/* {{{ sdl_window_write_property */
+void sdl_window_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+{
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Window is read-only");
+}
+/* }}} */
+
+
 #define FETCH_WINDOW(__ptr, __id, __check) \
 { \
         intern = (struct php_sdl_window *)zend_object_store_get_object(__id TSRMLS_CC);\
@@ -1780,6 +1892,9 @@ static zend_object_value php_sdl_window_new(zend_class_entry *class_type TSRMLS_
 	REGISTER_LONG_CONSTANT("SDL_WINDOWPOS_" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_window_ce, "POS_" const_name, sizeof("POS_" const_name)-1, value TSRMLS_CC); \
 
+#define REGISTER_WINDOW_PROP(name) \
+	zend_declare_property_long(php_sdl_window_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_window)
 {
@@ -1789,6 +1904,17 @@ PHP_MINIT_FUNCTION(sdl_window)
 	ce_window.create_object = php_sdl_window_new;
 	php_sdl_window_ce = zend_register_internal_class(&ce_window TSRMLS_CC);
 	memcpy(&php_sdl_window_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_window_handlers.read_property  = sdl_window_read_property;
+	php_sdl_window_handlers.get_properties = sdl_window_get_properties;
+	php_sdl_window_handlers.write_property = sdl_window_write_property;
+
+	REGISTER_WINDOW_PROP("id");
+	REGISTER_WINDOW_PROP("flags");
+	REGISTER_WINDOW_PROP("x");
+	REGISTER_WINDOW_PROP("y");
+	REGISTER_WINDOW_PROP("w");
+	REGISTER_WINDOW_PROP("h");
+	zend_declare_property_null(php_sdl_window_ce, "title",  sizeof("title")-1,  ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	REGISTER_WINDOW_CLASS_CONST_LONG("FULLSCREEN",         SDL_WINDOW_FULLSCREEN);
 	REGISTER_WINDOW_CLASS_CONST_LONG("OPENGL",             SDL_WINDOW_OPENGL);
