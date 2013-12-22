@@ -31,6 +31,7 @@ zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRML
 SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC);
 
 PHP_FUNCTION(SDL_GetMouseFocus);
+PHP_FUNCTION(SDL_WarpMouseInWindow);
 
 PHP_MINIT_FUNCTION(sdl_mouse);
 

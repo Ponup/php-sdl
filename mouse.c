@@ -420,6 +420,163 @@ PHP_FUNCTION(SDL_GetMouseFocus)
 }
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetMouseState, 0, 0, 0)
+       ZEND_ARG_INFO(1, x)
+       ZEND_ARG_INFO(1, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_GetMouseState(int &x, int &y)
+
+ *  \brief Retrieve the current state of the mouse.
+ *
+ *  The current button state is returned as a button bitmask, which can
+ *  be tested using the SDL_BUTTON(X) macros, and x and y are set to the
+ *  mouse cursor position relative to the focus window for the currently
+ *  selected mouse.  You can pass NULL for either x or y.
+ extern DECLSPEC Uint32 SDLCALL SDL_GetMouseState(int *x, int *y);
+ */
+static PHP_FUNCTION(SDL_GetMouseState)
+{
+	zval *z_x=NULL, *z_y=NULL;
+	int x, y;
+	Uint32 state;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zz", &z_x, &z_y)) {
+		return;
+	}
+	state = SDL_GetMouseState(&x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+	RETVAL_LONG(state);
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_GetRelativeMouseState(int &x, int &y)
+
+ *  \brief Retrieve the relative state of the mouse.
+ *
+ *  The current button state is returned as a button bitmask, which can
+ *  be tested using the SDL_BUTTON(X) macros, and x and y are set to the
+ *  mouse deltas since the last call to SDL_GetRelativeMouseState().
+ extern DECLSPEC Uint32 SDLCALL SDL_GetRelativeMouseState(int *x, int *y);
+ */
+static PHP_FUNCTION(SDL_GetRelativeMouseState)
+{
+	zval *z_x=NULL, *z_y=NULL;
+	int x, y;
+	Uint32 state;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zz", &z_x, &z_y)) {
+		return;
+	}
+	state = SDL_GetRelativeMouseState(&x, &y);
+	if (z_x) {
+		zval_dtor(z_x);
+		ZVAL_LONG(z_x, x);
+	}
+	if (z_y) {
+		zval_dtor(z_y);
+		ZVAL_LONG(z_y, y);
+	}
+	RETVAL_LONG(state);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WarpMouseInWindow, 0, 0, 3)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_INFO(0, x)
+       ZEND_ARG_INFO(0, y)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_WarpMouseInWindow(SDL_Window window, int x, int y)
+
+ *  \brief Moves the mouse to the given position within the window.
+ *
+ *  \param window The window to move the mouse into, or NULL for the current mouse focus
+ *  \param x The x coordinate within the window
+ *  \param y The y coordinate within the window
+ *
+ *  \note This function generates a mouse motion event
+ extern DECLSPEC void SDLCALL SDL_WarpMouseInWindow(SDL_Window * window,
+                                                    int x, int y);
+ */
+PHP_FUNCTION(SDL_WarpMouseInWindow)
+{
+	zval *z_window;
+	SDL_Window *window;
+	long x, y;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &z_window, get_php_sdl_window_ce(), &x, &y)) {
+		return;
+	}
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if (window) {
+		SDL_WarpMouseInWindow(window, (int)x, (int)y);
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRelativeMouseMode, 0, 0, 1)
+       ZEND_ARG_INFO(0, enabled)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetRelativeMouseMode(bool enabled)
+
+ *  \brief Set relative mouse mode.
+ *
+ *  \param enabled Whether or not to enable relative mode
+ *
+ *  \return 0 on success, or -1 if relative mode is not supported.
+ *
+ *  While the mouse is in relative mode, the cursor is hidden, and the
+ *  driver will try to report continuous motion in the current window.
+ *  Only relative motion events will be delivered, the mouse position
+ *  will not change.
+ *
+ *  \note This function will flush any pending mouse motion.
+ *
+ *  \sa SDL_GetRelativeMouseMode()
+ extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled);
+ */
+static PHP_FUNCTION(SDL_SetRelativeMouseMode)
+{
+	zend_bool enabled;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &enabled)) {
+		return;
+	}
+	RETVAL_LONG(SDL_SetRelativeMouseMode(enabled));
+}
+/* }}} */
+
+
+/* {{{ proto bool SDL_GetRelativeMouseMode(void)
+
+ *  \brief Query whether relative mouse mode is enabled.
+ *
+ *  \sa SDL_SetRelativeMouseMode()
+extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
+ */
+static PHP_FUNCTION(SDL_GetRelativeMouseMode)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	RETVAL_BOOL(SDL_GetRelativeMouseMode());
+}
+
+
 /* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
@@ -441,6 +598,11 @@ static zend_function_entry sdl_mouse_functions[] = {
 	ZEND_FE(SDL_GetDefaultCursor,               arginfo_none)
 	ZEND_FE(SDL_ShowCursor,                     arginfo_SDL_ShowCursor)
 	ZEND_FE(SDL_GetMouseFocus,                  arginfo_none)
+	ZEND_FE(SDL_GetMouseState,                  arginfo_SDL_GetMouseState)
+	ZEND_FE(SDL_GetRelativeMouseState,          arginfo_SDL_GetMouseState)
+	ZEND_FE(SDL_WarpMouseInWindow,              arginfo_SDL_WarpMouseInWindow)
+	ZEND_FE(SDL_SetRelativeMouseMode,           arginfo_SDL_SetRelativeMouseMode)
+	ZEND_FE(SDL_GetRelativeMouseMode,           arginfo_none)
 
 	ZEND_FE_END
 };
@@ -499,6 +661,23 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 
 	REGISTER_LONG_CONSTANT("SDL_NUM_SYSTEM_CURSORS",      SDL_NUM_SYSTEM_CURSORS, CONST_CS | CONST_PERSISTENT);
 	zend_declare_class_constant_long(php_sdl_cursor_ce, "NUM_SYSTEM", sizeof("NUM_SYSTEM")-1, SDL_NUM_SYSTEM_CURSORS TSRMLS_CC);
+
+	/*
+	 *  Used as a mask when testing buttons in buttonstate.
+	 *   - Button 1:  Left mouse button
+	 *   - Button 2:  Middle mouse button
+	 *   - Button 3:  Right mouse button
+	 */
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_LEFT",   SDL_BUTTON_LEFT,   CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_MIDDLE", SDL_BUTTON_MIDDLE, CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_RIGHT",  SDL_BUTTON_RIGHT,  CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_X1",     SDL_BUTTON_X1,     CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_X2",     SDL_BUTTON_X2,     CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_LMASK",  SDL_BUTTON_LMASK,  CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_MMASK",  SDL_BUTTON_MMASK,  CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_RMASK",  SDL_BUTTON_RMASK,  CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_X1MASK", SDL_BUTTON_X1MASK, CONST_CS | CONST_PERSISTENT); \
+	REGISTER_LONG_CONSTANT("SDL_BUTTON_X2MASK", SDL_BUTTON_X2MASK, CONST_CS | CONST_PERSISTENT); \
 
 	return (zend_register_functions(NULL, sdl_mouse_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

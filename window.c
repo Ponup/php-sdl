@@ -1834,6 +1834,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
 	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize,       arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
+	PHP_FALIAS(WarpMouse,          SDL_WarpMouseInWindow,        arginfo_SDL_Window_SetPosition)
 
 	/* static functions */
 	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)

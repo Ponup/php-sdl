@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [673] {
+  - Constants [683] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -555,6 +555,16 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_SYSTEM_CURSOR_NO ] { 10 }
     Constant [ integer SDL_SYSTEM_CURSOR_HAND ] { 11 }
     Constant [ integer SDL_NUM_SYSTEM_CURSORS ] { 12 }
+    Constant [ integer SDL_BUTTON_LEFT ] { 1 }
+    Constant [ integer SDL_BUTTON_MIDDLE ] { 2 }
+    Constant [ integer SDL_BUTTON_RIGHT ] { 3 }
+    Constant [ integer SDL_BUTTON_X1 ] { 4 }
+    Constant [ integer SDL_BUTTON_X2 ] { 5 }
+    Constant [ integer SDL_BUTTON_LMASK ] { 1 }
+    Constant [ integer SDL_BUTTON_MMASK ] { 2 }
+    Constant [ integer SDL_BUTTON_RMASK ] { 4 }
+    Constant [ integer SDL_BUTTON_X1MASK ] { 8 }
+    Constant [ integer SDL_BUTTON_X2MASK ] { 16 }
     Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
     Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
     Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
@@ -988,6 +998,39 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       }
     }
     Function [ <internal:SDL> function SDL_GetMouseFocus ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetMouseState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$x ]
+        Parameter #1 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRelativeMouseState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$x ]
+        Parameter #1 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WarpMouseInWindow ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetRelativeMouseMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $enabled ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRelativeMouseMode ] {
 
       - Parameters [0] {
       }
@@ -3312,7 +3355,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $title ]
       }
 
-      - Methods [43] {
+      - Methods [44] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -3612,6 +3655,14 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method GL_Swap ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WarpMouse ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
           }
         }
       }
