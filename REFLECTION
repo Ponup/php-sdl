@@ -873,6 +873,38 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> $name ]
       }
     }
+    Function [ <internal:SDL> function SDL_StartTextInput ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsTextInputActive ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_StopTextInput ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetTextInputRect ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Rect $rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasScreenKeyboardSupport ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsScreenKeyboardShown ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
     Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
 
       - Parameters [4] {

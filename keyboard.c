@@ -27,6 +27,7 @@
 
 #include "php_sdl.h"
 #include "keyboard.h"
+#include "rect.h"
 #include "window.h"
 
 
@@ -273,6 +274,142 @@ static PHP_FUNCTION(SDL_GetKeyFromName)
 /* }}} */
 
 
+/* {{{ proto void SDL_StartTextInput(void)
+
+ *  \brief Start accepting Unicode text input events.
+ *         This function will show the on-screen keyboard if supported.
+ *
+ *  \sa SDL_StopTextInput()
+ *  \sa SDL_SetTextInputRect()
+ *  \sa SDL_HasScreenKeyboardSupport()
+ extern DECLSPEC void SDLCALL SDL_StartTextInput(void);
+ */
+static PHP_FUNCTION(SDL_StartTextInput)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	SDL_StartTextInput();
+}
+/* }}} */
+
+
+/* {{{ proto bool SDL_IsTextInputActive(void)
+
+ *  \brief Return whether or not Unicode text input events are enabled.
+ *
+ *  \sa SDL_StartTextInput()
+ *  \sa SDL_StopTextInput()
+ extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputActive(void);
+ */
+static PHP_FUNCTION(SDL_IsTextInputActive)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	RETVAL_BOOL(SDL_IsTextInputActive());
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_StopTextInput(void)
+
+ *  \brief Stop receiving any text input events.
+ *         This function will hide the on-screen keyboard if supported.
+ *
+ *  \sa SDL_StartTextInput()
+ *  \sa SDL_HasScreenKeyboardSupport()
+ extern DECLSPEC void SDLCALL SDL_StopTextInput(void);
+ */
+static PHP_FUNCTION(SDL_StopTextInput)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	SDL_StopTextInput();
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetTextInputRect, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto void SDL_SetTextInputRect(SDL_Rect rect)
+
+ *  \brief Set the rectangle used to type Unicode text inputs.
+ *         This is used as a hint for IME and on-screen keyboard placement.
+ *
+ *  \sa SDL_StartTextInput()
+ extern DECLSPEC void SDLCALL SDL_SetTextInputRect(SDL_Rect *rect);
+ */
+static PHP_FUNCTION(SDL_SetTextInputRect)
+{
+	zval *z_rect;
+	SDL_Rect rect;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &z_rect, get_php_sdl_rect_ce())) {
+		return;
+	}
+	if (zval_to_sdl_rect(z_rect, &rect TSRMLS_CC)) {
+		SDL_SetTextInputRect(&rect);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto bool SDL_HasScreenKeyboardSupport(void)
+
+ *  \brief Returns whether the platform has some screen keyboard support.
+ *
+ *  \return SDL_TRUE if some keyboard support is available else SDL_FALSE.
+ *
+ *  \note Not all screen keyboard functions are supported on all platforms.
+ *
+ *  \sa SDL_IsScreenKeyboardShown()
+ extern DECLSPEC SDL_bool SDLCALL SDL_HasScreenKeyboardSupport(void);
+ */
+static PHP_FUNCTION(SDL_HasScreenKeyboardSupport)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	RETVAL_BOOL(SDL_HasScreenKeyboardSupport());
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IsScreenKeyboardShown, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto bool SDL_IsScreenKeyboardShown(SDL_Window window)
+
+ *  \brief Returns whether the screen keyboard is shown for given window.
+ *
+ *  \param window The window for which screen keyboard should be queried.
+ *
+ *  \return SDL_TRUE if screen keyboard is shown else SDL_FALSE.
+ *
+ *  \sa SDL_HasScreenKeyboardSupport()
+ extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenKeyboardShown(SDL_Window *window);
+ */
+static PHP_FUNCTION(SDL_IsScreenKeyboardShown)
+{
+	zval *z_window;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &z_window, get_php_sdl_window_ce())) {
+		return;
+	}
+	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if (window) {
+		RETVAL_BOOL(SDL_IsScreenKeyboardShown(window));
+	}
+}
+/* }}} */
+
+
 /* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
@@ -302,6 +439,12 @@ static zend_function_entry sdl_keyboard_functions[] = {
 	ZEND_FE(SDL_GetScancodeFromName,                  arginfo_name)
 	ZEND_FE(SDL_GetKeyName,                           arginfo_key)
 	ZEND_FE(SDL_GetKeyFromName,                       arginfo_name)
+	ZEND_FE(SDL_StartTextInput,                       arginfo_none)
+	ZEND_FE(SDL_IsTextInputActive,                    arginfo_none)
+	ZEND_FE(SDL_StopTextInput,                        arginfo_none)
+	ZEND_FE(SDL_SetTextInputRect,                     arginfo_SDL_SetTextInputRect)
+	ZEND_FE(SDL_HasScreenKeyboardSupport,             arginfo_none)
+	ZEND_FE(SDL_IsScreenKeyboardShown,                arginfo_SDL_IsScreenKeyboardShown)
 
 	ZEND_FE_END
 };
