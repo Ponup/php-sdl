@@ -50,6 +50,7 @@ error.c
 glcontext.c
 keyboard.c
 messagebox.c
+mouse.c
 pixels.c
 platform.c
 power.c

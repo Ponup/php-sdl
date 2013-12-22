@@ -32,6 +32,7 @@
 #include "glcontext.h"
 #include "keyboard.h"
 #include "messagebox.h"
+#include "mouse.h"
 #include "platform.h"
 #include "power.h"
 #include "pixels.h"
@@ -80,6 +81,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_glcontext)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_keyboard)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_messagebox)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_mouse)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_platform)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
