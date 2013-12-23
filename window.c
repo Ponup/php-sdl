@@ -1566,8 +1566,7 @@ static PHP_FUNCTION(SDL_CreateWindow)
 }
 /* }}} */
 
-/* {{{ proto SDL_Window, __construct(string title, int x, int y, int w, int h, int flags)
- */
+/* {{{ proto SDL_Window::__construct(string title, int x, int y, int w, int h, int flags) */
 static PHP_METHOD(SDL_Window, __construct)
 {
 	struct php_sdl_window *intern;
@@ -1596,8 +1595,7 @@ static PHP_METHOD(SDL_Window, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_Window::__toString()
-*/
+/* {{{ proto SDL_Window::__toString() */
 static PHP_METHOD(SDL_Window, __toString)
 {
 	struct php_sdl_window *intern;
@@ -1836,9 +1834,10 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
 	PHP_FALIAS(WarpMouse,          SDL_WarpMouseInWindow,        arginfo_SDL_Window_SetPosition)
 
-	/* static functions */
+	/* static methods */
 	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FENTRY(GetMouseFocus,      ZEND_FN(SDL_GetMouseFocus),          arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(GetFromID,          ZEND_FN(SDL_GetWindowFromID),        arginfo_SDL_GetWindowFromID, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 	PHP_FE_END
 };

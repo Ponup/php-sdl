@@ -2134,13 +2134,18 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [0] {
+      - Static methods [1] {
+        Method [ <internal:SDL> static public method GL_GetCurrent ] {
+
+          - Parameters [0] {
+          }
+        }
       }
 
       - Properties [0] {
       }
 
-      - Methods [4] {
+      - Methods [3] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [1] {
@@ -2155,12 +2160,6 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method Delete ] {
-
-          - Parameters [0] {
-          }
-        }
-
-        Method [ <internal:SDL> public method GL_GetCurrent ] {
 
           - Parameters [0] {
           }
@@ -2840,7 +2839,38 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [0] {
+      - Static methods [4] {
+        Method [ <internal:SDL> static public method FromFile ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $path ]
+            Parameter #1 [ <required> $mode ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromFP ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $fp ]
+            Parameter #1 [ <optional> $autoclose ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromMem ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> &$buf ]
+            Parameter #1 [ <required> $size ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromConstMem ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $buf ]
+            Parameter #1 [ <optional> $size ]
+          }
+        }
       }
 
       - Properties [1] {
@@ -3015,7 +3045,21 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [0] {
+      - Static methods [2] {
+        Method [ <internal:SDL> static public method LoadRW ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_RWops &$RWops ]
+            Parameter #1 [ <required> $freesrc ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method LoadBMP ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $path ]
+          }
+        }
       }
 
       - Properties [7] {
@@ -3331,7 +3375,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
       - Static properties [0] {
       }
 
-      - Static methods [2] {
+      - Static methods [3] {
         Method [ <internal:SDL> static public method GL_GetCurrent ] {
 
           - Parameters [0] {
@@ -3341,6 +3385,13 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> static public method GetMouseFocus ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetFromID ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $id ]
           }
         }
       }

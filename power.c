@@ -35,7 +35,7 @@ ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_GetPowerInfo(int &sec, int &pct)
 
-  *  \brief Get the current power supply details.
+ *  \brief Get the current power supply details.
  *
  *  \param secs Seconds of battery life left. You can pass a NULL here if
  *              you don't care. Will return -1 if we can't determine a

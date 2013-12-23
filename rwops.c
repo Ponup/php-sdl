@@ -205,7 +205,7 @@ void sdl_rwops_write_property(zval *object, zval *member, zval *value, const zen
 /* }}} */
 
 
-/* {{{ proto SDL_RWops, __construct(void) */
+/* {{{ proto SDL_RWops::__construct(void) */
 static PHP_METHOD(SDL_RWops, __construct)
 {
 	struct php_sdl_rwops *intern;
@@ -229,8 +229,7 @@ static PHP_METHOD(SDL_RWops, __construct)
 }
 /* }}} */
 
-/* {{{ proto SDL_RWops::__toString()
-*/
+/* {{{ proto SDL_RWops::__toString() */
 static PHP_METHOD(SDL_RWops, __toString)
 {
 	struct php_sdl_rwops *intern;
@@ -983,6 +982,7 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_ME(SDL_RWops,        __construct,       arginfo_rwops_none,    ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_RWops,        __toString,        arginfo_rwops_none,    ZEND_ACC_PUBLIC)
 
+	/* non-static methods */
 	PHP_FALIAS(Free,         SDL_FreeRW,        arginfo_rwops_none)
 	PHP_FALIAS(Size,         SDL_RWsize,        arginfo_rwops_none)
 	PHP_FALIAS(Seek,         SDL_RWseek,        arginfo_SDL_RWops_seek)
@@ -1008,6 +1008,13 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_FALIAS(WriteLE64,    SDL_WriteLE32,     arginfo_SDL_RWops_writeint)
 	PHP_FALIAS(WriteBE64,    SDL_WriteBE32,     arginfo_SDL_RWops_writeint)
 #endif
+
+	/* static methods */
+	ZEND_FENTRY(FromFile,      ZEND_FN(SDL_RWFromFile),      arginfo_SDL_RWFromFile,      ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(FromFP,        ZEND_FN(SDL_RWFromFP),        arginfo_SDL_RWFromFP,        ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(FromMem,       ZEND_FN(SDL_RWFromMem),       arginfo_SDL_RWFromMem,       ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(FromConstMem,  ZEND_FN(SDL_RWFromConstMem),  arginfo_SDL_RWFromConstMem,  ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+
 	PHP_FE_END
 };
 /* }}} */

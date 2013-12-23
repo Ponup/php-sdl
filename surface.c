@@ -216,8 +216,7 @@ PHP_FUNCTION(SDL_LoadBMP)
 /* }}} */
 
 
-/* {{{ proto SDL_Surface, __construct(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
- */
+/* {{{ proto SDL_Surface::__construct(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask) */
 static PHP_METHOD(SDL_Surface, __construct)
 {
 	struct php_sdl_surface *intern;
@@ -244,8 +243,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_Surface::__toString()
-*/
+/* {{{ proto SDL_Surface::__toString() */
 static PHP_METHOD(SDL_Surface, __toString)
 {
 	struct php_sdl_surface *intern;
@@ -1512,7 +1510,8 @@ zend_function_entry sdl_surface_functions[] = {
 static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateRGBSurface, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Surface, __toString,  arginfo_surface_none,         ZEND_ACC_PUBLIC)
-	/* Aliases */
+
+	/* non-static methods */
 	PHP_FALIAS(Free,             SDL_FreeSurface,           arginfo_surface_none)
 	PHP_FALIAS(FillRect,         SDL_FillRect,              arginfo_SDL_Surface_FillRect)
 	PHP_FALIAS(FillRects,        SDL_FillRects,             arginfo_SDL_Surface_FillRects)
@@ -1541,6 +1540,11 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetClipRect,      SDL_GetClipRect,           arginfo_SDL_Surface_GetClipRect)
 	PHP_FALIAS(Convert,          SDL_ConvertSurface,        arginfo_SDL_Surface_Convert)
 	PHP_FALIAS(ConvertFormat,    SDL_ConvertSurfaceFormat,  arginfo_SDL_Surface_ConvertFormat)
+
+	/* static methods */
+	ZEND_FENTRY(LoadRW,    ZEND_FN(SDL_LoadBMP_RW),  arginfo_SDL_LoadBMP_RW,  ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(LoadBMP,   ZEND_FN(SDL_LoadBMP),     arginfo_SDL_LoadBMP,     ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+
 	PHP_FE_END
 };
 

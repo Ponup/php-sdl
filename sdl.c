@@ -115,7 +115,7 @@ PHP_FUNCTION(SDL_WasInit) {
 }
 /* }}} */
 
-/* {{{ proto void SDL_Quit(void )
+/* {{{ proto void SDL_Quit(void)
 
  *  This function cleans up all initialized subsystems. You should
  *  call it upon all exit conditions.

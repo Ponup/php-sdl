@@ -141,7 +141,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cursor__construct, 0, 0, 6)
        ZEND_ARG_INFO(0, hot_y)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_Cursor, __construct(void) */
+/* {{{ proto SDL_Cursor::__construct(void) */
 static PHP_METHOD(SDL_Cursor, __construct)
 {
 	struct php_sdl_cursor *intern;

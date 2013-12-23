@@ -31,7 +31,8 @@
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPlatform, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-/**
+/* {{{ proto string SDL_GetPlatform(void)
+
  *  \brief Gets the name of the platform.
  */
 PHP_FUNCTION(SDL_GetPlatform)

@@ -274,8 +274,7 @@ static PHP_METHOD(SDL_MessageBoxColor, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_MessageBoxColor::__toString()
-*/
+/* {{{ proto SDL_MessageBoxColor::__toString() */
 static PHP_METHOD(SDL_MessageBoxColor, __toString)
 {
 	char *buf;
@@ -356,7 +355,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MessageBoxData__construct, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, parentwindow, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_MessageBoxData, __construct(int flags, string title, string text [, array buttons [, array colors [, SDL_Window window ]]])
+/* {{{ proto SDL_MessageBoxData::__construct(int flags, string title, string text [, array buttons [, array colors [, SDL_Window window ]]])
 
  *  \brief MessageBox structure containing title, text, window, etc.
  typedef struct
@@ -460,8 +459,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_MessageBoxData::__toString()
-*/
+/* {{{ proto SDL_MessageBoxData::__toString() */
 static PHP_METHOD(SDL_MessageBoxData, __toString)
 {
 	struct php_sdl_messageboxdata *intern;
@@ -655,7 +653,7 @@ ZEND_END_ARG_INFO()
         }\
 }
 
-/* {{{ proto int SDL_ShowMessageBox(SDL_MessageBoxData *messageboxdata, int &buttonid)
+/* {{{ proto int SDL_ShowMessageBox(SDL_MessageBoxData messageboxdata, int &buttonid)
 
  *  \brief Create a modal message box.
  *
@@ -699,7 +697,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowSimpleMessageBox, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto bool SDLCALL SDL_ShowSimpleMessageBox(int flags, string title, string message, SDL_Window window)
+/* {{{ proto bool SDL_ShowSimpleMessageBox(int flags, string title, string message, SDL_Window window)
 
  *  \brief Create a simple modal message box
  *
@@ -738,6 +736,7 @@ ZEND_END_ARG_INFO()
 static const zend_function_entry php_sdl_messageboxcolor_methods[] = {
 	PHP_ME(SDL_MessageBoxColor, __construct, arginfo_SDL_MessageBoxColor__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_MessageBoxColor, __toString,  arginfo_messagebox_none,                ZEND_ACC_PUBLIC)
+
 	PHP_FE_END
 };
 /* }}} */
@@ -746,6 +745,7 @@ static const zend_function_entry php_sdl_messageboxcolor_methods[] = {
 static const zend_function_entry php_sdl_messageboxbuttondata_methods[] = {
 	PHP_ME(SDL_MessageBoxButtonData, __construct, arginfo_SDL_MessageBoxButtonData__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_MessageBoxButtonData, __toString,  arginfo_messagebox_none,                     ZEND_ACC_PUBLIC)
+
 	PHP_FE_END
 };
 /* }}} */
@@ -755,7 +755,9 @@ static const zend_function_entry php_sdl_messageboxdata_methods[] = {
 	PHP_ME(SDL_MessageBoxData, __construct, arginfo_SDL_MessageBoxData__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_MessageBoxData, __toString,  arginfo_messagebox_none,               ZEND_ACC_PUBLIC)
 
+	/* non-static methods */
 	PHP_FALIAS(Show,         SDL_ShowMessageBox,          arginfo_SDL_MessageBoxData_Show)
+
 	PHP_FE_END
 };
 /* }}} */
@@ -764,6 +766,7 @@ static const zend_function_entry php_sdl_messageboxdata_methods[] = {
 zend_function_entry sdl_messagebox_functions[] = {
 	ZEND_FE(SDL_ShowSimpleMessageBox,     arginfo_SDL_ShowSimpleMessageBox)
 	ZEND_FE(SDL_ShowMessageBox,           arginfo_SDL_ShowMessageBox)
+
 	ZEND_FE_END
 };
 /* }}} */

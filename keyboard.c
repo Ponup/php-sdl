@@ -163,6 +163,7 @@ static PHP_FUNCTION(SDL_GetKeyFromScancode)
 
 
 /* {{{ proto int SDL_GetScancodeFromKey(int key)
+
  *  \brief Get the scancode corresponding to the given key code according to the
  *         current keyboard layout.
  *

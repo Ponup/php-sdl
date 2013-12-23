@@ -129,6 +129,7 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 	return 0;
 }
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, x)
        ZEND_ARG_INFO(0, y)
@@ -160,8 +161,7 @@ static PHP_METHOD(SDL_Rect, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_Rect::__toString()
-*/
+/* {{{ proto SDL_Rect::__toString() */
 static PHP_METHOD(SDL_Rect, __toString)
 {
 	char *buf;
@@ -183,7 +183,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Point__construct, 0, 0, 2)
        ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_Point, __construct(, int x, int y)
+/* {{{ proto SDL_Point::__construct(, int x, int y)
 
  *  \brief A rectangle, with the origin at the upper left.
 */
@@ -205,8 +205,7 @@ static PHP_METHOD(SDL_Point, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_Point::__toString()
-*/
+/* {{{ proto SDL_Point::__toString() */
 static PHP_METHOD(SDL_Point, __toString)
 {
 	char *buf;
@@ -358,6 +357,7 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
        ZEND_ARG_ARRAY_INFO(0, point, 0)
        ZEND_ARG_INFO(0, count)
@@ -366,7 +366,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
 ZEND_END_ARG_INFO()
 
 
-/* {{{ proto bool SDLCALL SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
+/* {{{ proto bool SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
 
  *  \brief Calculate a minimal rectangle enclosing a set of points
  *
@@ -484,6 +484,7 @@ static const zend_function_entry php_sdl_rect_methods[] = {
 	PHP_ME(SDL_Rect, __construct,     arginfo_SDL_Rect__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Rect, __toString,      arginfo_none,                ZEND_ACC_PUBLIC)
 
+	/* non-static methods */
 	PHP_FALIAS(Empty,            SDL_RectEmpty,            arginfo_none)
 	PHP_FALIAS(Equal,            SDL_RectEquals,           arginfo_SDL_Rect)
 	PHP_FALIAS(HasIntersection,  SDL_HasIntersection,      arginfo_SDL_Rect)

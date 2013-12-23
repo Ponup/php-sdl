@@ -89,7 +89,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DisplayMode__construct, 0, 0, 4)
        ZEND_ARG_INFO(0, refresh_rate)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_DisplayMode, __construct(int format, int w, int h, int refresh_rate)
+/* {{{ proto SDL_DisplayMode::__construct(int format, int w, int h, int refresh_rate)
 
  *  \brief  The structure that defines a display mode
 */
@@ -112,8 +112,7 @@ static PHP_METHOD(SDL_DisplayMode, __construct)
 }
 /* }}} */
 
-/* {{{ proto SDL_DisplayMode::__toString()
-*/
+/* {{{ proto SDL_DisplayMode::__toString() */
 static PHP_METHOD(SDL_DisplayMode, __toString)
 {
 	char *buf;
@@ -582,6 +581,7 @@ zend_function_entry sdl_video_functions[] = {
 static const zend_function_entry php_sdl_displaymode_methods[] = {
 	PHP_ME(SDL_DisplayMode, __construct, arginfo_SDL_DisplayMode__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_DisplayMode, __toString,  arginfo_video_none,                 ZEND_ACC_PUBLIC)
+
 	PHP_FE_END
 };
 /* }}} */

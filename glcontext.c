@@ -218,7 +218,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext__construct, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_GLContext, __construct(void) */
+/* {{{ proto SDL_GLContext::__construct(void) */
 static PHP_METHOD(SDL_GLContext, __construct)
 {
 	struct php_sdl_glcontext *intern;
@@ -250,8 +250,7 @@ static PHP_METHOD(SDL_GLContext, __construct)
 /* }}} */
 
 
-/* {{{ proto SDL_GLContext::__toString()
-*/
+/* {{{ proto SDL_GLContext::__toString() */
 static PHP_METHOD(SDL_GLContext, __toString)
 {
 	struct php_sdl_glcontext *intern;
@@ -272,7 +271,7 @@ static PHP_METHOD(SDL_GLContext, __toString)
 /* }}} */
 
 
-/* {{{ proto SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window window)
+/* {{{ proto SDL_GLContext SDL_GL_CreateContext(SDL_Window window)
 
  *  \brief Create an OpenGL context for use with an OpenGL window, and make it
  *         current.
@@ -301,7 +300,7 @@ PHP_FUNCTION(SDL_GL_CreateContext)
 /* }}} */
 
 
-/* {{{ proto void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context)
+/* {{{ proto void SDL_GL_DeleteContext(SDL_GLContext context)
 
  *  \brief Delete an OpenGL context.
  *
@@ -330,7 +329,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_MakeCurrent, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, context, SDL_GLContext, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto int SDLCALL SDL_GL_MakeCurrent(SDL_Window window, SDL_GLContext context)
+/* {{{ proto int SDL_GL_MakeCurrent(SDL_Window window, SDL_GLContext context)
 
  *  \brief Set up an OpenGL context for rendering into an OpenGL window.
  *
@@ -359,7 +358,7 @@ PHP_FUNCTION(SDL_GL_MakeCurrent)
 /* }}} */
 
 
-/* {{{ proto SDL_Window SDLCALL SDL_GL_GetCurrentWindow(void)
+/* {{{ proto SDL_Window SDL_GL_GetCurrentWindow(void)
 
  *  \brief Get the currently active OpenGL window.
  extern DECLSPEC SDL_Window* SDLCALL SDL_GL_GetCurrentWindow(void);
@@ -373,7 +372,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentWindow)
 }
 
 
-/* {{{ proto SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void)
+/* {{{ proto SDL_GLContext SDL_GL_GetCurrentContext(void)
 
  *  \brief Get the currently active OpenGL context.
  extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void);
@@ -530,8 +529,12 @@ static const zend_function_entry php_sdl_glcontext_methods[] = {
 	PHP_ME(SDL_GLContext,       __construct,                arginfo_SDL_GLContext__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_GLContext,       __toString,                 arginfo_none,                         ZEND_ACC_PUBLIC)
 
+	/* non-static method */
 	PHP_FALIAS(Delete,          SDL_GL_DeleteContext,       arginfo_none)
-	PHP_FALIAS(GL_GetCurrent,   SDL_GL_GetCurrentContext,   arginfo_none)
+
+	/* static functions */
+	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentContext),    arginfo_none,           ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+
 	ZEND_FE_END
 };
 /* }}} */
