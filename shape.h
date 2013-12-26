@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
+/* $Id$ */
 
 #ifndef PHP_SDL_SHAPE_H
 #define PHP_SDL_SHAPE_H
@@ -26,10 +26,15 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_windowshapemode_ce(void);
+zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC);
+SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC);
+
+
 PHP_MINIT_FUNCTION(sdl_shape);
 
 #ifdef  __cplusplus
-} // extern "C" 
+} // extern "C"
 #endif
 
 #endif /* PHP_SDL_SHAPE_H */

@@ -37,6 +37,7 @@
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
+#include "shape.h"
 #include "surface.h"
 #include "video.h"
 #include "window.h"
@@ -1731,6 +1732,7 @@ static PHP_FUNCTION(SDL_GetWindowTitle)
 }
 /* }}} */
 
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowTitle, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(0, title)
@@ -1764,6 +1766,132 @@ static PHP_FUNCTION(SDL_SetWindowTitle)
 	SDL_SetWindowTitle(window, title);
 }
 /* }}} */
+
+
+/* {{{ proto bool SDL_IsShapedWindow(SDL_Window window)
+
+* \brief Return whether the given window is a shaped window.
+ *
+ * \param window The window to query for being shaped.
+ *
+ * \return SDL_TRUE if the window is a window that can be shaped, SDL_FALSE if the window is unshaped or NULL.
+ * \sa SDL_CreateShapedWindow
+extern DECLSPEC SDL_bool SDLCALL SDL_IsShapedWindow(const SDL_Window *window);
+ */
+static PHP_FUNCTION(SDL_IsShapedWindow)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+	RETVAL_BOOL(SDL_IsShapedWindow(window));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowShape, 0, 0, 3)
+       ZEND_ARG_OBJ_INFO(0, window,  SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
+       ZEND_ARG_OBJ_INFO(0, mode,    SDL_WindowShapeMode, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetShape, 0, 0, 2)
+       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
+       ZEND_ARG_OBJ_INFO(0, mode,    SDL_WindowShapeMode, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SetWindowShape(SDL_Window window, SDL_Surface shape, SDL_WindowShapeMode shape_mode)
+
+ * \brief Set the shape and parameters of a shaped window.
+ *
+ * \param window The shaped window whose parameters should be set.
+ * \param shape A surface encoding the desired shape for the window.
+ * \param shape_mode The parameters to set for the shaped window.
+ *
+ * \return 0 on success, SDL_INVALID_SHAPE_ARGUMENT on invalid an invalid shape argument, or SDL_NONSHAPEABLE_WINDOW
+ *           if the SDL_Window* given does not reference a valid shaped window.
+ *
+ * \sa SDL_WindowShapeMode
+ * \sa SDL_GetShapedWindowMode.
+ extern DECLSPEC int SDLCALL SDL_SetWindowShape(SDL_Window *window,SDL_Surface *shape,SDL_WindowShapeMode *shape_mode);
+ */
+static PHP_FUNCTION(SDL_SetWindowShape)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_surface, *z_mode;
+	SDL_Window *window;
+	SDL_Surface *surface;
+	SDL_WindowShapeMode *mode;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOO", &z_window, php_sdl_window_ce,
+			&z_surface, get_php_sdl_surface_ce(), &z_mode, get_php_sdl_windowshapemode_ce()) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	surface = zval_to_sdl_surface(z_surface TSRMLS_CC);
+	mode    = zval_to_sdl_windowshapemode(z_mode TSRMLS_CC);
+	if (!surface) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Surface object");
+
+	} else if (!mode) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_WindowShapeMode object");
+
+	} else {
+	  RETVAL_LONG(SDL_SetWindowShape(window, surface, mode));
+	}
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetShapedWindowMode, 0, 0, 2)
+       ZEND_ARG_OBJ_INFO(0, window,  SDL_Window, 0)
+       ZEND_ARG_INFO(1, shaped_mode)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetShapedMode, 0, 0, 1)
+       ZEND_ARG_INFO(1, shaped_mode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_GetShapedWindowMode(SDL_Window window, SDL_WindowShapeMode &shape_mode)
+
+ * \brief Get the shape parameters of a shaped window.
+ *
+ * \param window The shaped window whose parameters should be retrieved.
+ * \param shape_mode An empty shape-mode structure to fill, or NULL to check whether the window has a shape.
+ *
+ * \return 0 if the window has a shape and, provided shape_mode was not NULL, shape_mode has been filled with the mode
+ *           data, SDL_NONSHAPEABLE_WINDOW if the SDL_Window given is not a shaped window, or SDL_WINDOW_LACKS_SHAPE if
+ *           the SDL_Window* given is a shapeable window currently lacking a shape.
+ *
+ * \sa SDL_WindowShapeMode
+ * \sa SDL_SetWindowShape
+ extern DECLSPEC int SDLCALL SDL_GetShapedWindowMode(SDL_Window *window,SDL_WindowShapeMode *shape_mode);
+ */
+static PHP_FUNCTION(SDL_GetShapedWindowMode)
+{
+	struct php_sdl_window *intern;
+	zval *z_window, *z_mode;
+	SDL_Window *window;
+	SDL_WindowShapeMode mode;
+	int ret;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce, &z_mode) == FAILURE) {
+		return;
+	}
+	FETCH_WINDOW(window, z_window, 1);
+	ret = SDL_GetShapedWindowMode(window, &mode);
+	if (ret==0) {
+		zval_dtor(z_mode);
+		sdl_windowshapemode_to_zval(&mode, z_mode TSRMLS_CC);
+	}
+	RETVAL_LONG(ret);
+}
+/* }}} */
+
 
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_window_none, 0, 0, 0)
@@ -1820,6 +1948,9 @@ zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_GetWindowBrightness,		arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowGammaRamp, 		arginfo_SDL_SetWindowGammaRamp)
 	ZEND_FE(SDL_GetWindowGammaRamp, 		arginfo_SDL_GetWindowGammaRamp)
+	ZEND_FE(SDL_IsShapedWindow,				arginfo_SDL_Window)
+	ZEND_FE(SDL_SetWindowShape,				arginfo_SDL_SetWindowShape)
+	ZEND_FE(SDL_GetShapedWindowMode,		arginfo_SDL_GetShapedWindowMode)
 
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY,	arginfo_SDL_WINDOWPOS_DISPLAY)
@@ -1875,6 +2006,9 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize,       arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
 	PHP_FALIAS(WarpMouse,          SDL_WarpMouseInWindow,        arginfo_SDL_Window_SetPosition)
+	PHP_FALIAS(IsShaped,           SDL_IsShapedWindow,           arginfo_window_none)
+	PHP_FALIAS(SetShape,           SDL_SetWindowShape,           arginfo_SDL_Window_SetShape)
+	PHP_FALIAS(GetShapedMode,      SDL_GetShapedWindowMode,      arginfo_SDL_Window_GetShapedMode)
 
 	/* static methods */
 	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)

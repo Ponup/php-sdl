@@ -2098,6 +2098,27 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #3 [ <required> &$blue ]
       }
     }
+    Function [ <internal:SDL> function SDL_IsShapedWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowShape ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_Surface $surface ]
+        Parameter #2 [ <required> SDL_WindowShapeMode $mode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetShapedWindowMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$shaped_mode ]
+      }
+    }
     Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
 
       - Parameters [1] {
@@ -3462,7 +3483,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Property [ <default> public $title ]
       }
 
-      - Methods [44] {
+      - Methods [47] {
         Method [ <internal:SDL, ctor> public method __construct ] {
 
           - Parameters [6] {
@@ -3770,6 +3791,27 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
           - Parameters [2] {
             Parameter #0 [ <required> $x ]
             Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method IsShaped ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetShape ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_Surface $surface ]
+            Parameter #1 [ <required> SDL_WindowShapeMode $mode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetShapedMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$shaped_mode ]
           }
         }
       }
