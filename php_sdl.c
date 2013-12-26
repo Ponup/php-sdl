@@ -39,6 +39,7 @@
 #include "rect.h"
 #include "rwops.h"
 #include "sdl.h"
+#include "shape.h"
 #include "surface.h"
 #include "version.h"
 #include "video.h"
@@ -88,6 +89,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rwops)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_sdl)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_shape)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)

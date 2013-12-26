@@ -57,6 +57,7 @@ power.c
 rect.c
 rwops.c
 sdl.c
+shape.c
 surface.c
 version.c
 video.c

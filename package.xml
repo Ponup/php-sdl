@@ -86,6 +86,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='rwops.h'/>
       <file role='src' name='sdl.c'/>
       <file role='src' name='sdl.h'/>
+      <file role='src' name='shape.c'/>
+      <file role='src' name='shape.h'/>
       <file role='src' name='surface.c'/>
       <file role='src' name='surface.h'/>
       <file role='src' name='version.c'/>
