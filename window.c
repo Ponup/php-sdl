@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
+/* $Id$ */
 
 /*
   +----------------------------------------------------------------------+
@@ -33,6 +33,7 @@
 */
 
 #include "php_sdl.h"
+#include <SDL_shape.h>
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
@@ -1509,6 +1510,35 @@ static PHP_FUNCTION(SDL_GetWindowGammaRamp)
 /* }}} */
 
 
+static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
+{
+	struct php_sdl_window *intern;
+	long x, y, w, h, flags;
+	char *title;
+	int  *title_len;
+	SDL_Window *window;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slllll", &title, &title_len, &x, &y, &w, &h, &flags)) {
+		return;
+	}
+	switch(opt) {
+		case 1:
+			window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
+			break;
+		default:
+			window = SDL_CreateWindow(title, x, y, w, h, flags);
+	}
+	if (window) {
+		object_init_ex(return_value, php_sdl_window_ce);
+		intern = (struct php_sdl_window *)zend_object_store_get_object(return_value TSRMLS_CC);
+		intern->window = window;
+		intern->flags  = 0;
+
+		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
+	}
+}
+
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
        ZEND_ARG_INFO(0, title)
        ZEND_ARG_INFO(0, x)
@@ -1517,6 +1547,34 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
        ZEND_ARG_INFO(0, y)
        ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_Window SDL_CreateShapedWindow(string title, int x, int y, int w, int h, int flags)
+
+ *  \brief Create a window that can be shaped with the specified position, dimensions, and flags.
+ *
+ *  \param title The title of the window, in UTF-8 encoding.
+ *  \param x     The x position of the window, ::SDL_WINDOWPOS_CENTERED, or
+ *               ::SDL_WINDOWPOS_UNDEFINED.
+ *  \param y     The y position of the window, ::SDL_WINDOWPOS_CENTERED, or
+ *               ::SDL_WINDOWPOS_UNDEFINED.
+ *  \param w     The width of the window.
+ *  \param h     The height of the window.
+ *  \param flags The flags for the window, a mask of SDL_WINDOW_BORDERLESS with any of the following:
+ *               ::SDL_WINDOW_OPENGL,     ::SDL_WINDOW_INPUT_GRABBED,
+ *               ::SDL_WINDOW_HIDDEN,     ::SDL_WINDOW_RESIZABLE,
+ *               ::SDL_WINDOW_MAXIMIZED,  ::SDL_WINDOW_MINIMIZED,
+ *       ::SDL_WINDOW_BORDERLESS is always set, and ::SDL_WINDOW_FULLSCREEN is always unset.
+ *
+ *  \return The window created, or NULL if window creation failed.
+ *
+ *  \sa SDL_DestroyWindow()
+ extern DECLSPEC SDL_Window * SDLCALL SDL_CreateShapedWindow(const char *title,unsigned int x,unsigned int y,unsigned int w,unsigned int h,Uint32 flags);
+*/
+static PHP_FUNCTION(SDL_CreateShapedWindow)
+{
+	php_create_window(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+/* }}} */
 
 /* {{{ proto SDL_Window SDL_CreateWindow(string title, int x, int y, int w, int h, int flags)
 
@@ -1545,24 +1603,7 @@ ZEND_END_ARG_INFO()
 */
 static PHP_FUNCTION(SDL_CreateWindow)
 {
-	struct php_sdl_window *intern;
-	long x, y, w, h, flags;
-	char *title;
-	int  *title_len;
-	SDL_Window *window;
-
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "slllll", &title, &title_len, &x, &y, &w, &h, &flags)) {
-		return;
-	}
-	window = SDL_CreateWindow(title, x, y, w, h, flags);
-	if (window) {
-		object_init_ex(return_value, php_sdl_window_ce);
-		intern = (struct php_sdl_window *)zend_object_store_get_object(return_value TSRMLS_CC);
-		intern->window = window;
-		intern->flags  = 0;
-
-		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
-	}
+	php_create_window(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
 /* }}} */
 
@@ -1740,6 +1781,7 @@ ZEND_END_ARG_INFO()
 /* {{{ sdl_window_functions[] */
 zend_function_entry sdl_window_functions[] = {
 	ZEND_FE(SDL_CreateWindow,				arginfo_SDL_CreateWindow)
+	ZEND_FE(SDL_CreateShapedWindow,			arginfo_SDL_CreateWindow)
 	ZEND_FE(SDL_DestroyWindow,				arginfo_SDL_Window)
 	ZEND_FE(SDL_UpdateWindowSurface,		arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowTitle,				arginfo_SDL_Window)
