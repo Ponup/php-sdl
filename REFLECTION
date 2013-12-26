@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [683] {
+  - Constants [687] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -657,6 +657,10 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_INIT_EVENTS ] { 16384 }
     Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
     Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer ShapeModeDefault ] { 0 }
+    Constant [ integer ShapeModeBinarizeAlpha ] { 1 }
+    Constant [ integer ShapeModeReverseBinarizeAlpha ] { 2 }
+    Constant [ integer ShapeModeColorKey ] { 3 }
     Constant [ integer SDL_SWSURFACE ] { 0 }
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
@@ -2094,7 +2098,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [15] {
+  - Classes [16] {
     Class [ <internal:SDL> class SDL_GLContext ] {
 
       - Constants [31] {
@@ -3028,6 +3032,44 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
           - Parameters [1] {
             Parameter #0 [ <required> $value ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_WindowShapeMode ] {
+
+      - Constants [4] {
+        Constant [ integer Default ] { 0 }
+        Constant [ integer BinarizeAlpha ] { 1 }
+        Constant [ integer ReverseBinarizeAlpha ] { 2 }
+        Constant [ integer ColorKey ] { 3 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $mode ]
+        Property [ <default> public $colorKey ]
+        Property [ <default> public $binarizationCutoff ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $mode ]
+            Parameter #1 [ <required> $parameter ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
           }
         }
       }

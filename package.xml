@@ -51,6 +51,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   SDL_RWops
   SDL_Surface
   SDL_Window
+  SDL_WindowShapeMode
   </notes>
   <contents>
     <dir name="/">
