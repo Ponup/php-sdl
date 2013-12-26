@@ -49,7 +49,7 @@ zend_class_entry *get_php_sdl_windowshapemode_ce(void)
 
 
 /* {{{ sdl_windowshapemode_to_zval */
-zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val	 TSRMLS_DC)
+zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC)
 {
 	if (mode) {
 		struct php_sdl_windowshapemode *intern;
@@ -283,10 +283,10 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 /* }}} */
 
 
+
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
-
 
 /* {{{ php_sdl_windowshapemode_methods[] */
 static const zend_function_entry php_sdl_windowshapemode_methods[] = {
