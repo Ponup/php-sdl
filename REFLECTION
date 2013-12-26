@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [687] {
+  - Constants [690] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -661,6 +661,9 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer ShapeModeBinarizeAlpha ] { 1 }
     Constant [ integer ShapeModeReverseBinarizeAlpha ] { 2 }
     Constant [ integer ShapeModeColorKey ] { 3 }
+    Constant [ integer SDL_NONSHAPEABLE_WINDOW ] { -1 }
+    Constant [ integer SDL_INVALID_SHAPE_ARGUMENT ] { -2 }
+    Constant [ integer SDL_WINDOW_LACKS_SHAPE ] { -3 }
     Constant [ integer SDL_SWSURFACE ] { 0 }
     Constant [ integer SDL_PREALLOC ] { 1 }
     Constant [ integer SDL_RLEACCEL ] { 2 }
