@@ -29,7 +29,6 @@
 
 
 #include "php_sdl.h"
-#include <SDL_shape.h>
 #include "pixels.h"
 #include "shape.h"
 #include "window.h"

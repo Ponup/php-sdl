@@ -22,6 +22,9 @@
 #ifndef PHP_SDL_SHAPE_H
 #define PHP_SDL_SHAPE_H
 
+/* not included in default SDL.h */
+#include <SDL_shape.h>
+
 #ifdef  __cplusplus
 extern "C" {
 #endif

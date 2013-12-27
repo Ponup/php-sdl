@@ -33,7 +33,6 @@
 */
 
 #include "php_sdl.h"
-#include <SDL_shape.h>
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
