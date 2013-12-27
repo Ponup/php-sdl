@@ -50,6 +50,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   SDL_Point
   SDL_Rect
   SDL_RWops
+  SDL_sem
   SDL_Surface
   SDL_Window
   SDL_WindowShapeMode
@@ -130,6 +131,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='021-surface-oo.phpt'/>
         <file role='test' name='022-pixels.phpt'/>
         <file role='test' name='023-messagebox.phpt'/>
+        <file role='test' name='024-mutex.phpt'/>
+        <file role='test' name='025-mutex-oo.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>
