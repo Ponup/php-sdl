@@ -1,6 +1,6 @@
 Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
 
-  - Constants [690] {
+  - Constants [692] {
     Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
     Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
     Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
@@ -565,6 +565,8 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Constant [ integer SDL_BUTTON_RMASK ] { 4 }
     Constant [ integer SDL_BUTTON_X1MASK ] { 8 }
     Constant [ integer SDL_BUTTON_X2MASK ] { 16 }
+    Constant [ integer SDL_MUTEX_TIMEDOUT ] { 1 }
+    Constant [ integer SDL_MUTEX_MAXWAIT ] { 4294967295 }
     Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
     Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
     Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
@@ -1040,6 +1042,47 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     Function [ <internal:SDL> function SDL_GetRelativeMouseMode ] {
 
       - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateMutex ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_LockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_TryLockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UnlockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroyMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_mutexP ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_mutexV ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
       }
     }
     Function [ <internal:SDL> function SDL_GetPlatform ] {
@@ -2133,7 +2176,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [16] {
+  - Classes [17] {
     Class [ <internal:SDL> class SDL_GLContext ] {
 
       - Constants [31] {
@@ -2435,6 +2478,61 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         }
 
         Method [ <internal:SDL> public method Set ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_mutex ] {
+
+      - Constants [2] {
+        Constant [ integer TIMEDOUT ] { 1 }
+        Constant [ integer MAXWAIT ] { 4294967295 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [6] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Lock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method TryLock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Unlock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
 
           - Parameters [0] {
           }
