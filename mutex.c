@@ -39,11 +39,27 @@ struct php_sdl_mutex {
 	Uint32        flags;
 };
 
+static zend_class_entry *php_sdl_sem_ce;
+static zend_object_handlers php_sdl_sem_handlers;
+struct php_sdl_sem {
+	zend_object   zo;
+	SDL_sem      *sem;
+	Uint32        flags;
+};
+
 
 /* {{{ get_php_sdl_mutex_ce */
 zend_class_entry *get_php_sdl_mutex_ce(void)
 {
 	return php_sdl_mutex_ce;
+}
+/* }}} */
+
+
+/* {{{ get_php_sdl_sem_ce */
+zend_class_entry *get_php_sdl_sem_ce(void)
+{
+	return php_sdl_sem_ce;
 }
 /* }}} */
 
@@ -58,6 +74,18 @@ zend_class_entry *get_php_sdl_mutex_ce(void)
         }\
 }
 
+
+#define FETCH_SEM(__ptr, __id, __check) \
+{ \
+        intern = (struct php_sdl_sem *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = intern->sem; \
+        if (__check && !__ptr) {\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                RETURN_FALSE;\
+        }\
+}
+
+
 /* {{{ sdl_mutex_to_zval */
 zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags TSRMLS_DC)
 {
@@ -67,6 +95,25 @@ zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags TSRMLS_D
 		object_init_ex(z_val, php_sdl_mutex_ce);
 		intern = (struct php_sdl_mutex *)zend_object_store_get_object(z_val TSRMLS_CC);
 		intern->mutex = mutex;
+		intern->flags = flags;
+
+		return 1;
+	}
+	ZVAL_NULL(z_val);
+	return 0;
+}
+/* }}} */
+
+
+/* {{{ sdl_sem_to_zval */
+zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC)
+{
+	if (sem) {
+		struct php_sdl_sem *intern;
+
+		object_init_ex(z_val, php_sdl_sem_ce);
+		intern = (struct php_sdl_sem *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->sem   = sem;
 		intern->flags = flags;
 
 		return 1;
@@ -91,8 +138,21 @@ SDL_mutex *zval_to_sdl_mutex(zval *z_val TSRMLS_DC)
 /* }}} */
 
 
-/* {{{ php_sdl_mutex_free
-	 */
+/* {{{ zval_to_sdl_sem */
+SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC)
+{
+	struct php_sdl_sem *intern;
+
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_sem_ce) {
+		intern = (struct php_sdl_sem *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->sem;
+	}
+	return NULL;
+}
+/* }}} */
+
+
+/* {{{ php_sdl_mutex_free */
 static void php_sdl_mutex_free(void *object TSRMLS_DC)
 {
 	struct php_sdl_mutex *intern = (struct php_sdl_mutex *) object;
@@ -109,8 +169,24 @@ static void php_sdl_mutex_free(void *object TSRMLS_DC)
 /* }}} */
 
 
-/* {{{ php_sdl_mutex_new
- */
+/* {{{ php_sdl_sem_free */
+static void php_sdl_sem_free(void *object TSRMLS_DC)
+{
+	struct php_sdl_sem *intern = (struct php_sdl_sem *) object;
+
+	if (intern->sem) {
+		if (!(intern->flags & SDL_DONTFREE)) {
+			SDL_DestroySemaphore(intern->sem);
+		}
+	}
+
+	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	efree(intern);
+}
+/* }}} */
+
+
+/* {{{ php_sdl_mutex_new */
 static zend_object_value php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	zend_object_value retval;
@@ -126,6 +202,28 @@ static zend_object_value php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_D
 
 	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_mutex_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_mutex_handlers;
+
+	return retval;
+}
+/* }}} */
+
+
+/* {{{ php_sdl_sem_new */
+static zend_object_value php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	zend_object_value retval;
+	struct php_sdl_sem *intern;
+
+	intern = emalloc(sizeof(*intern));
+	memset(intern, 0, sizeof(*intern));
+
+	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	object_properties_init(&intern->zo, class_type);
+
+	intern->sem = NULL;
+
+	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_sem_free, NULL TSRMLS_CC);
+	retval.handlers = (zend_object_handlers *) &php_sdl_sem_handlers;
 
 	return retval;
 }
@@ -185,13 +283,13 @@ static PHP_METHOD(SDL_mutex, __toString)
  */
 PHP_FUNCTION(SDL_CreateMutex)
 {
-	SDL_mutex *context;
+	SDL_mutex *mutex;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	context = SDL_CreateMutex();
-	sdl_mutex_to_zval(context, return_value, 0 TSRMLS_CC);
+	mutex = SDL_CreateMutex();
+	sdl_mutex_to_zval(mutex, return_value, 0 TSRMLS_CC);
 }
 /* }}} */
 
@@ -291,6 +389,224 @@ static PHP_FUNCTION(SDL_DestroyMutex)
 /* }}} */
 
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem__construct, 0, 0, 1)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto SDL_sem::__construct(int value) */
+static PHP_METHOD(SDL_sem, __construct)
+{
+	struct php_sdl_sem *intern;
+	zend_error_handling error_handling;
+	long value;
+
+	intern = (struct php_sdl_sem *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &value)) {
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		return;
+	}
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+
+	intern->sem = SDL_CreateSemaphore((Uint32)value);
+	if (intern->sem) {
+		intern->flags = 0;
+	} else {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_sem::__toString() */
+static PHP_METHOD(SDL_sem, __toString)
+{
+	struct php_sdl_sem *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_sem *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->sem) {
+		spprintf(&buf, 100, "SDL_sem(%lx)", (long)intern->sem);
+		RETVAL_STRING(buf, 0);
+	} else {
+		RETVAL_STRING("SDL_sem()", 1);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_sem SDL_CreateSemaphore(int value)
+
+ *  Create a semaphore, initialized with value, returns NULL on failure.
+ extern DECLSPEC SDL_sem *SDLCALL SDL_CreateSemaphore(Uint32 initial_value);
+ */
+PHP_FUNCTION(SDL_CreateSemaphore)
+{
+	SDL_sem *sem;
+	long value;
+
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &value)) {
+		return;
+	}
+	sem = SDL_CreateSemaphore((Uint32)value);
+	sdl_sem_to_zval(sem, return_value, 0 TSRMLS_CC);
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_SemWait(SDL_sem sem)
+
+ *  This function suspends the calling thread until the semaphore pointed
+ *  to by \c sem has a positive count. It then atomically decreases the
+ *  semaphore count.
+ extern DECLSPEC int SDLCALL SDL_SemWait(SDL_sem * sem);
+ */
+static PHP_FUNCTION(SDL_SemWait)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_sem, php_sdl_sem_ce) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+
+	RETVAL_LONG(SDL_SemWait(intern->sem));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_SemTryWait(SDL_sem sem)
+
+ *  Non-blocking variant of SDL_SemWait().
+ *
+ *  \return 0 if the wait succeeds, ::SDL_MUTEX_TIMEDOUT if the wait would
+ *          block, and -1 on error.
+ extern DECLSPEC int SDLCALL SDL_SemTryWait(SDL_sem * sem);
+ */
+static PHP_FUNCTION(SDL_SemTryWait)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_sem, php_sdl_sem_ce) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+
+	RETVAL_LONG(SDL_SemTryWait(intern->sem));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_SemPost(SDL_sem sem)
+
+ *  Atomically increases the semaphore's count (not blocking).
+ *
+ *  \return 0, or -1 on error.
+ extern DECLSPEC int SDLCALL SDL_SemPost(SDL_sem * sem);
+ */
+static PHP_FUNCTION(SDL_SemPost)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_sem, php_sdl_sem_ce) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+
+	RETVAL_LONG(SDL_SemPost(intern->sem));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_SemValue(SDL_sem sem)
+
+ *  Returns the current count of the semaphore.
+ extern DECLSPEC Uint32 SDLCALL SDL_SemValue(SDL_sem * sem);
+ */
+static PHP_FUNCTION(SDL_SemValue)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_sem, php_sdl_sem_ce) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+
+	RETVAL_LONG(SDL_SemValue(intern->sem));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SemWaitTimeout, 0, 0, 2)
+	ZEND_ARG_OBJ_INFO(0, semaphore, SDL_sem, 0)
+	ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Sem_WaitTimeout, 0, 0, 1)
+	ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_SemWaitTimeout(SDL_sem sem, int ms)
+
+ *  Variant of SDL_SemWait() with a timeout in milliseconds.
+ *
+ *  \return 0 if the wait succeeds, ::SDL_MUTEX_TIMEDOUT if the wait does not
+ *          succeed in the allotted time, and -1 on error.
+ *
+ *  \warning On some platforms this function is implemented by looping with a
+ *           delay of 1 ms, and so should be avoided if possible.
+ extern DECLSPEC int SDLCALL SDL_SemWaitTimeout(SDL_sem * sem, Uint32 ms);
+ */
+static PHP_FUNCTION(SDL_SemWaitTimeout)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+	long ms;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_sem, php_sdl_sem_ce, &ms) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+
+	RETVAL_LONG(SDL_SemWaitTimeout(intern->sem, (Uint32)ms));
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_DestroySemaphore(SDL_sem sem)
+
+ *  Destroy a semaphore.
+ extern DECLSPEC void SDLCALL SDL_DestroySemaphore(SDL_sem * sem);
+ */
+static PHP_FUNCTION(SDL_DestroySemaphore)
+{
+	struct php_sdl_sem *intern;
+	zval *z_sem;
+	SDL_sem *sem;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_sem, php_sdl_sem_ce) == FAILURE) {
+		return;
+	}
+	FETCH_SEM(sem, z_sem, 1);
+	SDL_DestroySemaphore(sem);
+	intern->sem = NULL;
+}
+/* }}} */
+
 /* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
@@ -298,6 +614,10 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_mutex, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, semaphore, SDL_sem, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -310,7 +630,25 @@ static const zend_function_entry php_sdl_mutex_methods[] = {
 	PHP_FALIAS(Lock,        SDL_LockMutex,              arginfo_none)
 	PHP_FALIAS(TryLock,     SDL_TryLockMutex,           arginfo_none)
 	PHP_FALIAS(Unlock,      SDL_UnlockMutex,            arginfo_none)
-	PHP_FALIAS(Destroy,     SDL_DestroyMutex,            arginfo_none)
+	PHP_FALIAS(Destroy,     SDL_DestroyMutex,           arginfo_none)
+
+	ZEND_FE_END
+};
+/* }}} */
+
+
+/* {{{ sdl_sem_methods[] */
+static const zend_function_entry php_sdl_sem_methods[] = {
+	PHP_ME(SDL_sem,        __construct,                arginfo_SDL_sem__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_sem,        __toString,                 arginfo_none,               ZEND_ACC_PUBLIC)
+
+	/* non-static method */
+	PHP_FALIAS(Wait,        SDL_SemWait,               arginfo_none)
+	PHP_FALIAS(TryWait,     SDL_SemTryWait,            arginfo_none)
+	PHP_FALIAS(Post,        SDL_SemPost,               arginfo_none)
+	PHP_FALIAS(Value,       SDL_SemValue,              arginfo_none)
+	PHP_FALIAS(WaitTimeout, SDL_SemWaitTimeout,        arginfo_SDL_Sem_WaitTimeout)
+	PHP_FALIAS(Destroy,     SDL_DestroySemaphore,      arginfo_none)
 
 	ZEND_FE_END
 };
@@ -319,15 +657,25 @@ static const zend_function_entry php_sdl_mutex_methods[] = {
 
 /* {{{ sdl_mutex_functions[] */
 static zend_function_entry sdl_mutex_functions[] = {
+	/* mutex functions */
 	ZEND_FE(SDL_CreateMutex,                        arginfo_none)
 	ZEND_FE(SDL_LockMutex,                          arginfo_SDL_mutex)
 	ZEND_FE(SDL_TryLockMutex,                       arginfo_SDL_mutex)
 	ZEND_FE(SDL_UnlockMutex,                        arginfo_SDL_mutex)
 	ZEND_FE(SDL_DestroyMutex,                       arginfo_SDL_mutex)
 
-	/* aliases */
+	/* mutex aliases */
 	PHP_FALIAS(SDL_mutexP,      SDL_LockMutex,      arginfo_SDL_mutex)
 	PHP_FALIAS(SDL_mutexV,      SDL_UnlockMutex,    arginfo_SDL_mutex)
+
+	/* semaphore functions */
+	ZEND_FE(SDL_CreateSemaphore,                    arginfo_SDL_sem__construct)
+	ZEND_FE(SDL_SemWait,                            arginfo_SDL_sem)
+	ZEND_FE(SDL_SemTryWait,                         arginfo_SDL_sem)
+	ZEND_FE(SDL_SemPost,                            arginfo_SDL_sem)
+	ZEND_FE(SDL_SemValue,                           arginfo_SDL_sem)
+	ZEND_FE(SDL_SemWaitTimeout,                     arginfo_SDL_SemWaitTimeout)
+	ZEND_FE(SDL_DestroySemaphore,                   arginfo_SDL_sem)
 
 	ZEND_FE_END
 };
@@ -350,6 +698,11 @@ PHP_MINIT_FUNCTION(sdl_mutex)
 
 	REGISTER_MUTEXT_CLASS_CONST_LONG("TIMEDOUT", SDL_MUTEX_TIMEDOUT);
 	REGISTER_MUTEXT_CLASS_CONST_LONG("MAXWAIT",  SDL_MUTEX_MAXWAIT);
+
+	INIT_CLASS_ENTRY(ce, "SDL_sem", php_sdl_sem_methods);
+	ce.create_object = php_sdl_sem_new;
+	php_sdl_sem_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	memcpy(&php_sdl_sem_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	return (zend_register_functions(NULL, sdl_mutex_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

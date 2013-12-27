@@ -1073,6 +1073,49 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Parameter #0 [ <required> SDL_mutex $mutex ]
       }
     }
+    Function [ <internal:SDL> function SDL_CreateSemaphore ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemWait ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemTryWait ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemPost ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemValue ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemWaitTimeout ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+        Parameter #1 [ <required> $ms ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroySemaphore ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
     Function [ <internal:SDL> function SDL_mutexP ] {
 
       - Parameters [1] {
@@ -2176,7 +2219,7 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
     }
   }
 
-  - Classes [17] {
+  - Classes [18] {
     Class [ <internal:SDL> class SDL_GLContext ] {
 
       - Constants [31] {
@@ -2529,6 +2572,73 @@ Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
         Method [ <internal:SDL> public method Unlock ] {
 
           - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_sem ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [8] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Wait ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method TryWait ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Post ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Value ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WaitTimeout ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $ms ]
           }
         }
 

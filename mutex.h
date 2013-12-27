@@ -26,6 +26,14 @@
 extern "C" {
 #endif
 
+zend_class_entry *get_php_sdl_mutex_ce(void);
+zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_mutex *zval_to_sdl_mutex(zval *z_val TSRMLS_DC);
+
+zend_class_entry *get_php_sdl_sem_ce(void);
+zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC);
+
 PHP_MINIT_FUNCTION(sdl_mutex);
 
 #ifdef  __cplusplus
