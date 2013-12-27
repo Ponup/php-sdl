@@ -14,7 +14,7 @@ if test "$PHP_SDL" != "no"; then
   if test -z "$PHP_VERSION_ID"; then
     AC_MSG_CHECKING(PHP version)
     AC_TRY_COMPILE([#include <php_version.h>], [
-    #if PHP_VERSION_ID < $REQ_PHP_VERSION_ID 
+    #if PHP_VERSION_ID < $REQ_PHP_VERSION_ID
     #error  this extension requires at least PHP version $REQ_PHP_VERSION
     #endif
     ],
@@ -51,6 +51,7 @@ glcontext.c
 keyboard.c
 messagebox.c
 mouse.c
+mutex.c
 pixels.c
 platform.c
 power.c

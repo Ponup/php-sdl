@@ -17,7 +17,7 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
+/* $Id$ */
 
 /*
   +----------------------------------------------------------------------+
@@ -33,6 +33,7 @@
 #include "keyboard.h"
 #include "messagebox.h"
 #include "mouse.h"
+#include "mutex.h"
 #include "platform.h"
 #include "power.h"
 #include "pixels.h"
@@ -83,6 +84,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_keyboard)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_messagebox)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_mouse)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_mutex)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_platform)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
@@ -143,12 +145,12 @@ zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
 	"SDL",
 	NULL,
-	PHP_MINIT(sdl),     /* Replace with NULL if there is nothing to do at php startup   */ 
+	PHP_MINIT(sdl),     /* Replace with NULL if there is nothing to do at php startup   */
 	PHP_MSHUTDOWN(sdl), /* Replace with NULL if there is nothing to do at php shutdown  */
 	NULL, /* RINIT */
 	NULL, /* RSHUTDOWN */
 	PHP_MINFO(sdl),
-	PHP_SDL_VERSION, 
+	PHP_SDL_VERSION,
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */

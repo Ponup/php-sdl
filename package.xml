@@ -75,6 +75,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='messagebox.h'/>
       <file role='src' name='mouse.c'/>
       <file role='src' name='mouse.h'/>
+      <file role='src' name='mutex.c'/>
+      <file role='src' name='mutex.h'/>
       <file role='src' name='pixels.c'/>
       <file role='src' name='pixels.h'/>
       <file role='src' name='platform.c'/>
