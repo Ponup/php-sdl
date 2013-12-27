@@ -48,6 +48,15 @@ struct php_sdl_sem {
 };
 
 
+static zend_class_entry *php_sdl_cond_ce;
+static zend_object_handlers php_sdl_cond_handlers;
+struct php_sdl_cond {
+	zend_object   zo;
+	SDL_cond     *cond;
+	Uint32        flags;
+};
+
+
 /* {{{ get_php_sdl_mutex_ce */
 zend_class_entry *get_php_sdl_mutex_ce(void)
 {
@@ -60,6 +69,14 @@ zend_class_entry *get_php_sdl_mutex_ce(void)
 zend_class_entry *get_php_sdl_sem_ce(void)
 {
 	return php_sdl_sem_ce;
+}
+/* }}} */
+
+
+/* {{{ get_php_sdl_cond_ce */
+zend_class_entry *get_php_sdl_cond_ce(void)
+{
+	return php_sdl_cond_ce;
 }
 /* }}} */
 
@@ -79,6 +96,17 @@ zend_class_entry *get_php_sdl_sem_ce(void)
 { \
         intern = (struct php_sdl_sem *)zend_object_store_get_object(__id TSRMLS_CC);\
         __ptr = intern->sem; \
+        if (__check && !__ptr) {\
+                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                RETURN_FALSE;\
+        }\
+}
+
+
+#define FETCH_COND(__ptr, __id, __check) \
+{ \
+        intern = (struct php_sdl_cond *)zend_object_store_get_object(__id TSRMLS_CC);\
+        __ptr = intern->cond; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
                 RETURN_FALSE;\
@@ -124,6 +152,25 @@ zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC)
 /* }}} */
 
 
+/* {{{ sdl_cond_to_zval */
+zend_bool sdl_cond_to_zval(SDL_cond *cond, zval *z_val, Uint32 flags TSRMLS_DC)
+{
+	if (cond) {
+		struct php_sdl_cond *intern;
+
+		object_init_ex(z_val, php_sdl_cond_ce);
+		intern = (struct php_sdl_cond *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern->cond  = cond;
+		intern->flags = flags;
+
+		return 1;
+	}
+	ZVAL_NULL(z_val);
+	return 0;
+}
+/* }}} */
+
+
 /* {{{ zval_to_sdl_mutex */
 SDL_mutex *zval_to_sdl_mutex(zval *z_val TSRMLS_DC)
 {
@@ -146,6 +193,20 @@ SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC)
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_sem_ce) {
 		intern = (struct php_sdl_sem *)zend_object_store_get_object(z_val TSRMLS_CC);
 		return intern->sem;
+	}
+	return NULL;
+}
+/* }}} */
+
+
+/* {{{ zval_to_sdl_cond */
+SDL_cond *zval_to_sdl_cond(zval *z_val TSRMLS_DC)
+{
+	struct php_sdl_cond *intern;
+
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_cond_ce) {
+		intern = (struct php_sdl_cond *)zend_object_store_get_object(z_val TSRMLS_CC);
+		return intern->cond;
 	}
 	return NULL;
 }
@@ -177,6 +238,23 @@ static void php_sdl_sem_free(void *object TSRMLS_DC)
 	if (intern->sem) {
 		if (!(intern->flags & SDL_DONTFREE)) {
 			SDL_DestroySemaphore(intern->sem);
+		}
+	}
+
+	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	efree(intern);
+}
+/* }}} */
+
+
+/* {{{ php_sdl_cond_free */
+static void php_sdl_cond_free(void *object TSRMLS_DC)
+{
+	struct php_sdl_cond *intern = (struct php_sdl_cond *) object;
+
+	if (intern->cond) {
+		if (!(intern->flags & SDL_DONTFREE)) {
+			SDL_DestroyCond(intern->cond);
 		}
 	}
 
@@ -224,6 +302,28 @@ static zend_object_value php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 
 	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_sem_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_sem_handlers;
+
+	return retval;
+}
+/* }}} */
+
+
+/* {{{ php_sdl_cond_new */
+static zend_object_value php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	zend_object_value retval;
+	struct php_sdl_cond *intern;
+
+	intern = emalloc(sizeof(*intern));
+	memset(intern, 0, sizeof(*intern));
+
+	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	object_properties_init(&intern->zo, class_type);
+
+	intern->cond = NULL;
+
+	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cond_free, NULL TSRMLS_CC);
+	retval.handlers = (zend_object_handlers *) &php_sdl_cond_handlers;
 
 	return retval;
 }
@@ -607,6 +707,248 @@ static PHP_FUNCTION(SDL_DestroySemaphore)
 }
 /* }}} */
 
+
+/* {{{ proto SDL_cond::__construct(int value) */
+static PHP_METHOD(SDL_cond, __construct)
+{
+	struct php_sdl_cond *intern;
+	zend_error_handling error_handling;
+
+	intern = (struct php_sdl_cond *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	if (zend_parse_parameters_none() == FAILURE) {
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		return;
+	}
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+
+	intern->cond = SDL_CreateCond();
+	if (intern->cond) {
+		intern->flags = 0;
+	} else {
+		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_cond::__toString() */
+static PHP_METHOD(SDL_cond, __toString)
+{
+	struct php_sdl_cond *intern;
+	char *buf;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (struct php_sdl_cond *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (intern->cond) {
+		spprintf(&buf, 100, "SDL_cond(%lx)", (long)intern->cond);
+		RETVAL_STRING(buf, 0);
+	} else {
+		RETVAL_STRING("SDL_cond()", 1);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto SDL_sem SDL_CreateCond(int value)
+
+ *  Create a condition variable.
+ *
+ *  Typical use of condition variables:
+ *
+ *  Thread A:
+ *    SDL_LockMutex(lock);
+ *    while ( ! condition ) {
+ *        SDL_CondWait(cond, lock);
+ *    }
+ *    SDL_UnlockMutex(lock);
+ *
+ *  Thread B:
+ *    SDL_LockMutex(lock);
+ *    ...
+ *    condition = true;
+ *    ...
+ *    SDL_CondSignal(cond);
+ *    SDL_UnlockMutex(lock);
+ *
+ *  There is some discussion whether to signal the condition variable
+ *  with the mutex locked or not.  There is some potential performance
+ *  benefit to unlocking first on some platforms, but there are some
+ *  potential race conditions depending on how your code is structured.
+ *
+ *  In general it's safer to signal the condition variable while the
+ *  mutex is locked.
+ extern DECLSPEC SDL_cond *SDLCALL SDL_CreateCond(void);
+ */
+PHP_FUNCTION(SDL_CreateCond)
+{
+	SDL_cond *cond;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	cond = SDL_CreateCond();
+	sdl_cond_to_zval(cond, return_value, 0 TSRMLS_CC);
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CondWait, 0, 0, 2)
+	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
+	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cond_Wait, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_CondWait(SDL_cond condition, SDL_mutex mutex)
+
+ *  Wait on the condition variable, unlocking the provided mutex.
+ *
+ *  \warning The mutex must be locked before entering this function!
+ *
+ *  The mutex is re-locked once the condition variable is signaled.
+ *
+ *  \return 0 when it is signaled, or -1 on error.
+ extern DECLSPEC int SDLCALL SDL_CondWait(SDL_cond * cond, SDL_mutex * mutex);
+ */
+static PHP_FUNCTION(SDL_CondWait)
+{
+	struct php_sdl_cond *intern;
+	zval *z_cond, *z_mutex;
+	SDL_cond *cond;
+	SDL_mutex *mutex;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &z_cond, php_sdl_cond_ce, &z_mutex, php_sdl_mutex_ce) == FAILURE) {
+		return;
+	}
+	FETCH_COND(cond, z_cond, 1);
+	mutex = zval_to_sdl_mutex(z_mutex TSRMLS_CC);
+	if (mutex) {
+		RETVAL_LONG(SDL_CondWait(intern->cond, mutex));
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_mutex object");
+	}
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_CondSignal(SDL_cond cond)
+
+ *  Restart one of the threads that are waiting on the condition variable.
+ *
+ *  \return 0 or -1 on error.
+ extern DECLSPEC int SDLCALL SDL_CondSignal(SDL_cond * cond);
+ */
+static PHP_FUNCTION(SDL_CondSignal)
+{
+	struct php_sdl_cond *intern;
+	zval *z_cond;
+	SDL_cond *cond;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cond, php_sdl_cond_ce) == FAILURE) {
+		return;
+	}
+	FETCH_COND(cond, z_cond, 1);
+
+	RETVAL_LONG(SDL_CondSignal(intern->cond));
+}
+/* }}} */
+
+
+/* {{{ proto int SDL_CondBroadcast(SDL_cond cond)
+
+ *  Restart all threads that are waiting on the condition variable.
+ *
+ *  \return 0 or -1 on error.
+extern DECLSPEC int SDLCALL SDL_CondBroadcast(SDL_cond * cond);
+ */
+static PHP_FUNCTION(SDL_CondBroadcast)
+{
+	struct php_sdl_cond *intern;
+	zval *z_cond;
+	SDL_cond *cond;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cond, php_sdl_cond_ce) == FAILURE) {
+		return;
+	}
+	FETCH_COND(cond, z_cond, 1);
+
+	RETVAL_LONG(SDL_CondBroadcast(intern->cond));
+}
+/* }}} */
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CondWaitTimeout, 0, 0, 3)
+	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
+	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
+	ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cond_WaitTimeout, 0, 0, 2)
+	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
+	ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int SDL_CondWaitTimeout(SDL_cond cond, SDL_mutex mutex, int ms)
+
+ *  Waits for at most \c ms milliseconds, and returns 0 if the condition
+ *  variable is signaled, ::SDL_MUTEX_TIMEDOUT if the condition is not
+ *  signaled in the allotted time, and -1 on error.
+ *
+ *  \warning On some platforms this function is implemented by looping with a
+ *           delay of 1 ms, and so should be avoided if possible.
+ extern DECLSPEC int SDLCALL SDL_CondWaitTimeout(SDL_cond * cond,
+                                                 SDL_mutex * mutex, Uint32 ms);
+ */
+static PHP_FUNCTION(SDL_CondWaitTimeout)
+{
+	struct php_sdl_cond *intern;
+	zval *z_cond, *z_mutex;
+	SDL_cond *cond;
+	SDL_mutex *mutex;
+	long ms;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOl", &z_cond, php_sdl_cond_ce, &z_mutex, php_sdl_mutex_ce, &ms) == FAILURE) {
+		return;
+	}
+	FETCH_COND(cond, z_cond, 1);
+	mutex = zval_to_sdl_mutex(z_mutex TSRMLS_CC);
+	if (mutex) {
+		RETVAL_LONG(SDL_CondWaitTimeout(intern->cond, mutex, (Uint32)ms));
+	} else {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_mutex object");
+	}
+}
+/* }}} */
+
+
+/* {{{ proto void SDL_DestroyCond(SDL_cond cond)
+
+ *  Destroy a condition variable.
+ extern DECLSPEC void SDLCALL SDL_DestroyCond(SDL_cond * cond);
+ */
+static PHP_FUNCTION(SDL_DestroyCond)
+{
+	struct php_sdl_cond *intern;
+	zval *z_cond;
+	SDL_cond *cond;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cond, php_sdl_cond_ce) == FAILURE) {
+		return;
+	}
+	FETCH_COND(cond, z_cond, 1);
+	SDL_DestroyCond(cond);
+	intern->cond = NULL;
+}
+/* }}} */
+
+
 /* generic arginfo */
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
@@ -618,6 +960,10 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, semaphore, SDL_sem, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_cond, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -655,6 +1001,23 @@ static const zend_function_entry php_sdl_sem_methods[] = {
 /* }}} */
 
 
+/* {{{ sdl_cond_methods[] */
+static const zend_function_entry php_sdl_cond_methods[] = {
+	PHP_ME(SDL_cond,        __construct,               arginfo_none, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_cond,        __toString,                arginfo_none,               ZEND_ACC_PUBLIC)
+
+	/* non-static method */
+	PHP_FALIAS(Wait,        SDL_CondWait,              arginfo_SDL_Cond_Wait)
+	PHP_FALIAS(Signal,      SDL_CondSignal,            arginfo_none)
+	PHP_FALIAS(Broadcast,   SDL_CondBroadcast,         arginfo_none)
+	PHP_FALIAS(WaitTimeout, SDL_CondWaitTimeout,       arginfo_SDL_Cond_WaitTimeout)
+	PHP_FALIAS(Destroy,     SDL_DestroySemaphore,      arginfo_none)
+
+	ZEND_FE_END
+};
+/* }}} */
+
+
 /* {{{ sdl_mutex_functions[] */
 static zend_function_entry sdl_mutex_functions[] = {
 	/* mutex functions */
@@ -676,6 +1039,14 @@ static zend_function_entry sdl_mutex_functions[] = {
 	ZEND_FE(SDL_SemValue,                           arginfo_SDL_sem)
 	ZEND_FE(SDL_SemWaitTimeout,                     arginfo_SDL_SemWaitTimeout)
 	ZEND_FE(SDL_DestroySemaphore,                   arginfo_SDL_sem)
+
+	/* condition functions */
+	ZEND_FE(SDL_CreateCond,                         arginfo_none)
+	ZEND_FE(SDL_CondWait,                           arginfo_SDL_CondWait)
+	ZEND_FE(SDL_CondSignal,                         arginfo_SDL_cond)
+	ZEND_FE(SDL_CondBroadcast,                      arginfo_SDL_cond)
+	ZEND_FE(SDL_CondWaitTimeout,                    arginfo_SDL_CondWaitTimeout)
+	ZEND_FE(SDL_DestroyCond,                        arginfo_SDL_cond)
 
 	ZEND_FE_END
 };
@@ -703,6 +1074,11 @@ PHP_MINIT_FUNCTION(sdl_mutex)
 	ce.create_object = php_sdl_sem_new;
 	php_sdl_sem_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_sem_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+
+	INIT_CLASS_ENTRY(ce, "SDL_cond", php_sdl_cond_methods);
+	ce.create_object = php_sdl_cond_new;
+	php_sdl_cond_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	memcpy(&php_sdl_cond_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	return (zend_register_functions(NULL, sdl_mutex_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }

@@ -37,6 +37,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 - initial version for SDL2, rewrite from scratch providing procedural style and object oriented style
 - implemented classes:
   SDL_Color
+  SDL_cond
   SDL_Cursor
   SDL_DisplayMode
   SDL_GLContext

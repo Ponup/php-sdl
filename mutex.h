@@ -34,6 +34,10 @@ zend_class_entry *get_php_sdl_sem_ce(void);
 zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC);
 SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC);
 
+zend_class_entry *get_php_sdl_cond_ce(void);
+zend_bool sdl_cond_to_zval(SDL_cond *cond, zval *z_val, Uint32 flags TSRMLS_DC);
+SDL_cond *zval_to_sdl_cond(zval *z_val TSRMLS_DC);
+
 PHP_MINIT_FUNCTION(sdl_mutex);
 
 #ifdef  __cplusplus
