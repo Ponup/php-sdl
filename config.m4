@@ -2,8 +2,8 @@ dnl
 dnl $ Id: $
 dnl
 
-PHP_ARG_ENABLE(sdl, whether to enable SDL functions,
-[  --enable-sdl         Enable SDL support])
+PHP_ARG_WITH(sdl, whether to enable SDL functions,
+[  --with-sdl[=SDLCONFIG_PATH]         Enable SDL support])
 
 if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
@@ -28,7 +28,11 @@ if test "$PHP_SDL" != "no"; then
 
   export CPPFLAGS="$OLD_CPPFLAGS"
 
-  AC_PATH_PROG(SDL2_CONFIG, sdl2-config, no)
+  if test "$PHP_SDL" == "yes"; then
+    AC_PATH_PROG(SDL2_CONFIG, sdl2-config, no)
+  else
+    SDL2_CONFIG="$PHP_SDL"
+  fi
 
   AC_MSG_CHECKING(for SDL2 library)
   if test -x "$SDL2_CONFIG" ; then
