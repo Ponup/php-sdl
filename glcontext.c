@@ -385,7 +385,7 @@ static PHP_FUNCTION(SDL_GL_GetCurrentContext)
 	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, SDL_DONTFREE TSRMLS_CC);
 }
 
-
+#if SDL_VERSION_ATLEAST(2,0,1)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_GetDrawableSize, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(1, w)
@@ -431,7 +431,7 @@ PHP_FUNCTION(SDL_GL_GetDrawableSize)
 	}
 }
 /* }}} */
-
+#endif
 
 /* {{{ proto void SDL_GL_SwapWindow(SDL_Window window)
 
@@ -550,7 +550,9 @@ zend_function_entry sdl_glcontext_functions[] = {
 	ZEND_FE(SDL_GL_MakeCurrent,                          arginfo_SDL_GL_MakeCurrent)
 	ZEND_FE(SDL_GL_GetCurrentWindow,                     arginfo_none)
 	ZEND_FE(SDL_GL_GetCurrentContext,                    arginfo_none)
+#if SDL_VERSION_ATLEAST(2,0,1)
 	ZEND_FE(SDL_GL_GetDrawableSize,                      arginfo_SDL_GL_GetDrawableSize)
+#endif
 	ZEND_FE(SDL_GL_SwapWindow,                           arginfo_SDL_Window)
 	ZEND_FE(SDL_GL_SetSwapInterval,                      arginfo_SDL_GL_SetSwapInterval)
 	ZEND_FE(SDL_GL_GetSwapInterval,                      arginfo_none)
@@ -596,7 +598,10 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 	REGISTER_GL_CLASS_CONST_LONG("ACCELERATED_VISUAL",             SDL_GL_ACCELERATED_VISUAL);
 	REGISTER_GL_CLASS_CONST_LONG("RETAINED_BACKING",               SDL_GL_RETAINED_BACKING);
 	REGISTER_GL_CLASS_CONST_LONG("SHARE_WITH_CURRENT_CONTEXT",     SDL_GL_SHARE_WITH_CURRENT_CONTEXT);
+
+#if SDL_VERSION_ATLEAST(2,0,1)	
 	REGISTER_GL_CLASS_CONST_LONG("FRAMEBUFFER_SRGB_CAPABLE",       SDL_GL_FRAMEBUFFER_SRGB_CAPABLE);
+#endif
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MAJOR_VERSION",           SDL_GL_CONTEXT_MAJOR_VERSION);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MINOR_VERSION",           SDL_GL_CONTEXT_MINOR_VERSION);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("EGL",                     SDL_GL_CONTEXT_EGL);

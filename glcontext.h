@@ -33,7 +33,9 @@ SDL_GLContext zval_to_sdl_glcontext(zval *z_val TSRMLS_DC);
 PHP_FUNCTION(SDL_GL_CreateContext);
 PHP_FUNCTION(SDL_GL_MakeCurrent);
 PHP_FUNCTION(SDL_GL_GetCurrentWindow);
+#if SDL_VERSION_ATLEAST(2,0,1)
 PHP_FUNCTION(SDL_GL_GetDrawableSize);
+#endif
 PHP_FUNCTION(SDL_GL_SwapWindow);
 
 PHP_MINIT_FUNCTION(sdl_glcontext);

@@ -2002,7 +2002,9 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
 	PHP_FALIAS(GL_CreateContext,   SDL_GL_CreateContext,         arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
+#if SDL_VERSION_ATLEAST(2,0,1)
 	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize,       arginfo_SDL_Window_GetPosition)
+#endif
 	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
 	PHP_FALIAS(WarpMouse,          SDL_WarpMouseInWindow,        arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(IsShaped,           SDL_IsShapedWindow,           arginfo_window_none)
