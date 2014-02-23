@@ -12,6 +12,7 @@ Done:
 	SDL_version.h
 	SDL_platform.h
 	SDL_power.h
+	SDL_filesystem.h
 
 TODO:
 	SDL_assert.h
@@ -22,7 +23,6 @@ TODO:
 	SDL_clipboard.h
 	SDL_endian.h
 	SDL_events.h
-	SDL_filesystem.h
 	SDL_gamecontroller.h
 	SDL_gesture.h
 	SDL_haptic.h

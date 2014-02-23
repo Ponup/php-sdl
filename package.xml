@@ -70,6 +70,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='cpuinfo.h'/>
       <file role='src' name='error.c'/>
       <file role='src' name='error.h'/>
+      <file role='src' name='filesystem.c'/>
+      <file role='src' name='filesystem.h'/>
       <file role='src' name='glcontext.c'/>
       <file role='src' name='glcontext.h'/>
       <file role='src' name='keyboard.c'/>

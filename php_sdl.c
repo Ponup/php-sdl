@@ -29,6 +29,7 @@
 #include "blendmode.h"
 #include "cpuinfo.h"
 #include "error.h"
+#include "filesystem.h"
 #include "glcontext.h"
 #include "keyboard.h"
 #include "messagebox.h"
@@ -87,6 +88,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_mutex)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_platform)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_power)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_filesystem)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rwops)
