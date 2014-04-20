@@ -23,10 +23,9 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
-#include "ext/sdl/php_sdl.h"
 #include "php_sdl_gfx.h"
 
-#include <SDL_gfxPrimitives.h>
+#include <SDL/SDL_gfxPrimitives.h>
 
 /* True global resources - no need for thread safety here */
 static int le_sdl_gfx;

@@ -52,6 +52,8 @@ if test "$PHP_SDL_IMAGE" != "no"; then
 			esac
 		done
 	fi
+		
+	PHP_ADD_LIBRARY_WITH_PATH(SDL_image, $SDL_IMAGE_DIR/lib, SDL_IMAGE_SHARED_LIBADD)
 
 	if test "$ext_shared" = "yes"; then
 		PHP_ADD_LIBRARY_WITH_PATH(SDL, $SDL_DIR/lib, SDL_SHARED_LIBADD)
@@ -67,6 +69,9 @@ if test "$PHP_SDL_IMAGE" != "no"; then
 	
 	PHP_NEW_EXTENSION(sdl_image, sdl_image.c, $ext_shared)
 	ifdef([PHP_ADD_EXTENSION_DEP], [ PHP_ADD_EXTENSION_DEP(sdl_image, sdl) ] )
+
+	PHP_SUBST(SDL_SHARED_LIBADD)
+	PHP_SUBST(SDL_IMAGE_SHARED_LIBADD)
 
 	AC_DEFINE(HAVE_SDL_IMAGE, 1, [ ])
 fi

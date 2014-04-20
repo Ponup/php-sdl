@@ -158,7 +158,11 @@ PHP_FUNCTION(sdl_cdopen)
 		add_next_index_zval(track_array, one_track);
 	}
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
 	handle = zend_list_insert(cdrom, le_cdrom TSRMLS_CC);
+#else
+	handle = zend_list_insert(cdrom, le_cdrom);
+#endif
 
 	array_init(return_value);
 	add_assoc_resource(return_value, "handle", handle);

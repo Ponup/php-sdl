@@ -25,7 +25,7 @@
 #include "ext/standard/info.h"
 #include "php_sdl_ttf.h"
 
-#include <SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 
 /* True global resources - no need for thread safety here */
 static int le_sdl_ttf;

@@ -21,7 +21,10 @@
 
 #define PHP_SDL_GFX_VERSION "0.9.2"
 
-#include <SDL_rotozoom.h>
+#include <SDL/SDL_rotozoom.h>
+
+extern int le_surface;
+#define le_surface_name "SDL Surface"
 
 extern zend_module_entry sdl_gfx_module_entry;
 #define phpext_sdl_gfx_ptr &sdl_gfx_module_entry

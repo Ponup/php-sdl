@@ -23,6 +23,12 @@
 
 #define	   le_smpeg_name		"SMPEG"
 
+extern int le_surface;
+#define le_surface_name "SDL Surface"
+
+extern int le_mutex;
+#define le_mutex_name "SDL Mutex"
+
 extern zend_module_entry sdl_smpeg_module_entry;
 #define phpext_sdl_smpeg_ptr &sdl_smpeg_module_entry
 

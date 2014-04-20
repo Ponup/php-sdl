@@ -24,7 +24,6 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_sdl_smpeg.h"
-#include "ext/sdl/php_sdl.h"
 
 #include <smpeg/smpeg.h>
 

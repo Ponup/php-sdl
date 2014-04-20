@@ -25,7 +25,7 @@
 #include "ext/standard/info.h"
 #include "php_sdl_mixer.h"
 
-#include <SDL_mixer.h>
+#include <SDL/SDL_mixer.h>
 
 /* True global resources - no need for thread safety here */
 static int le_sdl_mixer;

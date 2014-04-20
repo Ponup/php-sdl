@@ -34,6 +34,8 @@ if test "$PHP_SDL_SMPEG" != "no"; then
 
 	PHP_NEW_EXTENSION(sdl_smpeg, sdl_smpeg.c, $ext_shared)
 	ifdef([PHP_ADD_EXTENSION_DEP], [ PHP_ADD_EXTENSION_DEP(sdl_smpeg, sdl) ] )
+
+	PHP_ADD_LIBRARY_WITH_PATH(smpeg, $SDL_SMPEG_DIR/$PHP_LIBDIR, SDL_SMPEG_SHARED_LIBADD)
 	PHP_SUBST(SDL_SMPEG_SHARED_LIBADD)
 	
 	AC_DEFINE(HAVE_SDL_SMPEG, 1, [ ])

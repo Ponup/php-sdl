@@ -1630,7 +1630,11 @@ void php_sdl_pixelformat_to_array(SDL_PixelFormat *pixelformat, zval *pixelforma
 	zval *palette, *colors, *color;
 	int handle, i;
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
 	handle = zend_list_insert(pixelformat, le_pixelformat TSRMLS_CC);
+#else
+	handle = zend_list_insert(pixelformat, le_pixelformat);
+#endif
 	
 	array_init(pixelformat_array);
 	add_assoc_resource(pixelformat_array, "handle", handle);
@@ -1681,7 +1685,11 @@ void php_sdl_surface_to_array(SDL_Surface *surface, zval *surface_array TSRMLS_D
 	zval *format, *rect;
 	int handle;
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
 	handle = zend_list_insert(surface, le_surface TSRMLS_CC);
+#else
+	handle = zend_list_insert(surface, le_surface);
+#endif
 
 	array_init(surface_array);
 	add_assoc_resource(surface_array, "handle", handle);
@@ -2734,7 +2742,11 @@ PHP_FUNCTION(sdl_createcursor)
 	efree(mask);
 
 	if (cursor) {
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
 		handle = zend_list_insert(cursor, le_cursor TSRMLS_CC);
+#else
+		handle = zend_list_insert(cursor, le_cursor);
+#endif
 		RETURN_RESOURCE(handle);
 	}
 	
@@ -2861,7 +2873,11 @@ PHP_FUNCTION(sdl_getcursor)
 	cursor = SDL_GetCursor();
 
 	if (cursor) {
-		handle = zend_list_insert(cursor,le_cursor TSRMLS_CC);
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
+		handle = zend_list_insert(cursor, le_cursor TSRMLS_CC);
+#else
+		handle = zend_list_insert(cursor, le_cursor);
+#endif
 		RETURN_RESOURCE(handle);
 	}
 	
@@ -2995,7 +3011,11 @@ PHP_FUNCTION(sdl_createyuvoverlay)
 		RETURN_FALSE;
 	}
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 3) || (PHP_MAJOR_VERSION > 5)
 	handle = zend_list_insert(overlay, le_overlay TSRMLS_CC);
+#else
+	handle = zend_list_insert(overlay, le_overlay);
+#endif
 
 	array_init(return_value);
 	add_assoc_resource(return_value, "handle", handle);
