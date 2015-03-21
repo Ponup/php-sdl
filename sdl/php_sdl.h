@@ -19,7 +19,7 @@
 #ifndef PHP_SDL_H
 #define PHP_SDL_H
 
-#define PHP_SDL_VERSION "0.9.2"
+#define PHP_SDL_VERSION "0.9.3"
 
 extern int le_surface;
 #define le_surface_name "SDL Surface"
