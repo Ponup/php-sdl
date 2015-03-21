@@ -1,0 +1,4129 @@
+Extension [ <persistent> extension #16 SDL version 2.0.0-dev ] {
+
+  - Constants [692] {
+    Constant [ integer SDL_BLENDMODE_NONE ] { 0 }
+    Constant [ integer SDL_BLENDMODE_BLEND ] { 1 }
+    Constant [ integer SDL_BLENDMODE_ADD ] { 2 }
+    Constant [ integer SDL_BLENDMODE_MOD ] { 4 }
+    Constant [ integer SDL_GL_RED_SIZE ] { 0 }
+    Constant [ integer SDL_GL_GREEN_SIZE ] { 1 }
+    Constant [ integer SDL_GL_BLUE_SIZE ] { 2 }
+    Constant [ integer SDL_GL_ALPHA_SIZE ] { 3 }
+    Constant [ integer SDL_GL_BUFFER_SIZE ] { 4 }
+    Constant [ integer SDL_GL_DOUBLEBUFFER ] { 5 }
+    Constant [ integer SDL_GL_DEPTH_SIZE ] { 6 }
+    Constant [ integer SDL_GL_STENCIL_SIZE ] { 7 }
+    Constant [ integer SDL_GL_ACCUM_RED_SIZE ] { 8 }
+    Constant [ integer SDL_GL_ACCUM_GREEN_SIZE ] { 9 }
+    Constant [ integer SDL_GL_ACCUM_BLUE_SIZE ] { 10 }
+    Constant [ integer SDL_GL_ACCUM_ALPHA_SIZE ] { 11 }
+    Constant [ integer SDL_GL_STEREO ] { 12 }
+    Constant [ integer SDL_GL_MULTISAMPLEBUFFERS ] { 13 }
+    Constant [ integer SDL_GL_MULTISAMPLESAMPLES ] { 14 }
+    Constant [ integer SDL_GL_ACCELERATED_VISUAL ] { 15 }
+    Constant [ integer SDL_GL_RETAINED_BACKING ] { 16 }
+    Constant [ integer SDL_GL_SHARE_WITH_CURRENT_CONTEXT ] { 22 }
+    Constant [ integer SDL_GL_FRAMEBUFFER_SRGB_CAPABLE ] { 23 }
+    Constant [ integer SDL_GL_CONTEXT_MAJOR_VERSION ] { 17 }
+    Constant [ integer SDL_GL_CONTEXT_MINOR_VERSION ] { 18 }
+    Constant [ integer SDL_GL_CONTEXT_EGL ] { 19 }
+    Constant [ integer SDL_GL_CONTEXT_FLAGS ] { 20 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_MASK ] { 21 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_CORE ] { 1 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_COMPATIBILITY ] { 2 }
+    Constant [ integer SDL_GL_CONTEXT_PROFILE_ES ] { 4 }
+    Constant [ integer SDL_GL_CONTEXT_DEBUG_FLAG ] { 1 }
+    Constant [ integer SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG ] { 2 }
+    Constant [ integer SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG ] { 4 }
+    Constant [ integer SDL_GL_CONTEXT_RESET_ISOLATION_FLAG ] { 8 }
+    Constant [ integer SDL_SCANCODE_UNKNOWN ] { 0 }
+    Constant [ integer SDL_SCANCODE_A ] { 4 }
+    Constant [ integer SDL_SCANCODE_B ] { 5 }
+    Constant [ integer SDL_SCANCODE_C ] { 6 }
+    Constant [ integer SDL_SCANCODE_D ] { 7 }
+    Constant [ integer SDL_SCANCODE_E ] { 8 }
+    Constant [ integer SDL_SCANCODE_F ] { 9 }
+    Constant [ integer SDL_SCANCODE_G ] { 10 }
+    Constant [ integer SDL_SCANCODE_H ] { 11 }
+    Constant [ integer SDL_SCANCODE_I ] { 12 }
+    Constant [ integer SDL_SCANCODE_J ] { 13 }
+    Constant [ integer SDL_SCANCODE_K ] { 14 }
+    Constant [ integer SDL_SCANCODE_L ] { 15 }
+    Constant [ integer SDL_SCANCODE_M ] { 16 }
+    Constant [ integer SDL_SCANCODE_N ] { 17 }
+    Constant [ integer SDL_SCANCODE_O ] { 18 }
+    Constant [ integer SDL_SCANCODE_P ] { 19 }
+    Constant [ integer SDL_SCANCODE_Q ] { 20 }
+    Constant [ integer SDL_SCANCODE_R ] { 21 }
+    Constant [ integer SDL_SCANCODE_S ] { 22 }
+    Constant [ integer SDL_SCANCODE_T ] { 23 }
+    Constant [ integer SDL_SCANCODE_U ] { 24 }
+    Constant [ integer SDL_SCANCODE_V ] { 25 }
+    Constant [ integer SDL_SCANCODE_W ] { 26 }
+    Constant [ integer SDL_SCANCODE_X ] { 27 }
+    Constant [ integer SDL_SCANCODE_Y ] { 28 }
+    Constant [ integer SDL_SCANCODE_Z ] { 29 }
+    Constant [ integer SDL_SCANCODE_1 ] { 30 }
+    Constant [ integer SDL_SCANCODE_2 ] { 31 }
+    Constant [ integer SDL_SCANCODE_3 ] { 32 }
+    Constant [ integer SDL_SCANCODE_4 ] { 33 }
+    Constant [ integer SDL_SCANCODE_5 ] { 34 }
+    Constant [ integer SDL_SCANCODE_6 ] { 35 }
+    Constant [ integer SDL_SCANCODE_7 ] { 36 }
+    Constant [ integer SDL_SCANCODE_8 ] { 37 }
+    Constant [ integer SDL_SCANCODE_9 ] { 38 }
+    Constant [ integer SDL_SCANCODE_0 ] { 39 }
+    Constant [ integer SDL_SCANCODE_RETURN ] { 40 }
+    Constant [ integer SDL_SCANCODE_ESCAPE ] { 41 }
+    Constant [ integer SDL_SCANCODE_BACKSPACE ] { 42 }
+    Constant [ integer SDL_SCANCODE_TAB ] { 43 }
+    Constant [ integer SDL_SCANCODE_SPACE ] { 44 }
+    Constant [ integer SDL_SCANCODE_MINUS ] { 45 }
+    Constant [ integer SDL_SCANCODE_EQUALS ] { 46 }
+    Constant [ integer SDL_SCANCODE_LEFTBRACKET ] { 47 }
+    Constant [ integer SDL_SCANCODE_RIGHTBRACKET ] { 48 }
+    Constant [ integer SDL_SCANCODE_BACKSLASH ] { 49 }
+    Constant [ integer SDL_SCANCODE_NONUSHASH ] { 50 }
+    Constant [ integer SDL_SCANCODE_SEMICOLON ] { 51 }
+    Constant [ integer SDL_SCANCODE_APOSTROPHE ] { 52 }
+    Constant [ integer SDL_SCANCODE_GRAVE ] { 53 }
+    Constant [ integer SDL_SCANCODE_COMMA ] { 54 }
+    Constant [ integer SDL_SCANCODE_PERIOD ] { 55 }
+    Constant [ integer SDL_SCANCODE_SLASH ] { 56 }
+    Constant [ integer SDL_SCANCODE_CAPSLOCK ] { 57 }
+    Constant [ integer SDL_SCANCODE_F1 ] { 58 }
+    Constant [ integer SDL_SCANCODE_F2 ] { 59 }
+    Constant [ integer SDL_SCANCODE_F3 ] { 60 }
+    Constant [ integer SDL_SCANCODE_F4 ] { 61 }
+    Constant [ integer SDL_SCANCODE_F5 ] { 62 }
+    Constant [ integer SDL_SCANCODE_F6 ] { 63 }
+    Constant [ integer SDL_SCANCODE_F7 ] { 64 }
+    Constant [ integer SDL_SCANCODE_F8 ] { 65 }
+    Constant [ integer SDL_SCANCODE_F9 ] { 66 }
+    Constant [ integer SDL_SCANCODE_F10 ] { 67 }
+    Constant [ integer SDL_SCANCODE_F11 ] { 68 }
+    Constant [ integer SDL_SCANCODE_F12 ] { 69 }
+    Constant [ integer SDL_SCANCODE_PRINTSCREEN ] { 70 }
+    Constant [ integer SDL_SCANCODE_SCROLLLOCK ] { 71 }
+    Constant [ integer SDL_SCANCODE_PAUSE ] { 72 }
+    Constant [ integer SDL_SCANCODE_INSERT ] { 73 }
+    Constant [ integer SDL_SCANCODE_HOME ] { 74 }
+    Constant [ integer SDL_SCANCODE_PAGEUP ] { 75 }
+    Constant [ integer SDL_SCANCODE_DELETE ] { 76 }
+    Constant [ integer SDL_SCANCODE_END ] { 77 }
+    Constant [ integer SDL_SCANCODE_PAGEDOWN ] { 78 }
+    Constant [ integer SDL_SCANCODE_RIGHT ] { 79 }
+    Constant [ integer SDL_SCANCODE_LEFT ] { 80 }
+    Constant [ integer SDL_SCANCODE_DOWN ] { 81 }
+    Constant [ integer SDL_SCANCODE_UP ] { 82 }
+    Constant [ integer SDL_SCANCODE_NUMLOCKCLEAR ] { 83 }
+    Constant [ integer SDL_SCANCODE_KP_DIVIDE ] { 84 }
+    Constant [ integer SDL_SCANCODE_KP_MULTIPLY ] { 85 }
+    Constant [ integer SDL_SCANCODE_KP_MINUS ] { 86 }
+    Constant [ integer SDL_SCANCODE_KP_PLUS ] { 87 }
+    Constant [ integer SDL_SCANCODE_KP_ENTER ] { 88 }
+    Constant [ integer SDL_SCANCODE_KP_1 ] { 89 }
+    Constant [ integer SDL_SCANCODE_KP_2 ] { 90 }
+    Constant [ integer SDL_SCANCODE_KP_3 ] { 91 }
+    Constant [ integer SDL_SCANCODE_KP_4 ] { 92 }
+    Constant [ integer SDL_SCANCODE_KP_5 ] { 93 }
+    Constant [ integer SDL_SCANCODE_KP_6 ] { 94 }
+    Constant [ integer SDL_SCANCODE_KP_7 ] { 95 }
+    Constant [ integer SDL_SCANCODE_KP_8 ] { 96 }
+    Constant [ integer SDL_SCANCODE_KP_9 ] { 97 }
+    Constant [ integer SDL_SCANCODE_KP_0 ] { 98 }
+    Constant [ integer SDL_SCANCODE_KP_PERIOD ] { 99 }
+    Constant [ integer SDL_SCANCODE_NONUSBACKSLASH ] { 100 }
+    Constant [ integer SDL_SCANCODE_APPLICATION ] { 101 }
+    Constant [ integer SDL_SCANCODE_POWER ] { 102 }
+    Constant [ integer SDL_SCANCODE_KP_EQUALS ] { 103 }
+    Constant [ integer SDL_SCANCODE_F13 ] { 104 }
+    Constant [ integer SDL_SCANCODE_F14 ] { 105 }
+    Constant [ integer SDL_SCANCODE_F15 ] { 106 }
+    Constant [ integer SDL_SCANCODE_F16 ] { 107 }
+    Constant [ integer SDL_SCANCODE_F17 ] { 108 }
+    Constant [ integer SDL_SCANCODE_F18 ] { 109 }
+    Constant [ integer SDL_SCANCODE_F19 ] { 110 }
+    Constant [ integer SDL_SCANCODE_F20 ] { 111 }
+    Constant [ integer SDL_SCANCODE_F21 ] { 112 }
+    Constant [ integer SDL_SCANCODE_F22 ] { 113 }
+    Constant [ integer SDL_SCANCODE_F23 ] { 114 }
+    Constant [ integer SDL_SCANCODE_F24 ] { 115 }
+    Constant [ integer SDL_SCANCODE_EXECUTE ] { 116 }
+    Constant [ integer SDL_SCANCODE_HELP ] { 117 }
+    Constant [ integer SDL_SCANCODE_MENU ] { 118 }
+    Constant [ integer SDL_SCANCODE_SELECT ] { 119 }
+    Constant [ integer SDL_SCANCODE_STOP ] { 120 }
+    Constant [ integer SDL_SCANCODE_AGAIN ] { 121 }
+    Constant [ integer SDL_SCANCODE_UNDO ] { 122 }
+    Constant [ integer SDL_SCANCODE_CUT ] { 123 }
+    Constant [ integer SDL_SCANCODE_COPY ] { 124 }
+    Constant [ integer SDL_SCANCODE_PASTE ] { 125 }
+    Constant [ integer SDL_SCANCODE_FIND ] { 126 }
+    Constant [ integer SDL_SCANCODE_MUTE ] { 127 }
+    Constant [ integer SDL_SCANCODE_VOLUMEUP ] { 128 }
+    Constant [ integer SDL_SCANCODE_VOLUMEDOWN ] { 129 }
+    Constant [ integer SDL_SCANCODE_KP_COMMA ] { 133 }
+    Constant [ integer SDL_SCANCODE_KP_EQUALSAS400 ] { 134 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL1 ] { 135 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL2 ] { 136 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL3 ] { 137 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL4 ] { 138 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL5 ] { 139 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL6 ] { 140 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL7 ] { 141 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL8 ] { 142 }
+    Constant [ integer SDL_SCANCODE_INTERNATIONAL9 ] { 143 }
+    Constant [ integer SDL_SCANCODE_LANG1 ] { 144 }
+    Constant [ integer SDL_SCANCODE_LANG2 ] { 145 }
+    Constant [ integer SDL_SCANCODE_LANG3 ] { 146 }
+    Constant [ integer SDL_SCANCODE_LANG4 ] { 147 }
+    Constant [ integer SDL_SCANCODE_LANG5 ] { 148 }
+    Constant [ integer SDL_SCANCODE_LANG6 ] { 149 }
+    Constant [ integer SDL_SCANCODE_LANG7 ] { 150 }
+    Constant [ integer SDL_SCANCODE_LANG8 ] { 151 }
+    Constant [ integer SDL_SCANCODE_LANG9 ] { 152 }
+    Constant [ integer SDL_SCANCODE_ALTERASE ] { 153 }
+    Constant [ integer SDL_SCANCODE_SYSREQ ] { 154 }
+    Constant [ integer SDL_SCANCODE_CANCEL ] { 155 }
+    Constant [ integer SDL_SCANCODE_CLEAR ] { 156 }
+    Constant [ integer SDL_SCANCODE_PRIOR ] { 157 }
+    Constant [ integer SDL_SCANCODE_RETURN2 ] { 158 }
+    Constant [ integer SDL_SCANCODE_SEPARATOR ] { 159 }
+    Constant [ integer SDL_SCANCODE_OUT ] { 160 }
+    Constant [ integer SDL_SCANCODE_OPER ] { 161 }
+    Constant [ integer SDL_SCANCODE_CLEARAGAIN ] { 162 }
+    Constant [ integer SDL_SCANCODE_CRSEL ] { 163 }
+    Constant [ integer SDL_SCANCODE_EXSEL ] { 164 }
+    Constant [ integer SDL_SCANCODE_KP_00 ] { 176 }
+    Constant [ integer SDL_SCANCODE_KP_000 ] { 177 }
+    Constant [ integer SDL_SCANCODE_THOUSANDSSEPARATOR ] { 178 }
+    Constant [ integer SDL_SCANCODE_DECIMALSEPARATOR ] { 179 }
+    Constant [ integer SDL_SCANCODE_CURRENCYUNIT ] { 180 }
+    Constant [ integer SDL_SCANCODE_CURRENCYSUBUNIT ] { 181 }
+    Constant [ integer SDL_SCANCODE_KP_LEFTPAREN ] { 182 }
+    Constant [ integer SDL_SCANCODE_KP_RIGHTPAREN ] { 183 }
+    Constant [ integer SDL_SCANCODE_KP_LEFTBRACE ] { 184 }
+    Constant [ integer SDL_SCANCODE_KP_RIGHTBRACE ] { 185 }
+    Constant [ integer SDL_SCANCODE_KP_TAB ] { 186 }
+    Constant [ integer SDL_SCANCODE_KP_BACKSPACE ] { 187 }
+    Constant [ integer SDL_SCANCODE_KP_A ] { 188 }
+    Constant [ integer SDL_SCANCODE_KP_B ] { 189 }
+    Constant [ integer SDL_SCANCODE_KP_C ] { 190 }
+    Constant [ integer SDL_SCANCODE_KP_D ] { 191 }
+    Constant [ integer SDL_SCANCODE_KP_E ] { 192 }
+    Constant [ integer SDL_SCANCODE_KP_F ] { 193 }
+    Constant [ integer SDL_SCANCODE_KP_XOR ] { 194 }
+    Constant [ integer SDL_SCANCODE_KP_POWER ] { 195 }
+    Constant [ integer SDL_SCANCODE_KP_PERCENT ] { 196 }
+    Constant [ integer SDL_SCANCODE_KP_LESS ] { 197 }
+    Constant [ integer SDL_SCANCODE_KP_GREATER ] { 198 }
+    Constant [ integer SDL_SCANCODE_KP_AMPERSAND ] { 199 }
+    Constant [ integer SDL_SCANCODE_KP_DBLAMPERSAND ] { 200 }
+    Constant [ integer SDL_SCANCODE_KP_VERTICALBAR ] { 201 }
+    Constant [ integer SDL_SCANCODE_KP_DBLVERTICALBAR ] { 202 }
+    Constant [ integer SDL_SCANCODE_KP_COLON ] { 203 }
+    Constant [ integer SDL_SCANCODE_KP_HASH ] { 204 }
+    Constant [ integer SDL_SCANCODE_KP_SPACE ] { 205 }
+    Constant [ integer SDL_SCANCODE_KP_AT ] { 206 }
+    Constant [ integer SDL_SCANCODE_KP_EXCLAM ] { 207 }
+    Constant [ integer SDL_SCANCODE_KP_MEMSTORE ] { 208 }
+    Constant [ integer SDL_SCANCODE_KP_MEMRECALL ] { 209 }
+    Constant [ integer SDL_SCANCODE_KP_MEMCLEAR ] { 210 }
+    Constant [ integer SDL_SCANCODE_KP_MEMADD ] { 211 }
+    Constant [ integer SDL_SCANCODE_KP_MEMSUBTRACT ] { 212 }
+    Constant [ integer SDL_SCANCODE_KP_MEMMULTIPLY ] { 213 }
+    Constant [ integer SDL_SCANCODE_KP_MEMDIVIDE ] { 214 }
+    Constant [ integer SDL_SCANCODE_KP_PLUSMINUS ] { 215 }
+    Constant [ integer SDL_SCANCODE_KP_CLEAR ] { 216 }
+    Constant [ integer SDL_SCANCODE_KP_CLEARENTRY ] { 217 }
+    Constant [ integer SDL_SCANCODE_KP_BINARY ] { 218 }
+    Constant [ integer SDL_SCANCODE_KP_OCTAL ] { 219 }
+    Constant [ integer SDL_SCANCODE_KP_DECIMAL ] { 220 }
+    Constant [ integer SDL_SCANCODE_KP_HEXADECIMAL ] { 221 }
+    Constant [ integer SDL_SCANCODE_LCTRL ] { 224 }
+    Constant [ integer SDL_SCANCODE_LSHIFT ] { 225 }
+    Constant [ integer SDL_SCANCODE_LALT ] { 226 }
+    Constant [ integer SDL_SCANCODE_LGUI ] { 227 }
+    Constant [ integer SDL_SCANCODE_RCTRL ] { 228 }
+    Constant [ integer SDL_SCANCODE_RSHIFT ] { 229 }
+    Constant [ integer SDL_SCANCODE_RALT ] { 230 }
+    Constant [ integer SDL_SCANCODE_RGUI ] { 231 }
+    Constant [ integer SDL_SCANCODE_MODE ] { 257 }
+    Constant [ integer SDL_SCANCODE_AUDIONEXT ] { 258 }
+    Constant [ integer SDL_SCANCODE_AUDIOPREV ] { 259 }
+    Constant [ integer SDL_SCANCODE_AUDIOSTOP ] { 260 }
+    Constant [ integer SDL_SCANCODE_AUDIOPLAY ] { 261 }
+    Constant [ integer SDL_SCANCODE_AUDIOMUTE ] { 262 }
+    Constant [ integer SDL_SCANCODE_MEDIASELECT ] { 263 }
+    Constant [ integer SDL_SCANCODE_WWW ] { 264 }
+    Constant [ integer SDL_SCANCODE_MAIL ] { 265 }
+    Constant [ integer SDL_SCANCODE_CALCULATOR ] { 266 }
+    Constant [ integer SDL_SCANCODE_COMPUTER ] { 267 }
+    Constant [ integer SDL_SCANCODE_AC_SEARCH ] { 268 }
+    Constant [ integer SDL_SCANCODE_AC_HOME ] { 269 }
+    Constant [ integer SDL_SCANCODE_AC_BACK ] { 270 }
+    Constant [ integer SDL_SCANCODE_AC_FORWARD ] { 271 }
+    Constant [ integer SDL_SCANCODE_AC_STOP ] { 272 }
+    Constant [ integer SDL_SCANCODE_AC_REFRESH ] { 273 }
+    Constant [ integer SDL_SCANCODE_AC_BOOKMARKS ] { 274 }
+    Constant [ integer SDL_SCANCODE_BRIGHTNESSDOWN ] { 275 }
+    Constant [ integer SDL_SCANCODE_BRIGHTNESSUP ] { 276 }
+    Constant [ integer SDL_SCANCODE_DISPLAYSWITCH ] { 277 }
+    Constant [ integer SDL_SCANCODE_KBDILLUMTOGGLE ] { 278 }
+    Constant [ integer SDL_SCANCODE_KBDILLUMDOWN ] { 279 }
+    Constant [ integer SDL_SCANCODE_KBDILLUMUP ] { 280 }
+    Constant [ integer SDL_SCANCODE_EJECT ] { 281 }
+    Constant [ integer SDL_SCANCODE_SLEEP ] { 282 }
+    Constant [ integer SDL_SCANCODE_APP1 ] { 283 }
+    Constant [ integer SDL_SCANCODE_APP2 ] { 284 }
+    Constant [ integer SDL_NUM_SCANCODES ] { 512 }
+    Constant [ integer SDLK_UNKNOWN ] { 0 }
+    Constant [ integer SDLK_RETURN ] { 13 }
+    Constant [ integer SDLK_ESCAPE ] { 27 }
+    Constant [ integer SDLK_BACKSPACE ] { 8 }
+    Constant [ integer SDLK_TAB ] { 9 }
+    Constant [ integer SDLK_SPACE ] { 32 }
+    Constant [ integer SDLK_EXCLAIM ] { 33 }
+    Constant [ integer SDLK_QUOTEDBL ] { 34 }
+    Constant [ integer SDLK_HASH ] { 35 }
+    Constant [ integer SDLK_PERCENT ] { 37 }
+    Constant [ integer SDLK_DOLLAR ] { 36 }
+    Constant [ integer SDLK_AMPERSAND ] { 38 }
+    Constant [ integer SDLK_QUOTE ] { 39 }
+    Constant [ integer SDLK_LEFTPAREN ] { 40 }
+    Constant [ integer SDLK_RIGHTPAREN ] { 41 }
+    Constant [ integer SDLK_ASTERISK ] { 42 }
+    Constant [ integer SDLK_PLUS ] { 43 }
+    Constant [ integer SDLK_COMMA ] { 44 }
+    Constant [ integer SDLK_MINUS ] { 45 }
+    Constant [ integer SDLK_PERIOD ] { 46 }
+    Constant [ integer SDLK_SLASH ] { 47 }
+    Constant [ integer SDLK_0 ] { 48 }
+    Constant [ integer SDLK_1 ] { 49 }
+    Constant [ integer SDLK_2 ] { 50 }
+    Constant [ integer SDLK_3 ] { 51 }
+    Constant [ integer SDLK_4 ] { 52 }
+    Constant [ integer SDLK_5 ] { 53 }
+    Constant [ integer SDLK_6 ] { 54 }
+    Constant [ integer SDLK_7 ] { 55 }
+    Constant [ integer SDLK_8 ] { 56 }
+    Constant [ integer SDLK_9 ] { 57 }
+    Constant [ integer SDLK_COLON ] { 58 }
+    Constant [ integer SDLK_SEMICOLON ] { 59 }
+    Constant [ integer SDLK_LESS ] { 60 }
+    Constant [ integer SDLK_EQUALS ] { 61 }
+    Constant [ integer SDLK_GREATER ] { 62 }
+    Constant [ integer SDLK_QUESTION ] { 63 }
+    Constant [ integer SDLK_AT ] { 64 }
+    Constant [ integer SDLK_LEFTBRACKET ] { 91 }
+    Constant [ integer SDLK_BACKSLASH ] { 92 }
+    Constant [ integer SDLK_RIGHTBRACKET ] { 93 }
+    Constant [ integer SDLK_CARET ] { 94 }
+    Constant [ integer SDLK_UNDERSCORE ] { 95 }
+    Constant [ integer SDLK_BACKQUOTE ] { 96 }
+    Constant [ integer SDLK_a ] { 97 }
+    Constant [ integer SDLK_b ] { 98 }
+    Constant [ integer SDLK_c ] { 99 }
+    Constant [ integer SDLK_d ] { 100 }
+    Constant [ integer SDLK_e ] { 101 }
+    Constant [ integer SDLK_f ] { 102 }
+    Constant [ integer SDLK_g ] { 103 }
+    Constant [ integer SDLK_h ] { 104 }
+    Constant [ integer SDLK_i ] { 105 }
+    Constant [ integer SDLK_j ] { 106 }
+    Constant [ integer SDLK_k ] { 107 }
+    Constant [ integer SDLK_l ] { 108 }
+    Constant [ integer SDLK_m ] { 109 }
+    Constant [ integer SDLK_n ] { 110 }
+    Constant [ integer SDLK_o ] { 111 }
+    Constant [ integer SDLK_p ] { 112 }
+    Constant [ integer SDLK_q ] { 113 }
+    Constant [ integer SDLK_r ] { 114 }
+    Constant [ integer SDLK_s ] { 115 }
+    Constant [ integer SDLK_t ] { 116 }
+    Constant [ integer SDLK_u ] { 117 }
+    Constant [ integer SDLK_v ] { 118 }
+    Constant [ integer SDLK_w ] { 119 }
+    Constant [ integer SDLK_x ] { 120 }
+    Constant [ integer SDLK_y ] { 121 }
+    Constant [ integer SDLK_z ] { 122 }
+    Constant [ integer SDLK_CAPSLOCK ] { 1073741881 }
+    Constant [ integer SDLK_F1 ] { 1073741882 }
+    Constant [ integer SDLK_F2 ] { 1073741883 }
+    Constant [ integer SDLK_F3 ] { 1073741884 }
+    Constant [ integer SDLK_F4 ] { 1073741885 }
+    Constant [ integer SDLK_F5 ] { 1073741886 }
+    Constant [ integer SDLK_F6 ] { 1073741887 }
+    Constant [ integer SDLK_F7 ] { 1073741888 }
+    Constant [ integer SDLK_F8 ] { 1073741889 }
+    Constant [ integer SDLK_F9 ] { 1073741890 }
+    Constant [ integer SDLK_F10 ] { 1073741891 }
+    Constant [ integer SDLK_F11 ] { 1073741892 }
+    Constant [ integer SDLK_F12 ] { 1073741893 }
+    Constant [ integer SDLK_PRINTSCREEN ] { 1073741894 }
+    Constant [ integer SDLK_SCROLLLOCK ] { 1073741895 }
+    Constant [ integer SDLK_PAUSE ] { 1073741896 }
+    Constant [ integer SDLK_INSERT ] { 1073741897 }
+    Constant [ integer SDLK_HOME ] { 1073741898 }
+    Constant [ integer SDLK_PAGEUP ] { 1073741899 }
+    Constant [ integer SDLK_DELETE ] { 127 }
+    Constant [ integer SDLK_END ] { 1073741901 }
+    Constant [ integer SDLK_PAGEDOWN ] { 1073741902 }
+    Constant [ integer SDLK_RIGHT ] { 1073741903 }
+    Constant [ integer SDLK_LEFT ] { 1073741904 }
+    Constant [ integer SDLK_DOWN ] { 1073741905 }
+    Constant [ integer SDLK_UP ] { 1073741906 }
+    Constant [ integer SDLK_NUMLOCKCLEAR ] { 1073741907 }
+    Constant [ integer SDLK_KP_DIVIDE ] { 1073741908 }
+    Constant [ integer SDLK_KP_MULTIPLY ] { 1073741909 }
+    Constant [ integer SDLK_KP_MINUS ] { 1073741910 }
+    Constant [ integer SDLK_KP_PLUS ] { 1073741911 }
+    Constant [ integer SDLK_KP_ENTER ] { 1073741912 }
+    Constant [ integer SDLK_KP_1 ] { 1073741913 }
+    Constant [ integer SDLK_KP_2 ] { 1073741914 }
+    Constant [ integer SDLK_KP_3 ] { 1073741915 }
+    Constant [ integer SDLK_KP_4 ] { 1073741916 }
+    Constant [ integer SDLK_KP_5 ] { 1073741917 }
+    Constant [ integer SDLK_KP_6 ] { 1073741918 }
+    Constant [ integer SDLK_KP_7 ] { 1073741919 }
+    Constant [ integer SDLK_KP_8 ] { 1073741920 }
+    Constant [ integer SDLK_KP_9 ] { 1073741921 }
+    Constant [ integer SDLK_KP_0 ] { 1073741922 }
+    Constant [ integer SDLK_KP_PERIOD ] { 1073741923 }
+    Constant [ integer SDLK_APPLICATION ] { 1073741925 }
+    Constant [ integer SDLK_POWER ] { 1073741926 }
+    Constant [ integer SDLK_KP_EQUALS ] { 1073741927 }
+    Constant [ integer SDLK_F13 ] { 1073741928 }
+    Constant [ integer SDLK_F14 ] { 1073741929 }
+    Constant [ integer SDLK_F15 ] { 1073741930 }
+    Constant [ integer SDLK_F16 ] { 1073741931 }
+    Constant [ integer SDLK_F17 ] { 1073741932 }
+    Constant [ integer SDLK_F18 ] { 1073741933 }
+    Constant [ integer SDLK_F19 ] { 1073741934 }
+    Constant [ integer SDLK_F20 ] { 1073741935 }
+    Constant [ integer SDLK_F21 ] { 1073741936 }
+    Constant [ integer SDLK_F22 ] { 1073741937 }
+    Constant [ integer SDLK_F23 ] { 1073741938 }
+    Constant [ integer SDLK_F24 ] { 1073741939 }
+    Constant [ integer SDLK_EXECUTE ] { 1073741940 }
+    Constant [ integer SDLK_HELP ] { 1073741941 }
+    Constant [ integer SDLK_MENU ] { 1073741942 }
+    Constant [ integer SDLK_SELECT ] { 1073741943 }
+    Constant [ integer SDLK_STOP ] { 1073741944 }
+    Constant [ integer SDLK_AGAIN ] { 1073741945 }
+    Constant [ integer SDLK_UNDO ] { 1073741946 }
+    Constant [ integer SDLK_CUT ] { 1073741947 }
+    Constant [ integer SDLK_COPY ] { 1073741948 }
+    Constant [ integer SDLK_PASTE ] { 1073741949 }
+    Constant [ integer SDLK_FIND ] { 1073741950 }
+    Constant [ integer SDLK_MUTE ] { 1073741951 }
+    Constant [ integer SDLK_VOLUMEUP ] { 1073741952 }
+    Constant [ integer SDLK_VOLUMEDOWN ] { 1073741953 }
+    Constant [ integer SDLK_KP_COMMA ] { 1073741957 }
+    Constant [ integer SDLK_KP_EQUALSAS400 ] { 1073741958 }
+    Constant [ integer SDLK_ALTERASE ] { 1073741977 }
+    Constant [ integer SDLK_SYSREQ ] { 1073741978 }
+    Constant [ integer SDLK_CANCEL ] { 1073741979 }
+    Constant [ integer SDLK_CLEAR ] { 1073741980 }
+    Constant [ integer SDLK_PRIOR ] { 1073741981 }
+    Constant [ integer SDLK_RETURN2 ] { 1073741982 }
+    Constant [ integer SDLK_SEPARATOR ] { 1073741983 }
+    Constant [ integer SDLK_OUT ] { 1073741984 }
+    Constant [ integer SDLK_OPER ] { 1073741985 }
+    Constant [ integer SDLK_CLEARAGAIN ] { 1073741986 }
+    Constant [ integer SDLK_CRSEL ] { 1073741987 }
+    Constant [ integer SDLK_EXSEL ] { 1073741988 }
+    Constant [ integer SDLK_KP_00 ] { 1073742000 }
+    Constant [ integer SDLK_KP_000 ] { 1073742001 }
+    Constant [ integer SDLK_THOUSANDSSEPARATOR ] { 1073742002 }
+    Constant [ integer SDLK_DECIMALSEPARATOR ] { 1073742003 }
+    Constant [ integer SDLK_CURRENCYUNIT ] { 1073742004 }
+    Constant [ integer SDLK_CURRENCYSUBUNIT ] { 1073742005 }
+    Constant [ integer SDLK_KP_LEFTPAREN ] { 1073742006 }
+    Constant [ integer SDLK_KP_RIGHTPAREN ] { 1073742007 }
+    Constant [ integer SDLK_KP_LEFTBRACE ] { 1073742008 }
+    Constant [ integer SDLK_KP_RIGHTBRACE ] { 1073742009 }
+    Constant [ integer SDLK_KP_TAB ] { 1073742010 }
+    Constant [ integer SDLK_KP_BACKSPACE ] { 1073742011 }
+    Constant [ integer SDLK_KP_A ] { 1073742012 }
+    Constant [ integer SDLK_KP_B ] { 1073742013 }
+    Constant [ integer SDLK_KP_C ] { 1073742014 }
+    Constant [ integer SDLK_KP_D ] { 1073742015 }
+    Constant [ integer SDLK_KP_E ] { 1073742016 }
+    Constant [ integer SDLK_KP_F ] { 1073742017 }
+    Constant [ integer SDLK_KP_XOR ] { 1073742018 }
+    Constant [ integer SDLK_KP_POWER ] { 1073742019 }
+    Constant [ integer SDLK_KP_PERCENT ] { 1073742020 }
+    Constant [ integer SDLK_KP_LESS ] { 1073742021 }
+    Constant [ integer SDLK_KP_GREATER ] { 1073742022 }
+    Constant [ integer SDLK_KP_AMPERSAND ] { 1073742023 }
+    Constant [ integer SDLK_KP_DBLAMPERSAND ] { 1073742024 }
+    Constant [ integer SDLK_KP_VERTICALBAR ] { 1073742025 }
+    Constant [ integer SDLK_KP_DBLVERTICALBAR ] { 1073742026 }
+    Constant [ integer SDLK_KP_COLON ] { 1073742027 }
+    Constant [ integer SDLK_KP_HASH ] { 1073742028 }
+    Constant [ integer SDLK_KP_SPACE ] { 1073742029 }
+    Constant [ integer SDLK_KP_AT ] { 1073742030 }
+    Constant [ integer SDLK_KP_EXCLAM ] { 1073742031 }
+    Constant [ integer SDLK_KP_MEMSTORE ] { 1073742032 }
+    Constant [ integer SDLK_KP_MEMRECALL ] { 1073742033 }
+    Constant [ integer SDLK_KP_MEMCLEAR ] { 1073742034 }
+    Constant [ integer SDLK_KP_MEMADD ] { 1073742035 }
+    Constant [ integer SDLK_KP_MEMSUBTRACT ] { 1073742036 }
+    Constant [ integer SDLK_KP_MEMMULTIPLY ] { 1073742037 }
+    Constant [ integer SDLK_KP_MEMDIVIDE ] { 1073742038 }
+    Constant [ integer SDLK_KP_PLUSMINUS ] { 1073742039 }
+    Constant [ integer SDLK_KP_CLEAR ] { 1073742040 }
+    Constant [ integer SDLK_KP_CLEARENTRY ] { 1073742041 }
+    Constant [ integer SDLK_KP_BINARY ] { 1073742042 }
+    Constant [ integer SDLK_KP_OCTAL ] { 1073742043 }
+    Constant [ integer SDLK_KP_DECIMAL ] { 1073742044 }
+    Constant [ integer SDLK_KP_HEXADECIMAL ] { 1073742045 }
+    Constant [ integer SDLK_LCTRL ] { 1073742048 }
+    Constant [ integer SDLK_LSHIFT ] { 1073742049 }
+    Constant [ integer SDLK_LALT ] { 1073742050 }
+    Constant [ integer SDLK_LGUI ] { 1073742051 }
+    Constant [ integer SDLK_RCTRL ] { 1073742052 }
+    Constant [ integer SDLK_RSHIFT ] { 1073742053 }
+    Constant [ integer SDLK_RALT ] { 1073742054 }
+    Constant [ integer SDLK_RGUI ] { 1073742055 }
+    Constant [ integer SDLK_MODE ] { 1073742081 }
+    Constant [ integer SDLK_AUDIONEXT ] { 1073742082 }
+    Constant [ integer SDLK_AUDIOPREV ] { 1073742083 }
+    Constant [ integer SDLK_AUDIOSTOP ] { 1073742084 }
+    Constant [ integer SDLK_AUDIOPLAY ] { 1073742085 }
+    Constant [ integer SDLK_AUDIOMUTE ] { 1073742086 }
+    Constant [ integer SDLK_MEDIASELECT ] { 1073742087 }
+    Constant [ integer SDLK_WWW ] { 1073742088 }
+    Constant [ integer SDLK_MAIL ] { 1073742089 }
+    Constant [ integer SDLK_CALCULATOR ] { 1073742090 }
+    Constant [ integer SDLK_COMPUTER ] { 1073742091 }
+    Constant [ integer SDLK_AC_SEARCH ] { 1073742092 }
+    Constant [ integer SDLK_AC_HOME ] { 1073742093 }
+    Constant [ integer SDLK_AC_BACK ] { 1073742094 }
+    Constant [ integer SDLK_AC_FORWARD ] { 1073742095 }
+    Constant [ integer SDLK_AC_STOP ] { 1073742096 }
+    Constant [ integer SDLK_AC_REFRESH ] { 1073742097 }
+    Constant [ integer SDLK_AC_BOOKMARKS ] { 1073742098 }
+    Constant [ integer SDLK_BRIGHTNESSDOWN ] { 1073742099 }
+    Constant [ integer SDLK_BRIGHTNESSUP ] { 1073742100 }
+    Constant [ integer SDLK_DISPLAYSWITCH ] { 1073742101 }
+    Constant [ integer SDLK_KBDILLUMTOGGLE ] { 1073742102 }
+    Constant [ integer SDLK_KBDILLUMDOWN ] { 1073742103 }
+    Constant [ integer SDLK_KBDILLUMUP ] { 1073742104 }
+    Constant [ integer SDLK_EJECT ] { 1073742105 }
+    Constant [ integer SDLK_SLEEP ] { 1073742106 }
+    Constant [ integer KMOD_NONE ] { 0 }
+    Constant [ integer KMOD_LSHIFT ] { 1 }
+    Constant [ integer KMOD_RSHIFT ] { 2 }
+    Constant [ integer KMOD_LCTRL ] { 64 }
+    Constant [ integer KMOD_RCTRL ] { 128 }
+    Constant [ integer KMOD_LALT ] { 256 }
+    Constant [ integer KMOD_RALT ] { 512 }
+    Constant [ integer KMOD_LGUI ] { 1024 }
+    Constant [ integer KMOD_RGUI ] { 2048 }
+    Constant [ integer KMOD_NUM ] { 4096 }
+    Constant [ integer KMOD_CAPS ] { 8192 }
+    Constant [ integer KMOD_MODE ] { 16384 }
+    Constant [ integer KMOD_RESERVED ] { 32768 }
+    Constant [ integer KMOD_CTRL ] { 192 }
+    Constant [ integer KMOD_SHIFT ] { 3 }
+    Constant [ integer KMOD_ALT ] { 768 }
+    Constant [ integer KMOD_GUI ] { 3072 }
+    Constant [ integer SDL_MESSAGEBOX_ERROR ] { 16 }
+    Constant [ integer SDL_MESSAGEBOX_WARNING ] { 32 }
+    Constant [ integer SDL_MESSAGEBOX_INFORMATION ] { 64 }
+    Constant [ integer SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT ] { 1 }
+    Constant [ integer SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT ] { 2 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_BACKGROUND ] { 0 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_TEXT ] { 1 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_BUTTON_BORDER ] { 2 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND ] { 3 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED ] { 4 }
+    Constant [ integer SDL_MESSAGEBOX_COLOR_MAX ] { 5 }
+    Constant [ integer SDL_SYSTEM_CURSOR_ARROW ] { 0 }
+    Constant [ integer SDL_SYSTEM_CURSOR_IBEAM ] { 1 }
+    Constant [ integer SDL_SYSTEM_CURSOR_WAIT ] { 2 }
+    Constant [ integer SDL_SYSTEM_CURSOR_CROSSHAIR ] { 3 }
+    Constant [ integer SDL_SYSTEM_CURSOR_WAITARROW ] { 4 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENWSE ] { 5 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENESW ] { 6 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZEWE ] { 7 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZENS ] { 8 }
+    Constant [ integer SDL_SYSTEM_CURSOR_SIZEALL ] { 9 }
+    Constant [ integer SDL_SYSTEM_CURSOR_NO ] { 10 }
+    Constant [ integer SDL_SYSTEM_CURSOR_HAND ] { 11 }
+    Constant [ integer SDL_NUM_SYSTEM_CURSORS ] { 12 }
+    Constant [ integer SDL_BUTTON_LEFT ] { 1 }
+    Constant [ integer SDL_BUTTON_MIDDLE ] { 2 }
+    Constant [ integer SDL_BUTTON_RIGHT ] { 3 }
+    Constant [ integer SDL_BUTTON_X1 ] { 4 }
+    Constant [ integer SDL_BUTTON_X2 ] { 5 }
+    Constant [ integer SDL_BUTTON_LMASK ] { 1 }
+    Constant [ integer SDL_BUTTON_MMASK ] { 2 }
+    Constant [ integer SDL_BUTTON_RMASK ] { 4 }
+    Constant [ integer SDL_BUTTON_X1MASK ] { 8 }
+    Constant [ integer SDL_BUTTON_X2MASK ] { 16 }
+    Constant [ integer SDL_MUTEX_TIMEDOUT ] { 1 }
+    Constant [ integer SDL_MUTEX_MAXWAIT ] { 4294967295 }
+    Constant [ integer SDL_POWERSTATE_UNKNOWN ] { 0 }
+    Constant [ integer SDL_POWERSTATE_ON_BATTERY ] { 1 }
+    Constant [ integer SDL_POWERSTATE_NO_BATTERY ] { 2 }
+    Constant [ integer SDL_POWERSTATE_CHARGING ] { 3 }
+    Constant [ integer SDL_POWERSTATE_CHARGED ] { 4 }
+    Constant [ integer SDL_PIXELTYPE_UNKNOWN ] { 0 }
+    Constant [ integer SDL_PIXELTYPE_INDEX1 ] { 1 }
+    Constant [ integer SDL_PIXELTYPE_INDEX4 ] { 2 }
+    Constant [ integer SDL_PIXELTYPE_INDEX8 ] { 3 }
+    Constant [ integer SDL_PIXELTYPE_PACKED8 ] { 4 }
+    Constant [ integer SDL_PIXELTYPE_PACKED16 ] { 5 }
+    Constant [ integer SDL_PIXELTYPE_PACKED32 ] { 6 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU8 ] { 7 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU16 ] { 8 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYU32 ] { 9 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYF16 ] { 10 }
+    Constant [ integer SDL_PIXELTYPE_ARRAYF32 ] { 11 }
+    Constant [ integer SDL_BITMAPORDER_NONE ] { 0 }
+    Constant [ integer SDL_BITMAPORDER_4321 ] { 1 }
+    Constant [ integer SDL_BITMAPORDER_1234 ] { 2 }
+    Constant [ integer SDL_PACKEDORDER_NONE ] { 0 }
+    Constant [ integer SDL_PACKEDORDER_XRGB ] { 1 }
+    Constant [ integer SDL_PACKEDORDER_RGBX ] { 2 }
+    Constant [ integer SDL_PACKEDORDER_ARGB ] { 3 }
+    Constant [ integer SDL_PACKEDORDER_RGBA ] { 4 }
+    Constant [ integer SDL_PACKEDORDER_XBGR ] { 5 }
+    Constant [ integer SDL_PACKEDORDER_BGRX ] { 6 }
+    Constant [ integer SDL_PACKEDORDER_ABGR ] { 7 }
+    Constant [ integer SDL_PACKEDORDER_BGRA ] { 8 }
+    Constant [ integer SDL_PACKEDLAYOUT_NONE ] { 0 }
+    Constant [ integer SDL_PACKEDLAYOUT_332 ] { 1 }
+    Constant [ integer SDL_PACKEDLAYOUT_4444 ] { 2 }
+    Constant [ integer SDL_PACKEDLAYOUT_1555 ] { 3 }
+    Constant [ integer SDL_PACKEDLAYOUT_5551 ] { 4 }
+    Constant [ integer SDL_PACKEDLAYOUT_565 ] { 5 }
+    Constant [ integer SDL_PACKEDLAYOUT_8888 ] { 6 }
+    Constant [ integer SDL_PACKEDLAYOUT_2101010 ] { 7 }
+    Constant [ integer SDL_PACKEDLAYOUT_1010102 ] { 8 }
+    Constant [ integer SDL_PIXELFORMAT_UNKNOWN ] { 0 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX1LSB ] { 286261504 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX1MSB ] { 287310080 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX4LSB ] { 303039488 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX4MSB ] { 304088064 }
+    Constant [ integer SDL_PIXELFORMAT_INDEX8 ] { 318769153 }
+    Constant [ integer SDL_PIXELFORMAT_RGB332 ] { 336660481 }
+    Constant [ integer SDL_PIXELFORMAT_RGB444 ] { 353504258 }
+    Constant [ integer SDL_PIXELFORMAT_RGB555 ] { 353570562 }
+    Constant [ integer SDL_PIXELFORMAT_BGR555 ] { 357764866 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB4444 ] { 355602434 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA4444 ] { 356651010 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR4444 ] { 359796738 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA4444 ] { 360845314 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB1555 ] { 355667970 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA5551 ] { 356782082 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR1555 ] { 359862274 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA5551 ] { 360976386 }
+    Constant [ integer SDL_PIXELFORMAT_RGB565 ] { 353701890 }
+    Constant [ integer SDL_PIXELFORMAT_BGR565 ] { 357896194 }
+    Constant [ integer SDL_PIXELFORMAT_RGB24 ] { 386930691 }
+    Constant [ integer SDL_PIXELFORMAT_BGR24 ] { 390076419 }
+    Constant [ integer SDL_PIXELFORMAT_RGB888 ] { 370546692 }
+    Constant [ integer SDL_PIXELFORMAT_RGBX8888 ] { 371595268 }
+    Constant [ integer SDL_PIXELFORMAT_BGR888 ] { 374740996 }
+    Constant [ integer SDL_PIXELFORMAT_BGRX8888 ] { 375789572 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB8888 ] { 372645892 }
+    Constant [ integer SDL_PIXELFORMAT_RGBA8888 ] { 373694468 }
+    Constant [ integer SDL_PIXELFORMAT_ABGR8888 ] { 376840196 }
+    Constant [ integer SDL_PIXELFORMAT_BGRA8888 ] { 377888772 }
+    Constant [ integer SDL_PIXELFORMAT_ARGB2101010 ] { 372711428 }
+    Constant [ integer SDL_PIXELFORMAT_YV12 ] { 842094169 }
+    Constant [ integer SDL_PIXELFORMAT_IYUV ] { 1448433993 }
+    Constant [ integer SDL_PIXELFORMAT_YUY2 ] { 844715353 }
+    Constant [ integer SDL_PIXELFORMAT_UYVY ] { 1498831189 }
+    Constant [ integer SDL_PIXELFORMAT_YVYU ] { 1431918169 }
+    Constant [ integer SDL_UNKNOWN ] { 0 }
+    Constant [ integer SDL_WINFILE ] { 1 }
+    Constant [ integer SDL_STDFILE ] { 2 }
+    Constant [ integer SDL_JNIFILE ] { 3 }
+    Constant [ integer SDL_MEMORY ] { 4 }
+    Constant [ integer SDL_MEMORY_RO ] { 5 }
+    Constant [ integer RW_SEEK_SET ] { 0 }
+    Constant [ integer RW_SEEK_CUR ] { 1 }
+    Constant [ integer RW_SEEK_END ] { 2 }
+    Constant [ integer SDL_INIT_TIMER ] { 1 }
+    Constant [ integer SDL_INIT_AUDIO ] { 16 }
+    Constant [ integer SDL_INIT_VIDEO ] { 32 }
+    Constant [ integer SDL_INIT_JOYSTICK ] { 512 }
+    Constant [ integer SDL_INIT_HAPTIC ] { 4096 }
+    Constant [ integer SDL_INIT_GAMECONTROLLER ] { 8192 }
+    Constant [ integer SDL_INIT_EVENTS ] { 16384 }
+    Constant [ integer SDL_INIT_NOPARACHUTE ] { 1048576 }
+    Constant [ integer SDL_INIT_EVERYTHING ] { 29233 }
+    Constant [ integer ShapeModeDefault ] { 0 }
+    Constant [ integer ShapeModeBinarizeAlpha ] { 1 }
+    Constant [ integer ShapeModeReverseBinarizeAlpha ] { 2 }
+    Constant [ integer ShapeModeColorKey ] { 3 }
+    Constant [ integer SDL_NONSHAPEABLE_WINDOW ] { -1 }
+    Constant [ integer SDL_INVALID_SHAPE_ARGUMENT ] { -2 }
+    Constant [ integer SDL_WINDOW_LACKS_SHAPE ] { -3 }
+    Constant [ integer SDL_SWSURFACE ] { 0 }
+    Constant [ integer SDL_PREALLOC ] { 1 }
+    Constant [ integer SDL_RLEACCEL ] { 2 }
+    Constant [ integer SDL_DONTFREE ] { 4 }
+    Constant [ integer SDL_COMPILEDVERSION ] { 2001 }
+    Constant [ integer SDL_MAJOR_VERSION ] { 2 }
+    Constant [ integer SDL_MINOR_VERSION ] { 0 }
+    Constant [ integer SDL_PATCHLEVEL ] { 1 }
+    Constant [ string SDL_REVISION ] { hg-7890:c031abe0b287 }
+    Constant [ integer SDL_WINDOW_FULLSCREEN ] { 1 }
+    Constant [ integer SDL_WINDOW_OPENGL ] { 2 }
+    Constant [ integer SDL_WINDOW_SHOWN ] { 4 }
+    Constant [ integer SDL_WINDOW_HIDDEN ] { 8 }
+    Constant [ integer SDL_WINDOW_BORDERLESS ] { 16 }
+    Constant [ integer SDL_WINDOW_RESIZABLE ] { 32 }
+    Constant [ integer SDL_WINDOW_MINIMIZED ] { 64 }
+    Constant [ integer SDL_WINDOW_MAXIMIZED ] { 128 }
+    Constant [ integer SDL_WINDOW_INPUT_GRABBED ] { 256 }
+    Constant [ integer SDL_WINDOW_INPUT_FOCUS ] { 512 }
+    Constant [ integer SDL_WINDOW_MOUSE_FOCUS ] { 1024 }
+    Constant [ integer SDL_WINDOW_FULLSCREEN_DESKTOP ] { 4097 }
+    Constant [ integer SDL_WINDOW_FOREIGN ] { 2048 }
+    Constant [ integer SDL_WINDOW_ALLOW_HIGHDPI ] { 8192 }
+    Constant [ integer SDL_WINDOWPOS_UNDEFINED_MASK ] { 536805376 }
+    Constant [ integer SDL_WINDOWPOS_UNDEFINED ] { 536805376 }
+    Constant [ integer SDL_WINDOWPOS_CENTERED_MASK ] { 805240832 }
+    Constant [ integer SDL_WINDOWPOS_CENTERED ] { 805240832 }
+  }
+
+  - Functions {
+    Function [ <internal:SDL> function SDL_GetCPUCount ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCPUCacheLineSize ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasRDTSC ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasAltiVec ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasMMX ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_Has3DNow ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE2 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE3 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE41 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasSSE42 ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSystemRAM ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetError ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $error_message ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetError ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_ClearError ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_ExtensionSupported ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $extension ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SetAttribute ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $attr ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetAttribute ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $attr ]
+        Parameter #1 [ <required> &$value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_CreateContext ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_DeleteContext ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_GLContext $GLcontext ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_MakeCurrent ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> SDL_GLContext $context ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetCurrentWindow ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetCurrentContext ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetDrawableSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$w ]
+        Parameter #2 [ <required> &$h ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SwapWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_SetSwapInterval ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $interval ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GL_GetSwapInterval ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyboardFocus ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyboardState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$numkeys ]
+        Parameter #1 [ <optional> $allkeys ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetModState ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetModState ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $modstate ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyFromScancode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $scancode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeFromKey ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $scancode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetScancodeFromName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $name ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetKeyFromName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $name ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_StartTextInput ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsTextInputActive ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_StopTextInput ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetTextInputRect ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Rect $rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasScreenKeyboardSupport ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsScreenKeyboardShown ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ShowSimpleMessageBox ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> $flags ]
+        Parameter #1 [ <required> $title ]
+        Parameter #2 [ <required> $message ]
+        Parameter #3 [ <optional> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ShowMessageBox ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $messageboxdata ]
+        Parameter #1 [ <required> &$buttonid ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateCursor ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $data ]
+        Parameter #1 [ <required> $mask ]
+        Parameter #2 [ <required> $w ]
+        Parameter #3 [ <required> $h ]
+        Parameter #4 [ <required> $hot_x ]
+        Parameter #5 [ <required> $hot_y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateSystemCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $id ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateColorCursor ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $hot_x ]
+        Parameter #2 [ <required> $hot_y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Cursor $cursor ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Cursor $cursor ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCursor ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDefaultCursor ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_ShowCursor ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $toggle ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetMouseFocus ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetMouseState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$x ]
+        Parameter #1 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRelativeMouseState ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$x ]
+        Parameter #1 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WarpMouseInWindow ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetRelativeMouseMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $enabled ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRelativeMouseMode ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateMutex ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_LockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_TryLockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UnlockMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroyMutex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_mutexP ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_mutexV ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateSemaphore ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemWait ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemTryWait ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemPost ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemValue ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SemWaitTimeout ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+        Parameter #1 [ <required> $ms ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroySemaphore ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_sem $semaphore ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateCond ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_CondWait ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_cond $condition ]
+        Parameter #1 [ <required> SDL_mutex $mutex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CondSignal ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_cond $condition ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CondBroadcast ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_cond $condition ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CondWaitTimeout ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_cond $condition ]
+        Parameter #1 [ <required> SDL_mutex $mutex ]
+        Parameter #2 [ <required> $ms ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroyCond ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_cond $condition ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetPlatform ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetPowerInfo ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <optional> &$secs ]
+        Parameter #1 [ <optional> &$pct ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetPixelFormatName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $format ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_PixelFormatEnumToMasks ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $format ]
+        Parameter #1 [ <required> &$bpp ]
+        Parameter #2 [ <required> &$Rmask ]
+        Parameter #3 [ <required> &$Gmask ]
+        Parameter #4 [ <required> &$Bmask ]
+        Parameter #5 [ <required> &$Amask ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MasksToPixelFormatEnum ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $bpp ]
+        Parameter #1 [ <required> $Rmask ]
+        Parameter #2 [ <required> $Gmask ]
+        Parameter #3 [ <required> $Bmask ]
+        Parameter #4 [ <required> $Amask ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_AllocPalette ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $ncolors ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreePalette ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Palette $palette ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetPaletteColors ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Palette $palette ]
+        Parameter #1 [ <required> array $colors ]
+        Parameter #2 [ <optional> $first ]
+        Parameter #3 [ <optional> $ncolors ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_AllocFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $format ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_PixelFormat $format ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetPixelFormatPalette ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
+        Parameter #1 [ <required> SDL_Palette $palette ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MapRGB ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
+        Parameter #1 [ <required> $r ]
+        Parameter #2 [ <required> $g ]
+        Parameter #3 [ <required> $b ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MapRGBA ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> SDL_PixelFormat $pixelformat ]
+        Parameter #1 [ <required> $r ]
+        Parameter #2 [ <required> $g ]
+        Parameter #3 [ <required> $b ]
+        Parameter #4 [ <required> $a ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRGB ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> $pixel ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
+        Parameter #2 [ <required> &$r ]
+        Parameter #3 [ <required> &$g ]
+        Parameter #4 [ <required> &$b ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRGBA ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $pixel ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
+        Parameter #2 [ <required> &$r ]
+        Parameter #3 [ <required> &$g ]
+        Parameter #4 [ <required> &$b ]
+        Parameter #5 [ <required> &$a ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CalculateGammaRamp ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $gamma ]
+        Parameter #1 [ <required> &$ramp ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RectEmpty ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Rect $rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RectEquals ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HasIntersection ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IntersectRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+        Parameter #2 [ <required> &$result ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UnionRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Rect $rectA ]
+        Parameter #1 [ <required> SDL_Rect $rectB ]
+        Parameter #2 [ <required> &$result ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IntersectRectAndLine ] {
+
+      - Parameters [5] {
+        Parameter #0 [ <required> SDL_Rect $rect ]
+        Parameter #1 [ <required> &$X1 ]
+        Parameter #2 [ <required> &$Y1 ]
+        Parameter #3 [ <required> &$X2 ]
+        Parameter #4 [ <required> &$Y2 ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_EnclosePoints ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> array $point ]
+        Parameter #1 [ <required> $count ]
+        Parameter #2 [ <required> SDL_Rect $clip ]
+        Parameter #3 [ <required> &$rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_AllocRW ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeRW ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWFromFile ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $path ]
+        Parameter #1 [ <required> $mode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWFromFP ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $fp ]
+        Parameter #1 [ <optional> $autoclose ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWFromMem ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> &$buf ]
+        Parameter #1 [ <required> $size ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWFromConstMem ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $buf ]
+        Parameter #1 [ <optional> $size ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWsize ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWseek ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $offset ]
+        Parameter #2 [ <required> $whence ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWtell ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWread ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> &$buffer ]
+        Parameter #2 [ <required> $size ]
+        Parameter #3 [ <optional> $number ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWwrite ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $buffer ]
+        Parameter #2 [ <optional> $size ]
+        Parameter #3 [ <optional> $number ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RWclose ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadU8 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE16 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE16 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE32 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE32 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadLE64 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ReadBE64 ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteU8 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE16 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE16 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE32 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE32 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteLE64 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WriteBE64 ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops $RWops ]
+        Parameter #1 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_Init ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_InitSubSystem ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_Quit ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_QuitSubSystem ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WasInit ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateRGBSurface ] {
+
+      - Parameters [8] {
+        Parameter #0 [ <required> $flags ]
+        Parameter #1 [ <required> $width ]
+        Parameter #2 [ <required> $height ]
+        Parameter #3 [ <required> $depth ]
+        Parameter #4 [ <required> $Rmask ]
+        Parameter #5 [ <required> $Gmask ]
+        Parameter #6 [ <optional> $Bmask ]
+        Parameter #7 [ <optional> $Amask ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FreeSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FillRect ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $rect ]
+        Parameter #2 [ <required> $color ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_FillRects ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $rects ]
+        Parameter #2 [ <required> $count ]
+        Parameter #3 [ <required> $color ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MUSTLOCK ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LockSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UnlockSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LoadBMP_RW ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_RWops &$RWops ]
+        Parameter #1 [ <required> $freesrc ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LoadBMP ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $path ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpperBlit ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect or NULL $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect or NULL &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LowerBlit ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect &$srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <required> SDL_rect &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpperBlitScaled ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect or NULL $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect or NULL &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_LowerBlitScaled ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect &$srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <required> SDL_rect &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SoftStretch ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect or NULL $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect or NULL &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SaveBMP_RW ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> SDL_RWops &$rwops ]
+        Parameter #2 [ <optional> $freedst ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SaveBMP ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $path ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetSurfaceRLE ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $flag ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetColorKey ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $flag ]
+        Parameter #2 [ <optional> $key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetColorKey ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> &$key ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetSurfaceColorMod ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $red ]
+        Parameter #2 [ <required> $green ]
+        Parameter #3 [ <required> $blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceColorMod ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> &$red ]
+        Parameter #2 [ <required> &$green ]
+        Parameter #3 [ <required> &$blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetSurfaceAlphaMod ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $alpha ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceAlphaMod ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> &$alpha ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetSurfaceBlendMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $blendmmode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetSurfaceBlendMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> &$blendmode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetClipRect ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $cliprect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetClipRect ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> &$cliprect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ConvertSurface ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> SDL_PixelFormat $format ]
+        Parameter #2 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ConvertSurfaceFormat ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Surface $surface ]
+        Parameter #1 [ <required> $format ]
+        Parameter #2 [ <optional> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ConvertPixels ] {
+
+      - Parameters [8] {
+        Parameter #0 [ <required> $height ]
+        Parameter #1 [ <required> $width ]
+        Parameter #2 [ <required> $src_format ]
+        Parameter #3 [ <required> SDL_Pixels $src ]
+        Parameter #4 [ <required> $src_pitch ]
+        Parameter #5 [ <required> $dst_format ]
+        Parameter #6 [ <required> SDL_Pixels $dst ]
+        Parameter #7 [ <required> $dst_pitch ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_BlitSurface ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect or NULL $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect or NULL &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_BlitScaled ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Surface $src ]
+        Parameter #1 [ <required> SDL_rect or NULL $srcrect ]
+        Parameter #2 [ <required> SDL_Surface $dst ]
+        Parameter #3 [ <optional> SDL_rect or NULL &$dstrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRevision ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetRevisionNumber ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetVersion ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> &$version ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSIONNUM ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VERSION_ATLEAST ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $x ]
+        Parameter #1 [ <required> $y ]
+        Parameter #2 [ <required> $z ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumVideoDrivers ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetVideoDriver ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $driverIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VideoInit ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <optional> $drivername ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_VideoQuit ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCurrentVideoDriver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumVideoDisplays ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayName ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayBounds ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> &$rect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetNumDisplayModes ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDisplayMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> $modeIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetDesktopDisplayMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetCurrentDisplayMode ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $displayIndex ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetClosestDisplayMode ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> $displayIndex ]
+        Parameter #1 [ <required> SDL_DisplayMode $desired ]
+        Parameter #2 [ <optional> &$closest ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsScreenSaverEnabled ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_EnableScreenSaver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_DisableScreenSaver ] {
+
+      - Parameters [0] {
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateWindow ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $title ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+        Parameter #3 [ <required> $w ]
+        Parameter #4 [ <required> $y ]
+        Parameter #5 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_CreateShapedWindow ] {
+
+      - Parameters [6] {
+        Parameter #0 [ <required> $title ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+        Parameter #3 [ <required> $w ]
+        Parameter #4 [ <required> $y ]
+        Parameter #5 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_DestroyWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpdateWindowSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowTitle ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowTitle ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $title ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowDisplayIndex ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_ShowWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_HideWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RaiseWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MaximizeWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_MinimizeWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_RestoreWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowSurface ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowDisplayMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_DisplayMode $displaymode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowDisplayMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$displaymode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowPixelFormat ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowID ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowFromID ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $id ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowFlags ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowData ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $name ]
+        Parameter #2 [ <required> $value ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowData ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $name ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowIcon ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_Surface $icon ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowPosition ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowPosition ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowMinimumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowMinimumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowMaximumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $x ]
+        Parameter #2 [ <required> $y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowMaximumSize ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <optional> &$x ]
+        Parameter #2 [ <optional> &$y ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowBordered ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $bordered ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowFullscreen ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $flags ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_UpdateWindowSurfaceRects ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> array $rects ]
+        Parameter #2 [ <optional> $numrect ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowGrab ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $grabbed ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowGrab ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowBrightness ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> $brightness ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowBrightness ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowGammaRamp ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> array $red ]
+        Parameter #2 [ <required> array $green ]
+        Parameter #3 [ <required> array $blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetWindowGammaRamp ] {
+
+      - Parameters [4] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$red ]
+        Parameter #2 [ <required> &$green ]
+        Parameter #3 [ <required> &$blue ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_IsShapedWindow ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> SDL_Window $window ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_SetWindowShape ] {
+
+      - Parameters [3] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> SDL_Surface $surface ]
+        Parameter #2 [ <required> SDL_WindowShapeMode $mode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_GetShapedWindowMode ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> SDL_Window $window ]
+        Parameter #1 [ <required> &$shaped_mode ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WINDOWPOS_UNDEFINED_DISPLAY ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $display ]
+      }
+    }
+    Function [ <internal:SDL> function SDL_WINDOWPOS_CENTERED_DISPLAY ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> $display ]
+      }
+    }
+  }
+
+  - Classes [19] {
+    Class [ <internal:SDL> class SDL_GLContext ] {
+
+      - Constants [31] {
+        Constant [ integer RED_SIZE ] { 0 }
+        Constant [ integer GREEN_SIZE ] { 1 }
+        Constant [ integer BLUE_SIZE ] { 2 }
+        Constant [ integer ALPHA_SIZE ] { 3 }
+        Constant [ integer BUFFER_SIZE ] { 4 }
+        Constant [ integer DOUBLEBUFFER ] { 5 }
+        Constant [ integer DEPTH_SIZE ] { 6 }
+        Constant [ integer STENCIL_SIZE ] { 7 }
+        Constant [ integer ACCUM_RED_SIZE ] { 8 }
+        Constant [ integer ACCUM_GREEN_SIZE ] { 9 }
+        Constant [ integer ACCUM_BLUE_SIZE ] { 10 }
+        Constant [ integer ACCUM_ALPHA_SIZE ] { 11 }
+        Constant [ integer STEREO ] { 12 }
+        Constant [ integer MULTISAMPLEBUFFERS ] { 13 }
+        Constant [ integer MULTISAMPLESAMPLES ] { 14 }
+        Constant [ integer ACCELERATED_VISUAL ] { 15 }
+        Constant [ integer RETAINED_BACKING ] { 16 }
+        Constant [ integer SHARE_WITH_CURRENT_CONTEXT ] { 22 }
+        Constant [ integer FRAMEBUFFER_SRGB_CAPABLE ] { 23 }
+        Constant [ integer MAJOR_VERSION ] { 17 }
+        Constant [ integer MINOR_VERSION ] { 18 }
+        Constant [ integer EGL ] { 19 }
+        Constant [ integer FLAGS ] { 20 }
+        Constant [ integer PROFILE_MASK ] { 21 }
+        Constant [ integer PROFILE_CORE ] { 1 }
+        Constant [ integer PROFILE_COMPATIBILITY ] { 2 }
+        Constant [ integer PROFILE_ES ] { 4 }
+        Constant [ integer DEBUG_FLAG ] { 1 }
+        Constant [ integer FORWARD_COMPATIBLE_FLAG ] { 2 }
+        Constant [ integer ROBUST_ACCESS_FLAG ] { 4 }
+        Constant [ integer RESET_ISOLATION_FLAG ] { 8 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [1] {
+        Method [ <internal:SDL> static public method GL_GetCurrent ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [3] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Window $window ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Delete ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_MessageBoxColor ] {
+
+      - Constants [6] {
+        Constant [ integer BACKGROUND ] { 0 }
+        Constant [ integer TEXT ] { 1 }
+        Constant [ integer BUTTON_BORDER ] { 2 }
+        Constant [ integer BUTTON_BACKGROUND ] { 3 }
+        Constant [ integer BUTTON_SELECTED ] { 4 }
+        Constant [ integer MAX ] { 5 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $r ]
+        Property [ <default> public $g ]
+        Property [ <default> public $b ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_MessageBoxButtonData ] {
+
+      - Constants [2] {
+        Constant [ integer RETURNKEY_DEFAULT ] { 1 }
+        Constant [ integer ESCAPEKEY_DEFAULT ] { 2 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $buttonid ]
+        Property [ <default> public $text ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $buttonid ]
+            Parameter #2 [ <required> $text ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_MessageBoxData ] {
+
+      - Constants [3] {
+        Constant [ integer ERROR ] { 16 }
+        Constant [ integer WARNING ] { 32 }
+        Constant [ integer INFORMATION ] { 64 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [7] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $title ]
+        Property [ <default> public $message ]
+        Property [ <default> public $window ]
+        Property [ <default> public $numbuttons ]
+        Property [ <default> public $buttons ]
+        Property [ <default> public $colors ]
+      }
+
+      - Methods [3] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $title ]
+            Parameter #2 [ <required> $message ]
+            Parameter #3 [ <optional> array $buttons ]
+            Parameter #4 [ <optional> array $colors ]
+            Parameter #5 [ <optional> SDL_Window $parentwindow ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Show ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$buttonid ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Cursor ] {
+
+      - Constants [13] {
+        Constant [ integer ARROW ] { 0 }
+        Constant [ integer IBEAM ] { 1 }
+        Constant [ integer WAIT ] { 2 }
+        Constant [ integer CROSSHAIR ] { 3 }
+        Constant [ integer WAITARROW ] { 4 }
+        Constant [ integer SIZENWSE ] { 5 }
+        Constant [ integer SIZENESW ] { 6 }
+        Constant [ integer SIZEWE ] { 7 }
+        Constant [ integer SIZENS ] { 8 }
+        Constant [ integer SIZEALL ] { 9 }
+        Constant [ integer NO ] { 10 }
+        Constant [ integer HAND ] { 11 }
+        Constant [ integer NUM_SYSTEM ] { 12 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [6] {
+        Method [ <internal:SDL> static public method Create ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $data ]
+            Parameter #1 [ <required> $mask ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $h ]
+            Parameter #4 [ <required> $hot_x ]
+            Parameter #5 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method CreateSystem ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $id ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method CreateColor ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_Surface $surface ]
+            Parameter #1 [ <required> $hot_x ]
+            Parameter #2 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method Get ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetDefault ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method Show ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $toggle ]
+          }
+        }
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [4] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $data ]
+            Parameter #1 [ <required> $mask ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $h ]
+            Parameter #4 [ <required> $hot_x ]
+            Parameter #5 [ <required> $hot_y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Set ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_mutex ] {
+
+      - Constants [2] {
+        Constant [ integer TIMEDOUT ] { 1 }
+        Constant [ integer MAXWAIT ] { 4294967295 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [6] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Lock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method TryLock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Unlock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_sem ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [8] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Wait ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method TryWait ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Post ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Value ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WaitTimeout ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $ms ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_cond ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [0] {
+      }
+
+      - Methods [7] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Wait ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_mutex $mutex ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Signal ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Broadcast ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WaitTimeout ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_mutex $mutex ]
+            Parameter #1 [ <required> $ms ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Color ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $r ]
+        Property [ <default> public $g ]
+        Property [ <default> public $b ]
+        Property [ <default> public $a ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+            Parameter #3 [ <required> $a ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Palette implements ArrayAccess ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $ncolors ]
+        Property [ <default> public $version ]
+        Property [ <default> public $refcount ]
+        Property [ <default> public $colors ]
+      }
+
+      - Methods [9] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $ncolors ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method count ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetExists ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetGet ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetSet ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $color ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetUnset ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetColors ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> array $colors ]
+            Parameter #1 [ <optional> $first ]
+            Parameter #2 [ <optional> $ncolors ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_PixelFormat ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [16] {
+        Property [ <default> public $format ]
+        Property [ <default> public $BitsPerPixel ]
+        Property [ <default> public $BytesPerPixel ]
+        Property [ <default> public $Rmask ]
+        Property [ <default> public $Gmask ]
+        Property [ <default> public $Bmask ]
+        Property [ <default> public $Amask ]
+        Property [ <default> public $Rloss ]
+        Property [ <default> public $Gloss ]
+        Property [ <default> public $Bloss ]
+        Property [ <default> public $Aloss ]
+        Property [ <default> public $Rshift ]
+        Property [ <default> public $Gshift ]
+        Property [ <default> public $Bshift ]
+        Property [ <default> public $Ashift ]
+        Property [ <default> public $palette ]
+      }
+
+      - Methods [8] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $format ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetRGB ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $pixel ]
+            Parameter #1 [ <required> &$r ]
+            Parameter #2 [ <required> &$g ]
+            Parameter #3 [ <required> &$b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetRGBA ] {
+
+          - Parameters [5] {
+            Parameter #0 [ <required> $pixel ]
+            Parameter #1 [ <required> &$r ]
+            Parameter #2 [ <required> &$g ]
+            Parameter #3 [ <required> &$b ]
+            Parameter #4 [ <required> &$a ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetPalette ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Palette $palette ]
+          }
+        }
+
+        Method [ <internal:SDL> public method MapRGB ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+          }
+        }
+
+        Method [ <internal:SDL> public method MapRGBA ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $r ]
+            Parameter #1 [ <required> $g ]
+            Parameter #2 [ <required> $b ]
+            Parameter #3 [ <required> $a ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Pixels implements ArrayAccess ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $pitch ]
+        Property [ <default> public $h ]
+        Property [ <default> public $count ]
+      }
+
+      - Methods [9] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $pitch ]
+            Parameter #1 [ <required> $h ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method count ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetExists ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetGet ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetSet ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL, prototype ArrayAccess> public method offsetUnset ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $offset ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetByte ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetByte ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+            Parameter #2 [ <required> $byte ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Rect ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $x ]
+        Property [ <default> public $y ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+      }
+
+      - Methods [8] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+            Parameter #2 [ <required> $w ]
+            Parameter #3 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Empty ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Equal ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Rect $rect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method HasIntersection ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Rect $rect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Intersect ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_Rect $rect ]
+            Parameter #1 [ <required> &$result ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Union ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_Rect $rect ]
+            Parameter #1 [ <required> &$result ]
+          }
+        }
+
+        Method [ <internal:SDL> public method IntersectLine ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> &$X1 ]
+            Parameter #1 [ <required> &$Y1 ]
+            Parameter #2 [ <required> &$X2 ]
+            Parameter #3 [ <required> &$Y2 ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Point ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [2] {
+        Property [ <default> public $x ]
+        Property [ <default> public $y ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_RWops ] {
+
+      - Constants [6] {
+        Constant [ integer UNKNOWN ] { 0 }
+        Constant [ integer WINFILE ] { 1 }
+        Constant [ integer STDFILE ] { 2 }
+        Constant [ integer JNIFILE ] { 3 }
+        Constant [ integer MEMORY ] { 4 }
+        Constant [ integer MEMORY_RO ] { 5 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [4] {
+        Method [ <internal:SDL> static public method FromFile ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $path ]
+            Parameter #1 [ <required> $mode ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromFP ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $fp ]
+            Parameter #1 [ <optional> $autoclose ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromMem ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> &$buf ]
+            Parameter #1 [ <required> $size ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method FromConstMem ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $buf ]
+            Parameter #1 [ <optional> $size ]
+          }
+        }
+      }
+
+      - Properties [1] {
+        Property [ <default> public $type ]
+      }
+
+      - Methods [23] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Size ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Seek ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $offset ]
+            Parameter #1 [ <required> $whence ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Tell ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Read ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$buffer ]
+            Parameter #1 [ <required> $size ]
+            Parameter #2 [ <optional> $number ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Write ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $buffer ]
+            Parameter #1 [ <optional> $size ]
+            Parameter #2 [ <optional> $number ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Close ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadU8 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE16 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE16 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE32 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE32 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadLE64 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method ReadBE64 ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteU8 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE16 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE16 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE32 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE32 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteLE64 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method WriteBE64 ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $value ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_WindowShapeMode ] {
+
+      - Constants [4] {
+        Constant [ integer Default ] { 0 }
+        Constant [ integer BinarizeAlpha ] { 1 }
+        Constant [ integer ReverseBinarizeAlpha ] { 2 }
+        Constant [ integer ColorKey ] { 3 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [3] {
+        Property [ <default> public $mode ]
+        Property [ <default> public $colorKey ]
+        Property [ <default> public $binarizationCutoff ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $mode ]
+            Parameter #1 [ <required> $parameter ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Surface ] {
+
+      - Constants [4] {
+        Constant [ integer SWSURFACE ] { 0 }
+        Constant [ integer PREALLOC ] { 1 }
+        Constant [ integer RLEACCEL ] { 2 }
+        Constant [ integer DONTFREE ] { 4 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [2] {
+        Method [ <internal:SDL> static public method LoadRW ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_RWops &$RWops ]
+            Parameter #1 [ <required> $freesrc ]
+          }
+        }
+
+        Method [ <internal:SDL> static public method LoadBMP ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $path ]
+          }
+        }
+      }
+
+      - Properties [7] {
+        Property [ <default> public $flags ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+        Property [ <default> public $pitch ]
+        Property [ <default> public $format ]
+        Property [ <default> public $clip_rect ]
+        Property [ <default> public $pixels ]
+      }
+
+      - Methods [30] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [8] {
+            Parameter #0 [ <required> $flags ]
+            Parameter #1 [ <required> $width ]
+            Parameter #2 [ <required> $height ]
+            Parameter #3 [ <required> $depth ]
+            Parameter #4 [ <required> $Rmask ]
+            Parameter #5 [ <required> $Gmask ]
+            Parameter #6 [ <optional> $Bmask ]
+            Parameter #7 [ <optional> $Amask ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Free ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method FillRect ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $rect ]
+            Parameter #1 [ <required> $color ]
+          }
+        }
+
+        Method [ <internal:SDL> public method FillRects ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $rects ]
+            Parameter #1 [ <required> $count ]
+            Parameter #2 [ <required> $color ]
+          }
+        }
+
+        Method [ <internal:SDL> public method MustLock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Lock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Unlock ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Blit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect or NULL $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect or NULL &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpperBlit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect or NULL $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect or NULL &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method LowerBlit ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect &$srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <required> SDL_rect &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method BlitScaled ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect or NULL $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect or NULL &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpperBlitScaled ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect or NULL $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect or NULL &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method LowerBlitScaled ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect &$srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <required> SDL_rect &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SoftStretch ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> SDL_rect or NULL $srcrect ]
+            Parameter #1 [ <required> SDL_Surface $dst ]
+            Parameter #2 [ <optional> SDL_rect or NULL &$dstrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SaveBMP_RW ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_RWops &$rwops ]
+            Parameter #1 [ <optional> $freedst ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SaveBMP ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $path ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetRLE ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $flag ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetColorKey ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $flag ]
+            Parameter #1 [ <optional> $key ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetColorKey ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$key ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetColorMod ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> $red ]
+            Parameter #1 [ <required> $green ]
+            Parameter #2 [ <required> $blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetColorMod ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$red ]
+            Parameter #1 [ <required> &$green ]
+            Parameter #2 [ <required> &$blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetAlphaMod ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $alpha ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetAlphaMod ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$alpha ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetBlendMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $blendmmode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetBlendMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$blendmode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetClipRect ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $cliprect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetClipRect ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$cliprect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method Convert ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_PixelFormat $format ]
+            Parameter #1 [ <optional> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method ConvertFormat ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $format ]
+            Parameter #1 [ <optional> $flags ]
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_DisplayMode ] {
+
+      - Constants [0] {
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [0] {
+      }
+
+      - Properties [4] {
+        Property [ <default> public $format ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+        Property [ <default> public $refresh_rate ]
+      }
+
+      - Methods [2] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [4] {
+            Parameter #0 [ <required> $format ]
+            Parameter #1 [ <required> $w ]
+            Parameter #2 [ <required> $h ]
+            Parameter #3 [ <required> $refresh_rate ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+      }
+    }
+
+    Class [ <internal:SDL> class SDL_Window ] {
+
+      - Constants [18] {
+        Constant [ integer FULLSCREEN ] { 1 }
+        Constant [ integer OPENGL ] { 2 }
+        Constant [ integer SHOWN ] { 4 }
+        Constant [ integer HIDDEN ] { 8 }
+        Constant [ integer BORDERLESS ] { 16 }
+        Constant [ integer RESIZABLE ] { 32 }
+        Constant [ integer MINIMIZED ] { 64 }
+        Constant [ integer MAXIMIZED ] { 128 }
+        Constant [ integer INPUT_GRABBED ] { 256 }
+        Constant [ integer INPUT_FOCUS ] { 512 }
+        Constant [ integer MOUSE_FOCUS ] { 1024 }
+        Constant [ integer FULLSCREEN_DESKTOP ] { 4097 }
+        Constant [ integer FOREIGN ] { 2048 }
+        Constant [ integer ALLOW_HIGHDPI ] { 8192 }
+        Constant [ integer POS_UNDEFINED_MASK ] { 536805376 }
+        Constant [ integer POS_UNDEFINED ] { 536805376 }
+        Constant [ integer POS_CENTERED_MASK ] { 805240832 }
+        Constant [ integer POS_CENTERED ] { 805240832 }
+      }
+
+      - Static properties [0] {
+      }
+
+      - Static methods [3] {
+        Method [ <internal:SDL> static public method GL_GetCurrent ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetMouseFocus ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> static public method GetFromID ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $id ]
+          }
+        }
+      }
+
+      - Properties [7] {
+        Property [ <default> public $id ]
+        Property [ <default> public $flags ]
+        Property [ <default> public $x ]
+        Property [ <default> public $y ]
+        Property [ <default> public $w ]
+        Property [ <default> public $h ]
+        Property [ <default> public $title ]
+      }
+
+      - Methods [47] {
+        Method [ <internal:SDL, ctor> public method __construct ] {
+
+          - Parameters [6] {
+            Parameter #0 [ <required> $title ]
+            Parameter #1 [ <required> $x ]
+            Parameter #2 [ <required> $y ]
+            Parameter #3 [ <required> $w ]
+            Parameter #4 [ <required> $y ]
+            Parameter #5 [ <required> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method __toString ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method UpdateSurface ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Destroy ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetTitle ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetTitle ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $title ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetDisplayIndex ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Show ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Hide ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Raise ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Maximize ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Minimize ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method Restore ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetSurface ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetDisplayMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_DisplayMode $displaymode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetDisplayMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$displaymode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetPixelFormat ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetID ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GetFlags ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetData ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $name ]
+            Parameter #1 [ <required> $value ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetData ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $name ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetIcon ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_Surface $icon ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetPosition ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetPosition ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetMinimumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetMinimumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetMaximumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetMaximumSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetBordered ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $bordered ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetFullscreen ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $flags ]
+          }
+        }
+
+        Method [ <internal:SDL> public method UpdateSurfaceRects ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> array $rects ]
+            Parameter #1 [ <optional> $numrect ]
+          }
+        }
+
+        Method [ <internal:SDL> public method SetGrab ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $grabbed ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetGrab ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetBrightness ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> $brightness ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetBrightness ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetGammaRamp ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> array $red ]
+            Parameter #1 [ <required> array $green ]
+            Parameter #2 [ <required> array $blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetGammaRamp ] {
+
+          - Parameters [3] {
+            Parameter #0 [ <required> &$red ]
+            Parameter #1 [ <required> &$green ]
+            Parameter #2 [ <required> &$blue ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_CreateContext ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_MakeCurrent ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> SDL_GLContext $context ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_GetDrawableSize ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <optional> &$x ]
+            Parameter #1 [ <optional> &$y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GL_Swap ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method WarpMouse ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> $x ]
+            Parameter #1 [ <required> $y ]
+          }
+        }
+
+        Method [ <internal:SDL> public method IsShaped ] {
+
+          - Parameters [0] {
+          }
+        }
+
+        Method [ <internal:SDL> public method SetShape ] {
+
+          - Parameters [2] {
+            Parameter #0 [ <required> SDL_Surface $surface ]
+            Parameter #1 [ <required> SDL_WindowShapeMode $mode ]
+          }
+        }
+
+        Method [ <internal:SDL> public method GetShapedMode ] {
+
+          - Parameters [1] {
+            Parameter #0 [ <required> &$shaped_mode ]
+          }
+        }
+      }
+    }
+  }
+}
+
