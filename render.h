@@ -17,28 +17,18 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
-
-#ifndef PHP_SDL_RECT_H
-#define PHP_SDL_RECT_H
+#ifndef PHP_SDL_RENDER_H
+#define PHP_SDL_RENDER_H
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-zend_class_entry *get_php_sdl_point_ce(void);
-zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC);
-
-zend_class_entry *get_php_sdl_rect_ce(void);
-zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
-
-PHP_MINIT_FUNCTION(sdl_rect);
+PHP_MINIT_FUNCTION(sdl_render);
 
 #ifdef  __cplusplus
 } // extern "C" 
 #endif
 
-#endif /* PHP_SDL_RECT_H */
+#endif /* PHP_SDL_RENDER_H */
 

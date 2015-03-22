@@ -7,10 +7,10 @@ PHP_ARG_WITH(sdl, whether to enable SDL functions,
 
 if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
-  export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2"
+  export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2 -Wall -Wfatal-errors"
 
-  REQ_PHP_VERSION="5.3.0"
-  REQ_PHP_VERSION_ID=50300
+  REQ_PHP_VERSION="5.4.0"
+  REQ_PHP_VERSION_ID=50400
   if test -z "$PHP_VERSION_ID"; then
     AC_MSG_CHECKING(PHP version)
     AC_TRY_COMPILE([#include <php_version.h>], [
@@ -61,10 +61,12 @@ pixels.c
 platform.c
 power.c
 rect.c
+render.c
 rwops.c
 sdl.c
 shape.c
 surface.c
+timer.c
 version.c
 video.c
 window.c

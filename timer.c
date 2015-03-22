@@ -17,28 +17,39 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
+#include "php_sdl.h"
+#include "timer.h"
+#include "window.h"
 
-#ifndef PHP_SDL_RECT_H
-#define PHP_SDL_RECT_H
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Delay, 0, 0, 1)
+       ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
 
-#ifdef  __cplusplus
-extern "C" {
-#endif
+PHP_FUNCTION(SDL_Delay)
+{
+	long ms;
 
-zend_class_entry *get_php_sdl_point_ce(void);
-zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC);
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ms) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
 
-zend_class_entry *get_php_sdl_rect_ce(void);
-zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC);
+	SDL_Delay((Uint32)ms);
+}
 
-PHP_MINIT_FUNCTION(sdl_rect);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
 
-#ifdef  __cplusplus
-} // extern "C" 
-#endif
+/* {{{ sdl_timer_functions[] */
+zend_function_entry sdl_timer_functions[] = {
+	ZEND_FE(SDL_Delay, arginfo_SDL_Delay)
+	ZEND_FE_END
+};
+/* }}} */
 
-#endif /* PHP_SDL_RECT_H */
 
+/* {{{ MINIT */
+PHP_MINIT_FUNCTION(sdl_timer)
+{
+	return (zend_register_functions(NULL, sdl_timer_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+}
+/* }}} */

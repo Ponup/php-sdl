@@ -694,7 +694,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowSimpleMessageBox, 0, 0, 3)
        ZEND_ARG_INFO(0, flags)
        ZEND_ARG_INFO(0, title)
        ZEND_ARG_INFO(0, message)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 1)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_ShowSimpleMessageBox(int flags, string title, string message, SDL_Window window)
@@ -715,15 +715,17 @@ static PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 {
 	char *title, *msg;
 	zval *z_window;
-	SDL_Window *window;
+	SDL_Window *window = NULL;
 	long flags;
 	int title_len, msg_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lss|O", &flags, &title, &title_len, &msg, &msg_len, &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lss|O!", &flags, &title, &title_len, &msg, &msg_len, &z_window, get_php_sdl_window_ce())) {
 		return;
 	}
 
-	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	if( z_window != NULL ) {
+		window = zval_to_sdl_window(z_window TSRMLS_CC);
+	}
 	RETVAL_LONG(SDL_ShowSimpleMessageBox(flags, title, msg, window));
 }
 /* }}} */

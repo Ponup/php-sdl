@@ -39,10 +39,12 @@
 #include "power.h"
 #include "pixels.h"
 #include "rect.h"
+#include "render.h"
 #include "rwops.h"
 #include "sdl.h"
 #include "shape.h"
 #include "surface.h"
+#include "timer.h"
 #include "version.h"
 #include "video.h"
 #include "window.h"
@@ -91,10 +93,12 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_filesystem)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_pixels)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rect)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_render)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_rwops)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_shape)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_surface)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_timer)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_window)
@@ -119,7 +123,6 @@ PHP_MINFO_FUNCTION(sdl)
 {
 	SDL_version ver;
 	char buf[64];
-
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "SDL support", "enabled");

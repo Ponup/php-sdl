@@ -2,6 +2,8 @@
 if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
 if (version_compare(phpversion("sdl"), "2.0.0-dev", '<')) die("skip: SDL extension >= 2.0.0 required");
 
+SDL_Init(SDL_INIT_EVERYTHING);
+
 // Create the window
 $wind = new SDL_Window("Foo window 1", 100, 50, 400, 300, SDL_Window::SHOWN|SDL_Window::RESIZABLE);
 $surf = $wind->GetSurface();
@@ -23,6 +25,7 @@ $step = 5;
 $color = SDL_MapRGB($surf->format, 0xff, 0x87, 0xef);
 
 // Compute rects
+$rects = [];
 for ($t=$time*$step ; $t ; $t--) {
 	$rects[$time*$step-$t] = new SDL_Rect(35+($time*$step+1-$t)*15, $logo->h+20, 10, 10);
 }
@@ -54,3 +57,4 @@ for ($t=$time*$step ; $t ; $t--) {
 	usleep(1000000/$step);
 }
 echo "Done\n";
+
