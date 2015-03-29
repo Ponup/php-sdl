@@ -4,13 +4,6 @@ if (!extension_loaded("sdl")) die("SDL extension not loaded");
 if (!extension_loaded("imagick")) die("Imagick extension not loaded");
 if (version_compare(phpversion("sdl"), "2.0.0-dev", '<')) die("skip: SDL extension >= 2.0.0 required");
 
-/* Marketing ;) */
-SDL_GetVersion($version);
-
-$msg = sprintf("Powered by PHP %s, SDL extension %s, SDL2 library %s",
-	phpversion(), phpversion("sdl"), implode('.', $version));
-echo "\n$msg\n\n";
-
 /* Arguments */
 if (!isset($_SERVER['argv'][1])) {
 	die("Missing image path\n");

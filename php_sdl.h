@@ -35,7 +35,11 @@ extern "C" {
 
 #define PHP_SDL_VERSION "2.0.0-dev"
 
+#if defined(__APPLE__) && defined(__MACH__)
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include <php_ini.h>
 #include <SAPI.h>

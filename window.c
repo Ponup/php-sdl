@@ -1144,15 +1144,15 @@ static PHP_FUNCTION(SDL_GetWindowSurface)
 {
 	struct php_sdl_window *intern;
 	zval *object;
-	SDL_Window *window;
-	SDL_Surface *surface;
+	SDL_Window *window = NULL;
+	SDL_Surface *surface = NULL;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
 
-	surface = SDL_GetWindowSurface(window);
+	surface = SDL_GetWindowSurface(intern->window);
 	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
 }
 /* }}} */
@@ -1675,13 +1675,13 @@ static PHP_METHOD(SDL_Window, __toString)
 static PHP_FUNCTION(SDL_UpdateWindowSurface)
 {
 	struct php_sdl_window *intern;
-	zval *object;
+	zval *z_window;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_window, php_sdl_window_ce) == FAILURE) {
 		return;
 	}
-	FETCH_WINDOW(window, object, 1);
+	FETCH_WINDOW(window, z_window, 1);
 	RETURN_LONG(SDL_UpdateWindowSurface(window));
 }
 /* }}} */

@@ -19,16 +19,11 @@
 
 /* $Id$ */
 
-/*
-  +----------------------------------------------------------------------+
-  | SDL extension - PHP stuff                                            |
-  +----------------------------------------------------------------------+
-*/
-
 #include "php_sdl.h"
 #include "blendmode.h"
 #include "cpuinfo.h"
 #include "error.h"
+#include "event.h"
 #include "filesystem.h"
 #include "glcontext.h"
 #include "keyboard.h"
@@ -83,6 +78,7 @@ PHP_MINIT_FUNCTION(sdl)
 	if (   SUCCESS == PHP_MINIT_CALL(sdl_blendmode)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_error)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_event)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_glcontext)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_keyboard)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_messagebox)

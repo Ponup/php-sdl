@@ -2,7 +2,7 @@
 
 $window = SDL_CreateWindow( "Jeu de la vie", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN );
 
-$renderer =  SDL_CreateRenderer( $window, 0, SDL_RENDERER_ACCELERATED);
+$renderer = SDL_CreateRenderer( $window, 0, SDL_RENDERER_ACCELERATED);
 
 SDL_SetRenderDrawColor( $renderer, 255, 0, 0, 255 );
 

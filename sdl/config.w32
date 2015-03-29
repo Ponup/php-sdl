@@ -1,7 +1,0 @@
-// $Id$
-// vim:ft=javascript
-
-if (PHP_SDL != "no") {
-	EXTENSION( "sdl", "php_sdl.c php_sdl_audio.c php_sdl_event.c php_sdl_thread.c php_sdl_wm.c php_sdl_cdrom.c php_sdl_joystick.c php_sdl_time.c" );
-}
-

@@ -9,7 +9,7 @@ $wind = new SDL_Window("Foo window 1", 100, 50, 400, 300, SDL_Window::SHOWN|SDL_
 $surf = $wind->GetSurface();
 
 // Load the PHP Logo from a stream
-$logo = SDL_LoadBMP('compress.zlib://'.__DIR__.'/php.bmp.gz');
+$logo = SDL_LoadBMP('spaceship.bmp');
 
 SDL_GetVersion($version);
 

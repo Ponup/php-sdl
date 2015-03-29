@@ -1,4 +1,0 @@
-- Add real tests (phpt)
-- Test performance of using objects instead of arrays (for SDL_Rect, SDL_Event, etc...)
-- Complete (if possible) the threading API
-- Fix the non-ZTS compilation mode.

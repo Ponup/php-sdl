@@ -12,21 +12,27 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Santiago Lizardo <santiagolizardo@php.net>                   |
+  | Authors: Santiago Lizardo <santiagolizardo@php.net>                  |
+  |          Remi Collet <remi@php.net>                                  |
   +----------------------------------------------------------------------+
 */
 
-#ifndef PHP_SDL_WM_H
-#define PHP_SDL_WM_H
+#ifndef PHP_SDL_EVENT_H
+#define PHP_SDL_EVENT_H
 
-#include "php.h"
-
-PHP_FUNCTION(sdl_wm_setcaption);
-PHP_FUNCTION(sdl_wm_getcaption);
-PHP_FUNCTION(sdl_wm_seticon);
-PHP_FUNCTION(sdl_wm_iconifywindow);
-PHP_FUNCTION(sdl_wm_togglefullscreen);
-PHP_FUNCTION(sdl_wm_grabinput);
-
+#ifdef  __cplusplus
+extern "C" {
 #endif
+
+zend_class_entry *get_php_sdl_event_ce(void);
+zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC);
+zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC);
+
+PHP_MINIT_FUNCTION(sdl_event);
+
+#ifdef  __cplusplus
+} // extern "C" 
+#endif
+
+#endif /* PHP_SDL_EVENT_H */
 
