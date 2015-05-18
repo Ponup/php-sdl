@@ -9,6 +9,7 @@ env:
   - REPORT_EXIT_STATUS=1
 
 before_script:
+  - sudo apt-get install libsdl2-dev
   - phpize
   - ./configure --quiet
   - make all install
