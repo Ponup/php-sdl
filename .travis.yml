@@ -9,7 +9,9 @@ env:
   - REPORT_EXIT_STATUS=1
 
 before_script:
-  - sudo apt-get install libsdl2-dev
+  - wget http://libsdl.org/release/SDL2-2.0.3.tar.gz -O - | tar xz
+  - cd SDL2-2.0.3 && ./configure && make -j && sudo make install && cd ..
+  # - sudo apt-get install libsdl2-dev
   - phpize
   - ./configure --quiet
   - make all install
