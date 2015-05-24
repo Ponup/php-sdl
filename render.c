@@ -169,7 +169,7 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface)
 	}
 
 	ZEND_FETCH_RESOURCE(renderer, SDL_Renderer*, &z_renderer, -1, SDL_RENDERER_RES_NAME, le_sdl_renderer);
-	surface = zval_to_sdl_surface(z_surface);
+	surface = zval_to_sdl_surface(z_surface TSRMLS_CC);
 
 	if( renderer && surface ) {
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
