@@ -43,7 +43,7 @@ int(0)
 SDL_VideoInit():int(0)
 SDL_GetCurrentVideoDriver():string(%d) "%s"
 SDL_GetNumVideoDisplays():int(%d)
-SDL_GetDisplayName(0):string(17) "%s"
+SDL_GetDisplayName(0):string(9) "Color LCD"
 SDL_GetDisplayBounds(0):int(0)
 object(SDL_Rect)#1 (4) {
   ["x"]=>

@@ -64,11 +64,9 @@ PHP_FUNCTION(SDL_GetPowerInfo)
 	power_state = SDL_GetPowerInfo(has_secs ? &secs : NULL, has_pct ? &pct : NULL);
 
 	if (has_secs) {
-		zval_dtor(z_secs);
 		ZVAL_LONG(z_secs, (long)secs);
 	}
 	if (has_pct) {
-		zval_dtor(z_pct);
 		ZVAL_LONG(z_pct, (long)pct);
 	}
 
