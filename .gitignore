@@ -47,3 +47,8 @@ tmp-php.ini
 run-tests.php
 *.o
 *.loT
+tests/*.diff
+tests/*.exp
+tests/*.log
+tests/*.sh
+tests/*.out
