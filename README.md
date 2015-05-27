@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/phpsdl/extension.svg?branch=master)](https://travis-ci.org/phpsdl/extension)
+
 PHP-SDL
 =======
 
@@ -37,6 +40,43 @@ We are working on the Windows build. Stay tuned.
 ## Documentation
 
 The SDL extension mimics in almost  every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](http://www.libsdl.org/release/SDL-1.2.15/docs/index.html).
+
+### Example
+
+Standard SDL2 API is available in procedural style:
+
+```php
+    $w = SDL_CreateWindow( "Foo window", 500, 50, 350, 300, SDL_WINDOW_SHOWN+SDL_WINDOW_RESIZABLE);
+    SDL_SetWindowTitle($w, "Some new title");
+    SDL_DestroyWindow($w);
+```
+
+And is also available in object oriented style:
+
+```php
+    $w = new SDL_Window( "Foo window", 100, 50, 350, 300, SDL_Window::SHOWN|SDL_Window::RESIZABLE);
+    $w->SetTitle("Some new title");
+    unset($w); // will destroy the window
+```
+
+BUILDING ON UNIX etc.
+=====================
+
+To compile your new extension, you will have to execute the following steps:
+
+1.  $ ./phpize
+2.  $ ./configure [--enable--sdl] 
+3.  $ make
+4.  $ make test
+5.  $ [sudo] make install
+
+
+
+BUILDING ON WINDOWS
+===================
+
+Not supported yet.
+
 
 ## Support / Feedback / Bugs / Feature Requests
 
