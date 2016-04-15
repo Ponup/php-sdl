@@ -1,4 +1,5 @@
 <?php
+require 'bootstrap.php';
 
 $quit = false;
 $x = 288;

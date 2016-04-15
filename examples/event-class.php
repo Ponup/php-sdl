@@ -1,4 +1,5 @@
 <?php
+require 'bootstrap.php';
 
 $event = new SDL_Event();
 var_dump( $event ); // Shows public properties

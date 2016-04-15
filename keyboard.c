@@ -202,7 +202,7 @@ static PHP_FUNCTION(SDL_GetScancodeName)
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scancode)) {
 		return;
 	}
-	RETVAL_STRING(SDL_GetScancodeName(scancode), 1);
+	RETVAL_STRING(SDL_GetScancodeName(scancode));
 }
 /* }}} */
 
@@ -248,7 +248,7 @@ static PHP_FUNCTION(SDL_GetKeyName)
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &key)) {
 		return;
 	}
-	RETVAL_STRING(SDL_GetKeyName(key), 1);
+	RETVAL_STRING(SDL_GetKeyName(key));
 }
 /* }}} */
 

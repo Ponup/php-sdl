@@ -1,6 +1,6 @@
 <?php
-if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
-if (version_compare(phpversion("sdl"), "2.0.0-dev", '<')) die("skip: SDL extension >= 2.0.0 required");
+
+require 'bootstrap.php';
 
 SDL_Init(SDL_INIT_EVERYTHING);
 

@@ -50,7 +50,7 @@ zend_class_entry *get_php_sdl_rwops_ce(void)
 
 #define FETCH_RWOPS(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_rwops *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_rwops *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->rwops; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -65,7 +65,7 @@ zend_bool sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *b
 		struct php_sdl_rwops *intern;
 
 		object_init_ex(z_val, php_sdl_rwops_ce);
-		intern = (struct php_sdl_rwops *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->rwops = rwops;
 		intern->flags = flags;
 		intern->buf   = buf;
@@ -84,7 +84,7 @@ SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC)
 	struct php_sdl_rwops *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_rwops_ce) {
-		intern = (struct php_sdl_rwops *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->rwops;
 	}
 	return NULL;
@@ -115,9 +115,9 @@ static void php_sdl_rwops_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_rwops_new
  */
-static zend_object_value php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_rwops *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -128,7 +128,7 @@ static zend_object_value php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_D
 
 	intern->rwops = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_rwops_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_rwops_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_rwops_handlers;
 
 	return retval;
@@ -137,13 +137,13 @@ static zend_object_value php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_D
 
 
 /* {{{ sdl_rwops_read_property */
-zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
 {
 	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member;
+	zval *retval, tmp_member, rv;
 
 	if (!intern->rwops) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 	}
 
 	if (Z_TYPE_P(member) != IS_STRING) {
@@ -163,7 +163,7 @@ zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zend_l
 	} else {
 		FREE_ZVAL(retval);
 
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
@@ -190,7 +190,7 @@ static HashTable *sdl_rwops_get_properties(zval *object TSRMLS_DC)
 	if (intern->rwops) {
 		MAKE_STD_ZVAL(zv); \
 		ZVAL_LONG(zv, (long)intern->rwops->type); \
-		zend_hash_update(props, "type", sizeof("type"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "type", sizeof("type"), &zv, sizeof(zv), NULL);
 	}
 	return props;
 }
@@ -198,7 +198,7 @@ static HashTable *sdl_rwops_get_properties(zval *object TSRMLS_DC)
 
 
 /* {{{ sdl_rwops_write_property */
-void sdl_rwops_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+void sdl_rwops_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
 {
 	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_RWops is read-only");
 }
@@ -211,7 +211,7 @@ static PHP_METHOD(SDL_RWops, __construct)
 	struct php_sdl_rwops *intern;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_rwops *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters_none()) {
@@ -238,7 +238,7 @@ static PHP_METHOD(SDL_RWops, __toString)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	intern = (struct php_sdl_rwops *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->rwops) {
 		switch (intern->rwops->type) {
 			case SDL_RWOPS_WINFILE:
@@ -259,7 +259,7 @@ static PHP_METHOD(SDL_RWops, __toString)
 		}
 	}
 	spprintf(&buf, 100, "SDL_RWops(%s)", t ? t : "");
-	RETVAL_STRING(buf, 0);
+	RETVAL_STRING(buf);
 }
 /* }}} */
 
@@ -359,8 +359,8 @@ PHP_FUNCTION(SDL_RWFromMem)
 	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "this function may raised unsupported error with PHP memory");
 
 	Z_STRLEN_P(z_buf) = size;
-	Z_STRVAL_P(z_buf) = emalloc(size);
-	Z_TYPE_P(z_buf) = IS_STRING;
+//php7	Z_STRVAL_P(z_buf) = emalloc(size);
+//php7	Z_TYPE_P(z_buf) = IS_STRING;
 	memset(Z_STRVAL_P(z_buf), 0, size);
 
 	rwops = SDL_RWFromMem(Z_STRVAL_P(z_buf), size);
@@ -395,7 +395,8 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 		char *buff;
 		size_t buff_size;
 
-		buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 0);
+		buff_size = php_stream_copy_to_mem(stream, &buff, 0);
+		//buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 0);
 		if (!buff_size) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING,"Cannot map data to memory");
 			RETURN_NULL();
@@ -601,7 +602,7 @@ PHP_FUNCTION(SDL_RWread)
 			buf = erealloc(buf, read * size);
 		}
 		zval_dtor(z_buf);
-		ZVAL_STRINGL(z_buf, buf, read * size, 0);
+		ZVAL_STRINGL(z_buf, buf, read * size);
 	} else {
 		efree(buf);
 	}

@@ -48,7 +48,7 @@ zend_class_entry *get_php_sdl_surface_ce(void)
 
 #define FETCH_SURFACE(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_surface *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_surface *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->surface; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -63,7 +63,7 @@ zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 		struct php_sdl_surface *intern;
 
 		object_init_ex(z_val, php_sdl_surface_ce);
-		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_surface *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->surface = surface;
 		/* copy flags to be able to check before access to surface */
 		intern->flags = surface->flags;
@@ -81,7 +81,7 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val TSRMLS_DC)
 	struct php_sdl_surface *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_surface_ce) {
-		intern = (struct php_sdl_surface *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_surface *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->surface;
 		}
 	return NULL;
@@ -191,7 +191,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_LoadBMP)
 {
 	char *path;
-	int path_len;
+	size_t path_len;
 	zval *z_rwops;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
@@ -223,7 +223,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 	long flags, width, height, depth, rmask, gmask, bmask, amask;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_surface *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask)) {
@@ -253,15 +253,15 @@ static PHP_METHOD(SDL_Surface, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_surface *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->surface) {
 		spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
 			intern->surface->flags, intern->surface->w, intern->surface->h,
 			intern->surface->format->BitsPerPixel, intern->surface->format->Rmask,
 			intern->surface->format->Gmask, intern->surface->format->Bmask, intern->surface->format->Amask);
-		RETVAL_STRING(buf, 0);
+		RETVAL_STRING(buf);
 	} else {
-		RETVAL_STRING("SDL_Surface()", 1);
+		RETVAL_STRING("SDL_Surface()");
 	}
 }
 /* }}} */
@@ -469,7 +469,7 @@ PHP_FUNCTION(SDL_FillRects)
 	rects = emalloc(sizeof(SDL_Rect)*count);
 
 	for (i=nb=0 ; i<count ; i++) {
-		if (zend_hash_index_find(Z_ARRVAL_P(z_rects), i, (void**)&z_rect) == FAILURE) {
+		if (!(z_rect = zend_hash_index_find(Z_ARRVAL_P(z_rects), i))) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "rects[%d] missing", i);
 
 		} else if (Z_TYPE_PP(z_rect) != IS_OBJECT || Z_OBJCE_PP(z_rect) != get_php_sdl_rect_ce()) {
@@ -1567,9 +1567,9 @@ static void php_sdl_surface_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_surface_new
  */
-static zend_object_value php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_surface *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -1580,7 +1580,7 @@ static zend_object_value php_sdl_surface_new(zend_class_entry *class_type TSRMLS
 
 	intern->surface = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_surface_free, NULL TSRMLS_CC);
+///	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_surface_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_surface_handlers;
 
 	return retval;
@@ -1589,13 +1589,13 @@ static zend_object_value php_sdl_surface_new(zend_class_entry *class_type TSRMLS
 
 
 /* {{{ sdl_surface_read_property*/
-zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
 {
 	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member;
+	zval *retval, tmp_member, rv;
 
 	if (!intern->surface) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 	}
 
 	if (Z_TYPE_P(member) != IS_STRING) {
@@ -1641,7 +1641,7 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 	} else {
 		FREE_ZVAL(retval);
 
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
@@ -1658,7 +1658,7 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zend
 #define SDL_SURFACE_ADD_PROPERTY(n,f) \
 	MAKE_STD_ZVAL(zv); \
 	ZVAL_LONG(zv, (long)f); \
-	zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
+	// php7 zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
 
 /* {{{ sdl_surface_read_property*/
 static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
@@ -1680,25 +1680,25 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 
 		MAKE_STD_ZVAL(zv);
 		sdl_pixelformat_to_zval(intern->surface->format, zv, SDL_DONTFREE TSRMLS_CC);
-		zend_hash_update(props, "format", sizeof("format"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "format", sizeof("format"), &zv, sizeof(zv), NULL);
 
 		MAKE_STD_ZVAL(zv);
 		sdl_rect_to_zval(&intern->surface->clip_rect, zv TSRMLS_CC);
-		zend_hash_update(props, "clip_rect", sizeof("clip_rect"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "clip_rect", sizeof("clip_rect"), &zv, sizeof(zv), NULL);
 
 		pix.pitch  = intern->surface->pitch;
 		pix.h      = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
 		MAKE_STD_ZVAL(zv);
 		sdl_pixels_to_zval(&pix, zv, SDL_DONTFREE TSRMLS_CC);
-		zend_hash_update(props, "pixels", sizeof("pixels"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "pixels", sizeof("pixels"), &zv, sizeof(zv), NULL);
 	}
 	return props;
 }
 /* }}} */
 
 /* {{{ sdl_surface_write_property */
-void sdl_surface_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+void sdl_surface_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
 {
 	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Surface is read-only");
 }

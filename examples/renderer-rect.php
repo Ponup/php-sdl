@@ -1,5 +1,7 @@
 <?php
 
+require 'bootstrap.php';
+
 $window = SDL_CreateWindow( "Jeu de la vie", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN );
 
 $renderer = SDL_CreateRenderer( $window, 0, SDL_RENDERER_ACCELERATED);

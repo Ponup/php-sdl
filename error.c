@@ -65,7 +65,7 @@ PHP_FUNCTION(SDL_GetError) {
 
 	error = SDL_GetError();
 	if (error) {
-		RETURN_STRING(error, 1);
+		RETURN_STRING(error);
 	}
 }
 /* }}} */

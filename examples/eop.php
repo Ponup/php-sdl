@@ -1,8 +1,6 @@
 <?php
-/* Check prerequesites */
-if (!extension_loaded("sdl")) die("SDL extension not loaded");
+require 'bootstrap.php';
 if (!extension_loaded("imagick")) die("Imagick extension not loaded");
-if (version_compare(phpversion("sdl"), "2.0.0-dev", '<')) die("skip: SDL extension >= 2.0.0 required");
 
 /* Arguments */
 if (!isset($_SERVER['argv'][1])) {

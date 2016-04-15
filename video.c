@@ -61,8 +61,8 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_D
 
 #define read_displaymode_prop(z_value, name, value) \
 { \
-	zval *val; \
-	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0 TSRMLS_CC); \
+	zval *val, rv; \
+	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0, &rv TSRMLS_CC); \
 	convert_to_long(val); \
 	Z_LVAL_P(val) = value = (int)Z_LVAL_P(val); \
 }
@@ -124,7 +124,7 @@ static PHP_METHOD(SDL_DisplayMode, __toString)
 
 	zval_to_sdl_displaymode(getThis(), &mode TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
-	RETVAL_STRING(buf, 0);
+	RETVAL_STRING(buf);
 }
 /* }}} */
 
@@ -173,7 +173,7 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 	if (!name) {
 		RETURN_FALSE;
 	}
-	RETURN_STRING(name, 1);
+	RETURN_STRING(name);
 }
 /* }}} */
 
@@ -257,7 +257,7 @@ PHP_FUNCTION(SDL_GetCurrentVideoDriver)
 	if (!name) {
 		RETURN_FALSE;
 	}
-	RETURN_STRING(name, 1);
+	RETURN_STRING(name);
 }
 /* }}} */
 
@@ -301,7 +301,7 @@ PHP_FUNCTION(SDL_GetDisplayName)
 	if (!name) {
 		RETURN_FALSE;
 	}
-	RETURN_STRING(name, 1);
+	RETURN_STRING(name);
 }
 /* }}} */
 

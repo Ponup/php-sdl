@@ -41,7 +41,7 @@ PHP_FUNCTION(SDL_GetPlatform)
 		RETURN_FALSE;
 	}
 
-	RETURN_STRING(SDL_GetPlatform(), 1);
+	RETURN_STRING(SDL_GetPlatform());
 }
 
 /* {{{ sdl_platform_functions[] */

@@ -1,18 +1,19 @@
 <?php
-if (!extension_loaded("sdl")) die("skip: SDL extension not loaded");
-if (version_compare(phpversion("sdl"), "2.0.0-dev", '<')) die("skip: SDL extension >= 2.0.0 required");
+require 'bootstrap.php';
 
 SDL_GetVersion($version);
 
-$msg = sprintf("Powered by PHP %s, SDL extension %s, SDL2 library %s",
+$message = sprintf("Powered by PHP %s, SDL extension %s, SDL2 library %s",
 	phpversion(), phpversion("sdl"), implode('.', $version));
-echo "\n$msg\n\n";
 
-SDL_ShowSimpleMessageBox(
+if(false === SDL_ShowSimpleMessageBox(
 	SDL_MESSAGEBOX_INFORMATION,
-	"SDL_ShowSimpleMessageBox() example",
-	$msg
-);
+	"Simple message box",
+	$message
+)) {
+    fprintf(STDERR, 'Unable to show simple message box');
+    return;
+}
 
 $buttons = array(
 	new SDL_MessageBoxButtonData(SDL_MessageBoxButtonData::RETURNKEY_DEFAULT, 1, "Yes"),
@@ -25,13 +26,13 @@ $colors = array(
 	SDL_MessageBoxColor::BUTTON_BACKGROUND => new SDL_MessageBoxColor(0,255,0),
 	SDL_MessageBoxColor::BUTTON_SELECTED   => new SDL_MessageBoxColor(0,0,255),
 );
-$d = new SDL_MessageBoxData(
+$dialog = new SDL_MessageBoxData(
 	SDL_MessageBoxData::INFORMATION,
-	"SDL_ShowMessageBox() example",
-	$msg, 
+	"Message box data",
+	'Select Yes or No', 
 	$buttons,
 	$colors
 );
-$d->Show($id);
-printf("You press \"%s\"\n", ($id ? "Yes" : "No"));
-
+$dialog->Show($buttonId);
+printf("You press \"%s\"\n", ($buttonId ? "Yes" : "No"));
+echo 'Done';

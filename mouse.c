@@ -51,7 +51,7 @@ zend_class_entry *get_php_sdl_cursor_ce(void)
 
 #define FETCH_CURSOR(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_cursor *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_cursor *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->cursor; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -66,7 +66,7 @@ zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRML
 		struct php_sdl_cursor *intern;
 
 		object_init_ex(z_val, php_sdl_cursor_ce);
-		intern = (struct php_sdl_cursor *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_cursor *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->cursor = cursor;
 		intern->flags  = flags;
 
@@ -84,7 +84,7 @@ SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
 	struct php_sdl_cursor *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_cursor_ce) {
-		intern = (struct php_sdl_cursor *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_cursor *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->cursor;
 	}
 	return NULL;
@@ -111,9 +111,9 @@ static void php_sdl_cursor_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_cursor_new
  */
-static zend_object_value php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_cursor *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -124,7 +124,7 @@ static zend_object_value php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_
 
 	intern->cursor = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cursor_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cursor_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_cursor_handlers;
 
 	return retval;
@@ -150,7 +150,7 @@ static PHP_METHOD(SDL_Cursor, __construct)
 	int data_len, mask_len;
 	long w, h, x, y, size;
 
-	intern = (struct php_sdl_cursor *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_cursor *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
@@ -185,7 +185,7 @@ static PHP_METHOD(SDL_Cursor, __toString)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	RETVAL_STRING("SDL_Cursor()", 1);
+	RETVAL_STRING("SDL_Cursor()");
 }
 /* }}} */
 

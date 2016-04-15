@@ -54,7 +54,7 @@ zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSR
 		struct php_sdl_windowshapemode *intern;
 
 		object_init_ex(z_val, php_sdl_windowshapemode_ce);
-		intern = (struct php_sdl_windowshapemode *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val TSRMLS_CC);
 		memcpy(&intern->mode, mode, sizeof(SDL_WindowShapeMode));
 
 		return 1;
@@ -71,7 +71,7 @@ SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_windowshapemode_ce) {
 		struct php_sdl_windowshapemode *intern;
 
-		intern = (struct php_sdl_windowshapemode *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val TSRMLS_CC);
 		return &intern->mode;
 		}
 	return NULL;
@@ -93,9 +93,9 @@ static void php_sdl_windowshapemode_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_windowshapemode_new
  */
-static zend_object_value php_sdl_windowshapemode_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_windowshapemode_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_windowshapemode *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -104,7 +104,7 @@ static zend_object_value php_sdl_windowshapemode_new(zend_class_entry *class_typ
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_windowshapemode_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_windowshapemode_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_windowshapemode_handlers;
 
 	return retval;
@@ -113,10 +113,10 @@ static zend_object_value php_sdl_windowshapemode_new(zend_class_entry *class_typ
 
 
 /* {{{ sdl_windowshapemode_read_property*/
-zval *sdl_windowshapemode_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+zval *sdl_windowshapemode_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
 {
 	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member;
+	zval *retval, tmp_member, rv;
 
 	if (Z_TYPE_P(member) != IS_STRING) {
 		tmp_member = *member;
@@ -149,7 +149,7 @@ zval *sdl_windowshapemode_read_property(zval *object, zval *member, int type, co
 	} else {
 		FREE_ZVAL(retval);
 
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key TSRMLS_CC);
+		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
@@ -175,22 +175,22 @@ static HashTable *sdl_windowshapemode_get_properties(zval *object TSRMLS_DC)
 
 	MAKE_STD_ZVAL(zv);
 	ZVAL_LONG(zv, (long)intern->mode.mode);
-	zend_hash_update(props, "mode", sizeof("mode"), &zv, sizeof(zv), NULL);
+	// php7 zend_hash_update(props, "mode", sizeof("mode"), &zv, sizeof(zv), NULL);
 
 	MAKE_STD_ZVAL(zv);
 	ZVAL_NULL(zv);
-	zend_hash_update(props, "binarizationCutoff", sizeof("binarizationCutoff"), &zv, sizeof(zv), NULL);
-	zend_hash_update(props, "colorKey", sizeof("colorKey"), &zv, sizeof(zv), NULL);
+	// php7 zend_hash_update(props, "binarizationCutoff", sizeof("binarizationCutoff"), &zv, sizeof(zv), NULL);
+	// php7 zend_hash_update(props, "colorKey", sizeof("colorKey"), &zv, sizeof(zv), NULL);
 
 	if (SDL_SHAPEMODEALPHA(intern->mode.mode)) {
 		MAKE_STD_ZVAL(zv);
 		ZVAL_LONG(zv, intern->mode.parameters.binarizationCutoff);
-		zend_hash_update(props, "binarizationCutoff", sizeof("binarizationCutoff"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "binarizationCutoff", sizeof("binarizationCutoff"), &zv, sizeof(zv), NULL);
 
 	} else if (intern->mode.mode == ShapeModeColorKey) {
 		MAKE_STD_ZVAL(zv);
 		sdl_color_to_zval(&intern->mode.parameters.colorKey, zv  TSRMLS_CC);
-		zend_hash_update(props, "colorKey", sizeof("colorKey"), &zv, sizeof(zv), NULL);
+		// php7 zend_hash_update(props, "colorKey", sizeof("colorKey"), &zv, sizeof(zv), NULL);
 	}
 	return props;
 }
@@ -198,7 +198,7 @@ static HashTable *sdl_windowshapemode_get_properties(zval *object TSRMLS_DC)
 
 
 /* {{{ sdl_windowshapemode_write_property */
-void sdl_windowshapemode_write_property(zval *object, zval *member, zval *value, const zend_literal *key TSRMLS_DC)
+void sdl_windowshapemode_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
 {
 	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported for SDL_WindowShapeMode object");
 }
@@ -218,7 +218,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 	zval *z_param;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_windowshapemode *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz", &mode, &z_param)) {
@@ -258,7 +258,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_windowshapemode *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis() TSRMLS_CC);
 	switch (intern->mode.mode) {
 		case ShapeModeDefault:
 			spprintf(&buf, 200, "SDL_WindowShapeMode(ShapeModeDefault, %u)", intern->mode.parameters.binarizationCutoff);
@@ -277,7 +277,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 		default:
 			spprintf(&buf, 200, "SDL_WindowShapeMode()");
 	}
-	RETVAL_STRING(buf, 0);
+	RETVAL_STRING(buf);
 }
 /* }}} */
 

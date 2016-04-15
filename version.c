@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 5                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2013 The PHP Group                                |
+  | Copyright (c) 1997-2016 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -61,7 +61,7 @@ PHP_FUNCTION(SDL_GetRevision)
 		RETURN_FALSE;
 	}
 
-	RETURN_STRING(SDL_GetRevision(), 1);
+	RETURN_STRING(SDL_GetRevision());
 }
 /* }}} */
 
@@ -117,13 +117,16 @@ PHP_FUNCTION(SDL_GetVersion)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z/", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
 
 	SDL_GetVersion(&version);
-	zval_dtor(version_array);
-	convert_sdl_version_to_php_array(&version, version_array);
+	if(0 == convert_sdl_version_to_php_array(&version, version_array)) {
+        RETURN_FALSE;
+    }
+
+    RETURN_TRUE;
 }
 /* }}} */
 

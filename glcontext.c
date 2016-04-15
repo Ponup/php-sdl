@@ -57,7 +57,7 @@ zend_class_entry *get_php_sdl_glcontext_ce(void)
 
 #define FETCH_GLCONTEXT(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_glcontext *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_glcontext *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->glcontext; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -72,7 +72,7 @@ zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 fla
 		struct php_sdl_glcontext *intern;
 
 		object_init_ex(z_val, php_sdl_glcontext_ce);
-		intern = (struct php_sdl_glcontext *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_glcontext *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->glcontext = glcontext;
 		intern->flags     = flags;
 
@@ -90,7 +90,7 @@ SDL_GLContext zval_to_sdl_glcontext(zval *z_val TSRMLS_DC)
 	struct php_sdl_glcontext *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_glcontext_ce) {
-		intern = (struct php_sdl_glcontext *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_glcontext *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->glcontext;
 	}
 	return NULL;
@@ -118,9 +118,9 @@ static void php_sdl_glcontext_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_glcontext_new
  */
-static zend_object_value php_sdl_glcontext_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_glcontext_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_glcontext *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -131,7 +131,7 @@ static zend_object_value php_sdl_glcontext_new(zend_class_entry *class_type TSRM
 
 	intern->glcontext = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_glcontext_free, NULL TSRMLS_CC);
+	// php7 retval.handle = zend_objects_store_put(intern, NULL, php_sdl_glcontext_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_glcontext_handlers;
 
 	return retval;
@@ -226,7 +226,7 @@ static PHP_METHOD(SDL_GLContext, __construct)
 	zval *z_window;
 	SDL_Window *window;
 
-	intern = (struct php_sdl_glcontext *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_glcontext *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &z_window, get_php_sdl_window_ce())) {
@@ -260,12 +260,12 @@ static PHP_METHOD(SDL_GLContext, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_glcontext *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_glcontext *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->glcontext) {
 		spprintf(&buf, 100, "SDL_GLContext(%lx)", (long)intern->glcontext);
-		RETVAL_STRING(buf, 0);
+		RETVAL_STRING(buf);
 	} else {
-		RETVAL_STRING("SDL_GLContext()", 1);
+		RETVAL_STRING("SDL_GLContext()");
 	}
 }
 /* }}} */

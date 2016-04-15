@@ -83,7 +83,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
 
 #define FETCH_MUTEX(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_mutex *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_mutex *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->mutex; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -94,7 +94,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
 
 #define FETCH_SEM(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_sem *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_sem *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->sem; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -105,7 +105,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
 
 #define FETCH_COND(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_cond *)zend_object_store_get_object(__id TSRMLS_CC);\
+        intern = (struct php_sdl_cond *)Z_OBJ_P(__id TSRMLS_CC);\
         __ptr = intern->cond; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -121,7 +121,7 @@ zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags TSRMLS_D
 		struct php_sdl_mutex *intern;
 
 		object_init_ex(z_val, php_sdl_mutex_ce);
-		intern = (struct php_sdl_mutex *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_mutex *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->mutex = mutex;
 		intern->flags = flags;
 
@@ -140,7 +140,7 @@ zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC)
 		struct php_sdl_sem *intern;
 
 		object_init_ex(z_val, php_sdl_sem_ce);
-		intern = (struct php_sdl_sem *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_sem *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->sem   = sem;
 		intern->flags = flags;
 
@@ -159,7 +159,7 @@ zend_bool sdl_cond_to_zval(SDL_cond *cond, zval *z_val, Uint32 flags TSRMLS_DC)
 		struct php_sdl_cond *intern;
 
 		object_init_ex(z_val, php_sdl_cond_ce);
-		intern = (struct php_sdl_cond *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_cond *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->cond  = cond;
 		intern->flags = flags;
 
@@ -177,7 +177,7 @@ SDL_mutex *zval_to_sdl_mutex(zval *z_val TSRMLS_DC)
 	struct php_sdl_mutex *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_mutex_ce) {
-		intern = (struct php_sdl_mutex *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_mutex *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->mutex;
 	}
 	return NULL;
@@ -191,7 +191,7 @@ SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC)
 	struct php_sdl_sem *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_sem_ce) {
-		intern = (struct php_sdl_sem *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_sem *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->sem;
 	}
 	return NULL;
@@ -205,7 +205,7 @@ SDL_cond *zval_to_sdl_cond(zval *z_val TSRMLS_DC)
 	struct php_sdl_cond *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_cond_ce) {
-		intern = (struct php_sdl_cond *)zend_object_store_get_object(z_val TSRMLS_CC);
+		intern = (struct php_sdl_cond *)Z_OBJ_P(z_val TSRMLS_CC);
 		return intern->cond;
 	}
 	return NULL;
@@ -265,9 +265,9 @@ static void php_sdl_cond_free(void *object TSRMLS_DC)
 
 
 /* {{{ php_sdl_mutex_new */
-static zend_object_value php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_mutex *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -278,7 +278,7 @@ static zend_object_value php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_D
 
 	intern->mutex = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_mutex_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_mutex_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_mutex_handlers;
 
 	return retval;
@@ -287,9 +287,9 @@ static zend_object_value php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_D
 
 
 /* {{{ php_sdl_sem_new */
-static zend_object_value php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_sem *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -300,7 +300,7 @@ static zend_object_value php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 
 	intern->sem = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_sem_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_sem_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_sem_handlers;
 
 	return retval;
@@ -309,9 +309,9 @@ static zend_object_value php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 
 
 /* {{{ php_sdl_cond_new */
-static zend_object_value php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	zend_object retval;
 	struct php_sdl_cond *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -322,7 +322,7 @@ static zend_object_value php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC
 
 	intern->cond = NULL;
 
-	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cond_free, NULL TSRMLS_CC);
+//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cond_free, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &php_sdl_cond_handlers;
 
 	return retval;
@@ -336,7 +336,7 @@ static PHP_METHOD(SDL_mutex, __construct)
 	struct php_sdl_mutex *intern;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_mutex *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_mutex *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -365,12 +365,12 @@ static PHP_METHOD(SDL_mutex, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_mutex *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_mutex *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->mutex) {
 		spprintf(&buf, 100, "SDL_mutex(%lx)", (long)intern->mutex);
-		RETVAL_STRING(buf, 0);
+		RETVAL_STRING(buf);
 	} else {
-		RETVAL_STRING("SDL_mutex()", 1);
+		RETVAL_STRING("SDL_mutex()");
 	}
 }
 /* }}} */
@@ -500,7 +500,7 @@ static PHP_METHOD(SDL_sem, __construct)
 	zend_error_handling error_handling;
 	long value;
 
-	intern = (struct php_sdl_sem *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_sem *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &value)) {
@@ -529,12 +529,12 @@ static PHP_METHOD(SDL_sem, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_sem *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_sem *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->sem) {
 		spprintf(&buf, 100, "SDL_sem(%lx)", (long)intern->sem);
-		RETVAL_STRING(buf, 0);
+		RETVAL_STRING(buf);
 	} else {
-		RETVAL_STRING("SDL_sem()", 1);
+		RETVAL_STRING("SDL_sem()");
 	}
 }
 /* }}} */
@@ -714,7 +714,7 @@ static PHP_METHOD(SDL_cond, __construct)
 	struct php_sdl_cond *intern;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_cond *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_cond *)Z_OBJ_P(getThis() TSRMLS_CC);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -743,12 +743,12 @@ static PHP_METHOD(SDL_cond, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_cond *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_cond *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->cond) {
 		spprintf(&buf, 100, "SDL_cond(%lx)", (long)intern->cond);
-		RETVAL_STRING(buf, 0);
+		RETVAL_STRING(buf);
 	} else {
-		RETVAL_STRING("SDL_cond()", 1);
+		RETVAL_STRING("SDL_cond()");
 	}
 }
 /* }}} */

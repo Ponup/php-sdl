@@ -45,10 +45,10 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 
 zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC)
 {
-	zval *val;
+	zval *val, rv;
 	
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_event_ce) {
-		val = zend_read_property(php_sdl_event_ce, value, "type", sizeof("type")-1, 0 TSRMLS_CC);
+		val = zend_read_property(php_sdl_event_ce, value, "type", sizeof("type")-1, 0, &rv TSRMLS_CC);
 		convert_to_long(val);
 		Z_LVAL_P(val) = event->type = (int)Z_LVAL_P(val);
 
@@ -83,7 +83,7 @@ static PHP_METHOD(SDL_Event, __toString)
 
 	zval_to_sdl_event(getThis(), &event TSRMLS_CC);
 	spprintf(&buf, 100, "SDL_Event(type=%d)", event.type);
-	RETVAL_STRING(buf, 0);
+	RETVAL_STRING(buf);
 }
 /* }}} */
 
