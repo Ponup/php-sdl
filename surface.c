@@ -192,7 +192,7 @@ PHP_FUNCTION(SDL_LoadBMP)
 {
 	char *path;
 	size_t path_len;
-	zval *z_rwops;
+	zval z_rwops;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
 	php_stream *stream;
@@ -201,15 +201,14 @@ PHP_FUNCTION(SDL_LoadBMP)
 		return;
 	}
 	stream = php_stream_open_wrapper(path, "rb", REPORT_ERRORS, NULL);
-	MAKE_STD_ZVAL(z_rwops);
-	php_stream_to_zval_rwops(stream, z_rwops, 0 TSRMLS_CC);
+	php_stream_to_zval_rwops(stream, &z_rwops, 0 TSRMLS_CC);
 
-	rwops = zval_to_sdl_rwops(z_rwops TSRMLS_CC);
+	rwops = zval_to_sdl_rwops(&z_rwops TSRMLS_CC);
 	surface = SDL_LoadBMP_RW(rwops, 0);
 
 	/* we close the SDL_RWops ourself, to free the PHP object */
-	zval_dtor(z_rwops);
-	ZVAL_NULL(z_rwops);
+	zval_dtor(&z_rwops);
+	ZVAL_NULL(&z_rwops);
 
 	sdl_surface_to_zval(surface, return_value TSRMLS_CC);
 }
@@ -340,7 +339,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_SaveBMP)
 {
 	struct php_sdl_surface *intern;
-	zval *z_surface, *z_rwops;
+	zval *z_surface, z_rwops;
 	char *path;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
@@ -353,14 +352,13 @@ PHP_FUNCTION(SDL_SaveBMP)
 	FETCH_SURFACE(surface, z_surface, 1);
 
 	stream = php_stream_open_wrapper(path, "wb", REPORT_ERRORS, NULL);
-	MAKE_STD_ZVAL(z_rwops);
-	php_stream_to_zval_rwops(stream, z_rwops, 0 TSRMLS_CC);
+	php_stream_to_zval_rwops(stream, &z_rwops, 0 TSRMLS_CC);
 
-	rwops = zval_to_sdl_rwops(z_rwops TSRMLS_CC);
+	rwops = zval_to_sdl_rwops(&z_rwops TSRMLS_CC);
 	if (rwops) {
 		result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
 	}
-	zval_dtor(z_rwops);
+	zval_dtor(&z_rwops);
 
 	RETURN_LONG(result);
 }
@@ -453,7 +451,7 @@ extern DECLSPEC int SDLCALL SDL_FillRects
 PHP_FUNCTION(SDL_FillRects)
 {
 	struct php_sdl_surface *intern;
-	zval *z_surface, *z_rects, **z_rect;
+	zval *z_surface, *z_rects, *z_rect;
 	long color, count;
 	int i, nb;
 	SDL_Rect *rects;
@@ -472,11 +470,11 @@ PHP_FUNCTION(SDL_FillRects)
 		if (!(z_rect = zend_hash_index_find(Z_ARRVAL_P(z_rects), i))) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "rects[%d] missing", i);
 
-		} else if (Z_TYPE_PP(z_rect) != IS_OBJECT || Z_OBJCE_PP(z_rect) != get_php_sdl_rect_ce()) {
+		} else if (Z_TYPE_P(z_rect) != IS_OBJECT || Z_OBJCE_P(z_rect) != get_php_sdl_rect_ce()) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "rects[%d] is not a SDL_Rect object", i);
 
 		} else {
-			zval_to_sdl_rect(*z_rect, rects+nb TSRMLS_CC);
+			zval_to_sdl_rect(z_rect, rects+nb TSRMLS_CC);
 			nb++;
 		}
 	}
@@ -667,12 +665,14 @@ PHP_FUNCTION(SDL_UpperBlit)
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "srcrect is not a SDL_Rect object");
 		return;
 	}
+        /*
 	if (z_drect && !(Z_TYPE_P(z_drect)==IS_NULL || zval_to_sdl_rect(z_drect, &drect TSRMLS_CC))) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "dstrect is not a SDL_Rect object");
 		return;
 	} else if (z_drect && Z_TYPE_P(z_drect)==IS_NULL) {
 		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "dstrect is not a SDL_Rect object, so is ignored");
 	}
+         * */
 
 	result = SDL_UpperBlit(src, (Z_TYPE_P(z_srect)==IS_NULL ? NULL : &srect),
 	                       dst, (z_drect==NULL || Z_TYPE_P(z_drect)==IS_NULL ? NULL : &drect));
@@ -761,12 +761,14 @@ PHP_FUNCTION(SDL_UpperBlitScaled)
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "srcrect is not a SDL_Rect object");
 		return;
 	}
+        /*
 	if (z_drect && !(Z_TYPE_P(z_drect)==IS_NULL || zval_to_sdl_rect(z_drect, &drect TSRMLS_CC))) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "dstrect is not a SDL_Rect object");
 		return;
 	} else if (z_drect && Z_TYPE_P(z_drect)==IS_NULL) {
 		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "dstrect is not a SDL_Rect object, so is ignored");
 	}
+         * */
 
 	result = SDL_UpperBlitScaled(src, (Z_TYPE_P(z_srect)==IS_NULL ? NULL : &srect),
 	                       dst, (z_drect==NULL || Z_TYPE_P(z_drect)==IS_NULL ? NULL : &drect));
@@ -1567,9 +1569,8 @@ static void php_sdl_surface_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_surface_new
  */
-static zend_object php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_surface *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -1579,11 +1580,9 @@ static zend_object php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->surface = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_surface_handlers;
 
-///	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_surface_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_surface_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
@@ -1591,8 +1590,9 @@ static zend_object php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 /* {{{ sdl_surface_read_property*/
 zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
 {
-	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
+    struct php_sdl_surface* intern = (struct php_sdl_surface *)Z_OBJ_P(object TSRMLS_CC);\
+//	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
+	zval *retval, retval2,  tmp_member, rv;
 
 	if (!intern->surface) {
 		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
@@ -1606,29 +1606,28 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval
 		key = NULL;
 	}
 
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
+//	Z_SET_REFCOUNT_P(&retval2, 0);
 
 	if (!strcmp(Z_STRVAL_P(member), "flags")) {
-		ZVAL_LONG(retval, intern->surface->flags);
+		ZVAL_LONG(&retval2, intern->surface->flags);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "w")) {
-		ZVAL_LONG(retval, intern->surface->w);
+		ZVAL_LONG(&retval2, intern->surface->w);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "h")) {
-		ZVAL_LONG(retval, intern->surface->h);
+		ZVAL_LONG(&retval2, intern->surface->h);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
-		ZVAL_LONG(retval, intern->surface->pitch);
+		ZVAL_LONG(&retval2, intern->surface->pitch);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "locked")) {
-		ZVAL_LONG(retval, intern->surface->locked);
+		ZVAL_LONG(&retval2, intern->surface->locked);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "format")) {
-		sdl_pixelformat_to_zval(intern->surface->format, retval, SDL_DONTFREE TSRMLS_CC);
+		sdl_pixelformat_to_zval(intern->surface->format, &retval2, SDL_DONTFREE TSRMLS_CC);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "clip_rect")) {
-		sdl_rect_to_zval(&intern->surface->clip_rect, retval TSRMLS_CC);
+		sdl_rect_to_zval(&intern->surface->clip_rect, &retval2 TSRMLS_CC);
 
 	} else if (!strcmp(Z_STRVAL_P(member), "pixels")) {
 		SDL_Pixels pix;
@@ -1636,17 +1635,16 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval
 		pix.pitch  = intern->surface->pitch;
 		pix.h      = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
-		sdl_pixels_to_zval(&pix, retval, SDL_DONTFREE TSRMLS_CC);
+		sdl_pixels_to_zval(&pix, &retval2, SDL_DONTFREE TSRMLS_CC);
 
 	} else {
-		FREE_ZVAL(retval);
-
 		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
 		return retval;
 	}
+    retval = &retval2;
 
 	if (member == &tmp_member) {
 		zval_dtor(member);
@@ -1656,16 +1654,16 @@ zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval
 /* }}} */
 
 #define SDL_SURFACE_ADD_PROPERTY(n,f) \
-	MAKE_STD_ZVAL(zv); \
-	ZVAL_LONG(zv, (long)f); \
+	ZVAL_LONG(&zv, (long)f);
 	// php7 zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
 
 /* {{{ sdl_surface_read_property*/
 static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 {
 	HashTable *props;
-	zval *zv;
-	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
+	zval zv;
+	//struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
+    struct php_sdl_surface* intern = (struct php_sdl_surface *)Z_OBJ_P(object TSRMLS_CC);\
 
 	props = zend_std_get_properties(object TSRMLS_CC);
 
@@ -1678,19 +1676,16 @@ static HashTable *sdl_surface_get_properties(zval *object TSRMLS_DC)
 		SDL_SURFACE_ADD_PROPERTY("pitch",  intern->surface->pitch);
 		SDL_SURFACE_ADD_PROPERTY("locked", intern->surface->locked);
 
-		MAKE_STD_ZVAL(zv);
-		sdl_pixelformat_to_zval(intern->surface->format, zv, SDL_DONTFREE TSRMLS_CC);
+		sdl_pixelformat_to_zval(intern->surface->format, &zv, SDL_DONTFREE TSRMLS_CC);
 		// php7 zend_hash_update(props, "format", sizeof("format"), &zv, sizeof(zv), NULL);
 
-		MAKE_STD_ZVAL(zv);
-		sdl_rect_to_zval(&intern->surface->clip_rect, zv TSRMLS_CC);
+		sdl_rect_to_zval(&intern->surface->clip_rect, &zv TSRMLS_CC);
 		// php7 zend_hash_update(props, "clip_rect", sizeof("clip_rect"), &zv, sizeof(zv), NULL);
 
 		pix.pitch  = intern->surface->pitch;
 		pix.h      = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
-		MAKE_STD_ZVAL(zv);
-		sdl_pixels_to_zval(&pix, zv, SDL_DONTFREE TSRMLS_CC);
+		sdl_pixels_to_zval(&pix, &zv, SDL_DONTFREE TSRMLS_CC);
 		// php7 zend_hash_update(props, "pixels", sizeof("pixels"), &zv, sizeof(zv), NULL);
 	}
 	return props;

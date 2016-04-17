@@ -410,7 +410,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 			for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_buttons)) ;
 				zend_hash_has_more_elements(Z_ARRVAL_P(z_buttons)) == SUCCESS ;
 				zend_hash_move_forward(Z_ARRVAL_P(z_buttons))) {
-                    ppzval = zend_hash_get_current_data(Z_ARRVAL_P(z_buttons));
+                                        ppzval = zend_hash_get_current_data(Z_ARRVAL_P(z_buttons));
 					if (zval_to_sdl_messageboxbuttondata(ppzval, buttons+n TSRMLS_CC)) {
 						n++;
 					} else {
@@ -517,25 +517,23 @@ static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int ty
 	} else if (!strcmp(Z_STRVAL_P(member), "buttons")) {
 		if (intern->data->buttons) {
 			int i;
-			zval *z_button;
+			zval z_button;
 
 			array_init(retval);
 			for (i=0 ; i<intern->data->numbuttons ; i++) {
-				MAKE_STD_ZVAL(z_button);
-				sdl_messageboxbuttondata_to_zval(&intern->data->buttons[i], z_button  TSRMLS_CC);
-				add_next_index_zval(retval, z_button);
+				sdl_messageboxbuttondata_to_zval(&intern->data->buttons[i], &z_button TSRMLS_CC);
+				add_next_index_zval(retval, &z_button);
 			}
 		}
 	} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
 		if (intern->data->colorScheme) {
 			int i;
-			zval *z_color;
+			zval z_color;
 
 			array_init(retval);
 			for (i=0 ; i<SDL_MESSAGEBOX_COLOR_MAX ; i++) {
-				MAKE_STD_ZVAL(z_color);
-				sdl_messageboxcolor_to_zval(&intern->data->colorScheme->colors[i], z_color  TSRMLS_CC);
-				add_next_index_zval(retval, z_color);
+				sdl_messageboxcolor_to_zval(&intern->data->colorScheme->colors[i], &z_color TSRMLS_CC);
+				add_next_index_zval(retval, &z_color);
 			}
 		}
 	} else {
@@ -560,71 +558,62 @@ static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int ty
 static HashTable *sdl_messageboxdata_get_properties(zval *object TSRMLS_DC)
 {
 	HashTable *props;
-	zval *zv;
+	zval zv;
     zend_string* ht_key;
 	struct php_sdl_messageboxdata *intern = (struct php_sdl_messageboxdata *) zend_objects_get_address(object TSRMLS_CC);
 
 	props = zend_std_get_properties(object TSRMLS_CC);
 
 	if (intern->data) {
-		MAKE_STD_ZVAL(zv);
-		ZVAL_LONG(zv, (long)intern->data->flags);
+		ZVAL_LONG(&zv, (long)intern->data->flags);
         ht_key = zend_string_init("flags", 5, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
-		ZVAL_STRING(zv, intern->data->title);
+		ZVAL_STRING(&zv, intern->data->title);
         ht_key = zend_string_init("title", 5, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
-		ZVAL_STRING(zv, intern->data->message);
+		ZVAL_STRING(&zv, intern->data->message);
         ht_key = zend_string_init("message", 8, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
-		ZVAL_BOOL(zv, intern->data->window);
+		ZVAL_BOOL(&zv, intern->data->window);
         ht_key = zend_string_init("window", 6, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
-		ZVAL_LONG(zv, (long)intern->data->numbuttons);
+		ZVAL_LONG(&zv, (long)intern->data->numbuttons);
         ht_key = zend_string_init("numbuttons", 11, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
 		if (intern->data->buttons) {
 			int i;
-			zval *z_button;
+			zval z_button;
 
-			array_init(zv);
+			array_init(&zv);
 			for (i=0 ; i<intern->data->numbuttons ; i++) {
-				MAKE_STD_ZVAL(z_button);
-				sdl_messageboxbuttondata_to_zval(&intern->data->buttons[i], z_button  TSRMLS_CC);
-				add_next_index_zval(zv, z_button);
+				sdl_messageboxbuttondata_to_zval(&intern->data->buttons[i], &z_button TSRMLS_CC);
+				add_next_index_zval(&zv, &z_button);
 			}
 		} else {
-			ZVAL_NULL(zv);
+			ZVAL_NULL(&zv);
 		}
         ht_key = zend_string_init("buttons", 7, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 
-		MAKE_STD_ZVAL(zv);
 		if (intern->data->colorScheme) {
 			int i;
-			zval *z_color;
+			zval z_color;
 
-			array_init(zv);
+			array_init(&zv);
 			for (i=0 ; i<SDL_MESSAGEBOX_COLOR_MAX ; i++) {
-				MAKE_STD_ZVAL(z_color);
-				sdl_messageboxcolor_to_zval(&intern->data->colorScheme->colors[i], z_color  TSRMLS_CC);
-				add_next_index_zval(zv, z_color);
+				sdl_messageboxcolor_to_zval(&intern->data->colorScheme->colors[i], &z_color TSRMLS_CC);
+				add_next_index_zval(&zv, &z_color);
 			}
 		} else {
-			ZVAL_NULL(zv);
+			ZVAL_NULL(&zv);
 		}
         ht_key = zend_string_init("colors", 6, 0);
-		zend_hash_update(props, ht_key, zv);
+		zend_hash_update(props, ht_key, &zv);
 	}
 	return props;
 }

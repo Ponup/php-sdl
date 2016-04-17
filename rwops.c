@@ -115,23 +115,20 @@ static void php_sdl_rwops_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_rwops_new
  */
-static zend_object php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
-	struct php_sdl_rwops *intern;
+	struct php_sdl_rwops *intern = NULL;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(struct php_sdl_rwops) + zend_object_properties_size(class_type));
+	memset(intern, 0, sizeof(struct php_sdl_rwops) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->rwops = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_rwops_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_rwops_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_rwops_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
@@ -188,8 +185,8 @@ static HashTable *sdl_rwops_get_properties(zval *object TSRMLS_DC)
 	props = zend_std_get_properties(object TSRMLS_CC);
 
 	if (intern->rwops) {
-		MAKE_STD_ZVAL(zv); \
-		ZVAL_LONG(zv, (long)intern->rwops->type); \
+		MAKE_STD_ZVAL(zv);
+		ZVAL_LONG(zv, (long)intern->rwops->type);
 		// php7 zend_hash_update(props, "type", sizeof("type"), &zv, sizeof(zv), NULL);
 	}
 	return props;

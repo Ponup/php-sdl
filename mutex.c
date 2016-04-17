@@ -265,9 +265,8 @@ static void php_sdl_cond_free(void *object TSRMLS_DC)
 
 
 /* {{{ php_sdl_mutex_new */
-static zend_object php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_mutex *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -277,19 +276,16 @@ static zend_object php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->mutex = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_mutex_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_mutex_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_mutex_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
 
 /* {{{ php_sdl_sem_new */
-static zend_object php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_sem *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -299,19 +295,16 @@ static zend_object php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->sem = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_sem_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_sem_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_sem_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
 
 /* {{{ php_sdl_cond_new */
-static zend_object php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_cond *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -321,11 +314,9 @@ static zend_object php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->cond = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_cond_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cond_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_cond_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 

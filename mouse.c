@@ -111,23 +111,20 @@ static void php_sdl_cursor_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_cursor_new
  */
-static zend_object php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_cursor *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+        intern = ecalloc(1, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
+	memset(intern, 0, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->cursor = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_cursor_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_cursor_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_cursor_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 

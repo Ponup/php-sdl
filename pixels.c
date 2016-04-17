@@ -180,6 +180,7 @@ zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 f
 
 		return 1;
 	}
+
 	ZVAL_NULL(z_val);
 	return 0;
 }
@@ -794,7 +795,8 @@ PHP_FUNCTION(SDL_FreePalette)
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGB, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
+       //ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
+       ZEND_ARG_INFO(0, pixelformat)
        ZEND_ARG_INFO(0, r)
        ZEND_ARG_INFO(0, g)
        ZEND_ARG_INFO(0, b)
@@ -1278,9 +1280,8 @@ static void php_sdl_palette_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_palette_new
  */
-static zend_object php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_palette *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -1290,11 +1291,9 @@ static zend_object php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->palette = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_palette_handlers;
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_palette_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_palette_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
@@ -1421,23 +1420,20 @@ static void php_sdl_pixelformat_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_pixelformat_new
  */
-static zend_object php_sdl_pixelformat_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_pixelformat_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_pixelformat *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+        intern = ecalloc(1, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
+	memset(intern, 0, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->format = NULL;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_pixelformat_handlers;
 
-//////////////////	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_pixelformat_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_pixelformat_handlers;
-
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
@@ -1593,9 +1589,8 @@ static void php_sdl_pixels_free(void *object TSRMLS_DC)
 
 /* {{{ php_sdl_pixels_new
  */
-static zend_object php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object retval;
 	struct php_sdl_pixels *intern;
 
 	intern = emalloc(sizeof(*intern));
@@ -1604,10 +1599,9 @@ static zend_object php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_pixels_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_pixels_handlers;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_pixels_handlers;
 
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 

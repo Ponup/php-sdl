@@ -193,15 +193,16 @@ zval *sdl_window_read_property(zval *object, zval *member, int type, const zval 
 /* }}} */
 
 #define SDL_WINDOW_ADD_PROPERTY(n,f) \
-	MAKE_STD_ZVAL(zv); \
-	ZVAL_LONG(zv, (long)f); \
-	// php7 zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
+    z_string = zend_string_init(n,sizeof(n),0); \
+	ZVAL_LONG(&zv, (long)f); \
+	zend_hash_update(props, z_string, &zv)
 
 /* {{{ sdl_window_read_property*/
 static HashTable *sdl_window_get_properties(zval *object TSRMLS_DC)
 {
 	HashTable *props;
-	zval *zv;
+    zend_string* z_string;
+	zval zv;
 	struct php_sdl_window *intern = (struct php_sdl_window *) zend_objects_get_address(object TSRMLS_CC);
 
 	props = zend_std_get_properties(object TSRMLS_CC);
@@ -217,9 +218,9 @@ static HashTable *sdl_window_get_properties(zval *object TSRMLS_DC)
 		SDL_WINDOW_ADD_PROPERTY("y",     y);
 		SDL_WINDOW_ADD_PROPERTY("w",     w);
 		SDL_WINDOW_ADD_PROPERTY("h",     h);
-		MAKE_STD_ZVAL(zv);
-		ZVAL_STRING(zv, SDL_GetWindowTitle(intern->window));
-		// php7 zend_hash_update(props, "title", sizeof("title"), &zv, sizeof(zv), NULL);
+		ZVAL_STRING(&zv, SDL_GetWindowTitle(intern->window));
+        z_string = zend_string_init("title", 6, 0);
+		zend_hash_update(props, z_string, &zv);
 	}
 	return props;
 }
@@ -1198,13 +1199,14 @@ static PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 	nb  = 0;
 	max = (int)(num ? num : zend_hash_num_elements(Z_ARRVAL_P(z_array)));
 	if (max) {
-		zval **ppzval;
+		zval *ppzval;
 		rects = emalloc(max * sizeof(SDL_Rect));
 
 		for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_array)) ;
-			zend_hash_get_current_data(Z_ARRVAL_P(z_array)) == SUCCESS ;
+			zend_hash_has_more_elements(Z_ARRVAL_P(z_array)) == SUCCESS ;
 			zend_hash_move_forward(Z_ARRVAL_P(z_array))) {
-				if (zval_to_sdl_rect(*ppzval, rects+nb TSRMLS_CC)) {
+                                ppzval = zend_hash_get_current_data(Z_ARRVAL_P(z_array));
+				if (zval_to_sdl_rect(ppzval, rects+nb TSRMLS_CC)) {
 					nb++;
 				} else {
 					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Ignore rect, not a SDL_Rect object");
@@ -1640,23 +1642,23 @@ static PHP_METHOD(SDL_Window, __construct)
 static PHP_METHOD(SDL_Window, __toString)
 {
 	struct php_sdl_window *intern;
-	char *buf;
+	char *buf = NULL;
+    int buf_len;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
 	intern = (struct php_sdl_window *)Z_OBJ_P(getThis() TSRMLS_CC);
-	if (intern->window) {
+	if (0 && intern->window) {
 		int x, y, w, h;
 
 		SDL_GetWindowPosition(intern->window, &x, &y);
 		SDL_GetWindowSize(intern->window, &w, &h);
-		spprintf(&buf, 100, "SDL_Window(\"%s\",%d,%d,%d,%d,%u)",
-			SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
-		RETVAL_STRING(buf);
+		buf_len = spprintf(&buf, 0, "SDL_Window(\"%s\",%d,%d,%d,%d,%u)", SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
+		RETURN_STRINGL(buf, buf_len);
 	} else {
-		RETVAL_STRING("SDL_Window()");
+		RETURN_STRING("SDL_Window()");
 	}
 }
 /* }}} */
