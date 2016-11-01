@@ -116,6 +116,7 @@ static PHP_METHOD(SDL_DisplayMode, __construct)
 static PHP_METHOD(SDL_DisplayMode, __toString)
 {
 	char *buf;
+    size_t buf_len;
 	SDL_DisplayMode mode;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -123,8 +124,9 @@ static PHP_METHOD(SDL_DisplayMode, __toString)
 	}
 
 	zval_to_sdl_displaymode(getThis(), &mode TSRMLS_CC);
-	spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
-	RETVAL_STRING(buf);
+	buf_len = spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
+	RETVAL_STRINGL(buf, buf_len);
+    efree(buf);
 }
 /* }}} */
 

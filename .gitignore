@@ -53,3 +53,4 @@ tests/*.log
 tests/*.sh
 tests/*.out
 nbproject
+php_test_results*.txt

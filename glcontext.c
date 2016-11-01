@@ -74,7 +74,7 @@ zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 fla
 		object_init_ex(z_val, php_sdl_glcontext_ce);
 		intern = (struct php_sdl_glcontext *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern->glcontext = glcontext;
-		intern->flags     = flags;
+		intern->flags = flags;
 
 		return 1;
 	}

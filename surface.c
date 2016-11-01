@@ -247,6 +247,7 @@ static PHP_METHOD(SDL_Surface, __toString)
 {
 	struct php_sdl_surface *intern;
 	char *buf;
+    size_t buf_len;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -254,11 +255,12 @@ static PHP_METHOD(SDL_Surface, __toString)
 
 	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis() TSRMLS_CC);
 	if (intern->surface) {
-		spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
+		buf_len = spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
 			intern->surface->flags, intern->surface->w, intern->surface->h,
 			intern->surface->format->BitsPerPixel, intern->surface->format->Rmask,
 			intern->surface->format->Gmask, intern->surface->format->Bmask, intern->surface->format->Amask);
-		RETVAL_STRING(buf);
+		RETVAL_STRINGL(buf, buf_len);
+        efree(buf);
 	} else {
 		RETVAL_STRING("SDL_Surface()");
 	}

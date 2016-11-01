@@ -130,11 +130,11 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 }
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, 0, 0, 4)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-       ZEND_ARG_INFO(0, w)
-       ZEND_ARG_INFO(0, y)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, /*unused*/0, /*ret ref*/0, /*req num args*/0)
+       ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
+       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+       ZEND_ARG_TYPE_INFO(0, w, IS_LONG, 0)
+       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Rect::__construct(, int x, int y, int w, int h)
@@ -144,14 +144,10 @@ ZEND_END_ARG_INFO()
 static PHP_METHOD(SDL_Rect, __construct)
 {
 	long x, y, w, h;
-	zend_error_handling error_handling;
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x, &y, &w, &h)) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|llll", &x, &y, &w, &h)) {
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
 
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x TSRMLS_CC);
 	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
@@ -165,6 +161,7 @@ static PHP_METHOD(SDL_Rect, __construct)
 static PHP_METHOD(SDL_Rect, __toString)
 {
 	char *buf;
+    size_t buf_len;
 	SDL_Rect rect;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -172,8 +169,9 @@ static PHP_METHOD(SDL_Rect, __toString)
 	}
 
 	zval_to_sdl_rect(getThis(), &rect TSRMLS_CC);
-	spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
-	RETVAL_STRING(buf);
+	buf_len = spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
+	RETVAL_STRINGL(buf, buf_len);
+    efree(buf);
 }
 /* }}} */
 
@@ -455,10 +453,10 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 		return;
 	}
 	zval_to_sdl_rect(object, &rect TSRMLS_CC);
-	convert_to_long_ex(&z_x1);
-	convert_to_long_ex(&z_y1);
-	convert_to_long_ex(&z_x2);
-	convert_to_long_ex(&z_y2);
+	convert_to_long_ex(z_x1);
+	convert_to_long_ex(z_y1);
+	convert_to_long_ex(z_x2);
+	convert_to_long_ex(z_y2);
 	x1 = (int)Z_LVAL_P(z_x1);
 	y1 = (int)Z_LVAL_P(z_y1);
 	x2 = (int)Z_LVAL_P(z_x2);

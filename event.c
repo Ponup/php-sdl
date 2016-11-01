@@ -22,6 +22,7 @@
 
 static zend_class_entry *php_sdl_event_ce;
 static zend_object_handlers php_sdl_event_handlers;
+
 struct php_sdl_event {
 	zend_object zo;
 };
@@ -39,7 +40,25 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 	}
 
 	object_init_ex(value, php_sdl_event_ce);
-	zend_update_property_long(php_sdl_event_ce, value, "type", 4, event->type TSRMLS_CC);
+        
+    zval motion;
+    object_init(&motion);
+        
+	add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
+    add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
+        
+    zval keysym;
+    object_init(&keysym);
+	add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
+
+    zval key;
+    object_init(&key);
+        
+	add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
+
+	zend_update_property_long(php_sdl_event_ce, value, "type", sizeof("type")-1, event->type TSRMLS_CC);
+	zend_update_property(php_sdl_event_ce, value, "motion", sizeof("motion")-1, &motion TSRMLS_CC);
+	zend_update_property(php_sdl_event_ce, value, "key", sizeof("key")-1, &key TSRMLS_CC);
 
 	return 1;
 }
@@ -55,7 +74,7 @@ zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC)
 
 		return 1;
 	}
-	/* create an empty rect */
+	/* creupdate an empty rect */
 	memset(event, 0, sizeof(SDL_Event));
 	return 0;
 }
@@ -76,6 +95,7 @@ static PHP_METHOD(SDL_Event, __construct)
 static PHP_METHOD(SDL_Event, __toString)
 {
 	char *buf;
+        size_t buf_len;
 	SDL_Event event;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -83,8 +103,9 @@ static PHP_METHOD(SDL_Event, __toString)
 	}
 
 	zval_to_sdl_event(getThis(), &event TSRMLS_CC);
-	spprintf(&buf, 100, "SDL_Event(type=%d)", event.type);
-	RETVAL_STRING(buf);
+	buf_len = spprintf(&buf, 100, "SDL_Event(type=%d)", event.type);
+	RETVAL_STRINGL(buf, buf_len);
+        efree(buf);
 }
 /* }}} */
 
@@ -117,6 +138,25 @@ void sdl_event_write_property(zval *object, zval *member, zval *value, const zva
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PollEvent, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(1, event, SDL_Event, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_PollEvent)
+{
+	zval *object = NULL;
+	SDL_Event event;
+	int ret;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
+		return;
+	}
+
+	ret = SDL_PollEvent(&event);
+	sdl_event_to_zval(&event, object TSRMLS_CC);
+	
+	RETURN_LONG(ret);
+}
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WaitEvent, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(1, event, SDL_Event, 0)
@@ -126,7 +166,7 @@ PHP_FUNCTION(SDL_WaitEvent)
 {
 	zval *object = NULL;
 	SDL_Event event;
-	long ret;
+	int ret;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
 		return;
@@ -143,6 +183,7 @@ ZEND_END_ARG_INFO()
 
 zend_function_entry sdl_event_functions[] = {
 	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)
+	ZEND_FE(SDL_PollEvent, arginfo_SDL_PollEvent)
 	ZEND_FE_END
 };
 
@@ -187,6 +228,7 @@ PHP_MINIT_FUNCTION(sdl_event)
         php_sdl_event_handlers.write_property = sdl_event_write_property;
 
 	zend_declare_property_long(php_sdl_event_ce, "type", sizeof("type")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	//zend_declare_property(php_sdl_event_ce, "motion", sizeof("motion")-1, NULL, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return (zend_register_functions(NULL, sdl_event_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
 }
