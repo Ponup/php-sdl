@@ -40,7 +40,6 @@ while (!$quit) {
                 echo SDL_GetError(), PHP_EOL;
             }
             SDL_RenderPresent($renderer);
-
             break;
     }
 
