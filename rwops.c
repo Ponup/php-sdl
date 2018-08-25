@@ -293,7 +293,7 @@ PHP_FUNCTION(SDL_RWFromFile)
 	int path_len, mode_len;
 	SDL_RWops *rwops;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, ARG_PATH "s", &path, &path_len, &mode, &mode_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &path, &path_len, &mode, &mode_len)) {
 		return;
 	}
 	rwops = SDL_RWFromFile(path, mode);

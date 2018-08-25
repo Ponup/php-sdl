@@ -1,8 +1,7 @@
 language: php
 
 php:
-  - 5.6
-  - 5.5
+  - 7.2
 
 env:
   - REPORT_EXIT_STATUS=1
@@ -15,8 +14,8 @@ install:
   - sudo apt-get install libsdl2-dev
 
 before_script:
-  #- wget http://libsdl.org/release/SDL2-2.0.3.tar.gz -O - | tar xz
-  #- cd SDL2-2.0.3 && ./configure && make -j && sudo make install && cd ..
+  #- wget http://libsdl.org/release/SDL2-2.0.8.tar.gz -O - | tar xz
+  #- cd SDL2-2.0.8 && ./configure && make -j && sudo make install && cd ..
   - phpize
   - ./configure --quiet
   - make all install

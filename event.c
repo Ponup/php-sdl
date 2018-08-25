@@ -225,7 +225,7 @@ PHP_MINIT_FUNCTION(sdl_event)
 	memcpy(&php_sdl_event_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_event_handlers.read_property = sdl_event_read_property;
 	php_sdl_event_handlers.get_properties = sdl_event_get_properties;
-        php_sdl_event_handlers.write_property = sdl_event_write_property;
+    php_sdl_event_handlers.write_property = sdl_event_write_property;
 
 	zend_declare_property_long(php_sdl_event_ce, "type", sizeof("type")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	//zend_declare_property(php_sdl_event_ce, "motion", sizeof("motion")-1, NULL, ZEND_ACC_PUBLIC TSRMLS_CC);

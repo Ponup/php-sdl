@@ -1010,7 +1010,7 @@ static const zend_function_entry php_sdl_cond_methods[] = {
 
 
 /* {{{ sdl_mutex_functions[] */
-static zend_function_entry sdl_mutex_functions[] = {
+zend_function_entry sdl_mutex_functions[] = {
 	/* mutex functions */
 	ZEND_FE(SDL_CreateMutex,                        arginfo_none)
 	ZEND_FE(SDL_LockMutex,                          arginfo_SDL_mutex)

@@ -47,8 +47,8 @@ while (!$quit) {
 }
 
 // cleanup SDL
-SDL_DestroyTexture($texture);
-SDL_DestroyRenderer($renderer);
-SDL_DestroyWindow($window);
-SDL_Quit();
+//SDL_DestroyTexture($texture);
+//SDL_DestroyRenderer($renderer);
+//SDL_DestroyWindow($window);
+//SDL_Quit();
 

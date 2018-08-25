@@ -11,21 +11,26 @@ PHP-SDL
 * C compiler
 * Automake tools
 * PHP devel
-* libSDL v1.2.* devel libraries and headers
+* libSDL2 devel libraries and headers
 
 ### Via PECL (recommended)
 
-    pecl install sdl-beta
+```bash
+pecl install sdl-beta
+```
 
 ### Manual
 
 Download the source code and within the main directory run these commands:
 
-    phpize
-   ./configure --with-sdl (or --with-sdl=<PATH>)
-    make
-    make test
-    sudo make install
+```bash
+$ phpize --clean
+$ phpize
+$ ./configure --with-sdl (or --with-sdl=<PATH>)
+$ make
+$ make test
+$ sudo make install
+```
 
 Then add
 
@@ -39,7 +44,7 @@ We are working on the Windows build. Stay tuned.
 
 ## Documentation
 
-The SDL extension mimics in almost  every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](http://www.libsdl.org/release/SDL-1.2.15/docs/index.html).
+The SDL extension mimics in almost every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](https://wiki.libsdl.org/APIByCategory).
 
 ### Example
 
@@ -64,19 +69,18 @@ BUILDING ON UNIX etc.
 
 To compile your new extension, you will have to execute the following steps:
 
-1.  $ ./phpize
-2.  $ ./configure [--enable--sdl] 
-3.  $ make
-4.  $ make test
-5.  $ [sudo] make install
-
-
+```bash
+$ ./phpize
+$ ./configure [--enable--sdl] 
+$ make
+$ make test
+$ [sudo] make install
+```
 
 BUILDING ON WINDOWS
 ===================
 
 Not supported yet.
-
 
 ## Support / Feedback / Bugs / Feature Requests
 

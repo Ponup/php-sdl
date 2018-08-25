@@ -197,7 +197,7 @@ PHP_FUNCTION(SDL_LoadBMP)
 	SDL_RWops *rwops;
 	php_stream *stream;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, ARG_PATH, &path, &path_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len)) {
 		return;
 	}
 	stream = php_stream_open_wrapper(path, "rb", REPORT_ERRORS, NULL);
@@ -348,7 +348,7 @@ PHP_FUNCTION(SDL_SaveBMP)
 	int path_len, result=-1;
 	php_stream *stream;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O" ARG_PATH, &z_surface, php_sdl_surface_ce, &path, &path_len) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os", &z_surface, php_sdl_surface_ce, &path, &path_len) == FAILURE) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);

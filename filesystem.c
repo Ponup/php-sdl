@@ -70,7 +70,7 @@ PHP_FUNCTION(SDL_GetPrefPath)
 	pref_path = SDL_GetPrefPath(org,app);
 	if(pref_path) {
 		RETURN_STRING(pref_path);
-		SDL_Free(pref_path);
+		SDL_free(pref_path);
 	}
 #endif
 }
@@ -148,7 +148,7 @@ PHP_FUNCTION(SDL_GetBasePath)
 	base_path = SDL_GetBasePath();
 	if(base_path) {
 		RETURN_STRING(base_path);
-		SDL_Free(base_path);
+		SDL_free(base_path);
 	}
 #endif
 }

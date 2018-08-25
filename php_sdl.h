@@ -73,22 +73,9 @@ zend_bool php_sdl_check_overflow(int a, int b, int silent);
 #include "TSRM.h"
 #endif
 
-/* ZEND_FE_END exists only in PHP >= 5.3.7 */
-#ifndef ZEND_FE_END
-#define ZEND_FE_END { NULL, NULL, NULL, 0, 0 }
-#endif
-
-/* Arginfo PATH exists only in php >= 5.4.0 */
-#if PHP_VERSION_ID < 50400
-#define ARG_PATH "s"
-#else
-#define ARG_PATH "p"
-#endif
-
 #ifdef  __cplusplus
 } // extern "C" 
 #endif
-
 
 #endif /* PHP_PHPSDL_H */
 

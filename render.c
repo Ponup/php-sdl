@@ -21,6 +21,7 @@
 #include "render.h"
 #include "window.h"
 #include "surface.h"
+#include "rect.h"
 
 #define SDL_RENDERER_RES_NAME "SDL Renderer"
 int le_sdl_renderer;
@@ -111,17 +112,18 @@ PHP_FUNCTION(SDL_DestroyTexture)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderFillRect, 0, 0, 2)
 	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_INFO(0, rect)
+	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+	//ZEND_ARG_INFO(0, rect)
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_RenderFillRect)
 {
-	zval *z_renderer;
-	zval *z_rect;
+	zval *z_renderer = NULL;
+	zval *z_rect = NULL;
 	SDL_Rect rect;
-	SDL_Renderer *renderer;
+	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce() ) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 

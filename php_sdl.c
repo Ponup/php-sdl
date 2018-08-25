@@ -114,6 +114,23 @@ PHP_MSHUTDOWN_FUNCTION(sdl)
 /* }}} */
 
 
+
+/* {{{ PHP_RINIT_FUNCTION */
+PHP_RINIT_FUNCTION(sdl)
+{
+	return SUCCESS;
+}
+/* }}} */
+
+
+/* {{{ PHP_RSHUTDOWN_FUNCTION */
+PHP_RSHUTDOWN_FUNCTION(sdl)
+{
+	return SUCCESS;
+}
+/* }}} */
+
+
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION(sdl)
 {

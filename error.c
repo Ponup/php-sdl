@@ -45,7 +45,7 @@ PHP_FUNCTION(SDL_SetError) {
 		RETURN_FALSE;
 	}
 
-	RETURN_LONG(SDL_SetError(error));
+	RETURN_LONG(SDL_SetError("%s", error));
 }
 /* }}} */
 

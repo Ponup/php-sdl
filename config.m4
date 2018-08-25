@@ -1,6 +1,4 @@
-dnl
-dnl $ Id: $
-dnl
+dnl config.m4 for the PHP SDL extension
 
 PHP_ARG_WITH(sdl, whether to enable SDL functions,
 [  --with-sdl[=SDLCONFIG_PATH]         Enable SDL support])
@@ -9,8 +7,8 @@ if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
   export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2 -Wall -Wfatal-errors"
 
-  REQ_PHP_VERSION="5.4.0"
-  REQ_PHP_VERSION_ID=50400
+  REQ_PHP_VERSION="7.2.0"
+  REQ_PHP_VERSION_ID=70200
   if test -z "$PHP_VERSION_ID"; then
     AC_MSG_CHECKING(PHP version)
     AC_TRY_COMPILE([#include <php_version.h>], [
@@ -25,6 +23,7 @@ if test "$PHP_SDL" != "no"; then
       AC_MSG_ERROR([SDL needs at least PHP v$REQ_PHP_VERSION])
     fi
   fi
+  PHP_SDL_CFLAGS="$CPPFLAGS"
 
   export CPPFLAGS="$OLD_CPPFLAGS"
 
@@ -48,6 +47,7 @@ if test "$PHP_SDL" != "no"; then
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
   sources="
+php_sdl.c
 blendmode.c
 cpuinfo.c
 error.c
@@ -72,5 +72,5 @@ version.c
 video.c
 window.c
 "
-  PHP_NEW_EXTENSION(sdl, php_sdl.c $sources, $ext_shared)
+  PHP_NEW_EXTENSION(sdl, $sources, $ext_shared,, $PHP_SDL_CFLAGS)
 fi
