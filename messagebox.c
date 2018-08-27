@@ -627,14 +627,6 @@ static void sdl_messageboxdata_write_property(zval *object, zval *member, zval *
 }
 /* }}} */
 
-
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowMessageBox, 0, 0, 2)
-       ZEND_ARG_INFO(0, messageboxdata)
-       ZEND_ARG_INFO(1, buttonid)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MessageBoxData_Show, 0, 0, 1)
        ZEND_ARG_INFO(1, buttonid)
 ZEND_END_ARG_INFO()
@@ -665,7 +657,7 @@ ZEND_END_ARG_INFO()
  *        closes the messagebox.
  extern DECLSPEC int SDLCALL SDL_ShowMessageBox(const SDL_MessageBoxData *messageboxdata, int *buttonid);
  */
-static PHP_FUNCTION(SDL_ShowMessageBox)
+PHP_FUNCTION(SDL_ShowMessageBox)
 {
 	struct php_sdl_messageboxdata *intern;
 	zval *z_data, *z_id;
@@ -685,14 +677,6 @@ static PHP_FUNCTION(SDL_ShowMessageBox)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowSimpleMessageBox, 0, 0, 3)
-       ZEND_ARG_INFO(0, flags)
-       ZEND_ARG_INFO(0, title)
-       ZEND_ARG_INFO(0, message)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 1)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto bool SDL_ShowSimpleMessageBox(int flags, string title, string message, SDL_Window window)
 
  *  \brief Create a simple modal message box
@@ -707,7 +691,7 @@ ZEND_END_ARG_INFO()
  *  \sa SDL_ShowMessageBox
  extern DECLSPEC int SDLCALL SDL_ShowSimpleMessageBox(Uint32 flags, const char *title, const char *message, SDL_Window *window);
  */
-static PHP_FUNCTION(SDL_ShowSimpleMessageBox)
+PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 {
 	long flags;
 	char *title, *msg;
@@ -757,15 +741,6 @@ static const zend_function_entry php_sdl_messageboxdata_methods[] = {
 	PHP_FALIAS(Show,         SDL_ShowMessageBox,          arginfo_SDL_MessageBoxData_Show)
 
 	PHP_FE_END
-};
-/* }}} */
-
-/* {{{ sdl_messagebox_functions[] */
-zend_function_entry sdl_messagebox_functions[] = {
-	ZEND_FE(SDL_ShowSimpleMessageBox,     arginfo_SDL_ShowSimpleMessageBox)
-	ZEND_FE(SDL_ShowMessageBox,           arginfo_SDL_ShowMessageBox)
-
-	ZEND_FE_END
 };
 /* }}} */
 
@@ -833,6 +808,6 @@ PHP_MINIT_FUNCTION(sdl_messagebox)
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "BUTTON_SELECTED",   SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED,   php_sdl_messageboxcolor_ce);
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "MAX",               SDL_MESSAGEBOX_COLOR_MAX,               php_sdl_messageboxcolor_ce);
 
-	return (zend_register_functions(NULL, sdl_messagebox_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

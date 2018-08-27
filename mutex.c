@@ -1071,6 +1071,6 @@ PHP_MINIT_FUNCTION(sdl_mutex)
 	php_sdl_cond_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_cond_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	return (zend_register_functions(NULL, sdl_mutex_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

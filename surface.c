@@ -36,9 +36,9 @@
 static zend_class_entry *php_sdl_surface_ce;
 static zend_object_handlers php_sdl_surface_handlers;
 struct php_sdl_surface {
-	zend_object   zo;
 	SDL_Surface   *surface;
 	Uint32        flags;
+	zend_object   zo;
 };
 
 zend_class_entry *get_php_sdl_surface_ce(void)
@@ -48,7 +48,8 @@ zend_class_entry *get_php_sdl_surface_ce(void)
 
 #define FETCH_SURFACE(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_surface *)Z_OBJ_P(__id TSRMLS_CC);\
+		zend_object* zox = Z_OBJ_P(__id);\
+		intern = (struct php_sdl_surface*)((char*)zox - zox->handlers->offset);\
         __ptr = intern->surface; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -63,7 +64,8 @@ zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *z_val TSRMLS_DC)
 		struct php_sdl_surface *intern;
 
 		object_init_ex(z_val, php_sdl_surface_ce);
-		intern = (struct php_sdl_surface *)Z_OBJ_P(z_val TSRMLS_CC);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_surface*)((char*)zo - zo->handlers->offset);
 		intern->surface = surface;
 		/* copy flags to be able to check before access to surface */
 		intern->flags = surface->flags;
@@ -81,7 +83,8 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val TSRMLS_DC)
 	struct php_sdl_surface *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_surface_ce) {
-		intern = (struct php_sdl_surface *)Z_OBJ_P(z_val TSRMLS_CC);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_surface*)((char*)zo - zo->handlers->offset);
 		return intern->surface;
 		}
 	return NULL;
@@ -89,16 +92,6 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val TSRMLS_DC)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRGBSurface, 0, 0, 6)
-       ZEND_ARG_INFO(0, flags)
-       ZEND_ARG_INFO(0, width)
-       ZEND_ARG_INFO(0, height)
-       ZEND_ARG_INFO(0, depth)
-       ZEND_ARG_INFO(0, Rmask)
-       ZEND_ARG_INFO(0, Gmask)
-       ZEND_ARG_INFO(0, Bmask)
-       ZEND_ARG_INFO(0, Amask)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Surface SDL_CreateRGBSurface(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
 
@@ -135,12 +128,6 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP_RW, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(1, RWops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, freesrc)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto SDL_Surface SDL_LoadBMP_RW(SDL_RWops src, int freesrc)
 
  *  Load a surface from a seekable SDL data stream (memory or file).
@@ -175,9 +162,6 @@ PHP_FUNCTION(SDL_LoadBMP_RW)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP, 0, 0, 1)
-       ZEND_ARG_INFO(0, path)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Surface SDL_LoadBMP(string file)
 
@@ -193,7 +177,7 @@ PHP_FUNCTION(SDL_LoadBMP)
 	char *path;
 	size_t path_len;
 	zval z_rwops;
-	SDL_Surface *surface;
+	SDL_Surface *surface = NULL;
 	SDL_RWops *rwops;
 	php_stream *stream;
 
@@ -268,16 +252,6 @@ static PHP_METHOD(SDL_Surface, __toString)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP_RW, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, rwops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, freedst)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP_RW, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(1, rwops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, freedst)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SaveBMP_RW(SDL_Surface surface, SDL_RWops &dst, int freedst)
 
@@ -321,14 +295,6 @@ PHP_FUNCTION(SDL_SaveBMP_RW)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, path)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP, 0, 0, 1)
-       ZEND_ARG_INFO(0, path)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SaveBMP(SDL_Surface surface, string path)
 
@@ -389,16 +355,6 @@ PHP_FUNCTION(SDL_FreeSurface)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillRect, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, rect)
-       ZEND_ARG_INFO(0, color)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_FillRect, 0, 0, 2)
-       ZEND_ARG_INFO(0, rect)
-       ZEND_ARG_INFO(0, color)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_FillRect(SDL_Surface surface, SDL_Rect rect, int color)
 
@@ -431,19 +387,6 @@ PHP_FUNCTION(SDL_FillRect)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillRects, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, rects)
-       ZEND_ARG_INFO(0, count)
-       ZEND_ARG_INFO(0, color)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_FillRects, 0, 0, 3)
-       ZEND_ARG_INFO(0, rects)
-       ZEND_ARG_INFO(0, count)
-       ZEND_ARG_INFO(0, color)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_FillRects(SDL_Surface surface, SDL_Rect rect, int count, int color)
 
@@ -571,19 +514,6 @@ PHP_FUNCTION(SDL_UnlockSurface)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpperBlit, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, src, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(0, srcrect, SDL_rect, 1)
-       ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, dstrect, SDL_rect, 1)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_UpperBlit, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, srcrect, SDL_rect, 1)
-       ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, dstrect, SDL_rect, 1)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_UpperBlit(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst [, SDL_rect &dstrect])
 
  *  Performs a fast blit from the source surface to the destination surface.
@@ -686,19 +616,6 @@ PHP_FUNCTION(SDL_UpperBlit)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LowerBlit, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, src, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, srcrect, SDL_rect, 0)
-       ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, dstrect, SDL_rect, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_LowerBlit, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(1, srcrect, SDL_rect, 0)
-       ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, dstrect, SDL_rect, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_LowerBlit(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst , SDL_rect &dstrect)
 
@@ -864,15 +781,6 @@ PHP_FUNCTION(SDL_SoftStretch)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceRLE, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetRLE, 0, 0, 1)
-       ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
 
  *  \brief Sets the RLE acceleration hint for a surface.
@@ -898,18 +806,6 @@ PHP_FUNCTION(SDL_SetSurfaceRLE)
 	RETURN_LONG(SDL_SetSurfaceRLE(surface, (int)flag));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetColorKey, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, flag)
-       ZEND_ARG_INFO(0, key)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 1)
-       ZEND_ARG_INFO(0, flag)
-       ZEND_ARG_INFO(0, key)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SetColorKey(SDL_Surface src, int flag [, int key ])
 
@@ -939,16 +835,6 @@ PHP_FUNCTION(SDL_SetColorKey)
 	RETURN_LONG(SDL_SetColorKey(surface, (int)flag, (Uint32)key));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetColorKey, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(1, key)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorKey, 0, 0, 1)
-       ZEND_ARG_INFO(1, key)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetColorKey(SDL_Surface src, int &key)
 
@@ -984,20 +870,6 @@ PHP_FUNCTION(SDL_GetColorKey)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceColorMod, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, red)
-       ZEND_ARG_INFO(0, green)
-       ZEND_ARG_INFO(0, blue)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorMod, 0, 0, 3)
-       ZEND_ARG_INFO(0, red)
-       ZEND_ARG_INFO(0, green)
-       ZEND_ARG_INFO(0, blue)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetSurfaceColorMod(SDL_Surface src, int r, int g, int b)
 
  *  \brief Set an additional color value used in blit operations.
@@ -1027,20 +899,6 @@ PHP_FUNCTION(SDL_SetSurfaceColorMod)
 	RETURN_LONG(SDL_SetSurfaceColorMod(surface, (Uint8)r, (Uint8)g, (Uint8)b));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceColorMod, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(1, red)
-       ZEND_ARG_INFO(1, green)
-       ZEND_ARG_INFO(1, blue)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetColorMod, 0, 0, 3)
-       ZEND_ARG_INFO(1, red)
-       ZEND_ARG_INFO(1, green)
-       ZEND_ARG_INFO(1, blue)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetSurfaceColorMod(SDL_Surface src, int &r, int &g, int&b)
 
@@ -1083,16 +941,6 @@ PHP_FUNCTION(SDL_GetSurfaceColorMod)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceAlphaMod, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, alpha)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetAlphaMod, 0, 0, 1)
-       ZEND_ARG_INFO(0, alpha)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetSurfaceColorMod(SDL_Surface src, int alpha)
 
  *  \brief Set an additional alpha value used in blit operations.
@@ -1120,16 +968,6 @@ PHP_FUNCTION(SDL_SetSurfaceAlphaMod)
 	RETURN_LONG(SDL_SetSurfaceAlphaMod(surface, (Uint8)a));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceAlphaMod, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(1, alpha)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetAlphaMod, 0, 0, 1)
-       ZEND_ARG_INFO(1, alpha)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
 
@@ -1166,15 +1004,6 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceBlendMode, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, blendmmode)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetBlendMode, 0, 0, 1)
-       ZEND_ARG_INFO(0, blendmmode)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetSurfaceBlendMode(SDL_Surface src, int blendmode)
  *  \brief Set the blend mode used for blit operations.
  *
@@ -1201,16 +1030,6 @@ PHP_FUNCTION(SDL_SetSurfaceBlendMode)
 	RETURN_LONG(SDL_SetSurfaceBlendMode(surface, (SDL_BlendMode)mode));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceBlendMode, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(1, blendmode)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetBlendMode, 0, 0, 1)
-       ZEND_ARG_INFO(1, blendmode)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_GetSurfaceAlphaMod(SDL_Surface src, int &a)
 
@@ -1245,16 +1064,6 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode)
 	RETURN_LONG(result);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetClipRect, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, cliprect)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetClipRect, 0, 0, 1)
-       ZEND_ARG_INFO(0, cliprect)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_SetClipRect(SDL_Surface src, SDL_Rect cliprect)
 
@@ -1291,16 +1100,6 @@ PHP_FUNCTION(SDL_SetClipRect)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClipRect, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(1, cliprect)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetClipRect, 0, 0, 1)
-       ZEND_ARG_INFO(1, cliprect)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_GetClipRect(SDL_Surface src, SDL_Rect &rect)
 
  *  Gets the clipping rectangle for the destination surface in a blit.
@@ -1326,17 +1125,6 @@ PHP_FUNCTION(SDL_GetClipRect)
 	sdl_rect_to_zval(&rect, z_rect TSRMLS_CC);
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertSurface, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_Convert, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_ConvertSurface(SDL_Surface src, SDL_PixelFormat format, int flag)
 
@@ -1373,18 +1161,6 @@ PHP_FUNCTION(SDL_ConvertSurface)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertSurfaceFormat, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, format)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_ConvertFormat, 0, 0, 1)
-       ZEND_ARG_INFO(0, format)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_ConvertSurfaceFormat(SDL_Surface src, int format [, int flags])
 
  extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurfaceFormat
@@ -1405,18 +1181,6 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 	sdl_surface_to_zval(dst, return_value TSRMLS_CC);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertPixels, 0, 0, 8)
-       ZEND_ARG_INFO(0, height)
-       ZEND_ARG_INFO(0, width)
-       ZEND_ARG_INFO(0, src_format)
-       ZEND_ARG_OBJ_INFO(0, src, SDL_Pixels, 0)
-       ZEND_ARG_INFO(0, src_pitch)
-       ZEND_ARG_INFO(0, dst_format)
-       ZEND_ARG_OBJ_INFO(0, dst, SDL_Pixels, 0)
-       ZEND_ARG_INFO(0, dst_pitch)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_ConvertPixels(int width, int height, int src_format, SDL_Pixels src, int src_pitch, int dst_format, SDL_Pixels dst, int dst_pitch)
 
@@ -1460,56 +1224,9 @@ PHP_FUNCTION(SDL_ConvertPixels)
 }
 /* }}} */
 
-/* generic arginfo */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_surface_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-ZEND_END_ARG_INFO()
-
 /* we need to undefine this macros to avoid substitution in list behind */
 #undef SDL_BlitSurface
 #undef SDL_BlitScaled
-
-/* {{{ sdl_surface_functions[] */
-zend_function_entry sdl_surface_functions[] = {
-	ZEND_FE(SDL_CreateRGBSurface,			arginfo_SDL_CreateRGBSurface)
-	ZEND_FE(SDL_FreeSurface,				arginfo_SDL_Surface)
-	ZEND_FE(SDL_FillRect,					arginfo_SDL_FillRect)
-	ZEND_FE(SDL_FillRects,					arginfo_SDL_FillRects)
-	ZEND_FE(SDL_MUSTLOCK,					arginfo_SDL_Surface)
-	ZEND_FE(SDL_LockSurface,				arginfo_SDL_Surface)
-	ZEND_FE(SDL_UnlockSurface,				arginfo_SDL_Surface)
-	ZEND_FE(SDL_LoadBMP_RW,					arginfo_SDL_LoadBMP_RW)
-	ZEND_FE(SDL_LoadBMP,					arginfo_SDL_LoadBMP)
-	ZEND_FE(SDL_UpperBlit,					arginfo_SDL_UpperBlit)
-	ZEND_FE(SDL_LowerBlit,					arginfo_SDL_LowerBlit)
-	ZEND_FE(SDL_UpperBlitScaled,			arginfo_SDL_UpperBlit)
-	ZEND_FE(SDL_LowerBlitScaled,			arginfo_SDL_LowerBlit)
-	ZEND_FE(SDL_SoftStretch,				arginfo_SDL_UpperBlit)
-	ZEND_FE(SDL_SaveBMP_RW,					arginfo_SDL_SaveBMP_RW)
-	ZEND_FE(SDL_SaveBMP,					arginfo_SDL_SaveBMP)
-	ZEND_FE(SDL_SetSurfaceRLE,				arginfo_SDL_SetSurfaceRLE)
-	ZEND_FE(SDL_SetColorKey,				arginfo_SDL_SetColorKey)
-	ZEND_FE(SDL_GetColorKey,				arginfo_SDL_GetColorKey)
-	ZEND_FE(SDL_SetSurfaceColorMod,			arginfo_SDL_SetSurfaceColorMod)
-	ZEND_FE(SDL_GetSurfaceColorMod,			arginfo_SDL_GetSurfaceColorMod)
-	ZEND_FE(SDL_SetSurfaceAlphaMod,			arginfo_SDL_SetSurfaceAlphaMod)
-	ZEND_FE(SDL_GetSurfaceAlphaMod,			arginfo_SDL_GetSurfaceAlphaMod)
-	ZEND_FE(SDL_SetSurfaceBlendMode,		arginfo_SDL_SetSurfaceBlendMode)
-	ZEND_FE(SDL_GetSurfaceBlendMode,		arginfo_SDL_GetSurfaceBlendMode)
-	ZEND_FE(SDL_SetClipRect,				arginfo_SDL_SetClipRect)
-	ZEND_FE(SDL_GetClipRect,				arginfo_SDL_GetClipRect)
-	ZEND_FE(SDL_ConvertSurface,				arginfo_SDL_ConvertSurface)
-	ZEND_FE(SDL_ConvertSurfaceFormat,		arginfo_SDL_ConvertSurfaceFormat)
-	ZEND_FE(SDL_ConvertPixels,				arginfo_SDL_ConvertPixels)
-	/* Aliases */
-	PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,          arginfo_SDL_UpperBlit)
-	PHP_FALIAS(SDL_BlitScaled,    SDL_UpperBlitScaled,    arginfo_SDL_UpperBlit)
-	ZEND_FE_END
-};
-/* }}} */
 
 static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateRGBSurface, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
@@ -1554,10 +1271,9 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 
 /* {{{ php_sdl_surface_free
 	 */
-static void php_sdl_surface_free(void *object TSRMLS_DC)
+static void php_sdl_surface_free(zend_object *object TSRMLS_DC)
 {
-	struct php_sdl_surface *intern = (struct php_sdl_surface *) object;
-
+	struct php_sdl_surface *intern = (struct php_sdl_surface*)((char*)object - object->handlers->offset);
 	if (intern->surface) {
 		if (!(intern->flags & SDL_DONTFREE)) {
 			SDL_FreeSurface(intern->surface);
@@ -1565,7 +1281,6 @@ static void php_sdl_surface_free(void *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -1575,8 +1290,7 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_surface *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = (struct php_sdl_surface*)ecalloc(1, sizeof(struct php_sdl_surface) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -1592,8 +1306,8 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 /* {{{ sdl_surface_read_property*/
 zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
 {
-    struct php_sdl_surface* intern = (struct php_sdl_surface *)Z_OBJ_P(object TSRMLS_CC);\
-//	struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
+	zend_object* zobject = Z_OBJ_P(object);
+	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char*)zobject - zobject->handlers->offset);
 	zval *retval, retval2,  tmp_member, rv;
 
 	if (!intern->surface) {
@@ -1716,12 +1430,14 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	zend_class_entry ce_surface;
 
 	INIT_CLASS_ENTRY(ce_surface, "SDL_Surface", php_sdl_surface_methods);
-	ce_surface.create_object = php_sdl_surface_new;
 	php_sdl_surface_ce = zend_register_internal_class(&ce_surface TSRMLS_CC);
+	php_sdl_surface_ce->create_object = php_sdl_surface_new;
 	memcpy(&php_sdl_surface_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_surface_handlers.read_property  = sdl_surface_read_property;
 	php_sdl_surface_handlers.get_properties = sdl_surface_get_properties;
 	php_sdl_surface_handlers.write_property = sdl_surface_write_property;
+	php_sdl_surface_handlers.free_obj = php_sdl_surface_free;
+	php_sdl_surface_handlers.offset = XtOffsetOf(struct php_sdl_surface, zo);
 
 	REGISTER_SURFACE_PROP("flags");
 	REGISTER_SURFACE_PROP("w");
@@ -1736,6 +1452,6 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_CLASS_CONST_LONG("RLEACCEL",          SDL_RLEACCEL);
 	REGISTER_SURFACE_CLASS_CONST_LONG("DONTFREE",          SDL_DONTFREE);
 
-	return (zend_register_functions(NULL, sdl_surface_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

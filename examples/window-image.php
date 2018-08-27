@@ -10,6 +10,9 @@ $surf = $wind->GetSurface();
 
 // Load the PHP Logo from a stream
 $logo = SDL_LoadBMP('spaceship.bmp');
+if($logo == null) {
+	exit('Unable to load image');
+}
 
 SDL_GetVersion($version);
 

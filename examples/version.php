@@ -10,4 +10,3 @@ if (SDL_GetVersion($version)) {
 
 var_dump(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
 
-

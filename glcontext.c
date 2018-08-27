@@ -516,14 +516,6 @@ static PHP_FUNCTION(SDL_GL_GetSwapInterval)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ sdl_glcontext_methods[] */
 static const zend_function_entry php_sdl_glcontext_methods[] = {
 	PHP_ME(SDL_GLContext,       __construct,                arginfo_SDL_GLContext__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
@@ -619,6 +611,6 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("ROBUST_ACCESS_FLAG",      SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("RESET_ISOLATION_FLAG",    SDL_GL_CONTEXT_RESET_ISOLATION_FLAG);
 
-	return (zend_register_functions(NULL, sdl_glcontext_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

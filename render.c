@@ -17,7 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
 #include "render.h"
 #include "window.h"
 #include "surface.h"
@@ -28,15 +27,6 @@ int le_sdl_renderer;
 
 #define SDL_TEXTURE_RES_NAME "SDL Texture"
 int le_sdl_texture;
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderDrawColor, 0, 0, 5)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_INFO(0, r)
-	ZEND_ARG_INFO(0, g)
-	ZEND_ARG_INFO(0, b)
-	ZEND_ARG_INFO(0, a)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_SetRenderDrawColor)
 {
@@ -53,11 +43,6 @@ PHP_FUNCTION(SDL_SetRenderDrawColor)
 	RETURN_LONG(SDL_SetRenderDrawColor(renderer, r, g, b, a));
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderClear, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_INFO(0, renderer)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(SDL_RenderClear)
 {
 	zval *z_renderer;
@@ -71,11 +56,6 @@ PHP_FUNCTION(SDL_RenderClear)
 
 	RETURN_LONG(SDL_RenderClear(renderer));
 }
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DestroyRenderer, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_INFO(0, renderer)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_DestroyRenderer)
 {
@@ -91,10 +71,6 @@ PHP_FUNCTION(SDL_DestroyRenderer)
 	SDL_DestroyRenderer(renderer);
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DestroyTexture, 0, 0, 1)
-	ZEND_ARG_INFO(0, texture)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(SDL_DestroyTexture)
 {
 	zval *z_texture;
@@ -108,13 +84,6 @@ PHP_FUNCTION(SDL_DestroyTexture)
 
 	SDL_DestroyTexture(texture);
 }
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderFillRect, 0, 0, 2)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-	//ZEND_ARG_INFO(0, rect)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_RenderFillRect)
 {
@@ -134,11 +103,6 @@ PHP_FUNCTION(SDL_RenderFillRect)
 	RETURN_LONG(SDL_RenderFillRect(renderer, &rect));
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderPresent, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_INFO(0, renderer)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(SDL_RenderPresent)
 {
 	zval *z_renderer;
@@ -152,12 +116,6 @@ PHP_FUNCTION(SDL_RenderPresent)
 
 	SDL_RenderPresent(renderer);
 }
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawPoint, 0, 0, 3)
-	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_RenderDrawPoint)
 {
@@ -175,11 +133,6 @@ PHP_FUNCTION(SDL_RenderDrawPoint)
 
 	RETURN_LONG(SDL_RenderDrawPoint(renderer, (int)x, (int)y));
 }
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateTextureFromSurface, 0, 0, 2)
-	ZEND_ARG_INFO(0, renderer)//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
-	ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_CreateTextureFromSurface)
 {
@@ -201,17 +154,10 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface)
 		RETURN_RES(zend_register_resource(texture, le_sdl_texture));
 	}
 }
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRenderer, 0, 0, 3)
-	ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-	ZEND_ARG_INFO(0, index)
-	ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(SDL_CreateRenderer)
 {
-	long index, flags;
-	zval *z_window = NULL;
+	zend_long index, flags;
+	zval *z_window;
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
 
@@ -223,17 +169,10 @@ PHP_FUNCTION(SDL_CreateRenderer)
 		window = zval_to_sdl_window(z_window TSRMLS_CC);
 	}
 
-	renderer = SDL_CreateRenderer(window, index, flags);
+	renderer = SDL_CreateRenderer(window, (int)index, (Uint32)flags);
 	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderCopy, 0, 0, 4)
-	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_INFO(0, texture)
-	ZEND_ARG_OBJ_INFO(0, srcrect, SDL_Rect, 1)
-	ZEND_ARG_OBJ_INFO(0, dstrect, SDL_Rect, 1)
-ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_RenderCopy)
 {
@@ -255,30 +194,13 @@ PHP_FUNCTION(SDL_RenderCopy)
 		zval_to_sdl_rect(z_srcrect, srcrect TSRMLS_CC);
 	}
 	if(z_dstrect != NULL && Z_TYPE_P(z_dstrect) != IS_NULL) {
-		dstrect = (SDL_Rect*)emalloc(sizeof(SDL_Rect));
+		dstrect = (SDL_Rect*)ecalloc(1, sizeof(SDL_Rect));
 		zval_to_sdl_rect(z_dstrect, dstrect TSRMLS_CC);
 	}
 
 	RETURN_LONG(SDL_RenderCopy(renderer, texture, srcrect, dstrect));
 }
 /* }}} */
-
-/* {{{ sdl_render_functions[] */
-zend_function_entry sdl_render_functions[] = {
-	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
-	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
-	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
-	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)
-	ZEND_FE(SDL_RenderDrawPoint, arginfo_SDL_RenderDrawPoint)
-	ZEND_FE(SDL_RenderClear, arginfo_SDL_RenderClear)
-	ZEND_FE(SDL_RenderCopy, arginfo_SDL_RenderCopy)
-	ZEND_FE(SDL_RenderFillRect, arginfo_SDL_RenderFillRect)
-	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
-	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
-	ZEND_FE_END
-};
-/* }}} */
-
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_render)
@@ -291,6 +213,6 @@ PHP_MINIT_FUNCTION(sdl_render)
 	le_sdl_renderer = zend_register_list_destructors_ex(NULL, NULL, SDL_RENDERER_RES_NAME, module_number);
 	le_sdl_texture = zend_register_list_destructors_ex(NULL, NULL, SDL_TEXTURE_RES_NAME, module_number);
 
-	return (zend_register_functions(NULL, sdl_render_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

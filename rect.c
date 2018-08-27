@@ -129,14 +129,6 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 	return 0;
 }
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, /*unused*/0, /*ret ref*/0, /*req num args*/0)
-       ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, w, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto SDL_Rect::__construct(, int x, int y, int w, int h)
 
  *  \brief A rectangle, with the origin at the upper left.
@@ -174,12 +166,6 @@ static PHP_METHOD(SDL_Rect, __toString)
     efree(buf);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Point__construct, 0, 0, 2)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Point::__construct(, int x, int y)
 
@@ -220,10 +206,6 @@ static PHP_METHOD(SDL_Point, __toString)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto bool SDL_RectEmpty(SDL_Rect rect)
 
  *  \brief Returns true if the rectangle has no area.
@@ -242,11 +224,6 @@ PHP_FUNCTION(SDL_RectEmpty)
 	RETURN_BOOL(SDL_RectEmpty(&rect));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect2, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
 
 
 /* {{{ proto bool SDL_RectEquals(SDL_Rect a, SDL_Rect b)
@@ -292,17 +269,6 @@ PHP_FUNCTION(SDL_HasIntersection)
 	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
 
@@ -355,13 +321,6 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
-       ZEND_ARG_ARRAY_INFO(0, point, 0)
-       ZEND_ARG_INFO(0, count)
-       ZEND_ARG_OBJ_INFO(0, clip, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, rect)
-ZEND_END_ARG_INFO()
 
 
 /* {{{ proto bool SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
@@ -418,20 +377,6 @@ PHP_FUNCTION(SDL_EnclosePoints)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, X1)
-       ZEND_ARG_INFO(1, Y1)
-       ZEND_ARG_INFO(1, X2)
-       ZEND_ARG_INFO(1, Y2)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_IntersectLine, 0, 0, 4)
-       ZEND_ARG_INFO(1, X1)
-       ZEND_ARG_INFO(1, Y1)
-       ZEND_ARG_INFO(1, X2)
-       ZEND_ARG_INFO(1, Y2)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_IntersectRectAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
 
@@ -473,7 +418,6 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 }
 /* }}} */
 
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
@@ -503,20 +447,6 @@ static const zend_function_entry php_sdl_point_methods[] = {
 };
 /* }}} */
 
-/* {{{ sdl_rect_functions[] */
-zend_function_entry sdl_rect_functions[] = {
-	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
-	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
-	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
-	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
-	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
-	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
-	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
-	ZEND_FE_END
-};
-/* }}} */
-
-
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_rect)
 {
@@ -538,6 +468,6 @@ PHP_MINIT_FUNCTION(sdl_rect)
 	zend_declare_property_long(php_sdl_point_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_point_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	return (zend_register_functions(NULL, sdl_rect_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

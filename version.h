@@ -28,6 +28,36 @@ extern "C" {
 
 zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_array);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_version_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVersion, 0, 0, 1)
+	ZEND_ARG_INFO(1, version)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION, 0, 0, 1)
+	ZEND_ARG_INFO(1, version)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSIONNUM, 0, 0, 3)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, z)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION_ATLEAST, 0, 0, 3)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, z)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_GetRevision);
+PHP_FUNCTION(SDL_GetRevisionNumber);
+PHP_FUNCTION(SDL_GetVersion);
+PHP_FUNCTION(SDL_VERSION);
+PHP_FUNCTION(SDL_VERSIONNUM);
+PHP_FUNCTION(SDL_VERSION_ATLEAST);
+
 PHP_MINIT_FUNCTION(sdl_version);
 
 #ifdef  __cplusplus

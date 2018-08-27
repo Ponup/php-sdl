@@ -108,7 +108,6 @@ static void php_sdl_rwops_free(void *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -120,7 +119,6 @@ static zend_object* php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
 	struct php_sdl_rwops *intern = NULL;
 
 	intern = ecalloc(1, sizeof(struct php_sdl_rwops) + zend_object_properties_size(class_type));
-	memset(intern, 0, sizeof(struct php_sdl_rwops) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);

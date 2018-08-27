@@ -25,14 +25,7 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Init, 0, 0, 0)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
+#include "sdl.h"
 
 /* {{{ proto int SDL_Init([int flags=SDL_INIT_EVERYTHING])
 
@@ -42,19 +35,16 @@ ZEND_END_ARG_INFO()
 extern DECLSPEC int SDLCALL SDL_Init(Uint32 flags);
 */
 PHP_FUNCTION(SDL_Init) {
-	long flags = SDL_INIT_EVERYTHING;
+	zend_long flags = SDL_INIT_EVERYTHING;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
-		RETURN_FALSE;
-	}
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(flags)
+	ZEND_PARSE_PARAMETERS_END();
 
 	RETURN_LONG(SDL_Init((Uint32)flags));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_InitSubSystem, 0, 0, 1)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_InitSubSystem(int flags)
 
@@ -72,9 +62,21 @@ PHP_FUNCTION(SDL_InitSubSystem) {
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QuitSubSystem, 0, 0, 1)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
+/* {{{ proto void SDL_Quit(void)
+
+ *  This function cleans up all initialized subsystems. You should
+ *  call it upon all exit conditions.
+extern DECLSPEC void SDLCALL SDL_Quit(void);
+*/
+PHP_FUNCTION(SDL_Quit)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	SDL_Quit();
+}
+/* }}} */
 
 /* {{{ proto int SDL_QuitSubSystem(int flags)
 
@@ -91,10 +93,6 @@ PHP_FUNCTION(SDL_QuitSubSystem) {
 	SDL_QuitSubSystem((Uint32)flags);
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WasInit, 0, 0, 0)
-       ZEND_ARG_INFO(0, flags)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_WasInit(int flags)
 
@@ -115,33 +113,6 @@ PHP_FUNCTION(SDL_WasInit) {
 }
 /* }}} */
 
-/* {{{ proto void SDL_Quit(void)
-
- *  This function cleans up all initialized subsystems. You should
- *  call it upon all exit conditions.
-extern DECLSPEC void SDLCALL SDL_Quit(void);
-*/
-PHP_FUNCTION(SDL_Quit)
-{
-	if (zend_parse_parameters_none() == FAILURE) {
-		RETURN_FALSE;
-	}
-
-	SDL_Quit();
-}
-/* }}} */
-
-/* {{{ sdl_functions[] */
-zend_function_entry sdl_functions[] = {
-	ZEND_FE(SDL_Init,						arginfo_SDL_Init)
-	ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
-	ZEND_FE(SDL_Quit,						arginfo_sdl_none)
-	ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
-	ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
-	ZEND_FE_END
-};
-/* }}} */
-
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(sdl_sdl)
 {
@@ -159,7 +130,7 @@ PHP_MINIT_FUNCTION(sdl_sdl)
 	REGISTER_LONG_CONSTANT("SDL_INIT_NOPARACHUTE",     SDL_INIT_NOPARACHUTE,       CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
 
-	return (zend_register_functions(NULL, sdl_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */
 

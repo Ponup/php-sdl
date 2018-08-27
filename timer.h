@@ -24,6 +24,12 @@
 extern "C" {
 #endif
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Delay, 0, 0, 1)
+       ZEND_ARG_INFO(0, ms)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_Delay);
+
 PHP_MINIT_FUNCTION(sdl_timer);
 
 #ifdef  __cplusplus

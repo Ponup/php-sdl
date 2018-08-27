@@ -21,35 +21,20 @@
 #include "timer.h"
 #include "window.h"
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Delay, 0, 0, 1)
-       ZEND_ARG_INFO(0, ms)
-ZEND_END_ARG_INFO()
-
 PHP_FUNCTION(SDL_Delay)
 {
-	long ms;
+  zend_long ms;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ms) == FAILURE ) {
-		WRONG_PARAM_COUNT;
-	}
+  ZEND_PARSE_PARAMETERS_START(1, 1)
+    Z_PARAM_LONG(ms)
+  ZEND_PARSE_PARAMETERS_END();
 
 	SDL_Delay((Uint32)ms);
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-/* {{{ sdl_timer_functions[] */
-zend_function_entry sdl_timer_functions[] = {
-	ZEND_FE(SDL_Delay, arginfo_SDL_Delay)
-	ZEND_FE_END
-};
-/* }}} */
-
-
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_timer)
 {
-	return (zend_register_functions(NULL, sdl_timer_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+  return SUCCESS;
 }
 /* }}} */

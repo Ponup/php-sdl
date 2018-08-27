@@ -30,7 +30,6 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
 #include "pixels.h"
 #include "zend_interfaces.h"
 
@@ -287,11 +286,6 @@ static PHP_METHOD(SDL_Color, __toString)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPixelFormatName, 0, 0, 1)
-       ZEND_ARG_INFO(0, format)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto string SDL_GetPixelFormatName(int format)
 
  * \brief Get the human readable name of a pixel format
@@ -312,16 +306,6 @@ PHP_FUNCTION(SDL_GetPixelFormatName)
 	RETURN_STRING(name);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormatEnumToMasks, 0, 0, 6)
-       ZEND_ARG_INFO(0, format)
-       ZEND_ARG_INFO(1, bpp)
-       ZEND_ARG_INFO(1, Rmask)
-       ZEND_ARG_INFO(1, Gmask)
-       ZEND_ARG_INFO(1, Bmask)
-       ZEND_ARG_INFO(1, Amask)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_PixelFormatEnumToMasks(int format, int &bpp, int &Rmask, int &Gmask, int &Bmask, int &Amask)
 
@@ -366,14 +350,6 @@ PHP_FUNCTION(SDL_PixelFormatEnumToMasks)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MasksToPixelFormatEnum, 0, 0, 5)
-       ZEND_ARG_INFO(0, bpp)
-       ZEND_ARG_INFO(0, Rmask)
-       ZEND_ARG_INFO(0, Gmask)
-       ZEND_ARG_INFO(0, Bmask)
-       ZEND_ARG_INFO(0, Amask)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto bool SDL_MasksToPixelFormatEnum(int format, int bpp, int Rmask, int Gmask, int Bmask, int Amask)
  *  \brief Convert a bpp and RGBA masks to an enumerated pixel format.
  *
@@ -398,10 +374,6 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
 	RETURN_LONG(SDL_MasksToPixelFormatEnum((int)bpp, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_AllocFormat, 0, 0, 1)
-       ZEND_ARG_INFO(0, format)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_PixelFormat SDL_AllocFormat(int ncolors)
 
@@ -485,10 +457,6 @@ PHP_FUNCTION(SDL_FreeFormat)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_AllocPalette, 0, 0, 1)
-       ZEND_ARG_INFO(0, ncolors)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Palette SDL_AllocPalette(int ncolors)
 
@@ -657,16 +625,6 @@ PHP_METHOD(SDL_Palette, offsetSet)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPixelFormatPalette, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
-       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_SetPalette, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetPixelFormatPalette(SDL_PixelFormat format, SDL_Palette palette);
 
  *  \brief Set the palette for a pixel format structure.
@@ -690,19 +648,6 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetPaletteColors, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
-       ZEND_ARG_ARRAY_INFO(0, colors, 0)
-       ZEND_ARG_INFO(0, first)
-       ZEND_ARG_INFO(0, ncolors)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_SetColors, 0, 0, 1)
-       ZEND_ARG_ARRAY_INFO(0, colors, 0)
-       ZEND_ARG_INFO(0, first)
-       ZEND_ARG_INFO(0, ncolors)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_SetPaletteColors(SDL_Palette palette, array colors, int first, int ncolors)
 
@@ -794,19 +739,6 @@ PHP_FUNCTION(SDL_FreePalette)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGB, 0, 0, 4)
-       //ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, pixelformat)
-       ZEND_ARG_INFO(0, r)
-       ZEND_ARG_INFO(0, g)
-       ZEND_ARG_INFO(0, b)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_MapRGB, 0, 0, 3)
-       ZEND_ARG_INFO(0, r)
-       ZEND_ARG_INFO(0, g)
-       ZEND_ARG_INFO(0, b)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_MapRGB(SDL_PixelFormat format, int r, int g, int b)
 
@@ -833,20 +765,6 @@ PHP_FUNCTION(SDL_MapRGB)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_MapRGBA, 0, 0, 5)
-       ZEND_ARG_OBJ_INFO(0, pixelformat, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, r)
-       ZEND_ARG_INFO(0, g)
-       ZEND_ARG_INFO(0, b)
-       ZEND_ARG_INFO(0, a)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_MapRGBA, 0, 0, 4)
-       ZEND_ARG_INFO(0, r)
-       ZEND_ARG_INFO(0, g)
-       ZEND_ARG_INFO(0, b)
-       ZEND_ARG_INFO(0, a)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_MapRGBA(SDL_PixelFormat format, int r, int g, int b, int a)
 
@@ -872,15 +790,6 @@ PHP_FUNCTION(SDL_MapRGBA)
 	RETURN_LONG(SDL_MapRGBA(format, (Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a));
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGB, 0, 0, 5)
-       ZEND_ARG_INFO(0, pixel)
-       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(1, r)
-       ZEND_ARG_INFO(1, g)
-       ZEND_ARG_INFO(1, b)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_GetRGB(int pixel, SDL_PixelFormat format, int &r, int &g, int &b)
 
@@ -947,16 +856,6 @@ PHP_METHOD(SDL_PixelFormat, GetRGB)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRGBA, 0, 0, 6)
-       ZEND_ARG_INFO(0, pixel)
-       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(1, r)
-       ZEND_ARG_INFO(1, g)
-       ZEND_ARG_INFO(1, b)
-       ZEND_ARG_INFO(1, a)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_GetRGBA(int pixel, SDL_PixelFormat format, int &r, int &g, int &b, int &a)
 
  *  \brief Get the RGBA components from a pixel of the specified format.
@@ -991,13 +890,6 @@ PHP_FUNCTION(SDL_GetRGBA)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat_GetRGBA, 0, 0, 5)
-       ZEND_ARG_INFO(0, pixel)
-       ZEND_ARG_INFO(1, r)
-       ZEND_ARG_INFO(1, g)
-       ZEND_ARG_INFO(1, b)
-       ZEND_ARG_INFO(1, a)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_PixelFormat::GetRGBA(int pixel, int &r, int &g, int &b, int &a)
 
@@ -1027,11 +919,6 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CalculateGammaRamp, 0, 0, 2)
-       ZEND_ARG_INFO(0, gamma)
-       ZEND_ARG_INFO(1, ramp)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_CalculateGammaRamp(float gamma, array &ramp)
 
@@ -1683,21 +1570,6 @@ void sdl_pixels_write_property(zval *object, zval *member, zval *value, const zv
 }
 /* }}} */
 
-/* generic arginfo */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_palette_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, palette, SDL_Palette, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_format_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PixelFormat, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-ZEND_END_ARG_INFO()
-
 
 /* {{{ php_sdl_color_methods[] */
 static const zend_function_entry php_sdl_color_methods[] = {
@@ -1755,28 +1627,6 @@ static const zend_function_entry php_sdl_pixels_methods[] = {
 	PHP_ME(SDL_Pixels,    GetByte,       arginfo_SDL_Pixels_GetByte,        ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    SetByte,       arginfo_SDL_Pixels_SetByte,        ZEND_ACC_PUBLIC)
 	PHP_FE_END
-};
-/* }}} */
-
-/* {{{ sdl_pixels_functions[] */
-zend_function_entry sdl_pixels_functions[] = {
-	ZEND_FE(SDL_GetPixelFormatName,					arginfo_SDL_GetPixelFormatName)
-	ZEND_FE(SDL_PixelFormatEnumToMasks,				arginfo_SDL_PixelFormatEnumToMasks)
-	ZEND_FE(SDL_MasksToPixelFormatEnum,				arginfo_SDL_MasksToPixelFormatEnum)
-
-	ZEND_FE(SDL_AllocPalette,						arginfo_SDL_AllocPalette)
-	ZEND_FE(SDL_FreePalette,						arginfo_SDL_Palette)
-	ZEND_FE(SDL_SetPaletteColors,					arginfo_SDL_SetPaletteColors)
-
-	ZEND_FE(SDL_AllocFormat,						arginfo_SDL_AllocFormat)
-	ZEND_FE(SDL_FreeFormat,							arginfo_SDL_PixelFormat)
-	ZEND_FE(SDL_SetPixelFormatPalette,				arginfo_SDL_SetPixelFormatPalette)
-	ZEND_FE(SDL_MapRGB,								arginfo_SDL_MapRGB)
-	ZEND_FE(SDL_MapRGBA,							arginfo_SDL_MapRGBA)
-	ZEND_FE(SDL_GetRGB,								arginfo_SDL_GetRGB)
-	ZEND_FE(SDL_GetRGBA,							arginfo_SDL_GetRGBA)
-	ZEND_FE(SDL_CalculateGammaRamp,					arginfo_SDL_CalculateGammaRamp)
-	ZEND_FE_END
 };
 /* }}} */
 
@@ -1937,6 +1787,6 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_LONG_CONSTANT("SDL_PIXELFORMAT_UYVY",           SDL_PIXELFORMAT_UYVY,             CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_PIXELFORMAT_YVYU",           SDL_PIXELFORMAT_YVYU,             CONST_CS | CONST_PERSISTENT);
 
-	return (zend_register_functions(NULL, sdl_pixels_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

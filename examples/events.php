@@ -9,7 +9,7 @@ $y = 208;
 // init SDL
 
 SDL_Init(SDL_INIT_VIDEO);
-$window = SDL_CreateWindow("SDL2 Keyboard/Mouse events", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_ALLOW_HIGHDPI);
+$window = SDL_CreateWindow("SDL2 Keyboard/Mouse events", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 $renderer = SDL_CreateRenderer($window, -1, 0);
 
 $image = SDL_LoadBMP("spaceship.bmp");
@@ -34,8 +34,8 @@ while (!$quit) {
             $destRect = new SDL_Rect;
             $destRect->x = $event->motion->x;
             $destRect->y = $event->motion->y;
-            $destRect->w = $drect->w;
-            $destRect->h = $drect->h;
+            $destRect->w = 64;//$drect->w;
+            $destRect->h = 64;//$drect->h;
             if (SDL_RenderCopy($renderer, $texture, NULL, $destRect) != 0) {
                 echo SDL_GetError(), PHP_EOL;
             }
@@ -47,8 +47,8 @@ while (!$quit) {
 }
 
 // cleanup SDL
-//SDL_DestroyTexture($texture);
-//SDL_DestroyRenderer($renderer);
-//SDL_DestroyWindow($window);
-//SDL_Quit();
+SDL_DestroyTexture($texture);
+SDL_DestroyRenderer($renderer);
+SDL_DestroyWindow($window);
+SDL_Quit();
 

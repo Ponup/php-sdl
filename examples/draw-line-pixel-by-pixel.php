@@ -1,7 +1,7 @@
 <?php
 
 const WINDOW_WIDTH = 800;
-const WINDOW_HEIGHT = 600;
+const WINDOW_HEIGHT = 800;
 
 require 'bootstrap.php';
 
@@ -10,7 +10,7 @@ $window = SDL_CreateWindow("Drawing points on screen", SDL_WINDOWPOS_UNDEFINED, 
 $renderer = SDL_CreateRenderer($window, 0, SDL_RENDERER_ACCELERATED);
 
 // Clear screen
-SDL_SetRenderDrawColor($renderer, 0, 0, 0, 0);
+SDL_SetRenderDrawColor($renderer, 100, 0, 0, 0);
 SDL_RenderClear($renderer);
 
 // Draw line

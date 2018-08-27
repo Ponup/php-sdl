@@ -602,6 +602,6 @@ PHP_MINIT_FUNCTION(sdl_video)
 	zend_declare_property_long(php_sdl_displaymode_ce, "h",            1,                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_displaymode_ce, "refresh_rate", sizeof("refresh_rate")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	return (zend_register_functions(NULL, sdl_video_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

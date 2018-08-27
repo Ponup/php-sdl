@@ -44,9 +44,6 @@ zend_bool convert_sdl_version_to_php_array(SDL_version *version, zval *version_a
 	return 0;
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_sdl_version_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto string SDL_GetRevision()
 
  *  \brief Get the code revision of SDL that is linked against your program.
@@ -82,10 +79,6 @@ PHP_FUNCTION(SDL_GetRevisionNumber)
 	RETURN_LONG(SDL_GetRevisionNumber());
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVersion, 0, 0, 1)
-	ZEND_ARG_INFO(1, version)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_GetVersion(array &version)
 
@@ -130,11 +123,6 @@ PHP_FUNCTION(SDL_GetVersion)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION, 0, 0, 1)
-	ZEND_ARG_INFO(1, version)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_VERSION(array &version)
 
  *
@@ -166,13 +154,6 @@ PHP_FUNCTION(SDL_VERSION)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSIONNUM, 0, 0, 3)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-	ZEND_ARG_INFO(0, z)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto long SDL_VERSIONNUM(int x, int y, int z)
 
  *  This macro turns the version numbers into a numeric value:
@@ -194,13 +175,6 @@ PHP_FUNCTION(SDL_VERSIONNUM)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VERSION_ATLEAST, 0, 0, 3)
-	ZEND_ARG_INFO(0, x)
-	ZEND_ARG_INFO(0, y)
-	ZEND_ARG_INFO(0, z)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto bool SDL_VERSION_ATLEAST(int x, int y, int z)
 
  *  This macro will evaluate to true if compiled with SDL at least X.Y.Z.
@@ -217,19 +191,6 @@ PHP_FUNCTION(SDL_VERSION_ATLEAST)
 }
 /* }}} */
 
-
-/* {{{ sdl_version_functions[] */
-zend_function_entry sdl_version_functions[] = {
-	ZEND_FE(SDL_GetRevision,		arginfo_sdl_version_none)
-	ZEND_FE(SDL_GetRevisionNumber,		arginfo_sdl_version_none)
-	ZEND_FE(SDL_GetVersion,			arginfo_SDL_GetVersion)
-	ZEND_FE(SDL_VERSION,			arginfo_SDL_VERSION)
-	ZEND_FE(SDL_VERSIONNUM,			arginfo_SDL_VERSIONNUM)
-	ZEND_FE(SDL_VERSION_ATLEAST,		arginfo_SDL_VERSION_ATLEAST)
-	ZEND_FE_END
-};
-/* }}} */
-
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_version)
 {
@@ -239,7 +200,7 @@ PHP_MINIT_FUNCTION(sdl_version)
 	REGISTER_LONG_CONSTANT("SDL_PATCHLEVEL",	SDL_PATCHLEVEL, CONST_CS | CONST_PERSISTENT);
 	REGISTER_STRING_CONSTANT("SDL_REVISION",	SDL_REVISION, CONST_CS | CONST_PERSISTENT);
 
-	return (zend_register_functions(NULL, sdl_version_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */
 
