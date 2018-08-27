@@ -17,7 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
 
 #ifndef PHP_SDL_GLCONTEXT_H
 #define PHP_SDL_GLCONTEXT_H

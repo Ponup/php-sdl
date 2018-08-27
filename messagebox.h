@@ -17,7 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-/* $Id$ */ 
 
 #ifndef PHP_SDL_MESSAGEBOX_H
 #define PHP_SDL_MESSAGEBOX_H
