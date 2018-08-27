@@ -26,6 +26,17 @@
 extern "C" {
 #endif
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPrefPath, 0, 0, 2)
+       ZEND_ARG_INFO(0, org)
+       ZEND_ARG_INFO(0, app)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetBasePath, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_GetPrefPath);
+PHP_FUNCTION(SDL_GetBasePath);
+
 PHP_MINIT_FUNCTION(sdl_filesystem);
 
 #ifdef  __cplusplus

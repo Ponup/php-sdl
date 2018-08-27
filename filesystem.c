@@ -28,11 +28,6 @@
 #include "php_sdl.h"
 #include "filesystem.h"
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPrefPath, 0, 0, 2)
-       ZEND_ARG_INFO(0, org)
-       ZEND_ARG_INFO(0, app)
-ZEND_END_ARG_INFO()
-
 /**
  * {{{
  * \brief Get the path where the application resides.
@@ -60,14 +55,14 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_GetPrefPath)
 {
 #if SDL_VERSION_ATLEAST(2,0,1)
-	char *org, *app, *pref_path;
-	int org_len, app_len;
+	char *org = NULL, *app = NULL, *pref_path = NULL;
+	size_t org_len, app_len;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &org, &org_len, &app, &app_len)) {
 		RETURN_FALSE;
 	}
 
-	pref_path = SDL_GetPrefPath(org,app);
+	pref_path = SDL_GetPrefPath(org, app);
 	if(pref_path) {
 		RETURN_STRING(pref_path);
 		SDL_free(pref_path);
@@ -75,9 +70,6 @@ PHP_FUNCTION(SDL_GetPrefPath)
 #endif
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetBasePath, 0, 0, 0)
-ZEND_END_ARG_INFO()
 
 /**
  * {{{
@@ -144,7 +136,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_GetBasePath)
 {
 #if SDL_VERSION_ATLEAST(2,0,1)
-	char *base_path;
+	char *base_path = NULL;
 	base_path = SDL_GetBasePath();
 	if(base_path) {
 		RETURN_STRING(base_path);
@@ -152,14 +144,6 @@ PHP_FUNCTION(SDL_GetBasePath)
 	}
 #endif
 }
-/* }}} */
-
-/* {{{ sdl_filesystem_functions[] */
-zend_function_entry sdl_filesystem_functions[] = {
-	ZEND_FE(SDL_GetBasePath, arginfo_SDL_GetBasePath)
-	ZEND_FE(SDL_GetPrefPath, arginfo_SDL_GetPrefPath)
-	ZEND_FE_END
-};
 /* }}} */
 
 /* {{{ MINIT */

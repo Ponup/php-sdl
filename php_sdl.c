@@ -287,6 +287,10 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GetRGBA,							arginfo_SDL_GetRGBA)
 	ZEND_FE(SDL_CalculateGammaRamp,					arginfo_SDL_CalculateGammaRamp)
 
+	// Filesystem
+	ZEND_FE(SDL_GetBasePath, arginfo_SDL_GetBasePath)
+	ZEND_FE(SDL_GetPrefPath, arginfo_SDL_GetPrefPath)
+
 	ZEND_FE_END
 };
 /* }}} */
