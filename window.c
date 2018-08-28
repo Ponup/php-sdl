@@ -91,8 +91,6 @@ SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 		zend_object* zo = Z_OBJ_P(z_val);
 
 		struct php_sdl_window *intern;
-
-		//intern = (struct php_sdl_window *)Z_OBJ_P(z_val TSRMLS_CC);
 		intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
 		return intern->window;
 		}

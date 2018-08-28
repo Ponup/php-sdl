@@ -290,6 +290,22 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GetBasePath, arginfo_SDL_GetBasePath)
 	ZEND_FE(SDL_GetPrefPath, arginfo_SDL_GetPrefPath)
 
+	// GL
+	ZEND_FE(SDL_GL_ExtensionSupported,                   arginfo_SDL_GL_ExtensionSupported)
+	ZEND_FE(SDL_GL_SetAttribute,                         arginfo_SDL_GL_SetAttribute)
+	ZEND_FE(SDL_GL_GetAttribute,                         arginfo_SDL_GL_GetAttribute)
+	ZEND_FE(SDL_GL_CreateContext,                        arginfo_SDL_GLContext__construct)
+	ZEND_FE(SDL_GL_DeleteContext,                        arginfo_SDL_GLContext)
+	ZEND_FE(SDL_GL_MakeCurrent,                          arginfo_SDL_GL_MakeCurrent)
+	ZEND_FE(SDL_GL_GetCurrentWindow,                     arginfo_none)
+	ZEND_FE(SDL_GL_GetCurrentContext,                    arginfo_none)
+#if SDL_VERSION_ATLEAST(2,0,1)
+	ZEND_FE(SDL_GL_GetDrawableSize,                      arginfo_SDL_GL_GetDrawableSize)
+#endif
+	ZEND_FE(SDL_GL_SwapWindow,                           arginfo_SDL_Window)
+	ZEND_FE(SDL_GL_SetSwapInterval,                      arginfo_SDL_GL_SetSwapInterval)
+	ZEND_FE(SDL_GL_GetSwapInterval,                      arginfo_none)
+
 	ZEND_FE_END
 };
 /* }}} */

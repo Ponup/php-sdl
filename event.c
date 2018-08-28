@@ -53,17 +53,17 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 	add_property_zval(value, "motion", &motion TSRMLS_CC);
 	zval_ptr_dtor(&motion);
 
-    zval keysym;
+    zend_object keysym;
     object_init(&keysym);
 	add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
 	zval_ptr_dtor(&keysym);
 
-    zval key;
+    zend_object key;
     object_init(&key);
 	add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
-	zval_ptr_dtor(&key);
 
 	add_property_zval(value, "key", &key TSRMLS_CC);
+	zval_ptr_dtor(&key);
 
 	return 1;
 }
@@ -220,6 +220,7 @@ PHP_MINIT_FUNCTION(sdl_event)
     php_sdl_event_handlers.offset = XtOffsetOf(struct php_sdl_event, zo);
 
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("type"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("key"), ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("motion"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return SUCCESS;
