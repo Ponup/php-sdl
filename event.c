@@ -46,24 +46,29 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 
 	zend_update_property_long(php_sdl_event_ce, value, ZEND_STRL("type"), event->type TSRMLS_CC);
 
-	zend_object motion;
-	object_init(&motion);
-	add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
-  	add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
-	add_property_zval(value, "motion", &motion TSRMLS_CC);
-	zval_ptr_dtor(&motion);
+	switch(event->type) {
+		case SDL_MOUSEMOTION: {
+			zend_object motion;
+			object_init(&motion);
+			add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
+  			add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
+			add_property_zval(value, "motion", &motion TSRMLS_CC);
+			zval_ptr_dtor(&motion);
+			} break;
+		case SDL_KEYDOWN:
+		case SDL_KEYUP: {
+    		zend_object keysym;
+    		object_init(&keysym);
+			add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
 
-    zend_object keysym;
-    object_init(&keysym);
-	add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
-	zval_ptr_dtor(&keysym);
+    		zend_object key;
+    		object_init(&key);
+			add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
 
-    zend_object key;
-    object_init(&key);
-	add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
-
-	add_property_zval(value, "key", &key TSRMLS_CC);
-	zval_ptr_dtor(&key);
+			add_property_zval(value, "key", &key TSRMLS_CC);
+			zval_ptr_dtor(&key);
+			} break;
+	}
 
 	return 1;
 }

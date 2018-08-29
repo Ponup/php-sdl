@@ -24,24 +24,25 @@ SDL_SetRenderDrawColor($renderer, 255, 0, 255, 255);
 
 $event = new SDL_Event;
 while (!$quit) {
-    SDL_WaitEvent($event);
-    switch ($event->type) {
-        case SDL_QUIT:
-            $quit = true;
-            break;
-        case SDL_MOUSEMOTION:
-            SDL_RenderClear($renderer);
-            $destRect = new SDL_Rect;
-            $destRect->x = $event->motion->x;
-            $destRect->y = $event->motion->y;
-            $destRect->w = 64;//$drect->w;
-            $destRect->h = 64;//$drect->h;
-            if (SDL_RenderCopy($renderer, $texture, NULL, $destRect) != 0) {
-                echo SDL_GetError(), PHP_EOL;
-            }
-            SDL_RenderPresent($renderer);
-            break;
-    }
+	while(SDL_PollEvent($event)) {
+    	switch ($event->type) {
+        	case SDL_QUIT:
+            	$quit = true;
+            	break;
+        	case SDL_MOUSEMOTION:
+            	SDL_RenderClear($renderer);
+            	$destRect = new SDL_Rect;
+            	$destRect->x = $event->motion->x;
+            	$destRect->y = $event->motion->y;
+            	$destRect->w = 64;//$drect->w;
+            	$destRect->h = 64;//$drect->h;
+            	if (SDL_RenderCopy($renderer, $texture, NULL, $destRect) != 0) {
+                	echo SDL_GetError(), PHP_EOL;
+            	}
+            	SDL_RenderPresent($renderer);
+            	break;
+    	}
+	}
 
     SDL_Delay(5);
 }
