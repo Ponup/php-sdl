@@ -216,30 +216,6 @@ PHP_FUNCTION(SDL_GetSystemRAM)
 /* }}} */
 #endif
 
-/* generic arginfo */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_cpuinfo_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-/* {{{ sdl_cpuinfo_functions[] */
-zend_function_entry sdl_cpuinfo_functions[] = {
-	ZEND_FE(SDL_GetCPUCount,				arginfo_cpuinfo_none)
-	ZEND_FE(SDL_GetCPUCacheLineSize,		arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasRDTSC,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasAltiVec,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasMMX,						arginfo_cpuinfo_none)
-	ZEND_FE(SDL_Has3DNow,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasSSE,						arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasSSE2,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasSSE3,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasSSE41,					arginfo_cpuinfo_none)
-	ZEND_FE(SDL_HasSSE42,					arginfo_cpuinfo_none)
-#if SDL_COMPILEDVERSION > 2000
-	ZEND_FE(SDL_GetSystemRAM,				arginfo_cpuinfo_none)
-#endif
-	ZEND_FE_END
-};
-/* }}} */
-
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_cpuinfo)
 {

@@ -26,7 +26,7 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
+#include "video.h"
 #include "rect.h"
 
 static zend_class_entry *php_sdl_displaymode_ce;
@@ -148,10 +148,6 @@ PHP_FUNCTION(SDL_GetNumVideoDrivers)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)
-       ZEND_ARG_INFO(0, driverIndex)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto string SDL_GetVideoDriver(int driverIndex)
 
  *  \brief Get the name of a built in video driver.
@@ -178,10 +174,6 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VideoInit, 0, 0, 0)
-       ZEND_ARG_INFO(0, drivername)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_VideoInit([string driver])
 
@@ -306,12 +298,6 @@ PHP_FUNCTION(SDL_GetDisplayName)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(1, rect)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto array SDL_GetDisplayBounds(int displayIndex, SDL_Rect &rect)
 
  *  \brief Get the desktop area represented by a display, with the primary
@@ -360,11 +346,6 @@ PHP_FUNCTION(SDL_GetNumDisplayModes)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(0, modeIndex)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto array SDL_GetDisplayMode(int displayIndex, int modeIndex)
 
@@ -435,12 +416,6 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_OBJ_INFO(0, desired, SDL_DisplayMode, 0)
-       ZEND_ARG_INFO(1, closest)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_DisplayMode SDL_GetClosestDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])
 
@@ -545,37 +520,6 @@ PHP_FUNCTION(SDL_DisableScreenSaver)
 
 	SDL_DisableScreenSaver();
 }
-/* }}} */
-
-
-/* generic arginfo */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_video_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_dysplayindex, 0, 0, 1)
-       ZEND_ARG_INFO(0, displayIndex)
-ZEND_END_ARG_INFO()
-
-/* {{{ sdl_functions[] */
-zend_function_entry sdl_video_functions[] = {
-	ZEND_FE(SDL_GetNumVideoDrivers,			arginfo_video_none)
-	ZEND_FE(SDL_GetVideoDriver,				arginfo_SDL_GetVideoDriver)
-	ZEND_FE(SDL_VideoInit,					arginfo_SDL_VideoInit)
-	ZEND_FE(SDL_VideoQuit,					arginfo_video_none)
-	ZEND_FE(SDL_GetCurrentVideoDriver,		arginfo_video_none)
-	ZEND_FE(SDL_GetNumVideoDisplays,		arginfo_video_none)
-	ZEND_FE(SDL_GetDisplayName,				arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetDisplayBounds,			arginfo_SDL_GetDisplayBounds)
-	ZEND_FE(SDL_GetNumDisplayModes,			arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
-	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
-	ZEND_FE(SDL_GetClosestDisplayMode,		arginfo_SDL_GetClosestDisplayMode)
-	ZEND_FE(SDL_IsScreenSaverEnabled,		arginfo_video_none)
-	ZEND_FE(SDL_EnableScreenSaver,			arginfo_video_none)
-	ZEND_FE(SDL_DisableScreenSaver,			arginfo_video_none)
-	ZEND_FE_END
-};
 /* }}} */
 
 /* {{{ php_sdl_displaymode_methods[] */

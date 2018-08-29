@@ -306,6 +306,45 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GL_SetSwapInterval,                      arginfo_SDL_GL_SetSwapInterval)
 	ZEND_FE(SDL_GL_GetSwapInterval,                      arginfo_none)
 
+	// CPU info
+	ZEND_FE(SDL_GetCPUCount,				arginfo_cpuinfo_none)
+	ZEND_FE(SDL_GetCPUCacheLineSize,		arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasRDTSC,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasAltiVec,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasMMX,						arginfo_cpuinfo_none)
+	ZEND_FE(SDL_Has3DNow,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasSSE,						arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasSSE2,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasSSE3,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasSSE41,					arginfo_cpuinfo_none)
+	ZEND_FE(SDL_HasSSE42,					arginfo_cpuinfo_none)
+#if SDL_COMPILEDVERSION > 2000
+	ZEND_FE(SDL_GetSystemRAM,				arginfo_cpuinfo_none)
+#endif
+
+	// Error handling
+	ZEND_FE(SDL_SetError,     arginfo_SDL_SetError)
+	ZEND_FE(SDL_GetError,     arginfo_error_none)
+	ZEND_FE(SDL_ClearError,   arginfo_error_none)
+
+	// Video
+	ZEND_FE(SDL_GetNumVideoDrivers,			arginfo_video_none)
+	ZEND_FE(SDL_GetVideoDriver,				arginfo_SDL_GetVideoDriver)
+	ZEND_FE(SDL_VideoInit,					arginfo_SDL_VideoInit)
+	ZEND_FE(SDL_VideoQuit,					arginfo_video_none)
+	ZEND_FE(SDL_GetCurrentVideoDriver,		arginfo_video_none)
+	ZEND_FE(SDL_GetNumVideoDisplays,		arginfo_video_none)
+	ZEND_FE(SDL_GetDisplayName,				arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetDisplayBounds,			arginfo_SDL_GetDisplayBounds)
+	ZEND_FE(SDL_GetNumDisplayModes,			arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetDisplayMode,				arginfo_SDL_GetDisplayMode)
+	ZEND_FE(SDL_GetDesktopDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetCurrentDisplayMode,		arginfo_SDL_dysplayindex)
+	ZEND_FE(SDL_GetClosestDisplayMode,		arginfo_SDL_GetClosestDisplayMode)
+	ZEND_FE(SDL_IsScreenSaverEnabled,		arginfo_video_none)
+	ZEND_FE(SDL_EnableScreenSaver,			arginfo_video_none)
+	ZEND_FE(SDL_DisableScreenSaver,			arginfo_video_none)
+
 	ZEND_FE_END
 };
 /* }}} */

@@ -25,6 +25,17 @@
 extern "C" {
 #endif
 
+PHP_FUNCTION(SDL_SetError);
+PHP_FUNCTION(SDL_GetError);
+PHP_FUNCTION(SDL_ClearError);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetError, 0, 0, 1)
+       ZEND_ARG_INFO(0, error_message)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_error_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 PHP_MINIT_FUNCTION(sdl_error);
 
 #ifdef  __cplusplus

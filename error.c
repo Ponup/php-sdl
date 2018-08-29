@@ -27,10 +27,6 @@
 #include "php_sdl.h"
 #include "error.h"
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetError, 0, 0, 1)
-       ZEND_ARG_INFO(0, error_message)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetError(string error)
 
  * SDL_SetError() unconditionally returns -1.
@@ -47,9 +43,6 @@ PHP_FUNCTION(SDL_SetError) {
 	RETURN_LONG(SDL_SetError("%s", error));
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_error_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_GetError(void)
 
@@ -83,17 +76,6 @@ PHP_FUNCTION(SDL_ClearError) {
 	SDL_ClearError();
 }
 /* }}} */
-
-
-/* {{{ sdl_error_functions[] */
-zend_function_entry sdl_error_functions[] = {
-	ZEND_FE(SDL_SetError,     arginfo_SDL_SetError)
-	ZEND_FE(SDL_GetError,     arginfo_error_none)
-	ZEND_FE(SDL_ClearError,   arginfo_error_none)
-	ZEND_FE_END
-};
-/* }}} */
-
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_error)

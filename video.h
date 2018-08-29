@@ -25,9 +25,61 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
 zend_class_entry *get_php_sdl_displaymode_ce(void);
 zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC);
 zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)
+       ZEND_ARG_INFO(0, driverIndex)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VideoInit, 0, 0, 0)
+       ZEND_ARG_INFO(0, drivername)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_INFO(1, rect)
+ZEND_END_ARG_INFO()
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_INFO(0, modeIndex)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
+       ZEND_ARG_INFO(0, displayIndex)
+       ZEND_ARG_OBJ_INFO(0, desired, SDL_DisplayMode, 0)
+       ZEND_ARG_INFO(1, closest)
+ZEND_END_ARG_INFO()
+
+/* generic arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_video_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_dysplayindex, 0, 0, 1)
+       ZEND_ARG_INFO(0, displayIndex)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_GetNumVideoDrivers);
+PHP_FUNCTION(SDL_GetVideoDriver);
+PHP_FUNCTION(SDL_VideoInit);
+PHP_FUNCTION(SDL_VideoQuit);
+PHP_FUNCTION(SDL_GetCurrentVideoDriver);
+PHP_FUNCTION(SDL_GetNumVideoDisplays);
+PHP_FUNCTION(SDL_GetDisplayName);
+PHP_FUNCTION(SDL_GetDisplayBounds);
+PHP_FUNCTION(SDL_GetNumDisplayModes);
+PHP_FUNCTION(SDL_GetDisplayMode);
+PHP_FUNCTION(SDL_GetDesktopDisplayMode);
+PHP_FUNCTION(SDL_GetCurrentDisplayMode);
+PHP_FUNCTION(SDL_GetClosestDisplayMode);
+PHP_FUNCTION(SDL_IsScreenSaverEnabled);
+PHP_FUNCTION(SDL_EnableScreenSaver);
+PHP_FUNCTION(SDL_DisableScreenSaver);
 
 PHP_MINIT_FUNCTION(sdl_video);
 
