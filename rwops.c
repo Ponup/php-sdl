@@ -1052,7 +1052,7 @@ zend_function_entry sdl_rwops_functions[] = {
 
 #define REGISTER_RWOPS_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_rwops_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_rwops_ce, ZEND_STRL(const_name), value TSRMLS_CC)
 
 
 /* {{{ MINIT */
@@ -1068,7 +1068,7 @@ PHP_MINIT_FUNCTION(sdl_rwops)
 	php_sdl_rwops_handlers.get_properties = sdl_rwops_get_properties;
 	php_sdl_rwops_handlers.write_property = sdl_rwops_write_property;
 
-	zend_declare_property_long(php_sdl_rwops_ce, "type", sizeof("type")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_rwops_ce, ZEND_STRL("type"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/* RWops Types */
 	REGISTER_RWOPS_CLASS_CONST_LONG("UNKNOWN",        SDL_RWOPS_UNKNOWN);

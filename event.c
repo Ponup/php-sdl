@@ -17,7 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
 #include "event.h"
 
 static zend_class_entry *php_sdl_event_ce;
@@ -78,7 +77,7 @@ zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC)
 	zval *val, rv;
 	
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_event_ce) {
-		val = zend_read_property(php_sdl_event_ce, value, "type", sizeof("type")-1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_event_ce, value, ZEND_STRL("type"), 0, &rv TSRMLS_CC);
 		convert_to_long(val);
 		Z_LVAL_P(val) = event->type = (int)Z_LVAL_P(val);
 

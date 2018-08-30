@@ -94,9 +94,9 @@ zend_bool sdl_messageboxbuttondata_to_zval(const SDL_MessageBoxButtonData *data,
 {
 	if (data) {
 		object_init_ex(value, php_sdl_messageboxbuttondata_ce);
-		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, "flags", sizeof("flags")-1, data->flags TSRMLS_CC);
-		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, "buttonid", sizeof("buttonid")-1, data->buttonid TSRMLS_CC);
-		zend_update_property_string(php_sdl_messageboxbuttondata_ce, value, "text", sizeof("text")-1, data->text TSRMLS_CC);
+		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("flags"), data->flags TSRMLS_CC);
+		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("buttonid"), data->buttonid TSRMLS_CC);
+		zend_update_property_string(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("text"), data->text TSRMLS_CC);
 
 		return 1;
 	}
@@ -159,15 +159,15 @@ zend_bool zval_to_sdl_messageboxbuttondata(zval *value, SDL_MessageBoxButtonData
 
 		/* we convert the properties, without copy: yes ! */
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, "flags", sizeof("flags")-1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("flags"), 0, &rv TSRMLS_CC);
 		convert_to_long(val);
 		Z_LVAL_P(val) = data->flags = (Uint32)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, "buttonid", sizeof("buttonid")-1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("buttonid"), 0, &rv TSRMLS_CC);
 		convert_to_long(val);
 		Z_LVAL_P(val) = data->buttonid = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, "text", sizeof("text")-1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("text"), 0, &rv TSRMLS_CC);
 		convert_to_string(val);
 		data->text = Z_STRVAL_P(val);
 
@@ -318,9 +318,9 @@ static PHP_METHOD(SDL_MessageBoxButtonData, __construct)
 	}
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 
-	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), "flags", sizeof("flags")-1, flags TSRMLS_CC);
-	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), "buttonid", sizeof("buttonid")-1, (int)id TSRMLS_CC);
-	zend_update_property_string(php_sdl_messageboxbuttondata_ce, getThis(), "text", sizeof("text")-1, text TSRMLS_CC);
+	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("flags"), flags TSRMLS_CC);
+	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("buttonid"), (int)id TSRMLS_CC);
+	zend_update_property_string(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("text"), text TSRMLS_CC);
 }
 /* }}} */
 
@@ -745,13 +745,13 @@ static const zend_function_entry php_sdl_messageboxdata_methods[] = {
 
 #define REGISTER_MESSAGEBOX_CLASS_CONST_LONG(prefix, const_name, value, ce) \
 	REGISTER_LONG_CONSTANT("SDL_MESSAGEBOX_" prefix const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
+	zend_declare_class_constant_long(ce, ZEND_STRL(const_name), value TSRMLS_CC); \
 
 #define REGISTER_MESSAGEBOXCOLOR_PROP(name) \
-	zend_declare_property_long(php_sdl_messageboxcolor_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_messageboxcolor_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 #define REGISTER_MESSAGEBOXBUTTONDATA_PROP(name) \
-	zend_declare_property_long(php_sdl_messageboxbuttondata_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_messageboxbuttondata_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_messagebox)
@@ -782,13 +782,13 @@ PHP_MINIT_FUNCTION(sdl_messagebox)
 	php_sdl_messageboxdata_handlers.get_properties = sdl_messageboxdata_get_properties;
 	php_sdl_messageboxdata_handlers.write_property = sdl_messageboxdata_write_property;
 
-	zend_declare_property_long(php_sdl_messageboxdata_ce, "flags",      sizeof("flags")-1,      0,  ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_messageboxdata_ce, "title",      sizeof("title")-1,          ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_messageboxdata_ce, "message",    sizeof("message")-1,        ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_bool(php_sdl_messageboxdata_ce, "window",     sizeof("window")-1,     0,  ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_messageboxdata_ce, "numbuttons", sizeof("numbuttons")-1, 0,  ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_messageboxdata_ce, "buttons",    sizeof("buttons")-1,        ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_messageboxdata_ce, "colors",     sizeof("colors")-1,         ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_messageboxdata_ce, ZEND_STRL("flags"),      0,  ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_messageboxdata_ce, ZEND_STRL("title"),          ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_messageboxdata_ce, ZEND_STRL("message"),        ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_bool(php_sdl_messageboxdata_ce, ZEND_STRL("window"),     0,  ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_messageboxdata_ce, ZEND_STRL("numbuttons"), 0,  ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_messageboxdata_ce, ZEND_STRL("buttons"),        ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_messageboxdata_ce, ZEND_STRL("colors"),         ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/* enum SDL_MessageBoxFlags: If supported will display warning icon, etc. */
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("", "ERROR",       SDL_MESSAGEBOX_ERROR,       php_sdl_messageboxdata_ce);

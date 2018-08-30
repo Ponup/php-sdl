@@ -1170,8 +1170,7 @@ static zend_object* php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_palette *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(*intern));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -1310,8 +1309,7 @@ static zend_object* php_sdl_pixelformat_new(zend_class_entry *class_type TSRMLS_
 {
 	struct php_sdl_pixelformat *intern;
 
-        intern = ecalloc(1, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
-	memset(intern, 0, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
+	intern = ecalloc(1, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -1479,8 +1477,7 @@ static zend_object* php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_pixels *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(*intern));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -1630,16 +1627,16 @@ static const zend_function_entry php_sdl_pixels_methods[] = {
 /* }}} */
 
 #define REGISTER_COLOR_PROP(name) \
-	zend_declare_property_long(php_sdl_color_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_color_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 #define REGISTER_PALETTE_PROP(name) \
-	zend_declare_property_long(php_sdl_palette_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_palette_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 #define REGISTER_FORMAT_PROP(name) \
-	zend_declare_property_long(php_sdl_pixelformat_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_pixelformat_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 #define REGISTER_PIXELS_PROP(name) \
-	zend_declare_property_long(php_sdl_pixels_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_pixels_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_pixels)
@@ -1667,7 +1664,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_PALETTE_PROP("ncolors");
 	REGISTER_PALETTE_PROP("version");
 	REGISTER_PALETTE_PROP("refcount");
-	zend_declare_property_null(php_sdl_palette_ce, "colors", sizeof("colors")-1, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_palette_ce, ZEND_STRL("colors"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	INIT_CLASS_ENTRY(ce, "SDL_PixelFormat", php_sdl_pixelformat_methods);
 	ce.create_object = php_sdl_pixelformat_new;
@@ -1692,7 +1689,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_FORMAT_PROP("Gshift");
 	REGISTER_FORMAT_PROP("Bshift");
 	REGISTER_FORMAT_PROP("Ashift");
-	zend_declare_property_null(php_sdl_pixelformat_ce, "palette", sizeof("palette")-1, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_pixelformat_ce, ZEND_STRL("palette"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	INIT_CLASS_ENTRY(ce, "SDL_Pixels", php_sdl_pixels_methods);
 	ce.create_object = php_sdl_pixels_new;

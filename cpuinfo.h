@@ -25,6 +25,8 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
 PHP_FUNCTION(SDL_GetCPUCount);
 PHP_FUNCTION(SDL_GetCPUCacheLineSize);
 PHP_FUNCTION(SDL_HasRDTSC);

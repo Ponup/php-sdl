@@ -97,8 +97,7 @@ static zend_object php_sdl_windowshapemode_new(zend_class_entry *class_type TSRM
 	zend_object retval;
 	struct php_sdl_windowshapemode *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(*intern));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -305,7 +304,7 @@ zend_function_entry sdl_shape_functions[] = {
 
 #define REGISTER_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("ShapeMode" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
+	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, ZEND_STRL(const_name), value TSRMLS_CC); \
 
 
 	/* {{{ MINIT */
@@ -321,9 +320,9 @@ PHP_MINIT_FUNCTION(sdl_shape)
 	php_sdl_windowshapemode_handlers.get_properties = sdl_windowshapemode_get_properties;
 	php_sdl_windowshapemode_handlers.write_property = sdl_windowshapemode_write_property;
 
-	zend_declare_property_long(php_sdl_windowshapemode_ce, "mode",               sizeof("mode")-1,               0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_windowshapemode_ce, "colorKey",           sizeof("colorKey")-1,           0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_windowshapemode_ce, "binarizationCutoff", sizeof("binarizationCutoff")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("mode"),               0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("colorKey"),           0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("binarizationCutoff"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/* typedef enum WindowShapeMode */
 	REGISTER_CLASS_CONST_LONG("Default",              ShapeModeDefault);

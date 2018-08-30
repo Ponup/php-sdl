@@ -1801,14 +1801,14 @@ static zend_object* php_sdl_window_new(zend_class_entry *class_type TSRMLS_DC)
 
 #define REGISTER_WINDOW_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_WINDOW_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_window_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC); \
+	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL(const_name), value TSRMLS_CC); \
 
 #define REGISTER_WINDOWPOS_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_WINDOWPOS_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_window_ce, "POS_" const_name, sizeof("POS_" const_name)-1, value TSRMLS_CC); \
+	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL("POS_" const_name), value TSRMLS_CC); \
 
 #define REGISTER_WINDOW_PROP(name) \
-	zend_declare_property_long(php_sdl_window_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_window_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_window)
@@ -1832,7 +1832,7 @@ PHP_MINIT_FUNCTION(sdl_window)
 	REGISTER_WINDOW_PROP("w");
 	REGISTER_WINDOW_PROP("h");
 
-	zend_declare_property_null(php_sdl_window_ce, "title",  sizeof("title")-1,  ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_window_ce, ZEND_STRL("title"),  ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	REGISTER_WINDOW_CLASS_CONST_LONG("FULLSCREEN",         SDL_WINDOW_FULLSCREEN);
 	REGISTER_WINDOW_CLASS_CONST_LONG("OPENGL",             SDL_WINDOW_OPENGL);

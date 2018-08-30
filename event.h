@@ -24,6 +24,8 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
 zend_class_entry *get_php_sdl_event_ce(void);
 zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC);
 zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC);

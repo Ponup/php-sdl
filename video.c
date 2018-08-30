@@ -41,7 +41,7 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 }
 
 #define update_displaymode_prop(z_value, name, value) \
-	zend_update_property_long(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, value TSRMLS_CC)
+	zend_update_property_long(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), value TSRMLS_CC)
 
 zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
 {
@@ -61,7 +61,7 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_D
 #define read_displaymode_prop(z_value, name, value) \
 { \
 	zval *val, rv; \
-	val = zend_read_property(php_sdl_displaymode_ce, z_value, name, sizeof(name)-1, 0, &rv TSRMLS_CC); \
+	val = zend_read_property(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), 0, &rv TSRMLS_CC); \
 	convert_to_long(val); \
 	Z_LVAL_P(val) = value = (int)Z_LVAL_P(val); \
 }
@@ -540,10 +540,10 @@ PHP_MINIT_FUNCTION(sdl_video)
 	php_sdl_displaymode_ce = zend_register_internal_class(&ce_displaymode TSRMLS_CC);
 	memcpy(&php_sdl_displaymode_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	zend_declare_property_long(php_sdl_displaymode_ce, "format",       sizeof("format")-1,       0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, "w",            1,                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, "h",            1,                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, "refresh_rate", sizeof("refresh_rate")-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("format"),       0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("w"),                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("h"),                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("refresh_rate"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return SUCCESS;
 }

@@ -114,8 +114,7 @@ static zend_object* php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_cursor *intern;
 
-        intern = ecalloc(1, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
-	memset(intern, 0, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
+	intern = ecalloc(1, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -628,7 +627,7 @@ static const zend_function_entry php_sdl_cursor_methods[] = {
 
 #define REGISTER_CURSOR_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_SYSTEM_CURSOR_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_cursor_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL(const_name), value TSRMLS_CC)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_mouse)
@@ -656,7 +655,7 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	REGISTER_CURSOR_CLASS_CONST_LONG("HAND",      SDL_SYSTEM_CURSOR_HAND);
 
 	REGISTER_LONG_CONSTANT("SDL_NUM_SYSTEM_CURSORS",      SDL_NUM_SYSTEM_CURSORS, CONST_CS | CONST_PERSISTENT);
-	zend_declare_class_constant_long(php_sdl_cursor_ce, "NUM_SYSTEM", sizeof("NUM_SYSTEM")-1, SDL_NUM_SYSTEM_CURSORS TSRMLS_CC);
+	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL("NUM_SYSTEM"), SDL_NUM_SYSTEM_CURSORS TSRMLS_CC);
 
 	/*
 	 *  Used as a mask when testing buttons in buttonstate.

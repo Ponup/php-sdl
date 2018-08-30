@@ -1418,10 +1418,10 @@ void sdl_surface_write_property(zval *object, zval *member, zval *value, const z
 
 #define REGISTER_SURFACE_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_surface_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_surface_ce, ZEND_STRL(const_name), value TSRMLS_CC)
 
 #define REGISTER_SURFACE_PROP(name) \
-	zend_declare_property_long(php_sdl_surface_ce, name, sizeof(name)-1, 0, ZEND_ACC_PUBLIC TSRMLS_CC)
+	zend_declare_property_long(php_sdl_surface_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC TSRMLS_CC)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_surface)
@@ -1442,9 +1442,9 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_PROP("w");
 	REGISTER_SURFACE_PROP("h");
 	REGISTER_SURFACE_PROP("pitch");
-	zend_declare_property_null(php_sdl_surface_ce, "format",    sizeof("format")-1,    ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_surface_ce, "clip_rect", sizeof("clip_rect")-1, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_surface_ce, "pixels",    sizeof("pixels")-1,    ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("format"),    ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("pixels"),    ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	REGISTER_SURFACE_CLASS_CONST_LONG("SWSURFACE",         SDL_SWSURFACE);
 	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC",          SDL_PREALLOC);

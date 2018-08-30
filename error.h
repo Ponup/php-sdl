@@ -25,6 +25,8 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
 PHP_FUNCTION(SDL_SetError);
 PHP_FUNCTION(SDL_GetError);
 PHP_FUNCTION(SDL_ClearError);

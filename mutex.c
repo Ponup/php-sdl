@@ -268,8 +268,7 @@ static zend_object* php_sdl_mutex_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_mutex *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(struct php_sdl_mutex));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -287,8 +286,7 @@ static zend_object* php_sdl_sem_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_sem *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(struct php_sdl_sem));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -306,8 +304,7 @@ static zend_object* php_sdl_cond_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	struct php_sdl_cond *intern;
 
-	intern = emalloc(sizeof(*intern));
-	memset(intern, 0, sizeof(*intern));
+	intern = ecalloc(1, sizeof(*intern));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -1045,7 +1042,7 @@ zend_function_entry sdl_mutex_functions[] = {
 
 #define REGISTER_MUTEXT_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_MUTEX_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_mutex_ce, const_name, sizeof(const_name)-1, value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_mutex_ce, ZEND_STRL(const_name), value TSRMLS_CC)
 
 	/* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_mutex)
