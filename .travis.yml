@@ -19,6 +19,7 @@ before_script:
   - ./configure --quiet
   - make all install
   - echo "extension=sdl.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - chmod +x run-tests.php
 
 script:
   - ./run-tests.php -q -p $(which php) --show-diff

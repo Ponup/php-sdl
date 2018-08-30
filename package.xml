@@ -70,6 +70,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
       <file role='src' name='cpuinfo.h'/>
       <file role='src' name='error.c'/>
       <file role='src' name='error.h'/>
+      <file role='src' name='event.c'/>
+      <file role='src' name='event.h'/>
       <file role='src' name='filesystem.c'/>
       <file role='src' name='filesystem.h'/>
       <file role='src' name='glcontext.c'/>
@@ -115,7 +117,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='doc' name='window.php'/>
       </dir> <!-- examples -->
       <dir name="tests">
-        <file role='test' name='001-load.phpt'/>
+        <file role='test' name='001-extension-loading.phpt'/>
         <file role='test' name='002-simpleinit.phpt'/>
         <file role='test' name='003-otherinit.phpt'/>
         <file role='test' name='004-cpuinfo.phpt'/>
@@ -140,6 +142,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file role='test' name='023-messagebox.phpt'/>
         <file role='test' name='024-mutex.phpt'/>
         <file role='test' name='025-mutex-oo.phpt'/>
+        <file role='test' name='026-filesystem.phpt'/>
       </dir> <!-- tests -->
     </dir>
   </contents>
