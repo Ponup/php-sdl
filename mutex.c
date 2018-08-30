@@ -17,18 +17,10 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_mutex.h                                         |
-  +----------------------------------------------------------------------+
-  | SDL_mutex                                                            |
-  +----------------------------------------------------------------------+
-*/
-
-
-#include "php_sdl.h"
 #include "mutex.h"
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
 
 static zend_class_entry *php_sdl_mutex_ce;
 static zend_object_handlers php_sdl_mutex_handlers;
@@ -213,7 +205,7 @@ SDL_cond *zval_to_sdl_cond(zval *z_val TSRMLS_DC)
 
 
 /* {{{ php_sdl_mutex_free */
-static void php_sdl_mutex_free(void *object TSRMLS_DC)
+static void php_sdl_mutex_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_mutex *intern = (struct php_sdl_mutex *) object;
 
@@ -230,7 +222,7 @@ static void php_sdl_mutex_free(void *object TSRMLS_DC)
 
 
 /* {{{ php_sdl_sem_free */
-static void php_sdl_sem_free(void *object TSRMLS_DC)
+static void php_sdl_sem_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_sem *intern = (struct php_sdl_sem *) object;
 
@@ -247,7 +239,7 @@ static void php_sdl_sem_free(void *object TSRMLS_DC)
 
 
 /* {{{ php_sdl_cond_free */
-static void php_sdl_cond_free(void *object TSRMLS_DC)
+static void php_sdl_cond_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_cond *intern = (struct php_sdl_cond *) object;
 
@@ -389,7 +381,7 @@ PHP_FUNCTION(SDL_CreateMutex)
  define SDL_mutexP(m)   SDL_LockMutex(m)
  extern DECLSPEC int SDLCALL SDL_LockMutex(SDL_mutex * mutex);
  */
-static PHP_FUNCTION(SDL_LockMutex)
+PHP_FUNCTION(SDL_LockMutex)
 {
 	struct php_sdl_mutex *intern;
 	zval *z_mutex;
@@ -412,7 +404,7 @@ static PHP_FUNCTION(SDL_LockMutex)
  *  \return 0, SDL_MUTEX_TIMEDOUT, or -1 on error
  extern DECLSPEC int SDLCALL SDL_TryLockMutex(SDL_mutex * mutex);
  */
-static PHP_FUNCTION(SDL_TryLockMutex)
+PHP_FUNCTION(SDL_TryLockMutex)
 {
 	struct php_sdl_mutex *intern;
 	zval *z_mutex;
@@ -439,7 +431,7 @@ static PHP_FUNCTION(SDL_TryLockMutex)
  define SDL_mutexV(m)   SDL_UnlockMutex(m)
  extern DECLSPEC int SDLCALL SDL_UnlockMutex(SDL_mutex * mutex);
  */
-static PHP_FUNCTION(SDL_UnlockMutex)
+PHP_FUNCTION(SDL_UnlockMutex)
 {
 	struct php_sdl_mutex *intern;
 	zval *z_mutex;
@@ -460,7 +452,7 @@ static PHP_FUNCTION(SDL_UnlockMutex)
  *  Destroy a mutex.
  extern DECLSPEC void SDLCALL SDL_DestroyMutex(SDL_mutex * mutex);
  */
-static PHP_FUNCTION(SDL_DestroyMutex)
+PHP_FUNCTION(SDL_DestroyMutex)
 {
 	struct php_sdl_mutex *intern;
 	zval *z_mutex;
@@ -476,9 +468,6 @@ static PHP_FUNCTION(SDL_DestroyMutex)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem__construct, 0, 0, 1)
-	ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_sem::__construct(int value) */
 static PHP_METHOD(SDL_sem, __construct)
@@ -553,7 +542,7 @@ PHP_FUNCTION(SDL_CreateSemaphore)
  *  semaphore count.
  extern DECLSPEC int SDLCALL SDL_SemWait(SDL_sem * sem);
  */
-static PHP_FUNCTION(SDL_SemWait)
+PHP_FUNCTION(SDL_SemWait)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -577,7 +566,7 @@ static PHP_FUNCTION(SDL_SemWait)
  *          block, and -1 on error.
  extern DECLSPEC int SDLCALL SDL_SemTryWait(SDL_sem * sem);
  */
-static PHP_FUNCTION(SDL_SemTryWait)
+PHP_FUNCTION(SDL_SemTryWait)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -600,7 +589,7 @@ static PHP_FUNCTION(SDL_SemTryWait)
  *  \return 0, or -1 on error.
  extern DECLSPEC int SDLCALL SDL_SemPost(SDL_sem * sem);
  */
-static PHP_FUNCTION(SDL_SemPost)
+PHP_FUNCTION(SDL_SemPost)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -621,7 +610,7 @@ static PHP_FUNCTION(SDL_SemPost)
  *  Returns the current count of the semaphore.
  extern DECLSPEC Uint32 SDLCALL SDL_SemValue(SDL_sem * sem);
  */
-static PHP_FUNCTION(SDL_SemValue)
+PHP_FUNCTION(SDL_SemValue)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -636,16 +625,6 @@ static PHP_FUNCTION(SDL_SemValue)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SemWaitTimeout, 0, 0, 2)
-	ZEND_ARG_OBJ_INFO(0, semaphore, SDL_sem, 0)
-	ZEND_ARG_INFO(0, ms)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Sem_WaitTimeout, 0, 0, 1)
-	ZEND_ARG_INFO(0, ms)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SemWaitTimeout(SDL_sem sem, int ms)
 
  *  Variant of SDL_SemWait() with a timeout in milliseconds.
@@ -657,7 +636,7 @@ ZEND_END_ARG_INFO()
  *           delay of 1 ms, and so should be avoided if possible.
  extern DECLSPEC int SDLCALL SDL_SemWaitTimeout(SDL_sem * sem, Uint32 ms);
  */
-static PHP_FUNCTION(SDL_SemWaitTimeout)
+PHP_FUNCTION(SDL_SemWaitTimeout)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -679,7 +658,7 @@ static PHP_FUNCTION(SDL_SemWaitTimeout)
  *  Destroy a semaphore.
  extern DECLSPEC void SDLCALL SDL_DestroySemaphore(SDL_sem * sem);
  */
-static PHP_FUNCTION(SDL_DestroySemaphore)
+PHP_FUNCTION(SDL_DestroySemaphore)
 {
 	struct php_sdl_sem *intern;
 	zval *z_sem;
@@ -784,15 +763,6 @@ PHP_FUNCTION(SDL_CreateCond)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CondWait, 0, 0, 2)
-	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
-	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cond_Wait, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_CondWait(SDL_cond condition, SDL_mutex mutex)
 
  *  Wait on the condition variable, unlocking the provided mutex.
@@ -804,7 +774,7 @@ ZEND_END_ARG_INFO()
  *  \return 0 when it is signaled, or -1 on error.
  extern DECLSPEC int SDLCALL SDL_CondWait(SDL_cond * cond, SDL_mutex * mutex);
  */
-static PHP_FUNCTION(SDL_CondWait)
+PHP_FUNCTION(SDL_CondWait)
 {
 	struct php_sdl_cond *intern;
 	zval *z_cond, *z_mutex;
@@ -832,7 +802,7 @@ static PHP_FUNCTION(SDL_CondWait)
  *  \return 0 or -1 on error.
  extern DECLSPEC int SDLCALL SDL_CondSignal(SDL_cond * cond);
  */
-static PHP_FUNCTION(SDL_CondSignal)
+PHP_FUNCTION(SDL_CondSignal)
 {
 	struct php_sdl_cond *intern;
 	zval *z_cond;
@@ -855,7 +825,7 @@ static PHP_FUNCTION(SDL_CondSignal)
  *  \return 0 or -1 on error.
 extern DECLSPEC int SDLCALL SDL_CondBroadcast(SDL_cond * cond);
  */
-static PHP_FUNCTION(SDL_CondBroadcast)
+PHP_FUNCTION(SDL_CondBroadcast)
 {
 	struct php_sdl_cond *intern;
 	zval *z_cond;
@@ -871,17 +841,6 @@ static PHP_FUNCTION(SDL_CondBroadcast)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CondWaitTimeout, 0, 0, 3)
-	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
-	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
-	ZEND_ARG_INFO(0, ms)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cond_WaitTimeout, 0, 0, 2)
-	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
-	ZEND_ARG_INFO(0, ms)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_CondWaitTimeout(SDL_cond cond, SDL_mutex mutex, int ms)
 
  *  Waits for at most \c ms milliseconds, and returns 0 if the condition
@@ -893,7 +852,7 @@ ZEND_END_ARG_INFO()
  extern DECLSPEC int SDLCALL SDL_CondWaitTimeout(SDL_cond * cond,
                                                  SDL_mutex * mutex, Uint32 ms);
  */
-static PHP_FUNCTION(SDL_CondWaitTimeout)
+PHP_FUNCTION(SDL_CondWaitTimeout)
 {
 	struct php_sdl_cond *intern;
 	zval *z_cond, *z_mutex;
@@ -920,7 +879,7 @@ static PHP_FUNCTION(SDL_CondWaitTimeout)
  *  Destroy a condition variable.
  extern DECLSPEC void SDLCALL SDL_DestroyCond(SDL_cond * cond);
  */
-static PHP_FUNCTION(SDL_DestroyCond)
+PHP_FUNCTION(SDL_DestroyCond)
 {
 	struct php_sdl_cond *intern;
 	zval *z_cond;
@@ -934,24 +893,6 @@ static PHP_FUNCTION(SDL_DestroyCond)
 	intern->cond = NULL;
 }
 /* }}} */
-
-
-/* generic arginfo */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_mutex, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, mutex, SDL_mutex, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, semaphore, SDL_sem, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_cond, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, condition, SDL_cond, 0)
-ZEND_END_ARG_INFO()
 
 
 /* {{{ sdl_mutex_methods[] */
@@ -1004,42 +945,6 @@ static const zend_function_entry php_sdl_cond_methods[] = {
 };
 /* }}} */
 
-
-/* {{{ sdl_mutex_functions[] */
-zend_function_entry sdl_mutex_functions[] = {
-	/* mutex functions */
-	ZEND_FE(SDL_CreateMutex,                        arginfo_none)
-	ZEND_FE(SDL_LockMutex,                          arginfo_SDL_mutex)
-	ZEND_FE(SDL_TryLockMutex,                       arginfo_SDL_mutex)
-	ZEND_FE(SDL_UnlockMutex,                        arginfo_SDL_mutex)
-	ZEND_FE(SDL_DestroyMutex,                       arginfo_SDL_mutex)
-
-	/* mutex aliases */
-	PHP_FALIAS(SDL_mutexP,      SDL_LockMutex,      arginfo_SDL_mutex)
-	PHP_FALIAS(SDL_mutexV,      SDL_UnlockMutex,    arginfo_SDL_mutex)
-
-	/* semaphore functions */
-	ZEND_FE(SDL_CreateSemaphore,                    arginfo_SDL_sem__construct)
-	ZEND_FE(SDL_SemWait,                            arginfo_SDL_sem)
-	ZEND_FE(SDL_SemTryWait,                         arginfo_SDL_sem)
-	ZEND_FE(SDL_SemPost,                            arginfo_SDL_sem)
-	ZEND_FE(SDL_SemValue,                           arginfo_SDL_sem)
-	ZEND_FE(SDL_SemWaitTimeout,                     arginfo_SDL_SemWaitTimeout)
-	ZEND_FE(SDL_DestroySemaphore,                   arginfo_SDL_sem)
-
-	/* condition functions */
-	ZEND_FE(SDL_CreateCond,                         arginfo_none)
-	ZEND_FE(SDL_CondWait,                           arginfo_SDL_CondWait)
-	ZEND_FE(SDL_CondSignal,                         arginfo_SDL_cond)
-	ZEND_FE(SDL_CondBroadcast,                      arginfo_SDL_cond)
-	ZEND_FE(SDL_CondWaitTimeout,                    arginfo_SDL_CondWaitTimeout)
-	ZEND_FE(SDL_DestroyCond,                        arginfo_SDL_cond)
-
-	ZEND_FE_END
-};
-/* }}} */
-
-
 #define REGISTER_MUTEXT_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_MUTEX_" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_mutex_ce, ZEND_STRL(const_name), value TSRMLS_CC)
@@ -1053,6 +958,7 @@ PHP_MINIT_FUNCTION(sdl_mutex)
 	ce.create_object = php_sdl_mutex_new;
 	php_sdl_mutex_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_mutex_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_mutex_handlers.free_obj = php_sdl_mutex_free;
 
 	REGISTER_MUTEXT_CLASS_CONST_LONG("TIMEDOUT", SDL_MUTEX_TIMEDOUT);
 	REGISTER_MUTEXT_CLASS_CONST_LONG("MAXWAIT",  SDL_MUTEX_MAXWAIT);
@@ -1061,11 +967,13 @@ PHP_MINIT_FUNCTION(sdl_mutex)
 	ce.create_object = php_sdl_sem_new;
 	php_sdl_sem_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_sem_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_sem_handlers.free_obj = php_sdl_sem_free;
 
 	INIT_CLASS_ENTRY(ce, "SDL_cond", php_sdl_cond_methods);
 	ce.create_object = php_sdl_cond_new;
 	php_sdl_cond_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_cond_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_cond_handlers.free_obj = php_sdl_cond_free;
 
 	return SUCCESS;
 }

@@ -1,27 +1,34 @@
 --TEST--
+Extension is loaded.
 Check for SDL presence
 --SKIPIF--
 <?php
-if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
-?>
+require 'skipif.php';
 --FILE--
-<?php 
-echo "SDL version ".phpversion("sdl"). " extension is available\n";
-$r = new ReflectionExtension("sdl");
+<?php
+echo 'SDL extension version: ', phpversion('sdl'), PHP_EOL;
 
-$n = count($r->getFunctions());
-echo "$n functions defined (".($n ? 'ok' : 'ko').")\n";
+$ext = new ReflectionExtension('sdl');
 
-$n = count($r->getClasses());
-echo "$n classes defined (".($n ? 'ok' : 'ko').")\n";
+$numFunctions = count($ext->getFunctions());
+if($numFunctions)
+	echo "$numFunctions functions defined", PHP_EOL;
+else
+	echo 'no functions defined', PHP_EOL;
 
-$n = count($r->getConstants());
-echo "$n constants defined (".($n ? 'ok' : 'ko').")\n";
-?>
-Done
+$numClasses = count($ext->getClasses());
+if($numClasses)
+	echo "$numClasses classes defined", PHP_EOL;
+else
+	echo 'no functions defined', PHP_EOL;
+
+$numConstants = count($ext->getConstants());
+if($numConstants)
+	echo "$numConstants constants defined", PHP_EOL;
+else
+	echo 'no constants defined', PHP_EOL;
 --EXPECTF--
-SDL version %s extension is available
-%d functions defined (ok)
-%d classes defined (ok)
-%d constants defined (ok)
-Done
+SDL extension version: %s
+%d functions defined
+%d classes defined
+%d constants defined

@@ -2,7 +2,8 @@
 Init/Quit subsystem test
 --SKIPIF--
 <?php
-if (!extension_loaded("sdl")) die("skip SDL extension not loaded");
+require 'skipif.php';
+skip_test_not_complete();
 ?>
 --FILE--
 <?php 

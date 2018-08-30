@@ -194,7 +194,7 @@ SDL_MessageBoxData *zval_to_sdl_messageboxdata(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_messageboxdata_free
 	 */
-static void php_sdl_messageboxdata_free(void *object TSRMLS_DC)
+static void php_sdl_messageboxdata_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_messageboxdata *intern = (struct php_sdl_messageboxdata *) object;
 

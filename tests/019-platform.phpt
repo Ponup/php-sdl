@@ -2,7 +2,8 @@
 SDL_platform test suite
 --SKIPIF--
 <?php
-extension_loaded('sdl') or die('skip SDL extension not loaded');
+require 'skipif.php';
+skip_test_not_complete();
 ?>
 --FILE--
 <?php

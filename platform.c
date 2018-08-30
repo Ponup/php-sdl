@@ -17,11 +17,7 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
 #include "platform.h"
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPlatform, 0, 0, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_GetPlatform(void)
 
@@ -35,13 +31,6 @@ PHP_FUNCTION(SDL_GetPlatform)
 
 	RETURN_STRING(SDL_GetPlatform());
 }
-
-/* {{{ sdl_platform_functions[] */
-zend_function_entry sdl_platform_functions[] = {
-	ZEND_FE(SDL_GetPlatform,	arginfo_SDL_GetPlatform)
-	ZEND_FE_END
-};
-/* }}} */
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_platform)

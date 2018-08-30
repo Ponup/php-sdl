@@ -25,6 +25,8 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
 zend_class_entry *get_php_sdl_point_ce(void);
 zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC);
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC);
@@ -64,12 +66,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
        ZEND_ARG_INFO(1, result)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRect, 0, 0, 3)
+       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
+       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
+       ZEND_ARG_INFO(1, result)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
        ZEND_ARG_INFO(1, result)
 ZEND_END_ARG_INFO()
-
-
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
        ZEND_ARG_ARRAY_INFO(0, point, 0)

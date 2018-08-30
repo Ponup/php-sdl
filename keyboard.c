@@ -17,25 +17,16 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_keyboard.h, SDL_keycode.h, SDL_scancode.h       |
-  +----------------------------------------------------------------------+
-*/
-
-#include "php_sdl.h"
 #include "keyboard.h"
 #include "rect.h"
 #include "window.h"
-
 
 /* {{{ proto SDL_Window SDL_GetKeyboardFocus(void)
 
  *  \brief Get the window which currently has keyboard focus.
 extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
  */
-static PHP_FUNCTION(SDL_GetKeyboardFocus)
+PHP_FUNCTION(SDL_GetKeyboardFocus)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -43,12 +34,6 @@ static PHP_FUNCTION(SDL_GetKeyboardFocus)
 	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value TSRMLS_CC);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetKeyboardState, 0, 0, 0)
-       ZEND_ARG_INFO(1, numkeys)
-       ZEND_ARG_INFO(0, allkeys)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto array SDL_GetKeyboardState([int &numkeys [, bool allkeys=true ]])
 
@@ -72,7 +57,7 @@ ZEND_END_ARG_INFO()
  *  \endcode
  extern DECLSPEC const Uint8 *SDLCALL SDL_GetKeyboardState(int *numkeys);
  */
-static PHP_FUNCTION(SDL_GetKeyboardState)
+PHP_FUNCTION(SDL_GetKeyboardState)
 {
 	zval *z_numkeys = NULL;
 	int i, nb, numkeys;
@@ -106,7 +91,7 @@ static PHP_FUNCTION(SDL_GetKeyboardState)
  *  \brief Get the current key modifier state for the keyboard.
  extern DECLSPEC SDL_Keymod SDLCALL SDL_GetModState(void);
  */
-static PHP_FUNCTION(SDL_GetModState)
+PHP_FUNCTION(SDL_GetModState)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -116,10 +101,6 @@ static PHP_FUNCTION(SDL_GetModState)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetModState, 0, 0, 1)
-       ZEND_ARG_INFO(0, modstate)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto void SDL_SetModState(int modstate)
 
  *  \brief Set the current key modifier state for the keyboard.
@@ -127,7 +108,7 @@ ZEND_END_ARG_INFO()
  *  \note This does not change the keyboard state, only the key modifier flags.
  extern DECLSPEC void SDLCALL SDL_SetModState(SDL_Keymod modstate);
  */
-static PHP_FUNCTION(SDL_SetModState)
+PHP_FUNCTION(SDL_SetModState)
 {
 	long modstate;
 
@@ -149,7 +130,7 @@ static PHP_FUNCTION(SDL_SetModState)
  *  \sa SDL_GetKeyName()
  extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromScancode(SDL_Scancode scancode);
  */
-static PHP_FUNCTION(SDL_GetKeyFromScancode)
+PHP_FUNCTION(SDL_GetKeyFromScancode)
 {
 	long scancode;
 
@@ -171,7 +152,7 @@ static PHP_FUNCTION(SDL_GetKeyFromScancode)
  *  \sa SDL_GetScancodeName()
  extern DECLSPEC SDL_Scancode SDLCALL SDL_GetScancodeFromKey(SDL_Keycode key);
  */
-static PHP_FUNCTION(SDL_GetScancodeFromKey)
+PHP_FUNCTION(SDL_GetScancodeFromKey)
 {
 	long key;
 
@@ -194,7 +175,7 @@ static PHP_FUNCTION(SDL_GetScancodeFromKey)
  *  \sa SDL_Scancode
  extern DECLSPEC const char *SDLCALL SDL_GetScancodeName(SDL_Scancode scancode);
  */
-static PHP_FUNCTION(SDL_GetScancodeName)
+PHP_FUNCTION(SDL_GetScancodeName)
 {
 	long scancode;
 
@@ -215,7 +196,7 @@ static PHP_FUNCTION(SDL_GetScancodeName)
  *  \sa SDL_Scancode
  extern DECLSPEC SDL_Scancode SDLCALL SDL_GetScancodeFromName(const char *name);
  */
-static PHP_FUNCTION(SDL_GetScancodeFromName)
+PHP_FUNCTION(SDL_GetScancodeFromName)
 {
 	char *name;
 	int name_len;
@@ -240,7 +221,7 @@ static PHP_FUNCTION(SDL_GetScancodeFromName)
  *  \sa SDL_Key
  extern DECLSPEC const char *SDLCALL SDL_GetKeyName(SDL_Keycode key);
  */
-static PHP_FUNCTION(SDL_GetKeyName)
+PHP_FUNCTION(SDL_GetKeyName)
 {
 	long key;
 
@@ -261,7 +242,7 @@ static PHP_FUNCTION(SDL_GetKeyName)
  *  \sa SDL_Keycode
  extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromName(const char *name);
  */
-static PHP_FUNCTION(SDL_GetKeyFromName)
+PHP_FUNCTION(SDL_GetKeyFromName)
 {
 	char *name;
 	int name_len;
@@ -284,7 +265,7 @@ static PHP_FUNCTION(SDL_GetKeyFromName)
  *  \sa SDL_HasScreenKeyboardSupport()
  extern DECLSPEC void SDLCALL SDL_StartTextInput(void);
  */
-static PHP_FUNCTION(SDL_StartTextInput)
+PHP_FUNCTION(SDL_StartTextInput)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -302,7 +283,7 @@ static PHP_FUNCTION(SDL_StartTextInput)
  *  \sa SDL_StopTextInput()
  extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputActive(void);
  */
-static PHP_FUNCTION(SDL_IsTextInputActive)
+PHP_FUNCTION(SDL_IsTextInputActive)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -321,7 +302,7 @@ static PHP_FUNCTION(SDL_IsTextInputActive)
  *  \sa SDL_HasScreenKeyboardSupport()
  extern DECLSPEC void SDLCALL SDL_StopTextInput(void);
  */
-static PHP_FUNCTION(SDL_StopTextInput)
+PHP_FUNCTION(SDL_StopTextInput)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -329,11 +310,6 @@ static PHP_FUNCTION(SDL_StopTextInput)
 	SDL_StopTextInput();
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetTextInputRect, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_SetTextInputRect(SDL_Rect rect)
 
@@ -343,7 +319,7 @@ ZEND_END_ARG_INFO()
  *  \sa SDL_StartTextInput()
  extern DECLSPEC void SDLCALL SDL_SetTextInputRect(SDL_Rect *rect);
  */
-static PHP_FUNCTION(SDL_SetTextInputRect)
+PHP_FUNCTION(SDL_SetTextInputRect)
 {
 	zval *z_rect;
 	SDL_Rect rect;
@@ -369,7 +345,7 @@ static PHP_FUNCTION(SDL_SetTextInputRect)
  *  \sa SDL_IsScreenKeyboardShown()
  extern DECLSPEC SDL_bool SDLCALL SDL_HasScreenKeyboardSupport(void);
  */
-static PHP_FUNCTION(SDL_HasScreenKeyboardSupport)
+PHP_FUNCTION(SDL_HasScreenKeyboardSupport)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -378,10 +354,6 @@ static PHP_FUNCTION(SDL_HasScreenKeyboardSupport)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IsScreenKeyboardShown, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto bool SDL_IsScreenKeyboardShown(SDL_Window window)
 
@@ -394,7 +366,7 @@ ZEND_END_ARG_INFO()
  *  \sa SDL_HasScreenKeyboardSupport()
  extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenKeyboardShown(SDL_Window *window);
  */
-static PHP_FUNCTION(SDL_IsScreenKeyboardShown)
+PHP_FUNCTION(SDL_IsScreenKeyboardShown)
 {
 	zval *z_window;
 	SDL_Window *window;
@@ -407,47 +379,6 @@ static PHP_FUNCTION(SDL_IsScreenKeyboardShown)
 		RETVAL_BOOL(SDL_IsScreenKeyboardShown(window));
 	}
 }
-/* }}} */
-
-
-/* generic arginfo */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_scancode, 0, 0, 1)
-       ZEND_ARG_INFO(0, scancode)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_key, 0, 0, 1)
-       ZEND_ARG_INFO(0, key)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_name, 0, 0, 1)
-       ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
-
-/* {{{ sdl_keyboard_functions[] */
-static zend_function_entry sdl_keyboard_functions[] = {
-	ZEND_FE(SDL_GetKeyboardFocus,                     arginfo_none)
-	ZEND_FE(SDL_GetKeyboardState,                     arginfo_SDL_GetKeyboardState)
-	ZEND_FE(SDL_GetModState,                          arginfo_none)
-	ZEND_FE(SDL_SetModState,                          arginfo_SDL_SetModState)
-	ZEND_FE(SDL_GetKeyFromScancode,                   arginfo_scancode)
-	ZEND_FE(SDL_GetScancodeFromKey,                   arginfo_key)
-	ZEND_FE(SDL_GetScancodeName,                      arginfo_scancode)
-	ZEND_FE(SDL_GetScancodeFromName,                  arginfo_name)
-	ZEND_FE(SDL_GetKeyName,                           arginfo_key)
-	ZEND_FE(SDL_GetKeyFromName,                       arginfo_name)
-	ZEND_FE(SDL_StartTextInput,                       arginfo_none)
-	ZEND_FE(SDL_IsTextInputActive,                    arginfo_none)
-	ZEND_FE(SDL_StopTextInput,                        arginfo_none)
-	ZEND_FE(SDL_SetTextInputRect,                     arginfo_SDL_SetTextInputRect)
-	ZEND_FE(SDL_HasScreenKeyboardSupport,             arginfo_none)
-	ZEND_FE(SDL_IsScreenKeyboardShown,                arginfo_SDL_IsScreenKeyboardShown)
-
-	ZEND_FE_END
-};
 /* }}} */
 
 

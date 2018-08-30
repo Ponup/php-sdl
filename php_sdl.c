@@ -255,7 +255,7 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
 	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
 	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
-	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_Rect3)
+	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_IntersectRect)
 	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
 	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
 	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
@@ -344,6 +344,107 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_IsScreenSaverEnabled,		arginfo_video_none)
 	ZEND_FE(SDL_EnableScreenSaver,			arginfo_video_none)
 	ZEND_FE(SDL_DisableScreenSaver,			arginfo_video_none)
+
+	// Power
+	ZEND_FE(SDL_GetPowerInfo,	arginfo_SDL_GetPowerInfo)
+
+	// Platform
+	ZEND_FE(SDL_GetPlatform,	arginfo_SDL_GetPlatform)
+
+	// Keyboard
+	ZEND_FE(SDL_GetKeyboardFocus,                     arginfo_none)
+	ZEND_FE(SDL_GetKeyboardState,                     arginfo_SDL_GetKeyboardState)
+	ZEND_FE(SDL_GetModState,                          arginfo_none)
+	ZEND_FE(SDL_SetModState,                          arginfo_SDL_SetModState)
+	ZEND_FE(SDL_GetKeyFromScancode,                   arginfo_scancode)
+	ZEND_FE(SDL_GetScancodeFromKey,                   arginfo_key)
+	ZEND_FE(SDL_GetScancodeName,                      arginfo_scancode)
+	ZEND_FE(SDL_GetScancodeFromName,                  arginfo_name)
+	ZEND_FE(SDL_GetKeyName,                           arginfo_key)
+	ZEND_FE(SDL_GetKeyFromName,                       arginfo_name)
+	ZEND_FE(SDL_StartTextInput,                       arginfo_none)
+	ZEND_FE(SDL_IsTextInputActive,                    arginfo_none)
+	ZEND_FE(SDL_StopTextInput,                        arginfo_none)
+	ZEND_FE(SDL_SetTextInputRect,                     arginfo_SDL_SetTextInputRect)
+	ZEND_FE(SDL_HasScreenKeyboardSupport,             arginfo_none)
+	ZEND_FE(SDL_IsScreenKeyboardShown,                arginfo_SDL_IsScreenKeyboardShown)
+
+	// Mouse/Cursor
+	ZEND_FE(SDL_CreateCursor,                   arginfo_SDL_Cursor__construct)
+	ZEND_FE(SDL_CreateSystemCursor,             arginfo_SDL_CreateSystemCursor)
+	ZEND_FE(SDL_CreateColorCursor,              arginfo_SDL_CreateColorCursor)
+	ZEND_FE(SDL_FreeCursor,                     arginfo_SDL_Cursor)
+	ZEND_FE(SDL_SetCursor,                      arginfo_SDL_Cursor)
+	ZEND_FE(SDL_GetCursor,                      arginfo_none)
+	ZEND_FE(SDL_GetDefaultCursor,               arginfo_none)
+	ZEND_FE(SDL_ShowCursor,                     arginfo_SDL_ShowCursor)
+	ZEND_FE(SDL_GetMouseFocus,                  arginfo_none)
+	ZEND_FE(SDL_GetMouseState,                  arginfo_SDL_GetMouseState)
+	ZEND_FE(SDL_GetRelativeMouseState,          arginfo_SDL_GetMouseState)
+	ZEND_FE(SDL_WarpMouseInWindow,              arginfo_SDL_WarpMouseInWindow)
+	ZEND_FE(SDL_SetRelativeMouseMode,           arginfo_SDL_SetRelativeMouseMode)
+	ZEND_FE(SDL_GetRelativeMouseMode,           arginfo_none)
+
+	// Mutex
+	ZEND_FE(SDL_CreateMutex,                        arginfo_none)
+	ZEND_FE(SDL_LockMutex,                          arginfo_SDL_mutex)
+	ZEND_FE(SDL_TryLockMutex,                       arginfo_SDL_mutex)
+	ZEND_FE(SDL_UnlockMutex,                        arginfo_SDL_mutex)
+	ZEND_FE(SDL_DestroyMutex,                       arginfo_SDL_mutex)
+
+	/* mutex aliases */
+	PHP_FALIAS(SDL_mutexP,      SDL_LockMutex,      arginfo_SDL_mutex)
+	PHP_FALIAS(SDL_mutexV,      SDL_UnlockMutex,    arginfo_SDL_mutex)
+
+	/* semaphore functions */
+	ZEND_FE(SDL_CreateSemaphore,                    arginfo_SDL_sem__construct)
+	ZEND_FE(SDL_SemWait,                            arginfo_SDL_sem)
+	ZEND_FE(SDL_SemTryWait,                         arginfo_SDL_sem)
+	ZEND_FE(SDL_SemPost,                            arginfo_SDL_sem)
+	ZEND_FE(SDL_SemValue,                           arginfo_SDL_sem)
+	ZEND_FE(SDL_SemWaitTimeout,                     arginfo_SDL_SemWaitTimeout)
+	ZEND_FE(SDL_DestroySemaphore,                   arginfo_SDL_sem)
+
+	/* condition functions */
+	ZEND_FE(SDL_CreateCond,                         arginfo_none)
+	ZEND_FE(SDL_CondWait,                           arginfo_SDL_CondWait)
+	ZEND_FE(SDL_CondSignal,                         arginfo_SDL_cond)
+	ZEND_FE(SDL_CondBroadcast,                      arginfo_SDL_cond)
+	ZEND_FE(SDL_CondWaitTimeout,                    arginfo_SDL_CondWaitTimeout)
+	ZEND_FE(SDL_DestroyCond,                        arginfo_SDL_cond)
+
+	// Rwops
+	ZEND_FE(SDL_AllocRW,                      arginfo_none)
+	ZEND_FE(SDL_FreeRW,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWFromFile,                   arginfo_SDL_RWFromFile)
+	ZEND_FE(SDL_RWFromFP,                     arginfo_SDL_RWFromFP)
+	ZEND_FE(SDL_RWFromMem,                    arginfo_SDL_RWFromMem)
+	ZEND_FE(SDL_RWFromConstMem,               arginfo_SDL_RWFromConstMem)
+	ZEND_FE(SDL_RWsize,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWseek,                       arginfo_SDL_RWseek)
+	ZEND_FE(SDL_RWtell,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWread,                       arginfo_SDL_RWread)
+	ZEND_FE(SDL_RWwrite,                      arginfo_SDL_RWwrite)
+	ZEND_FE(SDL_RWclose,                      arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU8,                       arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadLE16,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE16,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadLE32,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE32,                     arginfo_SDL_RWops)
+#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_ReadLE64,                     arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE64,                     arginfo_SDL_RWops)
+#endif
+	ZEND_FE(SDL_WriteU8,                      arginfo_SDL_write)
+	ZEND_FE(SDL_WriteLE16,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE16,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteLE32,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE32,                    arginfo_SDL_write)
+#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_WriteLE64,                    arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE64,                    arginfo_SDL_write)
+#endif
+
 
 	ZEND_FE_END
 };

@@ -17,17 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_rect.h                                          |
-  +----------------------------------------------------------------------+
-  | class SDL_Point                                                      |
-  | class SDL_Rect                                                       |
-  +----------------------------------------------------------------------+
-*/
-
-#include "php_sdl.h"
 #include "rect.h"
 
 static zend_class_entry *php_sdl_rect_ce;
@@ -82,7 +71,7 @@ zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
 
 zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 {
-	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
+	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv TSRMLS_CC);
@@ -110,7 +99,7 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
 {
-	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_point_ce) {
+	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_point_ce) {
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv TSRMLS_CC);
@@ -334,7 +323,7 @@ PHP_FUNCTION(SDL_UnionRect)
  */
 PHP_FUNCTION(SDL_EnclosePoints)
 {
-	zval *z_points, *z_clip, *z_result, **z_point;
+	zval *z_points, *z_clip, *z_result, *z_point;
 	long i, count;
 	int nb;
 	SDL_Rect clip, result;
@@ -355,11 +344,11 @@ PHP_FUNCTION(SDL_EnclosePoints)
 		if (!(z_point = zend_hash_index_find(Z_ARRVAL_P(z_points), i))) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld missing", i);
 
-		} else if (Z_TYPE_PP(z_point) != IS_OBJECT || Z_OBJCE_PP(z_point) != php_sdl_point_ce) {
+		} else if (Z_TYPE(z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld is not a SDL_Point object", i);
 
 		} else {
-			zval_to_sdl_point(*z_point, points+nb TSRMLS_CC);
+			zval_to_sdl_point(z_point, points+nb TSRMLS_CC);
 			nb++;
 		}
 	}

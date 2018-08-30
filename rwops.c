@@ -18,15 +18,6 @@
 */
 
 
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_rwops.h                                         |
-  +----------------------------------------------------------------------+
-  | class SDL_RWops                                                      |
-  +----------------------------------------------------------------------+
-*/
-
-#include "php_sdl.h"
 #include "rwops.h"
 
 static zend_class_entry *php_sdl_rwops_ce;
@@ -93,7 +84,7 @@ SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_rwops_free
 	 */
-static void php_sdl_rwops_free(void *object TSRMLS_DC)
+static void php_sdl_rwops_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) object;
 
@@ -274,10 +265,6 @@ PHP_FUNCTION(SDL_AllocRW)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFile, 0, 0, 2)
-       ZEND_ARG_INFO(0, path)
-       ZEND_ARG_INFO(0, mode)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_RWops SDL_RWFromFile(string path,mode)
 
@@ -297,11 +284,6 @@ PHP_FUNCTION(SDL_RWFromFile)
 	sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromConstMem, 0, 0, 1)
-       ZEND_ARG_INFO(0, buf)
-       ZEND_ARG_INFO(0, size)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_RWops SDL_RWFromConstMem(string buf [, int size ])
 
@@ -331,11 +313,6 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 	sdl_rwops_to_zval(rwops, return_value, 0, pbuf TSRMLS_CC);
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromMem, 0, 0, 2)
-       ZEND_ARG_INFO(1, buf)
-       ZEND_ARG_INFO(0, size)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_RWops SDL_RWFromMem(string &buf, int size)
 
@@ -400,11 +377,6 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 	}
 }
 /* }}} */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFP, 0, 0, 1)
-       ZEND_ARG_INFO(0, fp)
-       ZEND_ARG_INFO(0, autoclose)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_RWops SDL_RWFromFP(resource fp, bool autoclose)
 
@@ -476,17 +448,6 @@ PHP_FUNCTION(SDL_RWsize)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWseek, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, offset)
-       ZEND_ARG_INFO(0, whence)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_seek, 0, 0, 2)
-       ZEND_ARG_INFO(0, offset)
-       ZEND_ARG_INFO(0, whence)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_RWseek(SDL_RWops area, int offset, int whence)
 
  define SDL_RWseek(ctx, offset, whence) (ctx)->seek(ctx, offset, whence)
@@ -552,19 +513,6 @@ PHP_FUNCTION(SDL_RWclose)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWread, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
-       ZEND_ARG_INFO(1, buffer)
-       ZEND_ARG_INFO(0, size)
-       ZEND_ARG_INFO(0, number)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_read, 0, 0, 2)
-       ZEND_ARG_INFO(1, buffer)
-       ZEND_ARG_INFO(0, size)
-       ZEND_ARG_INFO(0, number)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_RWread(SDL_RWops area, string, &buf, [ int size=1 ,] int n)
 
  define SDL_RWread(ctx, ptr, size, n)   (ctx)->read(ctx, ptr, size, n)
@@ -603,20 +551,6 @@ PHP_FUNCTION(SDL_RWread)
 	RETURN_LONG(read);
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWwrite, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, buffer)
-       ZEND_ARG_INFO(0, size)
-       ZEND_ARG_INFO(0, number)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_write, 0, 0, 1)
-       ZEND_ARG_INFO(0, buffer)
-       ZEND_ARG_INFO(0, size)
-       ZEND_ARG_INFO(0, number)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int SDL_RWwrite(SDL_RWops arean string, buf [[, int size=1 ], int n])
 
@@ -801,16 +735,6 @@ PHP_FUNCTION(SDL_ReadBE64)
 /* }}} */
 #endif
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_write, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
-       ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops_writeint, 0, 0, 1)
-       ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_WriteU8(SDL_RWops area, int value)
 
  *  \name Write endian functions
@@ -968,9 +892,6 @@ PHP_FUNCTION(SDL_WriteBE64)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rwops_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWops, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, RWops, SDL_RWops, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ sdl_rwops_methods[] */
 static const zend_function_entry php_sdl_rwops_methods[] = {
@@ -1014,42 +935,6 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 };
 /* }}} */
 
-/* {{{ sdl_rwops_functions[] */
-zend_function_entry sdl_rwops_functions[] = {
-	ZEND_FE(SDL_AllocRW,                      arginfo_rwops_none)
-	ZEND_FE(SDL_FreeRW,                       arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWFromFile,                   arginfo_SDL_RWFromFile)
-	ZEND_FE(SDL_RWFromFP,                     arginfo_SDL_RWFromFP)
-	ZEND_FE(SDL_RWFromMem,                    arginfo_SDL_RWFromMem)
-	ZEND_FE(SDL_RWFromConstMem,               arginfo_SDL_RWFromConstMem)
-	ZEND_FE(SDL_RWsize,                       arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWseek,                       arginfo_SDL_RWseek)
-	ZEND_FE(SDL_RWtell,                       arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWread,                       arginfo_SDL_RWread)
-	ZEND_FE(SDL_RWwrite,                      arginfo_SDL_RWwrite)
-	ZEND_FE(SDL_RWclose,                      arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU8,                       arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadLE16,                     arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadBE16,                     arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadLE32,                     arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadBE32,                     arginfo_SDL_RWops)
-#if SIZEOF_LONG > 4
-	ZEND_FE(SDL_ReadLE64,                     arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadBE64,                     arginfo_SDL_RWops)
-#endif
-	ZEND_FE(SDL_WriteU8,                      arginfo_SDL_write)
-	ZEND_FE(SDL_WriteLE16,                    arginfo_SDL_write)
-	ZEND_FE(SDL_WriteBE16,                    arginfo_SDL_write)
-	ZEND_FE(SDL_WriteLE32,                    arginfo_SDL_write)
-	ZEND_FE(SDL_WriteBE32,                    arginfo_SDL_write)
-#if SIZEOF_LONG > 4
-	ZEND_FE(SDL_WriteLE64,                    arginfo_SDL_write)
-	ZEND_FE(SDL_WriteBE64,                    arginfo_SDL_write)
-#endif
-	ZEND_FE_END
-};
-/* }}} */
-
 #define REGISTER_RWOPS_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_rwops_ce, ZEND_STRL(const_name), value TSRMLS_CC)
@@ -1067,6 +952,7 @@ PHP_MINIT_FUNCTION(sdl_rwops)
 	php_sdl_rwops_handlers.read_property  = sdl_rwops_read_property;
 	php_sdl_rwops_handlers.get_properties = sdl_rwops_get_properties;
 	php_sdl_rwops_handlers.write_property = sdl_rwops_write_property;
+	php_sdl_rwops_handlers.free_obj = php_sdl_rwops_free;
 
 	zend_declare_property_long(php_sdl_rwops_ce, ZEND_STRL("type"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
 
@@ -1082,6 +968,6 @@ PHP_MINIT_FUNCTION(sdl_rwops)
 	REGISTER_LONG_CONSTANT("RW_SEEK_CUR",    RW_SEEK_CUR, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RW_SEEK_END",    RW_SEEK_END, CONST_CS | CONST_PERSISTENT);
 
-	return (zend_register_functions(NULL, sdl_rwops_functions, NULL, MODULE_PERSISTENT TSRMLS_CC));
+	return SUCCESS;
 }
 /* }}} */

@@ -17,16 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_mouse.h                                         |
-  +----------------------------------------------------------------------+
-  | SDL_Cursor                                                           |
-  +----------------------------------------------------------------------+
-*/
-
-#include "php_sdl.h"
 #include "mouse.h"
 #include "surface.h"
 #include "window.h"
@@ -92,7 +82,7 @@ SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
 
 
 /* {{{ php_sdl_cursor_free */
-static void php_sdl_cursor_free(void *object TSRMLS_DC)
+static void php_sdl_cursor_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_cursor *intern = (struct php_sdl_cursor *) object;
 
@@ -125,16 +115,6 @@ static zend_object* php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
 	return &intern->zo;
 }
 /* }}} */
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cursor__construct, 0, 0, 6)
-       ZEND_ARG_INFO(0, data)
-       ZEND_ARG_INFO(0, mask)
-       ZEND_ARG_INFO(0, w)
-       ZEND_ARG_INFO(0, h)
-       ZEND_ARG_INFO(0, hot_x)
-       ZEND_ARG_INFO(0, hot_y)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Cursor::__construct(void) */
 static PHP_METHOD(SDL_Cursor, __construct)
@@ -209,7 +189,7 @@ static PHP_METHOD(SDL_Cursor, __toString)
                                                       int w, int h, int hot_x,
                                                       int hot_y);
  */
-static PHP_FUNCTION(SDL_CreateCursor)
+PHP_FUNCTION(SDL_CreateCursor)
 {
 	char *data, *mask;
 	int data_len, mask_len;
@@ -234,9 +214,6 @@ static PHP_FUNCTION(SDL_CreateCursor)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSystemCursor, 0, 0, 1)
-       ZEND_ARG_INFO(0, id)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Cursor SDL_CreateSystemCursor(int id)
 
@@ -245,7 +222,7 @@ ZEND_END_ARG_INFO()
  *  \sa SDL_FreeCursor()
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateSystemCursor(SDL_SystemCursor id);
  */
-static PHP_FUNCTION(SDL_CreateSystemCursor)
+PHP_FUNCTION(SDL_CreateSystemCursor)
 {
 	long id;
 	SDL_Cursor *cursor;
@@ -259,12 +236,6 @@ static PHP_FUNCTION(SDL_CreateSystemCursor)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateColorCursor, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_INFO(0, hot_x)
-       ZEND_ARG_INFO(0, hot_y)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto SDL_Cursor SDL_CreateSystemCursor(int id)
 
  *  \brief Create a color cursor.
@@ -274,7 +245,7 @@ ZEND_END_ARG_INFO()
                                                            int hot_x,
                                                            int hot_y);
  */
-static PHP_FUNCTION(SDL_CreateColorCursor)
+PHP_FUNCTION(SDL_CreateColorCursor)
 {
 	long x, y;
 	zval *z_surface;
@@ -302,7 +273,7 @@ static PHP_FUNCTION(SDL_CreateColorCursor)
  *  \sa SDL_CreateCursor()
  extern DECLSPEC void SDLCALL SDL_FreeCursor(SDL_Cursor * cursor);
  */
-static PHP_FUNCTION(SDL_FreeCursor)
+PHP_FUNCTION(SDL_FreeCursor)
 {
 	struct php_sdl_cursor *intern;
 	zval *z_cursor;
@@ -323,7 +294,7 @@ static PHP_FUNCTION(SDL_FreeCursor)
  *  \brief Set the active cursor.
  extern DECLSPEC void SDLCALL SDL_SetCursor(SDL_Cursor * cursor);
  */
-static PHP_FUNCTION(SDL_SetCursor)
+PHP_FUNCTION(SDL_SetCursor)
 {
 	struct php_sdl_cursor *intern;
 	zval *z_cursor;
@@ -344,7 +315,7 @@ static PHP_FUNCTION(SDL_SetCursor)
  *  \brief Return the active cursor.
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetCursor(void);
  */
-static PHP_FUNCTION(SDL_GetCursor)
+PHP_FUNCTION(SDL_GetCursor)
 {
 	SDL_Cursor *cursor;
 
@@ -362,7 +333,7 @@ static PHP_FUNCTION(SDL_GetCursor)
  *  \brief Return the default cursor.
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetDefaultCursor(void);
  */
-static PHP_FUNCTION(SDL_GetDefaultCursor)
+PHP_FUNCTION(SDL_GetDefaultCursor)
 {
 	SDL_Cursor *cursor;
 
@@ -375,10 +346,6 @@ static PHP_FUNCTION(SDL_GetDefaultCursor)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowCursor, 0, 0, 1)
-       ZEND_ARG_INFO(0, toggle)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_ShowCursor(bool toogle)
 
  *  \brief Toggle whether or not the cursor is shown.
@@ -389,7 +356,7 @@ ZEND_END_ARG_INFO()
  *  \return 1 if the cursor is shown, or 0 if the cursor is hidden.
  extern DECLSPEC int SDLCALL SDL_ShowCursor(int toggle);
  */
-static PHP_FUNCTION(SDL_ShowCursor)
+PHP_FUNCTION(SDL_ShowCursor)
 {
 	zend_bool toggle;
 
@@ -415,11 +382,6 @@ PHP_FUNCTION(SDL_GetMouseFocus)
 }
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetMouseState, 0, 0, 0)
-       ZEND_ARG_INFO(1, x)
-       ZEND_ARG_INFO(1, y)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_GetMouseState(int &x, int &y)
 
  *  \brief Retrieve the current state of the mouse.
@@ -430,7 +392,7 @@ ZEND_END_ARG_INFO()
  *  selected mouse.  You can pass NULL for either x or y.
  extern DECLSPEC Uint32 SDLCALL SDL_GetMouseState(int *x, int *y);
  */
-static PHP_FUNCTION(SDL_GetMouseState)
+PHP_FUNCTION(SDL_GetMouseState)
 {
 	zval *z_x=NULL, *z_y=NULL;
 	int x, y;
@@ -462,7 +424,7 @@ static PHP_FUNCTION(SDL_GetMouseState)
  *  mouse deltas since the last call to SDL_GetRelativeMouseState().
  extern DECLSPEC Uint32 SDLCALL SDL_GetRelativeMouseState(int *x, int *y);
  */
-static PHP_FUNCTION(SDL_GetRelativeMouseState)
+PHP_FUNCTION(SDL_GetRelativeMouseState)
 {
 	zval *z_x=NULL, *z_y=NULL;
 	int x, y;
@@ -484,12 +446,6 @@ static PHP_FUNCTION(SDL_GetRelativeMouseState)
 }
 /* }}} */
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WarpMouseInWindow, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto void SDL_WarpMouseInWindow(SDL_Window window, int x, int y)
 
@@ -522,10 +478,6 @@ PHP_FUNCTION(SDL_WarpMouseInWindow)
 /* }}} */
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRelativeMouseMode, 0, 0, 1)
-       ZEND_ARG_INFO(0, enabled)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int SDL_SetRelativeMouseMode(bool enabled)
 
  *  \brief Set relative mouse mode.
@@ -544,7 +496,7 @@ ZEND_END_ARG_INFO()
  *  \sa SDL_GetRelativeMouseMode()
  extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled);
  */
-static PHP_FUNCTION(SDL_SetRelativeMouseMode)
+PHP_FUNCTION(SDL_SetRelativeMouseMode)
 {
 	zend_bool enabled;
 
@@ -563,7 +515,7 @@ static PHP_FUNCTION(SDL_SetRelativeMouseMode)
  *  \sa SDL_SetRelativeMouseMode()
 extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
  */
-static PHP_FUNCTION(SDL_GetRelativeMouseMode)
+PHP_FUNCTION(SDL_GetRelativeMouseMode)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -572,36 +524,8 @@ static PHP_FUNCTION(SDL_GetRelativeMouseMode)
 }
 
 
-/* generic arginfo */
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Cursor, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, cursor, SDL_Cursor, 0)
-ZEND_END_ARG_INFO()
-
-
-/* {{{ sdl_mouse_functions[] */
-static zend_function_entry sdl_mouse_functions[] = {
-	ZEND_FE(SDL_CreateCursor,                   arginfo_SDL_Cursor__construct)
-	ZEND_FE(SDL_CreateSystemCursor,             arginfo_SDL_CreateSystemCursor)
-	ZEND_FE(SDL_CreateColorCursor,              arginfo_SDL_CreateColorCursor)
-	ZEND_FE(SDL_FreeCursor,                     arginfo_SDL_Cursor)
-	ZEND_FE(SDL_SetCursor,                      arginfo_SDL_Cursor)
-	ZEND_FE(SDL_GetCursor,                      arginfo_none)
-	ZEND_FE(SDL_GetDefaultCursor,               arginfo_none)
-	ZEND_FE(SDL_ShowCursor,                     arginfo_SDL_ShowCursor)
-	ZEND_FE(SDL_GetMouseFocus,                  arginfo_none)
-	ZEND_FE(SDL_GetMouseState,                  arginfo_SDL_GetMouseState)
-	ZEND_FE(SDL_GetRelativeMouseState,          arginfo_SDL_GetMouseState)
-	ZEND_FE(SDL_WarpMouseInWindow,              arginfo_SDL_WarpMouseInWindow)
-	ZEND_FE(SDL_SetRelativeMouseMode,           arginfo_SDL_SetRelativeMouseMode)
-	ZEND_FE(SDL_GetRelativeMouseMode,           arginfo_none)
-
-	ZEND_FE_END
-};
-/* }}} */
 
 
 /* {{{ sdl_cursor_methods[] */
@@ -638,6 +562,7 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	ce.create_object = php_sdl_cursor_new;
 	php_sdl_cursor_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_cursor_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_cursor_handlers.free_obj = php_sdl_cursor_free; 
 
 	/* Cursor types for SDL_CreateSystemCursor.
 	   typedef enum SDL_SystemCursor; */

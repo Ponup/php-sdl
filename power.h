@@ -25,6 +25,15 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 0)
+	ZEND_ARG_INFO(1, secs)
+	ZEND_ARG_INFO(1, pct)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_GetPowerInfo);
+
 PHP_MINIT_FUNCTION(sdl_power);
 
 #ifdef  __cplusplus

@@ -18,17 +18,6 @@
 */
 
 
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_pixels.h                                        |
-  +----------------------------------------------------------------------+
-  | class SDL_Color                                                      |
-  | class SDL_Palette                                                    |
-  | class SDL_PixelFormat                                                |
-  | class SDL_Pixels (PHP specific for memory access)                    |
-  +----------------------------------------------------------------------+
-*/
-
 #include "pixels.h"
 #include "zend_interfaces.h"
 
@@ -665,7 +654,7 @@ PHP_FUNCTION(SDL_SetPixelFormatPalette)
 PHP_FUNCTION(SDL_SetPaletteColors)
 {
 	struct php_sdl_palette *intern;
-	zval *object, *z_colors, **z_color;
+	zval *object, *z_colors, *z_color;
 	SDL_Palette *palette;
 	SDL_Color *colors;
 	int i, nb;
@@ -696,10 +685,10 @@ PHP_FUNCTION(SDL_SetPaletteColors)
 		if (!(z_color = zend_hash_index_find(Z_ARRVAL_P(z_colors), i))) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Unable to find colors[%d]", i);
 
-		} else if (Z_TYPE_PP(z_color) != IS_OBJECT || Z_OBJCE_PP(z_color) != php_sdl_color_ce) {
+		} else if (Z_TYPE_P(z_color) != IS_OBJECT || Z_OBJCE_P(z_color) != php_sdl_color_ce) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "colors[%d] is not a SDL_Color object", i);
 		} else {
-			zval_to_sdl_color(*z_color, colors+nb TSRMLS_CC);
+			zval_to_sdl_color(z_color, colors+nb TSRMLS_CC);
 			nb++;
 		}
 	}
@@ -1149,7 +1138,7 @@ PHP_METHOD(SDL_Pixels, SetByte)
 
 /* {{{ php_sdl_palette_free
 	 */
-static void php_sdl_palette_free(void *object TSRMLS_DC)
+static void php_sdl_palette_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_palette *intern = (struct php_sdl_palette *) object;
 
@@ -1288,7 +1277,7 @@ void sdl_palette_write_property(zval *object, zval *member, zval *value, const z
 
 /* {{{ php_sdl_pixelformat_free
 	 */
-static void php_sdl_pixelformat_free(void *object TSRMLS_DC)
+static void php_sdl_pixelformat_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat *) object;
 
@@ -1456,7 +1445,7 @@ void sdl_pixelformat_write_property(zval *object, zval *member, zval *value, con
 
 /* {{{ php_sdl_pixels_free
 	 */
-static void php_sdl_pixels_free(void *object TSRMLS_DC)
+static void php_sdl_pixels_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) object;
 

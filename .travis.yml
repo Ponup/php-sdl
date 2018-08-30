@@ -15,14 +15,11 @@ install:
   - sudo apt-get install libsdl2-dev
 
 before_script:
-  #- wget http://libsdl.org/release/SDL2-2.0.8.tar.gz -O - | tar xz
-  #- cd SDL2-2.0.8 && ./configure && make -j && sudo make install && cd ..
   - phpize
   - ./configure --quiet
   - make all install
   - echo "extension=sdl.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
 script:
-  # - TEST_PHP_EXECUTABLE=$(which php) $TEST_PHP_EXECUTABLE run-tests.php -n -d extension_dir=$MODULES -d extension=sdl.so -q -x --show-diff
-  - TEST_PHP_EXECUTABLE=$(which php) make test
+  - ./run-tests.php -q -p $(which php) --show-diff
 

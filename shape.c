@@ -80,7 +80,7 @@ SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_windowshapemode_free
 	 */
-static void php_sdl_windowshapemode_free(void *object TSRMLS_DC)
+static void php_sdl_windowshapemode_free(zend_object *object TSRMLS_DC)
 {
 	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode *) object;
 

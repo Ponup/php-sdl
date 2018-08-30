@@ -25,6 +25,13 @@
 extern "C" {
 #endif
 
+#include "php_sdl.h"
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPlatform, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_GetPlatform);
+
 PHP_MINIT_FUNCTION(sdl_platform);
 
 #ifdef  __cplusplus

@@ -45,8 +45,10 @@ $wind->UpdateSurface();
 $cursor = SDL_Cursor::CreateSystem(SDL_Cursor::WAITARROW);
 $cursor->Set();
 
+$event = new SDL_Event;
+
 $color = SDL_MapRGB($surf->format, 0xef, 0xff, 0x87);
-for ($t = $time * $step; $t; $t--) {
+for($t = $time * $step; $t; $t--) {
 
     if (!($t % $step)) {
         $wind->SetTitle("Will be closed in " . ($t / $step) . "\"");
@@ -57,6 +59,9 @@ for ($t = $time * $step; $t; $t--) {
     $wind->UpdateSurfaceRects(array($rects[$time * $step - $t]));
 
     usleep(1000000 / $step);
+
+	while(SDL_PollEvent($event)) {
+		if($event->type == SDL_QUIT) break;
+	}
 }
-echo "Done\n";
 

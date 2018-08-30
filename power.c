@@ -17,13 +17,7 @@
   +----------------------------------------------------------------------+
 */
 
-#include "php_sdl.h"
 #include "power.h"
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPowerInfo, 0, 0, 0)
-	ZEND_ARG_INFO(1, secs)
-	ZEND_ARG_INFO(1, pct)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto string SDL_GetPowerInfo(int &sec, int &pct)
 
@@ -66,13 +60,6 @@ PHP_FUNCTION(SDL_GetPowerInfo)
 }
 /* }}} */
 
-
-/* {{{ sdl_power_functions[] */
-zend_function_entry sdl_power_functions[] = {
-	ZEND_FE(SDL_GetPowerInfo,	arginfo_SDL_GetPowerInfo)
-	ZEND_FE_END
-};
-/* }}} */
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_power)
