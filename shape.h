@@ -21,12 +21,13 @@
 #ifndef PHP_SDL_SHAPE_H
 #define PHP_SDL_SHAPE_H
 
-/* not included in default SDL.h */
 #include <SDL_shape.h>
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+#include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_windowshapemode_ce(void);
 zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC);

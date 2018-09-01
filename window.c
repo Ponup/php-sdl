@@ -17,15 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_video.h (only SDL_Window)                       |
-  +----------------------------------------------------------------------+
-  | class SDL_Window                                                     |
-  +----------------------------------------------------------------------+
-*/
-
 /* Functions not wrapped
 
  extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindowFrom(const void *data);
@@ -72,7 +63,6 @@ zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val TSRMLS_DC)
 
 		h = (unsigned long)SDL_GetWindowData(window, PHP_SDL_MAGICDATA);
 		if (h) {
-	//php7		Z_TYPE_P(z_val) = IS_OBJECT;
 			Z_OBJ_HANDLE_P(z_val) = h;
 			Z_OBJ_HT_P(z_val) = (zend_object_handlers *) &php_sdl_window_handlers;
 			zend_objects_store_add_ref(z_val TSRMLS_CC);
@@ -126,7 +116,7 @@ static void php_del_window_data(struct php_sdl_window *intern, void *data) {
 }
 
 /* {{{ sdl_window_read_property*/
-zval *sdl_window_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
+zval *sdl_window_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key TSRMLS_DC)
 {
 	struct php_sdl_window* intern = php_sdl_window_fetch_object(Z_OBJ_P(object TSRMLS_CC));
 	zval *retval, tmp_member, rv;

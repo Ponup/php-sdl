@@ -73,6 +73,9 @@ zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 fla
 
 		object_init_ex(z_val, php_sdl_glcontext_ce);
 		intern = (struct php_sdl_glcontext *)Z_OBJ_P(z_val TSRMLS_CC);
+// @todo check if this is needed instead:
+//		zend_object* zo = Z_OBJ_P(z_val TSRMLS_CC);
+//		intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
 		intern->glcontext = glcontext;
 		intern->flags = flags;
 
@@ -131,7 +134,7 @@ static zend_object* php_sdl_glcontext_new(zend_class_entry *class_type TSRMLS_DC
 	
 	php_sdl_glcontext_handlers.offset = XtOffsetOf(struct php_sdl_glcontext, zo);
     php_sdl_glcontext_handlers.free_obj = php_sdl_glcontext_free;
-	intern->zo.handlers = (zend_object_handlers *) &php_sdl_glcontext_handlers;
+	intern->zo.handlers = &php_sdl_glcontext_handlers;
 
 	return &intern->zo; 
 }

@@ -20,7 +20,6 @@ printf("Window:  $wind\n");
 printf("Surface: %dx%d\n", $surf->clip_rect->w, $surf->clip_rect->h);
 printf("Title:   %s\n", $wind->GetTitle());
 printf("Logo:    %dx%d\n", $logo->clip_rect->w, $logo->clip_rect->h);
-printf("\nPowered by PHP %s, SDL extension %s, SDL2 library %s\n", phpversion(), phpversion("sdl"), implode('.', $version));
 
 $time = 4;
 $step = 5;

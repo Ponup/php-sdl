@@ -47,7 +47,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 
 	switch(event->type) {
 		case SDL_MOUSEMOTION: {
-			zend_object motion;
+			zval motion;
 			object_init(&motion);
 			add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
   			add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
@@ -56,11 +56,11 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 			} break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP: {
-    		zend_object keysym;
+    		zval keysym;
     		object_init(&keysym);
 			add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
 
-    		zend_object key;
+    		zval key;
     		object_init(&key);
 			add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
 
@@ -118,21 +118,9 @@ static PHP_METHOD(SDL_Event, __toString)
 }
 /* }}} */
 
-zval *sdl_event_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
-{
-    struct php_sdl_event* intern = (struct php_sdl_event*)Z_OBJ_P(object TSRMLS_CC);\
-	zval *retval, retval2,  tmp_member, rv;
-
-    return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-}
-
 static HashTable *sdl_event_get_properties(zval *object TSRMLS_DC)
 {
-	HashTable *props;
-	zval zv;
-	//struct php_sdl_surface *intern = (struct php_sdl_surface *) zend_objects_get_address(object TSRMLS_CC);
-        struct php_sdl_event* intern = (struct php_sdl_event*)Z_OBJ_P(object TSRMLS_CC);\
-        
+	HashTable *props;    
 	props = zend_std_get_properties(object TSRMLS_CC);
         zval test;
         zend_string *key = zend_string_init("type", 4, 0);
@@ -140,12 +128,6 @@ static HashTable *sdl_event_get_properties(zval *object TSRMLS_DC)
         zend_hash_update(props, key, &test);
 	return props;
 }
-
-void sdl_event_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Window is read-only");
-}
-/* }}} */
 
 PHP_FUNCTION(SDL_PollEvent)
 {
@@ -218,9 +200,7 @@ PHP_MINIT_FUNCTION(sdl_event)
 	INIT_CLASS_ENTRY(ce_event, "SDL_Event", php_sdl_event_methods);
 	php_sdl_event_ce = zend_register_internal_class(&ce_event TSRMLS_CC);
 	memcpy(&php_sdl_event_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_event_handlers.read_property = sdl_event_read_property;
 	php_sdl_event_handlers.get_properties = sdl_event_get_properties;
-    php_sdl_event_handlers.write_property = sdl_event_write_property;
     php_sdl_event_handlers.offset = XtOffsetOf(struct php_sdl_event, zo);
 
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("type"), ZEND_ACC_PUBLIC TSRMLS_CC);

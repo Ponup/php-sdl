@@ -2,8 +2,8 @@
 SDL_version test suite
 --SKIPIF--
 <?php
-require 'skipif.php';
-skip_test_not_complete();
+require 'test-functions.php';
+skipIncompleteTest();
 ?>
 --INI--
 error_reporting = 32767;

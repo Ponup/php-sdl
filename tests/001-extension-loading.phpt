@@ -1,9 +1,8 @@
 --TEST--
 Extension is loaded.
-Check for SDL presence
 --SKIPIF--
 <?php
-require 'skipif.php';
+require 'test-functions.php';
 --FILE--
 <?php
 echo 'SDL extension version: ', phpversion('sdl'), PHP_EOL;

@@ -295,7 +295,7 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GL_SetAttribute,                         arginfo_SDL_GL_SetAttribute)
 	ZEND_FE(SDL_GL_GetAttribute,                         arginfo_SDL_GL_GetAttribute)
 	ZEND_FE(SDL_GL_CreateContext,                        arginfo_SDL_GLContext__construct)
-	ZEND_FE(SDL_GL_DeleteContext,                        arginfo_SDL_GLContext)
+	ZEND_FE(SDL_GL_DeleteContext,                        arginfo_SDL_GL_DeleteContext)
 	ZEND_FE(SDL_GL_MakeCurrent,                          arginfo_SDL_GL_MakeCurrent)
 	ZEND_FE(SDL_GL_GetCurrentWindow,                     arginfo_none)
 	ZEND_FE(SDL_GL_GetCurrentContext,                    arginfo_none)

@@ -17,15 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_surface.h                                       |
-  +----------------------------------------------------------------------+
-  | class SDL_Surface                                                    |
-  +----------------------------------------------------------------------+
-*/
-
 #include "php_sdl.h"
 #include "pixels.h"
 #include "rect.h"
@@ -1303,7 +1294,7 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type TSRMLS_DC)
 
 
 /* {{{ sdl_surface_read_property*/
-zval *sdl_surface_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
+zval *sdl_surface_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key TSRMLS_DC)
 {
 	zend_object* zobject = Z_OBJ_P(object);
 	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char*)zobject - zobject->handlers->offset);

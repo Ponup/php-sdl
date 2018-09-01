@@ -2,8 +2,8 @@
 Tests for functions beloning to the filesystem "module".
 --SKIPIF--
 <?php
-require 'skipif.php';
-skip_test_not_complete();
+require 'test-functions.php';
+skipIncompleteTest();
 ?>
 --FILE--
 <?php

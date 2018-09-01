@@ -2,8 +2,8 @@
 SDL_Palette test, object mode
 --SKIPIF--
 <?php
-require 'skipif.php';
-skip_test_not_complete();
+require 'test-functions.php';
+skipIncompleteTest();
 ?>
 --FILE--
 <?php

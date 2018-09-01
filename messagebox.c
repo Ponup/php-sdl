@@ -17,18 +17,6 @@
   +----------------------------------------------------------------------+
 */
 
-
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_messagebox.h                                    |
-  +----------------------------------------------------------------------+
-  | SDL_MessageBoxButtonData                                             |
-  | SDL_MessageBoxColor                                                  |
-  | SDL_MessageBoxData                                                   |
-  +----------------------------------------------------------------------+
-*/
-
-#include "php_sdl.h"
 #include "messagebox.h"
 #include "window.h"
 
@@ -213,7 +201,6 @@ static void php_sdl_messageboxdata_free(zend_object *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -478,13 +465,13 @@ static PHP_METHOD(SDL_MessageBoxData, __toString)
 /* }}} */
 
 /* {{{ sdl_messageboxdata_read_property */
-static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
+static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int type, void** cache_slot, zval *rv TSRMLS_DC)
 {
 	struct php_sdl_messageboxdata *intern = (struct php_sdl_messageboxdata *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
+	zval *retval, tmp_member;
 
 	if (!intern->data) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, &key, &rv TSRMLS_CC);
+		return std_object_handlers.read_property(object, member, type, cache_slot, rv TSRMLS_CC);
 	}
 
 	if (Z_TYPE_P(member) != IS_STRING) {
@@ -492,7 +479,7 @@ static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int ty
 		zval_copy_ctor(&tmp_member);
 		convert_to_string(&tmp_member);
 		member = &tmp_member;
-		key = NULL;
+		rv = NULL;
 	}
 
 	ALLOC_INIT_ZVAL(retval);
@@ -538,7 +525,7 @@ static zval *sdl_messageboxdata_read_property(zval *object, zval *member, int ty
 	} else {
 		FREE_ZVAL(retval);
 
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
+		retval = std_object_handlers.read_property(object, member, type, cache_slot, rv TSRMLS_CC);
 		if (member == &tmp_member) {
 			zval_dtor(member);
 		}
@@ -620,7 +607,7 @@ static HashTable *sdl_messageboxdata_get_properties(zval *object TSRMLS_DC)
 
 
 /* {{{ sdl_messageboxdata_write_property */
-static void sdl_messageboxdata_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
+static void sdl_messageboxdata_write_property(zval *object, zval *member, zval *value, zval *key TSRMLS_DC)
 {
 	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_MessageBoxData is read-only");
 }
@@ -663,7 +650,7 @@ PHP_FUNCTION(SDL_ShowMessageBox)
 	SDL_MessageBoxData *data;
 	int id, res;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz", &z_data, php_sdl_messageboxdata_ce, &z_id) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz/", &z_data, php_sdl_messageboxdata_ce, &z_id) == FAILURE) {
 		return;
 	}
 	FETCH_DATA(data, z_data, 1);
@@ -781,6 +768,7 @@ PHP_MINIT_FUNCTION(sdl_messagebox)
 	php_sdl_messageboxdata_handlers.read_property  = sdl_messageboxdata_read_property;
 	php_sdl_messageboxdata_handlers.get_properties = sdl_messageboxdata_get_properties;
 	php_sdl_messageboxdata_handlers.write_property = sdl_messageboxdata_write_property;
+	php_sdl_messageboxdata_handlers.free_obj = php_sdl_messageboxdata_free;
 
 	zend_declare_property_long(php_sdl_messageboxdata_ce, ZEND_STRL("flags"),      0,  ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_null(php_sdl_messageboxdata_ce, ZEND_STRL("title"),          ZEND_ACC_PUBLIC TSRMLS_CC);

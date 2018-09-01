@@ -16,7 +16,7 @@ SDL_RenderClear($renderer);
 // Draw line
 SDL_SetRenderDrawColor($renderer, 255, 0, 0, 255);
 for($i = 0; $i < WINDOW_WIDTH; ++$i) {
-    SDL_RenderDrawPoint($renderer, $i, $i);
+	SDL_RenderDrawPoint($renderer, $i, $i);
 }
 SDL_RenderPresent($renderer);
 

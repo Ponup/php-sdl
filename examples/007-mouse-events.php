@@ -6,10 +6,8 @@ $quit = false;
 $x = 288;
 $y = 208;
 
-// init SDL
-
 SDL_Init(SDL_INIT_VIDEO);
-$window = SDL_CreateWindow("SDL2 Keyboard/Mouse events", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+$window = SDL_CreateWindow("Keyboard and mouse events", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 $renderer = SDL_CreateRenderer($window, -1, 0);
 
 $image = SDL_LoadBMP("spaceship.bmp");
@@ -47,7 +45,6 @@ while (!$quit) {
     SDL_Delay(5);
 }
 
-// cleanup SDL
 SDL_DestroyTexture($texture);
 SDL_DestroyRenderer($renderer);
 SDL_DestroyWindow($window);

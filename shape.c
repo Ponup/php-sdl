@@ -18,16 +18,6 @@
 */
 
 
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_shape.h (only SDL_Window)                       |
-  +----------------------------------------------------------------------+
-  | class SDL_WindowShapeMode                                            |
-  +----------------------------------------------------------------------+
-*/
-
-
-#include "php_sdl.h"
 #include "pixels.h"
 #include "shape.h"
 #include "window.h"
@@ -35,16 +25,14 @@
 static zend_class_entry *php_sdl_windowshapemode_ce;
 static zend_object_handlers php_sdl_windowshapemode_handlers;
 struct php_sdl_windowshapemode {
-	zend_object          zo;
 	SDL_WindowShapeMode  mode;
+	zend_object          zo;
 };
-
 
 zend_class_entry *get_php_sdl_windowshapemode_ce(void)
 {
 	return php_sdl_windowshapemode_ce;
 }
-
 
 /* {{{ sdl_windowshapemode_to_zval */
 zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC)
@@ -63,16 +51,16 @@ zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSR
 }
 /* }}} */
 
-
 /* {{{ zval_to_sdl_windowshapemode */
 SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
 {
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_windowshapemode_ce) {
-		struct php_sdl_windowshapemode *intern;
+		zend_object* zo = Z_OBJ_P(z_val);
 
-		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val TSRMLS_CC);
+		struct php_sdl_windowshapemode *intern;
+		intern = (struct php_sdl_windowshapemode*)((char*)zo - zo->handlers->offset);
 		return &intern->mode;
-		}
+	}
 	return NULL;
 }
 /* }}} */
@@ -80,38 +68,36 @@ SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_windowshapemode_free
 	 */
-static void php_sdl_windowshapemode_free(zend_object *object TSRMLS_DC)
+static void php_sdl_windowshapemode_free(zend_object *zo TSRMLS_DC)
 {
-	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode *) object;
+	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode*)((char*)zo - XtOffsetOf(struct php_sdl_windowshapemode, zo));
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
 
 /* {{{ php_sdl_windowshapemode_new
  */
-static zend_object php_sdl_windowshapemode_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_windowshapemode_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	zend_object retval;
 	struct php_sdl_windowshapemode *intern;
 
-	intern = ecalloc(1, sizeof(*intern));
+	intern = ecalloc(1, sizeof(struct php_sdl_windowshapemode) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-//	retval.handle = zend_objects_store_put(intern, NULL, php_sdl_windowshapemode_free, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &php_sdl_windowshapemode_handlers;
+	intern->zo.handlers = (zend_object_handlers *) &php_sdl_windowshapemode_handlers;
 
-	return retval;
+	return &intern->zo;
 }
 /* }}} */
 
 
 /* {{{ sdl_windowshapemode_read_property*/
-zval *sdl_windowshapemode_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
+zval *sdl_windowshapemode_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key TSRMLS_DC)
 {
 	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode *) zend_objects_get_address(object TSRMLS_CC);
 	zval *retval, tmp_member, rv;
@@ -212,7 +198,7 @@ ZEND_END_ARG_INFO()
 static PHP_METHOD(SDL_WindowShapeMode, __construct)
 {
 	struct php_sdl_windowshapemode *intern;
-	long mode;
+	zend_long mode;
 	zval *z_param;
 	zend_error_handling error_handling;
 
@@ -231,7 +217,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 		intern->mode.parameters.binarizationCutoff = (Uint8)Z_LVAL_P(z_param);
 
 	} else if (mode == ShapeModeColorKey) {
-		if (Z_TYPE_P(z_param) == IS_OBJECT && Z_OBJCE_P(z_param) == get_php_sdl_color_ce()) {
+		if (Z_TYPE_P( z_param) == IS_OBJECT && Z_OBJCE_P(z_param) == get_php_sdl_color_ce()) {
 			intern->mode.mode = ShapeModeColorKey;
 			zval_to_sdl_color(z_param, &intern->mode.parameters.colorKey TSRMLS_CC);
 		} else {
@@ -279,8 +265,6 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 }
 /* }}} */
 
-
-
 /* generic arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -294,31 +278,24 @@ static const zend_function_entry php_sdl_windowshapemode_methods[] = {
 };
 /* }}} */
 
-
-/* {{{ sdl_shape_functions[] */
-zend_function_entry sdl_shape_functions[] = {
-	ZEND_FE_END
-};
-/* }}} */
-
-
 #define REGISTER_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("ShapeMode" const_name, value, CONST_CS | CONST_PERSISTENT); \
 	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, ZEND_STRL(const_name), value TSRMLS_CC); \
 
-
-	/* {{{ MINIT */
+/* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_shape)
 {
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "SDL_WindowShapeMode", php_sdl_windowshapemode_methods);
-	ce.create_object = php_sdl_windowshapemode_new;
 	php_sdl_windowshapemode_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	php_sdl_windowshapemode_ce->create_object = php_sdl_windowshapemode_new;
 	memcpy(&php_sdl_windowshapemode_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_windowshapemode_handlers.read_property  = sdl_windowshapemode_read_property;
 	php_sdl_windowshapemode_handlers.get_properties = sdl_windowshapemode_get_properties;
 	php_sdl_windowshapemode_handlers.write_property = sdl_windowshapemode_write_property;
+	php_sdl_windowshapemode_handlers.free_obj = php_sdl_windowshapemode_free;
+	php_sdl_windowshapemode_handlers.offset = XtOffsetOf(struct php_sdl_windowshapemode, zo);
 
 	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("mode"),               0, ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("colorKey"),           0, ZEND_ACC_PUBLIC TSRMLS_CC);

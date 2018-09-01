@@ -25,19 +25,21 @@
 extern "C" {
 #endif
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
-ZEND_END_ARG_INFO()
-
 zend_class_entry *get_php_sdl_glcontext_ce(void);
 zend_bool  sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags TSRMLS_DC);
 SDL_GLContext zval_to_sdl_glcontext(zval *z_val TSRMLS_DC);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_DeleteContext, 0, 0, 1)
+       ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_ExtensionSupported, 0, 0, 1)
        ZEND_ARG_INFO(0, extension)
 ZEND_END_ARG_INFO()
-
-
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_SetAttribute, 0, 0, 2)
        ZEND_ARG_INFO(0, attr)
