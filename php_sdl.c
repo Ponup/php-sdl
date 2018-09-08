@@ -167,8 +167,6 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GetWindowID,				arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowFromID,			arginfo_SDL_GetWindowFromID)
 	ZEND_FE(SDL_GetWindowFlags,				arginfo_SDL_Window)
-	ZEND_FE(SDL_SetWindowData,				arginfo_SDL_SetWindowData)
-	ZEND_FE(SDL_GetWindowData,				arginfo_SDL_GetWindowData)
 	ZEND_FE(SDL_SetWindowIcon,				arginfo_SDL_SetWindowIcon)
 	ZEND_FE(SDL_SetWindowPosition,			arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowPosition,			arginfo_SDL_GetWindowPosition)

@@ -17,19 +17,13 @@
   +----------------------------------------------------------------------+
 */
 
-/* Functions not wrapped
-
- extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindowFrom(const void *data);
-*/
-
-#include "php_sdl.h"
+#include "window.h"
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
 #include "shape.h"
 #include "surface.h"
 #include "video.h"
-#include "window.h"
 
 /* used to associate PHP object handle to SDL_Window */
 #define PHP_SDL_MAGICDATA "__php__handle"
@@ -39,10 +33,6 @@ static zend_object_handlers php_sdl_window_handlers;
 struct php_sdl_window {
 	SDL_Window   *window;
 	Uint32        flags;
-	/* allocation list, for window data */
-	int           ndata;
-	int           maxdata;
-	void        **data;
 	zend_object   zo;
 };
 
@@ -83,37 +73,10 @@ SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 		struct php_sdl_window *intern;
 		intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
 		return intern->window;
-		}
+	}
 	return NULL;
 }
 /* }}} */
-
-static void php_add_window_data(struct php_sdl_window *intern, void *data) {
-	if (intern->ndata == intern->maxdata) {
-		if (intern->ndata) {
-			intern->maxdata += 8;
-			intern->data = erealloc(intern->data, sizeof(void *)*intern->maxdata);
-		} else {
-			intern->maxdata = 8;
-			intern->data = emalloc(sizeof(void *)*intern->maxdata);
-		}
-	}
-	intern->data[intern->ndata++] = data;
-}
-
-static void php_del_window_data(struct php_sdl_window *intern, void *data) {
-
-	int i;
-
-	for (i=0 ; i<intern->ndata && intern->data[i]!=data; i++);
-
-	if (i<intern->ndata && intern->data[i]==data) {
-		intern->ndata--;
-		for (; i<intern->ndata ; i++) {
-			intern->data[i] = intern->data[i+1];
-		}
-	}
-}
 
 /* {{{ sdl_window_read_property*/
 zval *sdl_window_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key TSRMLS_DC)
@@ -217,13 +180,6 @@ static HashTable *sdl_window_get_properties(zval *object TSRMLS_DC)
 		zend_hash_update(props, z_string, &zv);
 	}
 	return props;
-}
-/* }}} */
-
-/* {{{ sdl_window_write_property */
-void sdl_window_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Window is read-only");
 }
 /* }}} */
 
@@ -433,90 +389,6 @@ PHP_FUNCTION(SDL_SetWindowIcon)
 		SDL_SetWindowIcon(window, icon);
 	} else {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Surface object");
-	}
-}
-/* }}} */
-
-/* {{{ proto string SDL_SetWindowData(SDL Window window, string name, string value)
-
- *  \brief Associate an arbitrary named pointer with a window.
- *
- *  \param window   The window to associate with the pointer.
- *  \param name     The name of the pointer.
- *  \param userdata The associated pointer.
- *
- *  \return The previous value associated with 'name'
- *
- *  \note The name is case-sensitive.
- *
- *  \sa SDL_GetWindowData()
- extern DECLSPEC void* SDLCALL SDL_SetWindowData(SDL_Window * window,
-                                                 const char *name,
-                                                 void *userdata);
- */
-PHP_FUNCTION(SDL_SetWindowData)
-{
-	struct php_sdl_window *intern;
-	zval *z_window;
-	char *name, *value, *old;
-	int name_len, value_len;
-	SDL_Window *window;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oss", &z_window, php_sdl_window_ce, &name, &name_len, &value, &value_len)) {
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-	if (!strcmp(name, PHP_SDL_MAGICDATA)) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid name (reserved for internal use)");
-		return;
-	}
-	value = estrndup(value, value_len);
-	old = SDL_SetWindowData(window, name, value);
-	php_add_window_data(intern, value);
-	if (old) {
-		php_del_window_data(intern, old);
-		RETVAL_STRING(old);
-	} else {
-		RETVAL_NULL();
-	}
-}
-/* }}} */
-
-/* {{{ proto string SDL_GetWindowData(SDL Window window, string name)
-
- *  \brief Retrieve the data pointer associated with a window.
- *
- *  \param window   The window to query.
- *  \param name     The name of the pointer.
- *
- *  \return The value associated with 'name'
- *
- *  \sa SDL_SetWindowData()
- extern DECLSPEC void *SDLCALL SDL_GetWindowData(SDL_Window * window,
-                                                 const char *name);
- */
-PHP_FUNCTION(SDL_GetWindowData)
-{
-	struct php_sdl_window *intern;
-	zval *z_window;
-	char *name, *value;
-	int name_len;
-	SDL_Window *window;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os", &z_window, php_sdl_window_ce, &name, &name_len)) {
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-	if (!strcmp(name, PHP_SDL_MAGICDATA)) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid name (reserved for internal use)");
-		return;
-	}
-	name = estrndup(name, name_len);
-	value = SDL_GetWindowData(window, name);
-	if (value) {
-		RETVAL_STRING(value);
-	} else {
-		RETVAL_NULL();
 	}
 }
 /* }}} */
@@ -1065,7 +937,7 @@ PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 {
 	struct php_sdl_window *intern;
 	zval *z_window, *z_array;
-	long num=0;
+	zend_long num = 0;
 	int nb, max;
 	SDL_Window *window;
 	SDL_Rect *rects;
@@ -1705,8 +1577,6 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetPixelFormat,     SDL_GetWindowPixelFormat,     arginfo_window_none)
 	PHP_FALIAS(GetID,              SDL_GetWindowID,              arginfo_window_none)
 	PHP_FALIAS(GetFlags,           SDL_GetWindowFlags,           arginfo_window_none)
-	PHP_FALIAS(SetData,            SDL_SetWindowData,            arginfo_SDL_Window_SetData)
-	PHP_FALIAS(GetData,            SDL_GetWindowData,            arginfo_SDL_Window_GetData)
 	PHP_FALIAS(SetIcon,            SDL_SetWindowIcon,            arginfo_SDL_Window_SetIcon)
 	PHP_FALIAS(SetPosition,        SDL_SetWindowPosition,        arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(GetPosition,        SDL_GetWindowPosition,        arginfo_SDL_Window_GetPosition)
@@ -1750,15 +1620,8 @@ static void php_sdl_window_free(zend_object* zo TSRMLS_DC)
 {
 	struct php_sdl_window *intern = (struct php_sdl_window*)((char*)zo - XtOffsetOf(struct php_sdl_window, zo));
 
-	if (intern->window) {
-		int i;
-
-		if (!(intern->flags & SDL_DONTFREE)) {
-			SDL_DestroyWindow(intern->window);
-		}
-		for (i=0 ; i<intern->ndata ; i++) {
-			efree(intern->data[i]);
-		}
+	if (intern->window && !(intern->flags & SDL_DONTFREE)) {
+		SDL_DestroyWindow(intern->window);
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
@@ -1777,8 +1640,6 @@ static zend_object* php_sdl_window_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->window  = NULL;
-	intern->ndata   = 0;
-	intern->maxdata = 0;
 
 	php_sdl_window_handlers.offset = XtOffsetOf(struct php_sdl_window, zo);
     php_sdl_window_handlers.free_obj = php_sdl_window_free;
@@ -1811,7 +1672,6 @@ PHP_MINIT_FUNCTION(sdl_window)
 	memcpy(&php_sdl_window_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_window_handlers.read_property  = sdl_window_read_property;
 	php_sdl_window_handlers.get_properties = sdl_window_get_properties;
-	php_sdl_window_handlers.write_property = sdl_window_write_property;
 	php_sdl_window_handlers.free_obj = php_sdl_window_free;
 	php_sdl_window_handlers.offset = XtOffsetOf(struct php_sdl_window, zo);
 	

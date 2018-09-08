@@ -34,14 +34,16 @@
 extern DECLSPEC int SDLCALL SDL_Init(Uint32 flags);
 */
 PHP_FUNCTION(SDL_Init) {
-	zend_long flags = SDL_INIT_EVERYTHING;
+	zend_long z_flags = (zend_long)SDL_INIT_EVERYTHING;
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_LONG(flags)
+		Z_PARAM_LONG(z_flags)
 	ZEND_PARSE_PARAMETERS_END();
 
-	RETURN_LONG(SDL_Init((Uint32)flags));
+	Uint32 flags = (Uint32)z_flags;
+
+	RETURN_LONG(SDL_Init(flags));
 }
 /* }}} */
 
@@ -102,7 +104,7 @@ PHP_FUNCTION(SDL_QuitSubSystem) {
 extern DECLSPEC Uint32 SDLCALL SDL_WasInit(Uint32 flags);
 */
 PHP_FUNCTION(SDL_WasInit) {
-	long flags = 0;
+	zend_long flags = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
 		RETURN_FALSE;
