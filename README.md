@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/phpsdl/extension.svg?branch=master)](https://travis-ci.org/phpsdl/extension)
+[![Build Status](https://travis-ci.org/Ponup/phpsdl.svg?branch=master)](https://travis-ci.org/Ponup/phpsdl)
 
 PHP-SDL
 =======
