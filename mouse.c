@@ -24,11 +24,10 @@
 static zend_class_entry *php_sdl_cursor_ce;
 static zend_object_handlers php_sdl_cursor_handlers;
 struct php_sdl_cursor {
-	zend_object   zo;
 	SDL_Cursor   *cursor;
 	Uint32        flags;
+	zend_object   zo;
 };
-
 
 /* {{{ get_php_sdl_cursor_ce */
 zend_class_entry *get_php_sdl_cursor_ce(void)
@@ -37,10 +36,10 @@ zend_class_entry *get_php_sdl_cursor_ce(void)
 }
 /* }}} */
 
-
 #define FETCH_CURSOR(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_cursor *)Z_OBJ_P(__id TSRMLS_CC);\
+		zend_object* zo = Z_OBJ_P(__id);\
+		intern = (struct php_sdl_cursor *)((char*)zo - zo->handlers->offset);\
         __ptr = intern->cursor; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
@@ -55,7 +54,8 @@ zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRML
 		struct php_sdl_cursor *intern;
 
 		object_init_ex(z_val, php_sdl_cursor_ce);
-		intern = (struct php_sdl_cursor *)Z_OBJ_P(z_val TSRMLS_CC);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_cursor *)((char*)zo - zo->handlers->offset);
 		intern->cursor = cursor;
 		intern->flags  = flags;
 
@@ -73,7 +73,8 @@ SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
 	struct php_sdl_cursor *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_cursor_ce) {
-		intern = (struct php_sdl_cursor *)Z_OBJ_P(z_val TSRMLS_CC);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_cursor*)((char*)zo - zo->handlers->offset);
 		return intern->cursor;
 	}
 	return NULL;
@@ -84,16 +85,13 @@ SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
 /* {{{ php_sdl_cursor_free */
 static void php_sdl_cursor_free(zend_object *object TSRMLS_DC)
 {
-	struct php_sdl_cursor *intern = (struct php_sdl_cursor *) object;
+	struct php_sdl_cursor *intern = (struct php_sdl_cursor *)((char*)object - object->handlers->offset);
 
-	if (intern->cursor) {
-		if (!(intern->flags & SDL_DONTFREE)) {
-			SDL_FreeCursor(intern->cursor);
-		}
+	if (intern->cursor && !(intern->flags & SDL_DONTFREE)) {
+		SDL_FreeCursor(intern->cursor);
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -110,7 +108,8 @@ static zend_object* php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
 	object_properties_init(&intern->zo, class_type);
 
 	intern->cursor = NULL;
-	intern->zo.handlers = (zend_object_handlers *) &php_sdl_cursor_handlers;
+	php_sdl_cursor_handlers.offset = XtOffsetOf(struct php_sdl_cursor, zo);
+	intern->zo.handlers = &php_sdl_cursor_handlers;
 
 	return &intern->zo;
 }
@@ -224,7 +223,7 @@ PHP_FUNCTION(SDL_CreateCursor)
  */
 PHP_FUNCTION(SDL_CreateSystemCursor)
 {
-	long id;
+	zend_long id;
 	SDL_Cursor *cursor;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id)) {
@@ -305,7 +304,7 @@ PHP_FUNCTION(SDL_SetCursor)
 	}
 	FETCH_CURSOR(cursor, z_cursor, 1);
 
-	SDL_SetCursor(intern->cursor);
+	SDL_SetCursor(cursor);
 }
 /* }}} */
 
@@ -559,10 +558,11 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "SDL_Cursor", php_sdl_cursor_methods);
-	ce.create_object = php_sdl_cursor_new;
 	php_sdl_cursor_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	php_sdl_cursor_ce->create_object = php_sdl_cursor_new;
 	memcpy(&php_sdl_cursor_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_cursor_handlers.free_obj = php_sdl_cursor_free; 
+	php_sdl_cursor_handlers.offset = XtOffsetOf(struct php_sdl_cursor, zo);
 
 	/* Cursor types for SDL_CreateSystemCursor.
 	   typedef enum SDL_SystemCursor; */
