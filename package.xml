@@ -19,8 +19,8 @@
   <date>2018-09-22</date>
   <time>12:00:00</time>
   <version>
-    <release>2.1.0dev</release>
-    <api>2.1.0dev</api>
+    <release>2.1.0-dev</release>
+    <api>2.1.0-dev</api>
   </version>
   <stability>
     <release>devel</release>
