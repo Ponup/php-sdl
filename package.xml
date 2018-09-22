@@ -2,8 +2,8 @@
 <package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
   <name>sdl</name>
   <channel>pecl.php.net</channel>
-  <summary>Simple DirectMedia Layer for PHP</summary>
-  <description>This extension allows you to execute multimedia PHP applications using the SDL2 library API.</description>
+  <summary>SDL for PHP</summary>
+  <description>Bindings of the SDL2 (Simple DirectMedia Layer) library for PHP.</description>
   <lead>
     <name>Santiago Lizardo</name>
     <user>santiagolizardo</user>
@@ -19,8 +19,8 @@
   <date>2018-09-22</date>
   <time>12:00:00</time>
   <version>
-    <release>2.1.0-dev</release>
-    <api>2.1.0-dev</api>
+    <release>2.1.0</release>
+    <api>2.1.0</api>
   </version>
   <stability>
     <release>devel</release>

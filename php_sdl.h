@@ -32,7 +32,7 @@ extern "C" {
 #include <php.h>
 #include <zend_exceptions.h>
 
-#define PHP_SDL_VERSION "2.1.0-dev"
+#define PHP_SDL_VERSION "2.1.0"
 
 #if defined(__APPLE__) && defined(__MACH__)
 #include <SDL2/SDL.h>
