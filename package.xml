@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
-<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
-    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
   <name>sdl</name>
   <channel>pecl.php.net</channel>
   <summary>Simple DirectMedia Layer for PHP</summary>
@@ -25,125 +19,116 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <date>2013-11-30</date>
   <time>12:50:00</time>
   <version>
-    <release>2.0.0dev</release>
-    <api>2.0.0dev</api>
+    <release>2.1.0dev</release>
+    <api>2.1.0dev</api>
   </version>
   <stability>
     <release>devel</release>
     <api>devel</api>
   </stability>
-  <license>PHP 3.01</license>
+  <license uri="http://www.php.net/license">PHP</license>
   <notes>
-- initial version for SDL2, rewrite from scratch providing procedural style and object oriented style
-- implemented classes:
-  SDL_Color
-  SDL_cond
-  SDL_Cursor
-  SDL_DisplayMode
-  SDL_GLContext
-  SDL_MessageBoxButtonData
-  SDL_MessageBoxColor
-  SDL_MessageBoxData
-  SDL_mutex
-  SDL_Palette
-  SDL_PixelFormat
-  SDL_Pixels (PHP specific)
-  SDL_Point
-  SDL_Rect
-  SDL_RWops
-  SDL_sem
-  SDL_Surface
-  SDL_Window
-  SDL_WindowShapeMode
+	  - Code updated to support PHP7.
+	  - Code that could be implemented in userland was removed from the extension.
+	  - Unit tests improvements/changes.
   </notes>
   <contents>
     <dir name="/">
-      <file role='doc' name='CREDITS'/>
-      <file role='doc' name='LICENSE'/>
-      <file role='doc' name='EXPERIMENTAL'/>
-      <file role='src' name='config.m4'/>
-      <file role='src' name='php_sdl.c'/>
-      <file role='src' name='php_sdl.h'/>
-      <file role='src' name='blendmode.c'/>
-      <file role='src' name='blendmode.h'/>
-      <file role='src' name='cpuinfo.c'/>
-      <file role='src' name='cpuinfo.h'/>
-      <file role='src' name='error.c'/>
-      <file role='src' name='error.h'/>
-      <file role='src' name='event.c'/>
-      <file role='src' name='event.h'/>
-      <file role='src' name='filesystem.c'/>
-      <file role='src' name='filesystem.h'/>
-      <file role='src' name='glcontext.c'/>
-      <file role='src' name='glcontext.h'/>
-      <file role='src' name='keyboard.c'/>
-      <file role='src' name='keyboard.h'/>
-      <file role='src' name='messagebox.c'/>
-      <file role='src' name='messagebox.h'/>
-      <file role='src' name='mouse.c'/>
-      <file role='src' name='mouse.h'/>
-      <file role='src' name='mutex.c'/>
-      <file role='src' name='mutex.h'/>
-      <file role='src' name='pixels.c'/>
-      <file role='src' name='pixels.h'/>
-      <file role='src' name='platform.c'/>
-      <file role='src' name='platform.h'/>
-      <file role='src' name='power.c'/>
-      <file role='src' name='power.h'/>
-      <file role='src' name='rect.c'/>
-      <file role='src' name='rect.h'/>
-      <file role='src' name='render.c'/>
-      <file role='src' name='render.h'/>
-      <file role='src' name='rwops.c'/>
-      <file role='src' name='rwops.h'/>
-      <file role='src' name='sdl.c'/>
-      <file role='src' name='sdl.h'/>
-      <file role='src' name='shape.c'/>
-      <file role='src' name='shape.h'/>
-      <file role='src' name='surface.c'/>
-      <file role='src' name='surface.h'/>
-      <file role='src' name='timer.c'/>
-      <file role='src' name='timer.h'/>
-      <file role='src' name='version.c'/>
-      <file role='src' name='version.h'/>
-      <file role='src' name='video.c'/>
-      <file role='src' name='video.h'/>
-      <file role='src' name='window.c'/>
-      <file role='src' name='window.h'/>
+      <file role="doc" name="CREDITS"/>
+      <file role="doc" name="LICENSE"/>
+      <file role="doc" name="EXPERIMENTAL"/>
+      <file role="src" name="config.m4"/>
+      <file role="src" name="php_sdl.c"/>
+      <file role="src" name="php_sdl.h"/>
+      <file role="src" name="blendmode.c"/>
+      <file role="src" name="blendmode.h"/>
+      <file role="src" name="cpuinfo.c"/>
+      <file role="src" name="cpuinfo.h"/>
+      <file role="src" name="error.c"/>
+      <file role="src" name="error.h"/>
+      <file role="src" name="event.c"/>
+      <file role="src" name="event.h"/>
+      <file role="src" name="filesystem.c"/>
+      <file role="src" name="filesystem.h"/>
+      <file role="src" name="glcontext.c"/>
+      <file role="src" name="glcontext.h"/>
+      <file role="src" name="keyboard.c"/>
+      <file role="src" name="keyboard.h"/>
+      <file role="src" name="messagebox.c"/>
+      <file role="src" name="messagebox.h"/>
+      <file role="src" name="mouse.c"/>
+      <file role="src" name="mouse.h"/>
+      <file role="src" name="mutex.c"/>
+      <file role="src" name="mutex.h"/>
+      <file role="src" name="pixels.c"/>
+      <file role="src" name="pixels.h"/>
+      <file role="src" name="platform.c"/>
+      <file role="src" name="platform.h"/>
+      <file role="src" name="power.c"/>
+      <file role="src" name="power.h"/>
+      <file role="src" name="rect.c"/>
+      <file role="src" name="rect.h"/>
+      <file role="src" name="render.c"/>
+      <file role="src" name="render.h"/>
+      <file role="src" name="rwops.c"/>
+      <file role="src" name="rwops.h"/>
+      <file role="src" name="sdl.c"/>
+      <file role="src" name="sdl.h"/>
+      <file role="src" name="shape.c"/>
+      <file role="src" name="shape.h"/>
+      <file role="src" name="surface.c"/>
+      <file role="src" name="surface.h"/>
+      <file role="src" name="timer.c"/>
+      <file role="src" name="timer.h"/>
+      <file role="src" name="version.c"/>
+      <file role="src" name="version.h"/>
+      <file role="src" name="video.c"/>
+      <file role="src" name="video.h"/>
+      <file role="src" name="window.c"/>
+      <file role="src" name="window.h"/>
       <dir name="examples">
-        <file role='doc' name='eop.php'/>
-        <file role='doc' name='msgbox.php'/>
-        <file role='doc' name='php.bmp.gz'/>
-        <file role='doc' name='window.php'/>
-      </dir> <!-- examples -->
+        <file role="doc" name="001-sdl-version.php"/>
+        <file role="doc" name="002-error-messagebox.php"/>
+        <file role="doc" name="003-messagebox-inputs.php"/>
+        <file role="doc" name="004-draw-points.php"/>
+        <file role="doc" name="005-draw-rectangle.php"/>
+        <file role="doc" name="006-animated-boxes.php"/>
+        <file role="doc" name="007-mouse-events.php"/>
+        <file role="doc" name="008-shaped-window.php"/>
+        <file role="doc" name="bootstrap.php"/>
+        <file role="doc" name="p01_shape24.bmp"/>
+        <file role="doc" name="p01_shape32alpha.bmp"/>
+        <file role="doc" name="spaceship.bmp"/>
+      </dir>
       <dir name="tests">
-        <file role='test' name='001-extension-loading.phpt'/>
-        <file role='test' name='002-simpleinit.phpt'/>
-        <file role='test' name='003-otherinit.phpt'/>
-        <file role='test' name='004-cpuinfo.phpt'/>
-        <file role='test' name='005-video.phpt'/>
-        <file role='test' name='006-rect.phpt'/>
-        <file role='test' name='007-rect-oo.phpt'/>
-        <file role='test' name='008-error.phpt'/>
-        <file role='test' name='009-color.phpt'/>
-        <file role='test' name='010-palette.phpt'/>
-        <file role='test' name='011-palette-oo.phpt'/>
-        <file role='test' name='012-pixelformat.phpt'/>
-        <file role='test' name='013-pixelformat-oo.phpt'/>
-        <file role='test' name='014-version.phpt'/>
-        <file role='test' name='015-rwops.phpt'/>
-        <file role='test' name='016-rwops-oo.phpt'/>
-        <file role='test' name='017-rwops-stream.phpt'/>
-        <file role='test' name='018-power.phpt'/>
-        <file role='test' name='019-platform.phpt'/>
-        <file role='test' name='020-surface.phpt'/>
-        <file role='test' name='021-surface-oo.phpt'/>
-        <file role='test' name='022-pixels.phpt'/>
-        <file role='test' name='023-messagebox.phpt'/>
-        <file role='test' name='024-mutex.phpt'/>
-        <file role='test' name='025-mutex-oo.phpt'/>
-        <file role='test' name='026-filesystem.phpt'/>
-      </dir> <!-- tests -->
+        <file role="test" name="001-extension-loading.phpt"/>
+        <file role="test" name="002-init-and-shutdown.phpt"/>
+        <file role="test" name="003-init-and-quit-subsystems.phpt"/>
+        <file role="test" name="004-cpuinfo.phpt"/>
+        <file role="test" name="005-video.phpt"/>
+        <file role="test" name="006-rect.phpt"/>
+        <file role="test" name="007-rect-oo.phpt"/>
+        <file role="test" name="008-error.phpt"/>
+        <file role="test" name="009-color.phpt"/>
+        <file role="test" name="010-palette.phpt"/>
+        <file role="test" name="011-palette-oo.phpt"/>
+        <file role="test" name="012-pixelformat.phpt"/>
+        <file role="test" name="013-pixelformat-oo.phpt"/>
+        <file role="test" name="014-version.phpt"/>
+        <file role="test" name="015-rwops.phpt"/>
+        <file role="test" name="016-rwops-oo.phpt"/>
+        <file role="test" name="017-rwops-stream.phpt"/>
+        <file role="test" name="018-power.phpt"/>
+        <file role="test" name="019-platform.phpt"/>
+        <file role="test" name="020-surface.phpt"/>
+        <file role="test" name="021-surface-oo.phpt"/>
+        <file role="test" name="022-pixels.phpt"/>
+        <file role="test" name="023-messagebox.phpt"/>
+        <file role="test" name="024-mutex.phpt"/>
+        <file role="test" name="025-mutex-oo.phpt"/>
+        <file role="test" name="026-filesystem.phpt"/>
+        <file role="test" name="test-functions.php"/>
+      </dir>
     </dir>
   </contents>
   <dependencies>
