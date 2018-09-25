@@ -344,7 +344,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 		if (!(z_point = zend_hash_index_find(Z_ARRVAL_P(z_points), i))) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld missing", i);
 
-		} else if (Z_TYPE(z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce) {
+		} else if (Z_TYPE(*z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce) {
 			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld is not a SDL_Point object", i);
 
 		} else {

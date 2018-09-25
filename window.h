@@ -49,10 +49,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetDisplayMode, 0, 0, 1)
        ZEND_ARG_INFO(1, displaymode)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowFromID, 0, 0, 1)
-       ZEND_ARG_INFO(0, id)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowIcon, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_OBJ_INFO(0, icon, SDL_Surface, 0)
@@ -148,13 +144,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetBrightness, 0, 0, 1)
        ZEND_ARG_INFO(0, brightness)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowGammaRamp, 0, 0, 4)
-       ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-       ZEND_ARG_ARRAY_INFO(0, red, 0)
-       ZEND_ARG_ARRAY_INFO(0, green, 0)
-       ZEND_ARG_ARRAY_INFO(0, blue, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetGammaRamp, 0, 0, 3)
@@ -253,7 +242,6 @@ PHP_FUNCTION(SDL_SetWindowGrab);
 PHP_FUNCTION(SDL_GetWindowGrab);
 PHP_FUNCTION(SDL_SetWindowBrightness);
 PHP_FUNCTION(SDL_GetWindowBrightness);
-PHP_FUNCTION(SDL_SetWindowGammaRamp);
 PHP_FUNCTION(SDL_GetWindowGammaRamp);
 PHP_FUNCTION(SDL_CreateShapedWindow);
 PHP_FUNCTION(SDL_CreateWindow);

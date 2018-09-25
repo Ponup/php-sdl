@@ -45,25 +45,6 @@ zend_class_entry *get_php_sdl_window_ce(void)
 	return php_sdl_window_ce;
 }
 
-/* {{{ sdl_window_to_zval */
-zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val TSRMLS_DC)
-{
-	if (window) {
-		unsigned long h;
-
-		h = (unsigned long)SDL_GetWindowData(window, PHP_SDL_MAGICDATA);
-		if (h) {
-			Z_OBJ_HANDLE_P(z_val) = h;
-			Z_OBJ_HT_P(z_val) = (zend_object_handlers *) &php_sdl_window_handlers;
-			zend_objects_store_add_ref(z_val TSRMLS_CC);
-			return 1;
-		}
-	}
-	ZVAL_NULL(z_val);
-	return 0;
-}
-/* }}} */
-
 /* {{{ zval_to_sdl_window */
 SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 {
@@ -75,77 +56,6 @@ SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC)
 		return intern->window;
 	}
 	return NULL;
-}
-/* }}} */
-
-/* {{{ sdl_window_read_property*/
-zval *sdl_window_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key TSRMLS_DC)
-{
-	struct php_sdl_window* intern = php_sdl_window_fetch_object(Z_OBJ_P(object TSRMLS_CC));
-	zval *retval, tmp_member, rv;
-
-	if (!intern->window) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-	}
-
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		key = NULL;
-	}
-
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
-
-	if (!strcmp(Z_STRVAL_P(member), "id")) {
-		ZVAL_LONG(retval, SDL_GetWindowID(intern->window));
-
-	} else if (!strcmp(Z_STRVAL_P(member), "flags")) {
-		ZVAL_LONG(retval, SDL_GetWindowFlags(intern->window));
-
-	} else if (!strcmp(Z_STRVAL_P(member), "x")) {
-		int x, y;
-
-		SDL_GetWindowPosition(intern->window, &x, &y);
-		ZVAL_LONG(retval, x);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "y")) {
-		int x, y;
-
-		SDL_GetWindowPosition(intern->window, &x, &y);
-		ZVAL_LONG(retval, y);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "w")) {
-		int w, h;
-
-		SDL_GetWindowSize(intern->window, &w, &h);
-		ZVAL_LONG(retval, w);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "h")) {
-		int w, h;
-
-		SDL_GetWindowSize(intern->window, &w, &h);
-		ZVAL_LONG(retval, h);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "title")) {
-		ZVAL_STRING(retval, SDL_GetWindowTitle(intern->window));
-
-	} else {
-		FREE_ZVAL(retval);
-
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-		if (member == &tmp_member) {
-			zval_dtor(member);
-		}
-		return retval;
-	}
-
-	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-	return retval;
 }
 /* }}} */
 
@@ -328,21 +238,6 @@ PHP_FUNCTION(SDL_GetWindowID)
 	RETVAL_LONG(SDL_GetWindowID(window));
 }
 /* }}} */
-
-/* {{{ proto SDL_Window SDL_GetWindowFromID(int id)
-
- *  \brief Get a window from a stored ID, or NULL if it doesn't exist.
- extern DECLSPEC SDL_Window * SDLCALL SDL_GetWindowFromID(Uint32 id);
- */
-PHP_FUNCTION(SDL_GetWindowFromID)
-{
-	long id;
-
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id)) {
-		return;
-	}
-	sdl_window_to_zval(SDL_GetWindowFromID((Uint32)id), return_value TSRMLS_CC);
-}
 
 /* {{{ proto int SDL_GetWindowFlags(SDL_Window window)
 
@@ -1034,7 +929,6 @@ PHP_FUNCTION(SDL_GetWindowGrab)
  *  \return 0 on success, or -1 if setting the brightness isn't supported.
  *
  *  \sa SDL_GetWindowBrightness()
- *  \sa SDL_SetWindowGammaRamp()
  extern DECLSPEC int SDLCALL SDL_SetWindowBrightness(SDL_Window * window, float brightness);
  */
 PHP_FUNCTION(SDL_SetWindowBrightness)
@@ -1076,93 +970,6 @@ PHP_FUNCTION(SDL_GetWindowBrightness)
 }
 /* }}} */
 
-/* {{{ proto int SDL_SetWindowGammaRamp(SDL Window window, array red, array green, array blue)
-
- *  \brief Set the gamma ramp for a window.
- *
- *  \param window The window for which the gamma ramp should be set.
- *  \param red The translation table for the red channel, or NULL.
- *  \param green The translation table for the green channel, or NULL.
- *  \param blue The translation table for the blue channel, or NULL.
- *
- *  \return 0 on success, or -1 if gamma ramps are unsupported.
- *
- *  Set the gamma translation table for the red, green, and blue channels
- *  of the video hardware.  Each table is an array of 256 16-bit quantities,
- *  representing a mapping between the input and output for that channel.
- *  The input is the index into the array, and the output is the 16-bit
- *  gamma value at that index, scaled to the output color precision.
- *
- *  \sa SDL_GetWindowGammaRamp()
- extern DECLSPEC int SDLCALL SDL_SetWindowGammaRamp(SDL_Window * window,
-                                                    const Uint16 * red,
-                                                    const Uint16 * green,
-                                                    const Uint16 * blue);
- */
-PHP_FUNCTION(SDL_SetWindowGammaRamp)
-{
-	struct php_sdl_window *intern;
-	zval *z_window, *z_r, *z_g, *z_b;
-	SDL_Window *window;
-	Uint16 r[256], g[256], b[256];
-	zval **ppzval, tmp;
-	int i;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oaaa", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b)) {
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-
-	if (zend_hash_num_elements(Z_ARRVAL_P(z_r))<256
-	    || zend_hash_num_elements(Z_ARRVAL_P(z_g))<256
-	    || zend_hash_num_elements(Z_ARRVAL_P(z_b))<256) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Each array must contains 256 value");
-		return;
-	}
-	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_r));
-	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_g));
-	zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_b));
-	for (i=0 ; i<256 ; i++) {
-		zend_hash_get_current_data(Z_ARRVAL_P(z_r));
-		if (Z_TYPE_PP(ppzval) == IS_LONG) {
-			r[i] = Z_LVAL_PP(ppzval);
-		} else {
-			tmp = **ppzval;
-			zval_copy_ctor(&tmp);
-			convert_to_long(&tmp);
-			r[i] = Z_LVAL(tmp);
-			zval_dtor(&tmp);
-		}
-		zend_hash_move_forward(Z_ARRVAL_P(z_r));
-
-		zend_hash_get_current_data(Z_ARRVAL_P(z_g));
-		if (Z_TYPE_PP(ppzval) == IS_LONG) {
-			g[i] = Z_LVAL_PP(ppzval);
-		} else {
-			tmp = **ppzval;
-			zval_copy_ctor(&tmp);
-			convert_to_long(&tmp);
-			g[i] = Z_LVAL(tmp);
-			zval_dtor(&tmp);
-		}
-		zend_hash_move_forward(Z_ARRVAL_P(z_g));
-
-		zend_hash_get_current_data(Z_ARRVAL_P(z_b));
-		if (Z_TYPE_PP(ppzval) == IS_LONG) {
-			b[i] = Z_LVAL_PP(ppzval);
-		} else {
-			tmp = **ppzval;
-			zval_copy_ctor(&tmp);
-			convert_to_long(&tmp);
-			b[i] = Z_LVAL(tmp);
-			zval_dtor(&tmp);
-		}
-		zend_hash_move_forward(Z_ARRVAL_P(z_b));
-	}
-	RETVAL_LONG(SDL_SetWindowGammaRamp(window, r, g, b));
-}
-/* }}} */
-
 /* {{{ proto int SDL_GetWindowGammaRamp(SDL Window window, array &red, array &green, array &blue)
 
  *  \brief Get the gamma ramp for a window.
@@ -1177,7 +984,6 @@ PHP_FUNCTION(SDL_SetWindowGammaRamp)
  *
  *  \return 0 on success, or -1 if gamma ramps are unsupported.
  *
- *  \sa SDL_SetWindowGammaRamp()
  extern DECLSPEC int SDLCALL SDL_GetWindowGammaRamp(SDL_Window * window,
                                                     Uint16 * red,
                                                     Uint16 * green,
@@ -1593,7 +1399,6 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetGrab,            SDL_GetWindowGrab,            arginfo_window_none)
 	PHP_FALIAS(SetBrightness,      SDL_SetWindowBrightness,      arginfo_SDL_Window_SetBrightness)
 	PHP_FALIAS(GetBrightness,      SDL_GetWindowBrightness,      arginfo_window_none)
-	PHP_FALIAS(SetGammaRamp,       SDL_SetWindowGammaRamp,       arginfo_SDL_Window_SetGammaRamp)
 	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
 	PHP_FALIAS(GL_CreateContext,   SDL_GL_CreateContext,         arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
@@ -1609,7 +1414,6 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	/* static methods */
 	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FENTRY(GetMouseFocus,      ZEND_FN(SDL_GetMouseFocus),          arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	ZEND_FENTRY(GetFromID,          ZEND_FN(SDL_GetWindowFromID),        arginfo_SDL_GetWindowFromID, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 	PHP_FE_END
 };
@@ -1670,7 +1474,6 @@ PHP_MINIT_FUNCTION(sdl_window)
 	php_sdl_window_ce = zend_register_internal_class(&ce_window TSRMLS_CC);
 	php_sdl_window_ce->create_object = php_sdl_window_new;
 	memcpy(&php_sdl_window_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_window_handlers.read_property  = sdl_window_read_property;
 	php_sdl_window_handlers.get_properties = sdl_window_get_properties;
 	php_sdl_window_handlers.free_obj = php_sdl_window_free;
 	php_sdl_window_handlers.offset = XtOffsetOf(struct php_sdl_window, zo);

@@ -1149,7 +1149,6 @@ static void php_sdl_palette_free(zend_object *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -1171,110 +1170,6 @@ static zend_object* php_sdl_palette_new(zend_class_entry *class_type TSRMLS_DC)
 }
 /* }}} */
 
-
-/* {{{ sdl_palette_read_property*/
-zval *sdl_palette_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
-{
-	struct php_sdl_palette *intern = (struct php_sdl_palette *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
-
-	if (!intern->palette) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-	}
-
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		key = NULL;
-	}
-
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
-
-	if (!strcmp(Z_STRVAL_P(member), "ncolors")) {
-		ZVAL_LONG(retval, intern->palette->ncolors);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "version")) {
-		ZVAL_LONG(retval, intern->palette->version);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "refcount")) {
-		ZVAL_LONG(retval, intern->palette->refcount);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
-		int i;
-		zval *z_color;
-		array_init(retval);
-		for (i=0 ; i<intern->palette->ncolors ; i++) {
-			MAKE_STD_ZVAL(z_color);
-			sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
-			add_next_index_zval(retval, z_color);
-		}
-
-	} else {
-		FREE_ZVAL(retval);
-
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-		if (member == &tmp_member) {
-			zval_dtor(member);
-		}
-		return retval;
-	}
-
-	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-	return retval;
-}
-/* }}} */
-
-#define SDL_PALETTE_ADD_PROPERTY(n,f) \
-	MAKE_STD_ZVAL(zv); \
-	ZVAL_LONG(zv, (long)f); \
-	zend_hash_update(props, n, zv)
-
-/* {{{ sdl_palette_read_property*/
-static HashTable *sdl_palette_get_properties(zval *object TSRMLS_DC)
-{
-	HashTable *props;
-	zval *zv, *z_color;
-	int i;
-	struct php_sdl_palette *intern = (struct php_sdl_palette *) zend_objects_get_address(object TSRMLS_CC);
-    zend_string *key_ncolors, *key_colors, *key_version, *key_refcount;
-
-    key_ncolors = zend_string_init("ncolors", sizeof("ncolors"), 0);
-    key_colors = zend_string_init("colors", sizeof("colors"), 0);
-    key_version = zend_string_init("version", sizeof("version"), 0);
-    key_refcount = zend_string_init("refcount", sizeof("refcount"), 0);
-
-	props = zend_std_get_properties(object TSRMLS_CC);
-
-	if (intern->palette) {
-		SDL_PALETTE_ADD_PROPERTY(key_ncolors,  intern->palette->ncolors);
-		SDL_PALETTE_ADD_PROPERTY(key_version,  intern->palette->version);
-		SDL_PALETTE_ADD_PROPERTY(key_refcount, intern->palette->refcount);
-
-		MAKE_STD_ZVAL(zv);
-		array_init(zv);
-		for (i=0 ; i<intern->palette->ncolors ; i++) {
-			MAKE_STD_ZVAL(z_color);
-			sdl_color_to_zval(&intern->palette->colors[i], z_color  TSRMLS_CC);
-			add_next_index_zval(zv, z_color);
-		}
-		zend_hash_update(props, key_colors, zv);
-	}
-	return props;
-}
-/* }}} */
-
-/* {{{ sdl_palette_write_property */
-void sdl_palette_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, use SDL_SetPaletteColors() or SDL_Palette::SetColors()");
-}
-/* }}} */
-
 /* {{{ php_sdl_pixelformat_free
 	 */
 static void php_sdl_pixelformat_free(zend_object *object TSRMLS_DC)
@@ -1288,7 +1183,6 @@ static void php_sdl_pixelformat_free(zend_object *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -1310,139 +1204,6 @@ static zend_object* php_sdl_pixelformat_new(zend_class_entry *class_type TSRMLS_
 }
 /* }}} */
 
-
-/* {{{ sdl_pixelformat_read_property*/
-zval *sdl_pixelformat_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
-{
-	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
-
-	if (!intern->format) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-	}
-
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		key = NULL;
-	}
-
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
-
-	if (!strcmp(Z_STRVAL_P(member), "format")) {
-		ZVAL_LONG(retval, intern->format->format);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "BitsPerPixel")) {
-		ZVAL_LONG(retval, intern->format->BitsPerPixel);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "BytesPerPixel")) {
-		ZVAL_LONG(retval, intern->format->BytesPerPixel);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Rmask")) {
-		ZVAL_LONG(retval, intern->format->Rmask);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Gmask")) {
-		ZVAL_LONG(retval, intern->format->Gmask);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Bmask")) {
-		ZVAL_LONG(retval, intern->format->Bmask);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Amask")) {
-		ZVAL_LONG(retval, intern->format->Amask);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Rloss")) {
-		ZVAL_LONG(retval, intern->format->Rloss);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Gloss")) {
-		ZVAL_LONG(retval, intern->format->Gloss);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Bloss")) {
-		ZVAL_LONG(retval, intern->format->Bloss);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Aloss")) {
-		ZVAL_LONG(retval, intern->format->Aloss);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Rshift")) {
-		ZVAL_LONG(retval, intern->format->Rshift);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Gshift")) {
-		ZVAL_LONG(retval, intern->format->Gshift);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Bshift")) {
-		ZVAL_LONG(retval, intern->format->Bshift);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "Ashift")) {
-		ZVAL_LONG(retval, intern->format->Ashift);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "palette")) {
-		sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE TSRMLS_CC);
-
-	} else {
-		FREE_ZVAL(retval);
-
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-		if (member == &tmp_member) {
-			zval_dtor(member);
-		}
-		return retval;
-	}
-
-	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-	return retval;
-}
-/* }}} */
-
-#define SDL_PIXELFORMAT_ADD_PROPERTY(n,f) \
-	MAKE_STD_ZVAL(zv); \
-	ZVAL_LONG(zv, (long)f); \
-	// php7 zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
-
-/* {{{ sdl_pixelformat_read_property*/
-static HashTable *sdl_pixelformat_get_properties(zval *object TSRMLS_DC)
-{
-	HashTable *props;
-	zval *zv;
-	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat *) zend_objects_get_address(object TSRMLS_CC);
-
-	props = zend_std_get_properties(object TSRMLS_CC);
-
-	if (intern->format) {
-		SDL_PIXELFORMAT_ADD_PROPERTY("format",        intern->format->format);
-		SDL_PIXELFORMAT_ADD_PROPERTY("BitsPerPixel",  intern->format->BitsPerPixel);
-		SDL_PIXELFORMAT_ADD_PROPERTY("BytesPerPixel", intern->format->BytesPerPixel);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Rmask",         intern->format->Rmask);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Gmask",         intern->format->Gmask);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Bmask",         intern->format->Bmask);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Amask",         intern->format->Amask);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Rloss",         intern->format->Rloss);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Gloss",         intern->format->Gloss);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Bloss",         intern->format->Bloss);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Aloss",         intern->format->Aloss);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Rshift",        intern->format->Rshift);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Gshift",        intern->format->Rshift);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Bshift",        intern->format->Rshift);
-		SDL_PIXELFORMAT_ADD_PROPERTY("Ashift",        intern->format->Rshift);
-
-		MAKE_STD_ZVAL(zv);
-		sdl_palette_to_zval(intern->format->palette, zv, SDL_DONTFREE TSRMLS_CC);
-		// php7 zend_hash_update(props, "palette", sizeof("palette"), &zv, sizeof(zv), NULL);
-	}
-	return props;
-}
-/* }}} */
-
-/* {{{ sdl_pixelformat_write_property */
-void sdl_pixelformat_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_PixelFormat is read-only");
-}
-/* }}} */
-
 /* {{{ php_sdl_pixels_free
 	 */
 static void php_sdl_pixels_free(zend_object *object TSRMLS_DC)
@@ -1456,7 +1217,6 @@ static void php_sdl_pixels_free(zend_object *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree(intern);
 }
 /* }}} */
 
@@ -1476,85 +1236,6 @@ static zend_object* php_sdl_pixels_new(zend_class_entry *class_type TSRMLS_DC)
 	return &intern->zo;
 }
 /* }}} */
-
-
-/* {{{ sdl_pixels_read_property*/
-zval *sdl_pixels_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
-{
-	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
-
-	if (!intern->pixels.pixels) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-	}
-
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		key = NULL;
-	}
-
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
-
-	if (!strcmp(Z_STRVAL_P(member), "h")) {
-		ZVAL_LONG(retval, intern->pixels.h);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
-		ZVAL_LONG(retval, intern->pixels.pitch);
-
-	} else if (!strcmp(Z_STRVAL_P(member), "count")) {
-		ZVAL_LONG(retval, intern->pixels.pitch * intern->pixels.h);
-
-	} else {
-		FREE_ZVAL(retval);
-
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-		if (member == &tmp_member) {
-			zval_dtor(member);
-		}
-		return retval;
-	}
-
-	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-	return retval;
-}
-/* }}} */
-
-#define SDL_PIXELS_ADD_PROPERTY(n,f) \
-	MAKE_STD_ZVAL(zv); \
-	ZVAL_LONG(zv, (long)f); \
-	// php7 zend_hash_update(props, n, sizeof(n), &zv, sizeof(zv), NULL)
-
-/* {{{ sdl_pixels_read_properties */
-static HashTable *sdl_pixels_get_properties(zval *object TSRMLS_DC)
-{
-	HashTable *props;
-	zval *zv;
-	struct php_sdl_pixels *intern = (struct php_sdl_pixels *) zend_objects_get_address(object TSRMLS_CC);
-
-	props = zend_std_get_properties(object TSRMLS_CC);
-
-	if (intern->pixels.pixels) {
-		SDL_PIXELS_ADD_PROPERTY("pitch",  intern->pixels.pitch);
-		SDL_PIXELS_ADD_PROPERTY("h",      intern->pixels.h);
-		SDL_PIXELS_ADD_PROPERTY("count",  intern->pixels.h * intern->pixels.pitch);
-	}
-	return props;
-}
-/* }}} */
-
-/* {{{ sdl_pixels_write_property */
-void sdl_pixels_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_Pixels is read-only");
-}
-/* }}} */
-
 
 /* {{{ php_sdl_color_methods[] */
 static const zend_function_entry php_sdl_color_methods[] = {
@@ -1646,9 +1327,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	php_sdl_palette_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_sdl_palette_ce TSRMLS_CC, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
-	php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;
-	php_sdl_palette_handlers.write_property = sdl_palette_write_property;
+	php_sdl_palette_handlers.free_obj = php_sdl_palette_free;
 
 	REGISTER_PALETTE_PROP("ncolors");
 	REGISTER_PALETTE_PROP("version");
@@ -1659,9 +1338,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	ce.create_object = php_sdl_pixelformat_new;
 	php_sdl_pixelformat_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	memcpy(&php_sdl_pixelformat_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_pixelformat_handlers.read_property  = sdl_pixelformat_read_property;
-	php_sdl_pixelformat_handlers.get_properties = sdl_pixelformat_get_properties;
-	php_sdl_pixelformat_handlers.write_property = sdl_pixelformat_write_property;
+	php_sdl_pixelformat_handlers.free_obj = php_sdl_pixelformat_free;
 
 	REGISTER_FORMAT_PROP("format");
 	REGISTER_FORMAT_PROP("BitsPerPixel");
@@ -1685,9 +1362,7 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	php_sdl_pixels_ce = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_sdl_pixels_ce TSRMLS_CC, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_pixels_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_pixels_handlers.read_property  = sdl_pixels_read_property;
-	php_sdl_pixels_handlers.get_properties = sdl_pixels_get_properties;
-	php_sdl_pixels_handlers.write_property = sdl_pixels_write_property;
+	php_sdl_pixels_handlers.free_obj = php_sdl_pixels_free;
 
 	REGISTER_PIXELS_PROP("pitch");
 	REGISTER_PIXELS_PROP("h");

@@ -120,76 +120,6 @@ static zend_object* php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
 }
 /* }}} */
 
-
-/* {{{ sdl_rwops_read_property */
-zval *sdl_rwops_read_property(zval *object, zval *member, int type, const zval *key TSRMLS_DC)
-{
-	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) zend_objects_get_address(object TSRMLS_CC);
-	zval *retval, tmp_member, rv;
-
-	if (!intern->rwops) {
-		return (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-	}
-
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		key = NULL;
-	}
-
-	ALLOC_INIT_ZVAL(retval);
-	Z_SET_REFCOUNT_P(retval, 0);
-
-	if (!strcmp(Z_STRVAL_P(member), "type")) {
-		ZVAL_LONG(retval, intern->rwops->type);
-
-	} else {
-		FREE_ZVAL(retval);
-
-		retval = (zend_get_std_object_handlers())->read_property(object, member, type, key, &rv TSRMLS_CC);
-		if (member == &tmp_member) {
-			zval_dtor(member);
-		}
-		return retval;
-	}
-
-	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-	return retval;
-}
-/* }}} */
-
-
-/* {{{ sdl_rwops_get_properties */
-static HashTable *sdl_rwops_get_properties(zval *object TSRMLS_DC)
-{
-	HashTable *props;
-	zval *zv;
-	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) zend_objects_get_address(object TSRMLS_CC);
-
-	props = zend_std_get_properties(object TSRMLS_CC);
-
-	if (intern->rwops) {
-		MAKE_STD_ZVAL(zv);
-		ZVAL_LONG(zv, (long)intern->rwops->type);
-		// php7 zend_hash_update(props, "type", sizeof("type"), &zv, sizeof(zv), NULL);
-	}
-	return props;
-}
-/* }}} */
-
-
-/* {{{ sdl_rwops_write_property */
-void sdl_rwops_write_property(zval *object, zval *member, zval *value, const zval *key TSRMLS_DC)
-{
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Not supported, SDL_RWops is read-only");
-}
-/* }}} */
-
-
 /* {{{ proto SDL_RWops::__construct(void) */
 static PHP_METHOD(SDL_RWops, __construct)
 {
@@ -360,20 +290,6 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 		}
 		rwops = SDL_RWFromFP(fp, autoclose);
 		sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
-
-	/* Map the stream to memory */
-	} else {
-		char *buff;
-		size_t buff_size;
-
-		buff_size = php_stream_copy_to_mem(stream, &buff, 0);
-		//buff_size = php_stream_copy_to_mem(stream, &buff, PHP_STREAM_COPY_ALL, 0);
-		if (!buff_size) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING,"Cannot map data to memory");
-			RETURN_NULL();
-		}
-		rwops = SDL_RWFromMem(buff, (int)buff_size);
-		sdl_rwops_to_zval(rwops, return_value, 0, buff TSRMLS_CC);
 	}
 }
 /* }}} */
@@ -397,7 +313,7 @@ PHP_FUNCTION(SDL_RWFromFP)
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|l", &z_stream, &autoclose)) {
 		return;
 	}
-	php_stream_from_zval(stream, &z_stream);
+	php_stream_from_zval(stream, z_stream);
 	php_stream_to_zval_rwops(stream, return_value, autoclose TSRMLS_CC);
 }
 /* }}} */
@@ -949,9 +865,6 @@ PHP_MINIT_FUNCTION(sdl_rwops)
 	ce_rwops.create_object = php_sdl_rwops_new;
 	php_sdl_rwops_ce = zend_register_internal_class(&ce_rwops TSRMLS_CC);
 	memcpy(&php_sdl_rwops_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	php_sdl_rwops_handlers.read_property  = sdl_rwops_read_property;
-	php_sdl_rwops_handlers.get_properties = sdl_rwops_get_properties;
-	php_sdl_rwops_handlers.write_property = sdl_rwops_write_property;
 	php_sdl_rwops_handlers.free_obj = php_sdl_rwops_free;
 
 	zend_declare_property_long(php_sdl_rwops_ce, ZEND_STRL("type"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
