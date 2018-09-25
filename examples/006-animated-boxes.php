@@ -6,7 +6,6 @@ SDL_Init(SDL_INIT_EVERYTHING);
 
 $window = SDL_CreateWindow('Progress bar animation', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 400, 300, SDL_WINDOW_SHOWN | SDL_Window::RESIZABLE);
 $surf = SDL_GetWindowSurface($window);
-var_dump($surf);
 
 // Load the PHP Logo from a stream
 $logo = SDL_LoadBMP('spaceship.bmp');
