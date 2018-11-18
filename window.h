@@ -84,6 +84,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetPosition, 0, 0, 2)
        ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetSize, 0, 0, 2)
+       ZEND_ARG_INFO(0, w)
+       ZEND_ARG_INFO(0, h)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WINDOWPOS_DISPLAY, 0, 0, 1)
        ZEND_ARG_INFO(0, display)
 ZEND_END_ARG_INFO()
@@ -92,6 +97,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowPosition, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(1, x)
        ZEND_ARG_INFO(1, y)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetSize, 0, 0, 0)
+       ZEND_ARG_INFO(1, w)
+       ZEND_ARG_INFO(1, h)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_GetPosition, 0, 0, 0)
@@ -218,9 +228,9 @@ PHP_FUNCTION(SDL_GetWindowID);
 PHP_FUNCTION(SDL_GetWindowFromID);
 PHP_FUNCTION(SDL_GetWindowFlags);
 PHP_FUNCTION(SDL_SetWindowIcon);
-PHP_FUNCTION(SDL_SetWindowPosition);
 PHP_FUNCTION(SDL_WINDOWPOS_CENTERED_DISPLAY);
 PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY);
+PHP_FUNCTION(SDL_SetWindowPosition);
 PHP_FUNCTION(SDL_GetWindowPosition);
 PHP_FUNCTION(SDL_SetWindowSize);
 PHP_FUNCTION(SDL_GetWindowSize);

@@ -369,7 +369,7 @@ PHP_FUNCTION(SDL_GetWindowPosition)
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -435,7 +435,7 @@ PHP_FUNCTION(SDL_GetWindowSize)
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -1386,8 +1386,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(SetIcon,            SDL_SetWindowIcon,            arginfo_SDL_Window_SetIcon)
 	PHP_FALIAS(SetPosition,        SDL_SetWindowPosition,        arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(GetPosition,        SDL_GetWindowPosition,        arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetSize,            SDL_SetWindowSize,            arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetSize,            SDL_GetWindowSize,            arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(SetSize,            SDL_SetWindowSize,            arginfo_SDL_Window_SetSize)
+	PHP_FALIAS(GetSize,            SDL_GetWindowSize,            arginfo_SDL_Window_GetSize)
 	PHP_FALIAS(SetMinimumSize,     SDL_SetWindowMinimumSize,     arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(GetMinimumSize,     SDL_GetWindowMinimumSize,     arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(SetMaximumSize,     SDL_SetWindowMaximumSize,     arginfo_SDL_Window_SetPosition)
