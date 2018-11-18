@@ -180,7 +180,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
        ZEND_ARG_INFO(0, x)
        ZEND_ARG_INFO(0, y)
        ZEND_ARG_INFO(0, w)
-       ZEND_ARG_INFO(0, y)
+       ZEND_ARG_INFO(0, h)
        ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
