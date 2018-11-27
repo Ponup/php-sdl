@@ -85,6 +85,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderCopy, 0, 0, 4)
 	ZEND_ARG_OBJ_INFO(0, dstrect, SDL_Rect, 1)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderCopyEx, 0, 0, 7)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_INFO(0, texture)
+	ZEND_ARG_OBJ_INFO(0, srcrect, SDL_Rect, 1)
+	ZEND_ARG_OBJ_INFO(0, dstrect, SDL_Rect, 1)
+	ZEND_ARG_INFO(0, angle)
+	ZEND_ARG_OBJ_INFO(0, center, SDL_Point, 1)
+	ZEND_ARG_INFO(0, flip)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(SDL_SetRenderDrawColor);
 PHP_FUNCTION(SDL_RenderClear);
 PHP_FUNCTION(SDL_DestroyRenderer);
@@ -95,6 +105,7 @@ PHP_FUNCTION(SDL_RenderDrawPoint);
 PHP_FUNCTION(SDL_CreateTextureFromSurface);
 PHP_FUNCTION(SDL_CreateRenderer);
 PHP_FUNCTION(SDL_RenderCopy);
+PHP_FUNCTION(SDL_RenderCopyEx);
 
 PHP_MINIT_FUNCTION(sdl_render);
 
