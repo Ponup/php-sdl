@@ -20,6 +20,7 @@ SDL_FreeSurface($image);
 
 SDL_SetRenderDrawColor($renderer, 255, 0, 255, 255);
 
+$rotCenter = new SDL_Point(10, 10);
 $event = new SDL_Event;
 while (!$quit) {
 	while(SDL_PollEvent($event)) {
@@ -34,7 +35,7 @@ while (!$quit) {
             	$destRect->y = $event->motion->y;
             	$destRect->w = 64;//$drect->w;
             	$destRect->h = 64;//$drect->h;
-            	if (SDL_RenderCopy($renderer, $texture, NULL, $destRect) != 0) {
+            	if (SDL_RenderCopyEx($renderer, $texture, NULL, $destRect, 90, $rotCenter, SDL_FLIP_NONE) != 0) {
                 	echo SDL_GetError(), PHP_EOL;
             	}
             	SDL_RenderPresent($renderer);
