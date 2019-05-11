@@ -49,10 +49,20 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 		case SDL_MOUSEMOTION: {
 			zval motion;
 			object_init(&motion);
+			add_property_long(&motion, "state", event->motion.state TSRMLS_CC);
 			add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
   			add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
 			add_property_zval(value, "motion", &motion TSRMLS_CC);
 			zval_ptr_dtor(&motion);
+			} break;
+		case SDL_MOUSEBUTTONDOWN: {
+			zval button;
+			object_init(&button);
+			add_property_long(&button, "button", event->button.button TSRMLS_CC);
+			add_property_long(&button, "x", event->button.x TSRMLS_CC);
+  			add_property_long(&button, "y", event->button.y TSRMLS_CC);
+			add_property_zval(value, "button", &button TSRMLS_CC);
+			zval_ptr_dtor(&button);
 			} break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP: {
