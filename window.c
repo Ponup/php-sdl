@@ -412,7 +412,7 @@ PHP_FUNCTION(SDL_SetWindowSize)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	SDL_SetWindowPosition(window, x, y);
+	SDL_SetWindowSize(window, x, y);
 }
 /* }}} */
 
@@ -1477,7 +1477,7 @@ PHP_MINIT_FUNCTION(sdl_window)
 	php_sdl_window_handlers.get_properties = sdl_window_get_properties;
 	php_sdl_window_handlers.free_obj = php_sdl_window_free;
 	php_sdl_window_handlers.offset = XtOffsetOf(struct php_sdl_window, zo);
-	
+
 	REGISTER_WINDOW_PROP("id");
 	REGISTER_WINDOW_PROP("flags");
 	REGISTER_WINDOW_PROP("x");
