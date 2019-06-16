@@ -139,7 +139,7 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface)
 	zval *z_renderer, *z_surface;
 	SDL_Renderer *renderer = NULL;
 	SDL_Surface *surface = NULL;
-	
+
 	SDL_Texture *texture = NULL;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_surface, get_php_sdl_surface_ce() ) == FAILURE ) {
@@ -154,6 +154,45 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface)
 		RETURN_RES(zend_register_resource(texture, le_sdl_texture));
 	}
 }
+
+PHP_FUNCTION(SDL_CreateTexture)
+{
+	zval *z_renderer;
+	zend_long format, access, w, h;
+	SDL_Renderer *renderer = NULL;
+
+	SDL_Texture *texture = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zllll", &z_renderer, &format, &access, &w, &h ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	if( renderer ) {
+		texture = SDL_CreateTexture(renderer, format, access, w, h);
+		RETURN_RES(zend_register_resource(texture, le_sdl_texture));
+	}
+}
+
+PHP_FUNCTION(SDL_SetRenderTarget)
+{
+	zval *z_renderer, *z_texture;
+	SDL_Renderer *renderer = NULL;
+	SDL_Texture *texture = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &z_renderer, &z_texture ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+
+	if( renderer && texture ) {
+		RETURN_LONG(SDL_SetRenderTarget(renderer, texture));
+	}
+}
+
 PHP_FUNCTION(SDL_CreateRenderer)
 {
 	zend_long index, flags;
@@ -172,7 +211,6 @@ PHP_FUNCTION(SDL_CreateRenderer)
 	renderer = SDL_CreateRenderer(window, (int)index, (Uint32)flags);
 	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
 }
-/* }}} */
 
 PHP_FUNCTION(SDL_RenderCopy)
 {
@@ -188,7 +226,7 @@ PHP_FUNCTION(SDL_RenderCopy)
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
     texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
-	
+
 	if(z_srcrect != NULL && Z_TYPE_P(z_srcrect) != IS_NULL) {
 		srcrect = (SDL_Rect*)emalloc(sizeof(SDL_Rect));
 		zval_to_sdl_rect(z_srcrect, srcrect TSRMLS_CC);
@@ -200,7 +238,6 @@ PHP_FUNCTION(SDL_RenderCopy)
 
 	RETURN_LONG(SDL_RenderCopy(renderer, texture, srcrect, dstrect));
 }
-/* }}} */
 
 PHP_FUNCTION(SDL_RenderCopyEx)
 {
@@ -236,7 +273,26 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 
 	RETURN_LONG(SDL_RenderCopyEx(renderer, texture, srcrect, dstrect, angle, center, (Uint32)flip));
 }
-/* }}} */
+
+PHP_FUNCTION(SDL_GetRendererOutputSize)
+{
+	zval *z_renderer, *z_width=NULL, *z_height=NULL;
+	SDL_Renderer *renderer;
+	int w, h;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz/z/", &z_renderer, &z_width, &z_height) == FAILURE ) {
+		return;
+	}
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	SDL_GetRendererOutputSize(renderer, &w, &h);
+
+	zval_dtor(z_width);
+	ZVAL_LONG(z_width, w);
+	zval_dtor(z_height);
+	ZVAL_LONG(z_height, h);
+}
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_render)
@@ -249,6 +305,10 @@ PHP_MINIT_FUNCTION(sdl_render)
 	REGISTER_LONG_CONSTANT("SDL_FLIP_NONE", SDL_FLIP_NONE, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_FLIP_HORIZONTAL", SDL_FLIP_HORIZONTAL, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_FLIP_VERTICAL", SDL_FLIP_VERTICAL, CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_STATIC", SDL_TEXTUREACCESS_STATIC, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_STREAMING", SDL_TEXTUREACCESS_STREAMING, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_TARGET", SDL_TEXTUREACCESS_TARGET, CONST_CS | CONST_PERSISTENT);
 
 	le_sdl_renderer = zend_register_list_destructors_ex(NULL, NULL, SDL_RENDERER_RES_NAME, module_number);
 	le_sdl_texture = zend_register_list_destructors_ex(NULL, NULL, SDL_TEXTURE_RES_NAME, module_number);
