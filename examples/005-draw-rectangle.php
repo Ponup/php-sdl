@@ -12,6 +12,10 @@ $rect = new SDL_Rect(50, 50, 50, 50);
 SDL_SetRenderDrawColor($renderer, 0, 0, 255, 255);
 SDL_RenderFillRect($renderer, $rect);
 
+$rect = new SDL_Rect(150, 150, 50, 50);
+SDL_SetRenderDrawColor($renderer, 0, 0, 0, 255);
+SDL_RenderDrawRect($renderer, $rect);
+
 SDL_RenderPresent($renderer);
 
 $iniTime = time();
