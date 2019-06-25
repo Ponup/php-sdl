@@ -103,6 +103,24 @@ PHP_FUNCTION(SDL_RenderFillRect)
 	RETURN_LONG(SDL_RenderFillRect(renderer, &rect));
 }
 
+PHP_FUNCTION(SDL_RenderDrawRect)
+{
+	zval *z_renderer = NULL;
+	zval *z_rect = NULL;
+	SDL_Rect rect;
+	SDL_Renderer *renderer = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	zval_to_sdl_rect(z_rect, &rect TSRMLS_CC);
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	RETURN_LONG(SDL_RenderDrawRect(renderer, &rect));
+}
+
 PHP_FUNCTION(SDL_RenderPresent)
 {
 	zval *z_renderer;
