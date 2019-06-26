@@ -121,6 +121,25 @@ PHP_FUNCTION(SDL_RenderDrawRect)
 	RETURN_LONG(SDL_RenderDrawRect(renderer, &rect));
 }
 
+PHP_FUNCTION(SDL_RenderDrawLine)
+{
+	zval *z_renderer = NULL;
+	SDL_Renderer *renderer = NULL;
+	zend_long x1, y1, x2, y2;
+
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_ZVAL(z_renderer)
+		Z_PARAM_LONG(x1)
+		Z_PARAM_LONG(y1)
+		Z_PARAM_LONG(x2)
+		Z_PARAM_LONG(y2)
+	ZEND_PARSE_PARAMETERS_END();
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	RETURN_LONG(SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)x2, (int)y2));
+}
+
 PHP_FUNCTION(SDL_RenderPresent)
 {
 	zval *z_renderer;

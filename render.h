@@ -61,6 +61,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawRect, 0, 0, 2)
 	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawLine, 0, 0, 4)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_INFO(0, x1)
+	ZEND_ARG_INFO(0, y1)
+	ZEND_ARG_INFO(0, x2)
+	ZEND_ARG_INFO(0, y2)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderPresent, 0, 0, 1)
 	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
@@ -106,6 +114,7 @@ PHP_FUNCTION(SDL_DestroyRenderer);
 PHP_FUNCTION(SDL_DestroyTexture);
 PHP_FUNCTION(SDL_RenderFillRect);
 PHP_FUNCTION(SDL_RenderDrawRect);
+PHP_FUNCTION(SDL_RenderDrawLine);
 PHP_FUNCTION(SDL_RenderPresent);
 PHP_FUNCTION(SDL_RenderDrawPoint);
 PHP_FUNCTION(SDL_CreateTextureFromSurface);
