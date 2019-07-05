@@ -285,8 +285,10 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	SDL_Renderer *renderer = NULL;
 	SDL_Texture *texture = NULL;
 	SDL_Rect *srcrect = NULL, *dstrect = NULL;
+	SDL_Rect def_srcrect, def_dstrect;
 	double angle;
 	SDL_Point *center = NULL;
+	SDL_Point def_center;
 	long flip;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zzO!O!dO!l", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce(), &angle, &z_center, get_php_sdl_point_ce(), &flip) == FAILURE ) {
@@ -297,15 +299,15 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
 
 	if(z_srcrect != NULL && Z_TYPE_P(z_srcrect) != IS_NULL) {
-		srcrect = (SDL_Rect*)emalloc(sizeof(SDL_Rect));
+		srcrect = &def_srcrect;
 		zval_to_sdl_rect(z_srcrect, srcrect);
 	}
 	if(z_dstrect != NULL && Z_TYPE_P(z_dstrect) != IS_NULL) {
-		dstrect = (SDL_Rect*)ecalloc(1, sizeof(SDL_Rect));
+		dstrect = &def_dstrect;
 		zval_to_sdl_rect(z_dstrect, dstrect);
 	}
 	if(z_center != NULL && Z_TYPE_P(z_center) != IS_NULL) {
-		center = (SDL_Point*)ecalloc(1, sizeof(SDL_Point));
+		center = &def_center;
 		zval_to_sdl_point(z_center, center);
 	}
 
