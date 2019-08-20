@@ -31,7 +31,7 @@ PHP_FUNCTION(SDL_GetKeyboardFocus)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value TSRMLS_CC);
+	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value);
 }
 /* }}} */
 
@@ -64,7 +64,7 @@ PHP_FUNCTION(SDL_GetKeyboardState)
 	zend_bool allkeys=1;
 	const Uint8 *state;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zb", &z_numkeys, &allkeys)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|zb", &z_numkeys, &allkeys)) {
 		return;
 	}
 	state = SDL_GetKeyboardState(&numkeys);
@@ -112,7 +112,7 @@ PHP_FUNCTION(SDL_SetModState)
 {
 	long modstate;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &modstate)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &modstate)) {
 		return;
 	}
 	SDL_SetModState(modstate);
@@ -134,7 +134,7 @@ PHP_FUNCTION(SDL_GetKeyFromScancode)
 {
 	long scancode;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scancode)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
 		return;
 	}
 	RETVAL_LONG(SDL_GetKeyFromScancode(scancode));
@@ -156,7 +156,7 @@ PHP_FUNCTION(SDL_GetScancodeFromKey)
 {
 	long key;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &key)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
 		return;
 	}
 	RETVAL_LONG(SDL_GetScancodeFromKey(key));
@@ -179,7 +179,7 @@ PHP_FUNCTION(SDL_GetScancodeName)
 {
 	long scancode;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scancode)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
 		return;
 	}
 	RETVAL_STRING(SDL_GetScancodeName(scancode));
@@ -201,7 +201,7 @@ PHP_FUNCTION(SDL_GetScancodeFromName)
 	char *name;
 	int name_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
 		return;
 	}
 	RETVAL_LONG(SDL_GetScancodeFromName(name));
@@ -225,7 +225,7 @@ PHP_FUNCTION(SDL_GetKeyName)
 {
 	long key;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &key)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
 		return;
 	}
 	RETVAL_STRING(SDL_GetKeyName(key));
@@ -247,7 +247,7 @@ PHP_FUNCTION(SDL_GetKeyFromName)
 	char *name;
 	int name_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
 		return;
 	}
 	RETVAL_LONG(SDL_GetKeyFromName(name));
@@ -324,10 +324,10 @@ PHP_FUNCTION(SDL_SetTextInputRect)
 	zval *z_rect;
 	SDL_Rect rect;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &z_rect, get_php_sdl_rect_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_rect, get_php_sdl_rect_ce())) {
 		return;
 	}
-	if (zval_to_sdl_rect(z_rect, &rect TSRMLS_CC)) {
+	if (zval_to_sdl_rect(z_rect, &rect)) {
 		SDL_SetTextInputRect(&rect);
 	}
 }
@@ -371,10 +371,10 @@ PHP_FUNCTION(SDL_IsScreenKeyboardShown)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce())) {
 		return;
 	}
-	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	window = zval_to_sdl_window(z_window);
 	if (window) {
 		RETVAL_BOOL(SDL_IsScreenKeyboardShown(window));
 	}

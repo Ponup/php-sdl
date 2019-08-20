@@ -41,9 +41,9 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 }
 
 #define update_displaymode_prop(z_value, name, value) \
-	zend_update_property_long(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), value TSRMLS_CC)
+	zend_update_property_long(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), value)
 
-zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_DC)
+zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
 {
 	if (display) {
 		object_init_ex(value, php_sdl_displaymode_ce);
@@ -61,12 +61,12 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value TSRMLS_D
 #define read_displaymode_prop(z_value, name, value) \
 { \
 	zval *val, rv; \
-	val = zend_read_property(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), 0, &rv TSRMLS_CC); \
+	val = zend_read_property(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), 0, &rv); \
 	convert_to_long(val); \
 	Z_LVAL_P(val) = value = (int)Z_LVAL_P(val); \
 }
 
-zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display TSRMLS_DC)
+zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display)
 {
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_displaymode_ce) {
 		read_displaymode_prop(value, "format",       display->format);
@@ -97,12 +97,12 @@ static PHP_METHOD(SDL_DisplayMode, __construct)
 	long format, w, h, rate;
 	zend_error_handling error_handling;
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &format, &w, &h, &rate)) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llll", &format, &w, &h, &rate)) {
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 
 	update_displaymode_prop(getThis(), "format",       format);
 	update_displaymode_prop(getThis(), "w",            w);
@@ -122,7 +122,7 @@ static PHP_METHOD(SDL_DisplayMode, __toString)
 		return;
 	}
 
-	zval_to_sdl_displaymode(getThis(), &mode TSRMLS_CC);
+	zval_to_sdl_displaymode(getThis(), &mode);
 	buf_len = spprintf(&buf, 100, "SDL_DisplayMode(%s,%d,%d,%d)", SDL_GetPixelFormatName(mode.format), mode.w, mode.h, mode.refresh_rate);
 	RETVAL_STRINGL(buf, buf_len);
     efree(buf);
@@ -163,7 +163,7 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 	long driver;
 	const char *name;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &driver) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &driver) == FAILURE) {
 		RETURN_FALSE;
 	}
 	name = SDL_GetVideoDriver((int)driver);
@@ -196,7 +196,7 @@ PHP_FUNCTION(SDL_VideoInit)
 	char *name = NULL;
 	int  name_len = 0, res;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &name, &name_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|s", &name, &name_len) == FAILURE) {
 		RETURN_FALSE;
 	}
 	if (name && name_len) {
@@ -287,7 +287,7 @@ PHP_FUNCTION(SDL_GetDisplayName)
 	long display;
 	const char *name;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &display) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
 		RETURN_FALSE;
 	}
 	name = SDL_GetDisplayName((int)display);
@@ -314,13 +314,13 @@ PHP_FUNCTION(SDL_GetDisplayBounds)
 	SDL_Rect rect;
 	zval *result;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz", &display, &result) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &display, &result) == FAILURE) {
 		RETURN_FALSE;
 	}
 	err = SDL_GetDisplayBounds((int)display, &rect);
 	if (!err) {
 		zval_dtor(result);
-		sdl_rect_to_zval(&rect, result TSRMLS_CC);
+		sdl_rect_to_zval(&rect, result);
 	}
 	RETURN_LONG(err);
 }
@@ -338,7 +338,7 @@ PHP_FUNCTION(SDL_GetNumDisplayModes)
 {
 	long display;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &display) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -366,13 +366,13 @@ PHP_FUNCTION(SDL_GetDisplayMode)
 	long display, mode;
 	SDL_DisplayMode dm;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &display, &mode) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &display, &mode) == FAILURE) {
 		RETURN_FALSE;
 	}
 	if (SDL_GetDisplayMode((int)display, (int)mode, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
+	sdl_displaymode_to_zval(&dm, return_value);
 }
 /* }}} */
 
@@ -386,13 +386,13 @@ PHP_FUNCTION(SDL_GetDesktopDisplayMode)
 	long display;
 	SDL_DisplayMode dm;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &display) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
 		RETURN_FALSE;
 	}
 	if (SDL_GetDesktopDisplayMode((int)display, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
+	sdl_displaymode_to_zval(&dm, return_value);
 }
 /* }}} */
 
@@ -407,13 +407,13 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 	long display;
 	SDL_DisplayMode dm;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &display) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
 		RETURN_FALSE;
 	}
 	if (SDL_GetCurrentDisplayMode((int)display, &dm)) {
 		RETURN_FALSE;
 	}
-	sdl_displaymode_to_zval(&dm, return_value TSRMLS_CC);
+	sdl_displaymode_to_zval(&dm, return_value);
 }
 /* }}} */
 
@@ -446,22 +446,22 @@ PHP_FUNCTION(SDL_GetClosestDisplayMode)
 	zval *z_desired, *z_closest = NULL;
 	SDL_DisplayMode desired, closest;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lO|z", &display, &z_desired, php_sdl_displaymode_ce, &z_closest, php_sdl_displaymode_ce) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lO|z", &display, &z_desired, php_sdl_displaymode_ce, &z_closest, php_sdl_displaymode_ce) == FAILURE) {
 		RETURN_FALSE;
 	}
 
-	zval_to_sdl_displaymode(z_desired, &desired TSRMLS_CC);
+	zval_to_sdl_displaymode(z_desired, &desired);
 	if (SDL_GetClosestDisplayMode((int)display, &desired, &closest)==NULL) {
 		RETURN_NULL();
 	}
 
 	if (z_closest) {
 		zval_dtor(z_closest);
-		sdl_displaymode_to_zval(&closest, z_closest TSRMLS_CC);
+		sdl_displaymode_to_zval(&closest, z_closest);
 
 		RETURN_ZVAL(z_closest, 1, 0);
 	}
-	sdl_displaymode_to_zval(&closest, return_value TSRMLS_CC);
+	sdl_displaymode_to_zval(&closest, return_value);
 }
 /* }}} */
 
@@ -537,13 +537,13 @@ PHP_MINIT_FUNCTION(sdl_video)
 	zend_class_entry ce_displaymode;
 
 	INIT_CLASS_ENTRY(ce_displaymode, "SDL_DisplayMode", php_sdl_displaymode_methods);
-	php_sdl_displaymode_ce = zend_register_internal_class(&ce_displaymode TSRMLS_CC);
+	php_sdl_displaymode_ce = zend_register_internal_class(&ce_displaymode);
 	memcpy(&php_sdl_displaymode_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("format"),       0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("w"),                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("h"),                        0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("refresh_rate"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("format"),       0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("w"),                        0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("h"),                        0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("refresh_rate"), 0, ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
 }

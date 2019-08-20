@@ -42,13 +42,13 @@ zend_class_entry *get_php_sdl_cursor_ce(void)
 		intern = (struct php_sdl_cursor *)((char*)zo - zo->handlers->offset);\
         __ptr = intern->cursor; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
                 RETURN_FALSE;\
         }\
 }
 
 /* {{{ sdl_cursor_to_zval */
-zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRMLS_DC)
+zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags)
 {
 	if (cursor) {
 		struct php_sdl_cursor *intern;
@@ -68,7 +68,7 @@ zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRML
 
 
 /* {{{ zval_to_sdl_cursor */
-SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
+SDL_GLContext zval_to_sdl_cursor(zval *z_val)
 {
 	struct php_sdl_cursor *intern;
 
@@ -83,7 +83,7 @@ SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC)
 
 
 /* {{{ php_sdl_cursor_free */
-static void php_sdl_cursor_free(zend_object *object TSRMLS_DC)
+static void php_sdl_cursor_free(zend_object *object)
 {
 	struct php_sdl_cursor *intern = (struct php_sdl_cursor *)((char*)object - object->handlers->offset);
 
@@ -91,20 +91,20 @@ static void php_sdl_cursor_free(zend_object *object TSRMLS_DC)
 		SDL_FreeCursor(intern->cursor);
 	}
 
-	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	zend_object_std_dtor(&intern->zo);
 }
 /* }}} */
 
 
 /* {{{ php_sdl_cursor_new
  */
-static zend_object* php_sdl_cursor_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_cursor_new(zend_class_entry *class_type)
 {
 	struct php_sdl_cursor *intern;
 
 	intern = ecalloc(1, sizeof(struct php_sdl_cursor) + zend_object_properties_size(class_type));
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->cursor = NULL;
@@ -124,29 +124,29 @@ static PHP_METHOD(SDL_Cursor, __construct)
 	int data_len, mask_len;
 	long w, h, x, y, size;
 
-	intern = (struct php_sdl_cursor *)Z_OBJ_P(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_cursor *)Z_OBJ_P(getThis());
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 
 	if (w<=0 || w&7 || h<=0) {
-		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid cursor size", 0 TSRMLS_CC);
+		zend_throw_exception(zend_exception_get_default(), "Invalid cursor size", 0);
 		return;
 	}
 	size = w/8 * h;
 	if (data_len!=size || mask_len!=size) {
-		zend_throw_exception_ex(zend_exception_get_default(TSRMLS_C), 0 TSRMLS_CC, "Invalid data or mask, size must be %ld", size);
+		zend_throw_exception_ex(zend_exception_get_default(), 0, "Invalid data or mask, size must be %ld", size);
 		return;
 	}
 	intern->cursor = SDL_CreateCursor((Uint8 *)data, (Uint8 *)mask, (int)w, (int)h, (int)x, (int)y);
 	if (intern->cursor) {
 		intern->flags = 0;
 	} else {
-		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
+		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
 	}
 }
 /* }}} */
@@ -195,20 +195,20 @@ PHP_FUNCTION(SDL_CreateCursor)
 	long w, h, x, y, size;
 	SDL_Cursor *cursor;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
 		return;
 	}
 	if (w<=0 || w&7 || h<=0) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid cursor size");
+		php_error_docref(NULL, E_WARNING, "Invalid cursor size");
 		return;
 	}
 	size = w/8 * h;
 	if (data_len!=size || mask_len!=size) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid data or mask, size must be %ld", size);
+		php_error_docref(NULL, E_WARNING, "Invalid data or mask, size must be %ld", size);
 		return;
 	}
 	cursor = SDL_CreateCursor((Uint8 *)data, (Uint8 *)mask, (int)w, (int)h, (int)x, (int)y);
-	sdl_cursor_to_zval(cursor, return_value, 0 TSRMLS_CC);
+	sdl_cursor_to_zval(cursor, return_value, 0);
 }
 /* }}} */
 
@@ -226,11 +226,11 @@ PHP_FUNCTION(SDL_CreateSystemCursor)
 	zend_long id;
 	SDL_Cursor *cursor;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &id)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &id)) {
 		return;
 	}
 	cursor = SDL_CreateSystemCursor(id);
-	sdl_cursor_to_zval(cursor, return_value, 0 TSRMLS_CC);
+	sdl_cursor_to_zval(cursor, return_value, 0);
 }
 /* }}} */
 
@@ -251,15 +251,15 @@ PHP_FUNCTION(SDL_CreateColorCursor)
 	SDL_Surface *surface;
 	SDL_Cursor *cursor;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &z_surface, get_php_sdl_surface_ce(), &x, &y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "Oll", &z_surface, get_php_sdl_surface_ce(), &x, &y)) {
 		return;
 	}
-	surface = zval_to_sdl_surface(z_surface TSRMLS_CC);
+	surface = zval_to_sdl_surface(z_surface);
 	if (surface) {
 		cursor = SDL_CreateColorCursor(surface, (int)x, (int)y);
-		sdl_cursor_to_zval(cursor, return_value, 0 TSRMLS_CC);
+		sdl_cursor_to_zval(cursor, return_value, 0);
 	} else {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
 /* }}} */
@@ -278,7 +278,7 @@ PHP_FUNCTION(SDL_FreeCursor)
 	zval *z_cursor;
 	SDL_Cursor *cursor;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cursor, php_sdl_cursor_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_cursor, php_sdl_cursor_ce) == FAILURE) {
 		return;
 	}
 	FETCH_CURSOR(cursor, z_cursor, 1);
@@ -299,7 +299,7 @@ PHP_FUNCTION(SDL_SetCursor)
 	zval *z_cursor;
 	SDL_Cursor *cursor;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_cursor, php_sdl_cursor_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_cursor, php_sdl_cursor_ce) == FAILURE) {
 		return;
 	}
 	FETCH_CURSOR(cursor, z_cursor, 1);
@@ -322,7 +322,7 @@ PHP_FUNCTION(SDL_GetCursor)
 		return;
 	}
 	cursor = SDL_GetCursor();
-	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE TSRMLS_CC);
+	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE);
 }
 /* }}} */
 
@@ -340,7 +340,7 @@ PHP_FUNCTION(SDL_GetDefaultCursor)
 		return;
 	}
 	cursor = SDL_GetDefaultCursor();
-	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE TSRMLS_CC);
+	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE);
 }
 /* }}} */
 
@@ -359,7 +359,7 @@ PHP_FUNCTION(SDL_ShowCursor)
 {
 	zend_bool toggle;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &toggle)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "b", &toggle)) {
 		return;
 	}
 	RETVAL_BOOL(SDL_ShowCursor(toggle));
@@ -377,7 +377,7 @@ PHP_FUNCTION(SDL_GetMouseFocus)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	sdl_window_to_zval(SDL_GetMouseFocus(), return_value TSRMLS_CC);
+	sdl_window_to_zval(SDL_GetMouseFocus(), return_value);
 }
 
 
@@ -397,7 +397,7 @@ PHP_FUNCTION(SDL_GetMouseState)
 	int x, y;
 	Uint32 state;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zz", &z_x, &z_y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|zz", &z_x, &z_y)) {
 		return;
 	}
 	state = SDL_GetMouseState(&x, &y);
@@ -429,7 +429,7 @@ PHP_FUNCTION(SDL_GetRelativeMouseState)
 	int x, y;
 	Uint32 state;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zz", &z_x, &z_y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|zz", &z_x, &z_y)) {
 		return;
 	}
 	state = SDL_GetRelativeMouseState(&x, &y);
@@ -464,14 +464,14 @@ PHP_FUNCTION(SDL_WarpMouseInWindow)
 	SDL_Window *window;
 	long x, y;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &z_window, get_php_sdl_window_ce(), &x, &y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "Oll", &z_window, get_php_sdl_window_ce(), &x, &y)) {
 		return;
 	}
-	window = zval_to_sdl_window(z_window TSRMLS_CC);
+	window = zval_to_sdl_window(z_window);
 	if (window) {
 		SDL_WarpMouseInWindow(window, (int)x, (int)y);
 	} else {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid SDL_Window object");
+		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
 /* }}} */
@@ -499,7 +499,7 @@ PHP_FUNCTION(SDL_SetRelativeMouseMode)
 {
 	zend_bool enabled;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &enabled)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "b", &enabled)) {
 		return;
 	}
 	RETVAL_LONG(SDL_SetRelativeMouseMode(enabled));
@@ -550,7 +550,7 @@ static const zend_function_entry php_sdl_cursor_methods[] = {
 
 #define REGISTER_CURSOR_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_SYSTEM_CURSOR_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL(const_name), value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL(const_name), value)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_mouse)
@@ -558,7 +558,7 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "SDL_Cursor", php_sdl_cursor_methods);
-	php_sdl_cursor_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	php_sdl_cursor_ce = zend_register_internal_class(&ce);
 	php_sdl_cursor_ce->create_object = php_sdl_cursor_new;
 	memcpy(&php_sdl_cursor_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_cursor_handlers.free_obj = php_sdl_cursor_free; 
@@ -580,7 +580,7 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	REGISTER_CURSOR_CLASS_CONST_LONG("HAND",      SDL_SYSTEM_CURSOR_HAND);
 
 	REGISTER_LONG_CONSTANT("SDL_NUM_SYSTEM_CURSORS",      SDL_NUM_SYSTEM_CURSORS, CONST_CS | CONST_PERSISTENT);
-	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL("NUM_SYSTEM"), SDL_NUM_SYSTEM_CURSORS TSRMLS_CC);
+	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL("NUM_SYSTEM"), SDL_NUM_SYSTEM_CURSORS);
 
 	/*
 	 *  Used as a mask when testing buttons in buttonstate.

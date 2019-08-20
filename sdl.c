@@ -55,7 +55,7 @@ extern DECLSPEC int SDLCALL SDL_InitSubSystem(Uint32 flags);
 PHP_FUNCTION(SDL_InitSubSystem) {
 	long flags;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flags) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &flags) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -87,7 +87,7 @@ extern DECLSPEC void SDLCALL SDL_QuitSubSystem(Uint32 flags);
 PHP_FUNCTION(SDL_QuitSubSystem) {
 	long flags;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &flags) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &flags) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -106,7 +106,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_WasInit(Uint32 flags);
 PHP_FUNCTION(SDL_WasInit) {
 	zend_long flags = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &flags) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &flags) == FAILURE) {
 		RETURN_FALSE;
 	}
 

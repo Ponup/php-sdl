@@ -40,22 +40,22 @@ zend_class_entry *get_php_sdl_rwops_ce(void)
 
 #define FETCH_RWOPS(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_rwops *)Z_OBJ_P(__id TSRMLS_CC);\
+        intern = (struct php_sdl_rwops *)Z_OBJ_P(__id);\
         __ptr = intern->rwops; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
                 RETURN_FALSE;\
         }\
 }
 
 /* {{{ sdl_rwops_to_zval */
-zend_bool sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC)
+zend_bool sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf)
 {
 	if (rwops) {
 		struct php_sdl_rwops *intern;
 
 		object_init_ex(z_val, php_sdl_rwops_ce);
-		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val TSRMLS_CC);
+		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val);
 		intern->rwops = rwops;
 		intern->flags = flags;
 		intern->buf   = buf;
@@ -69,12 +69,12 @@ zend_bool sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *b
 
 
 /* {{{ zval_to_sdl_rwops */
-SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC)
+SDL_RWops *zval_to_sdl_rwops(zval *z_val)
 {
 	struct php_sdl_rwops *intern;
 
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_rwops_ce) {
-		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val TSRMLS_CC);
+		intern = (struct php_sdl_rwops *)Z_OBJ_P(z_val);
 		return intern->rwops;
 	}
 	return NULL;
@@ -84,7 +84,7 @@ SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_rwops_free
 	 */
-static void php_sdl_rwops_free(zend_object *object TSRMLS_DC)
+static void php_sdl_rwops_free(zend_object *object)
 {
 	struct php_sdl_rwops *intern = (struct php_sdl_rwops *) object;
 
@@ -97,20 +97,20 @@ static void php_sdl_rwops_free(zend_object *object TSRMLS_DC)
 		}
 	}
 
-	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	zend_object_std_dtor(&intern->zo);
 }
 /* }}} */
 
 
 /* {{{ php_sdl_rwops_new
  */
-static zend_object* php_sdl_rwops_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_rwops_new(zend_class_entry *class_type)
 {
 	struct php_sdl_rwops *intern = NULL;
 
 	intern = ecalloc(1, sizeof(struct php_sdl_rwops) + zend_object_properties_size(class_type));
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->rwops = NULL;
@@ -126,20 +126,20 @@ static PHP_METHOD(SDL_RWops, __construct)
 	struct php_sdl_rwops *intern;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis());
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters_none()) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 
 	intern->rwops = SDL_AllocRW();
 	if (intern->rwops) {
 		intern->flags = 0;
 	} else {
-		zend_throw_exception(zend_exception_get_default(TSRMLS_C), SDL_GetError(), 0 TSRMLS_CC);
+		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
 	}
 }
 /* }}} */
@@ -153,7 +153,7 @@ static PHP_METHOD(SDL_RWops, __toString)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_rwops *)Z_OBJ_P(getThis());
 	if (intern->rwops) {
 		switch (intern->rwops->type) {
 			case SDL_RWOPS_WINFILE:
@@ -191,7 +191,7 @@ PHP_FUNCTION(SDL_AllocRW)
 		return;
 	}
 	rwops = SDL_AllocRW();
-	sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
+	sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 }
 /* }}} */
 
@@ -207,11 +207,11 @@ PHP_FUNCTION(SDL_RWFromFile)
 	int path_len, mode_len;
 	SDL_RWops *rwops;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &path, &path_len, &mode, &mode_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &path, &path_len, &mode, &mode_len)) {
 		return;
 	}
 	rwops = SDL_RWFromFile(path, mode);
-	sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
+	sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 }
 /* }}} */
 
@@ -227,20 +227,20 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 	long size=0;
 	SDL_RWops *rwops;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &buf, &buf_len, &size)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &buf, &buf_len, &size)) {
 		return;
 	}
 	if (size<=0) {
 		size=buf_len;
 	} else if (buf_len < size) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
 		size = buf_len;
 	}
 
 	pbuf=estrndup(buf, size);
 
 	rwops = SDL_RWFromConstMem(pbuf, size);
-	sdl_rwops_to_zval(rwops, return_value, 0, pbuf TSRMLS_CC);
+	sdl_rwops_to_zval(rwops, return_value, 0, pbuf);
 }
 /* }}} */
 
@@ -254,10 +254,10 @@ PHP_FUNCTION(SDL_RWFromMem)
 	long size=0;
 	SDL_RWops *rwops;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zl", &z_buf, &size)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "zl", &z_buf, &size)) {
 		return;
 	}
-	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "this function may raised unsupported error with PHP memory");
+	php_error_docref(NULL, E_NOTICE, "this function may raised unsupported error with PHP memory");
 
 	Z_STRLEN_P(z_buf) = size;
 //php7	Z_STRVAL_P(z_buf) = emalloc(size);
@@ -265,13 +265,13 @@ PHP_FUNCTION(SDL_RWFromMem)
 	memset(Z_STRVAL_P(z_buf), 0, size);
 
 	rwops = SDL_RWFromMem(Z_STRVAL_P(z_buf), size);
-	sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
+	sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 }
 /* }}} */
 
 
 /* {{{ php_stream_to_zval_rwops */
-void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose  TSRMLS_DC)
+void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose )
 {
 	SDL_RWops *rwops;
 	FILE * fp = NULL;
@@ -280,7 +280,7 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 		RETURN_NULL();
 	}
 	if (autoclose) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "autoclose can raise unsupported error with PHP stream");
+		php_error_docref(NULL, E_NOTICE, "autoclose can raise unsupported error with PHP stream");
 	}
 
 	/* Can we get a FILE * */
@@ -289,7 +289,7 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 			RETURN_NULL();
 		}
 		rwops = SDL_RWFromFP(fp, autoclose);
-		sdl_rwops_to_zval(rwops, return_value, 0, NULL TSRMLS_CC);
+		sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 	}
 }
 /* }}} */
@@ -310,11 +310,11 @@ PHP_FUNCTION(SDL_RWFromFP)
 	long autoclose=0;
 	php_stream *stream;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|l", &z_stream, &autoclose)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "r|l", &z_stream, &autoclose)) {
 		return;
 	}
 	php_stream_from_zval(stream, z_stream);
-	php_stream_to_zval_rwops(stream, return_value, autoclose TSRMLS_CC);
+	php_stream_to_zval_rwops(stream, return_value, autoclose);
 }
 /* }}} */
 
@@ -329,7 +329,7 @@ PHP_FUNCTION(SDL_FreeRW)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -354,7 +354,7 @@ PHP_FUNCTION(SDL_RWsize)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -375,7 +375,7 @@ PHP_FUNCTION(SDL_RWseek)
 	SDL_RWops *rwops;
 	long offset, whence;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Oll", &z_rwops, php_sdl_rwops_ce, &offset, &whence) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_rwops, php_sdl_rwops_ce, &offset, &whence) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -395,7 +395,7 @@ PHP_FUNCTION(SDL_RWtell)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -415,7 +415,7 @@ PHP_FUNCTION(SDL_RWclose)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -441,7 +441,7 @@ PHP_FUNCTION(SDL_RWread)
 	SDL_RWops *rwops;
 	char *buf;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozl|l", &z_rwops, php_sdl_rwops_ce, &z_buf, &size, &n) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozl|l", &z_rwops, php_sdl_rwops_ce, &z_buf, &size, &n) == FAILURE) {
 		return;
 	}
 	if (n<=0) {
@@ -481,7 +481,7 @@ PHP_FUNCTION(SDL_RWwrite)
 	SDL_RWops *rwops;
 	char *buf;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os|ll", &z_rwops, php_sdl_rwops_ce, &buf, &buf_len, &size, &n) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Os|ll", &z_rwops, php_sdl_rwops_ce, &buf, &buf_len, &size, &n) == FAILURE) {
 		return;
 	}
 	if (size<=0) { /* optional arg, default to string length */
@@ -495,7 +495,7 @@ PHP_FUNCTION(SDL_RWwrite)
 		return;
 	}
 	if (buf_len < (size * n)) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
 		size = 1;
 		n = buf_len;
 	}
@@ -520,7 +520,7 @@ PHP_FUNCTION(SDL_ReadU8)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -540,7 +540,7 @@ PHP_FUNCTION(SDL_ReadLE16)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -560,7 +560,7 @@ PHP_FUNCTION(SDL_ReadBE16)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -580,7 +580,7 @@ PHP_FUNCTION(SDL_ReadLE32)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -600,7 +600,7 @@ PHP_FUNCTION(SDL_ReadBE32)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -621,7 +621,7 @@ PHP_FUNCTION(SDL_ReadLE64)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -641,7 +641,7 @@ PHP_FUNCTION(SDL_ReadBE64)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_rwops, php_sdl_rwops_ce) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -665,7 +665,7 @@ PHP_FUNCTION(SDL_WriteU8)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -686,7 +686,7 @@ PHP_FUNCTION(SDL_WriteLE16)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -708,7 +708,7 @@ PHP_FUNCTION(SDL_WriteBE16)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -729,7 +729,7 @@ PHP_FUNCTION(SDL_WriteLE32)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -750,7 +750,7 @@ PHP_FUNCTION(SDL_WriteBE32)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -772,7 +772,7 @@ PHP_FUNCTION(SDL_WriteLE64)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -793,7 +793,7 @@ PHP_FUNCTION(SDL_WriteBE64)
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_rwops, php_sdl_rwops_ce, &value) == FAILURE) {
 		return;
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
@@ -853,7 +853,7 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 
 #define REGISTER_RWOPS_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_rwops_ce, ZEND_STRL(const_name), value TSRMLS_CC)
+	zend_declare_class_constant_long(php_sdl_rwops_ce, ZEND_STRL(const_name), value)
 
 
 /* {{{ MINIT */
@@ -863,11 +863,11 @@ PHP_MINIT_FUNCTION(sdl_rwops)
 
 	INIT_CLASS_ENTRY(ce_rwops, "SDL_RWops", php_sdl_rwops_methods);
 	ce_rwops.create_object = php_sdl_rwops_new;
-	php_sdl_rwops_ce = zend_register_internal_class(&ce_rwops TSRMLS_CC);
+	php_sdl_rwops_ce = zend_register_internal_class(&ce_rwops);
 	memcpy(&php_sdl_rwops_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_rwops_handlers.free_obj = php_sdl_rwops_free;
 
-	zend_declare_property_long(php_sdl_rwops_ce, ZEND_STRL("type"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_rwops_ce, ZEND_STRL("type"), 0, ZEND_ACC_PUBLIC);
 
 	/* RWops Types */
 	REGISTER_RWOPS_CLASS_CONST_LONG("UNKNOWN",        SDL_RWOPS_UNKNOWN);

@@ -28,16 +28,16 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_messageboxcolor_ce(void);
-zend_bool sdl_messageboxcolor_to_zval(const SDL_MessageBoxColor *color, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_messageboxcolor(zval *value, SDL_MessageBoxColor *color TSRMLS_DC);
+zend_bool sdl_messageboxcolor_to_zval(const SDL_MessageBoxColor *color, zval *value);
+zend_bool zval_to_sdl_messageboxcolor(zval *value, SDL_MessageBoxColor *color);
 
 zend_class_entry *get_php_sdl_messageboxbuttondata_ce(void);
-zend_bool sdl_messageboxbuttondata_to_zval(const SDL_MessageBoxButtonData *data, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_messageboxbuttondata(zval *value, SDL_MessageBoxButtonData *data TSRMLS_DC);
+zend_bool sdl_messageboxbuttondata_to_zval(const SDL_MessageBoxButtonData *data, zval *value);
+zend_bool zval_to_sdl_messageboxbuttondata(zval *value, SDL_MessageBoxButtonData *data);
 
 zend_class_entry *get_php_sdl_messageboxdata_ce(void);
-zend_bool sdl_messageboxdata_to_zval(SDL_MessageBoxData *data, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_MessageBoxData *zval_to_sdl_messageboxdata(zval *z_val TSRMLS_DC);
+zend_bool sdl_messageboxdata_to_zval(SDL_MessageBoxData *data, zval *z_val, Uint32 flags);
+SDL_MessageBoxData *zval_to_sdl_messageboxdata(zval *z_val);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ShowMessageBox, 0, 0, 2)
        ZEND_ARG_INFO(0, messageboxdata)

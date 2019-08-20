@@ -30,8 +30,8 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_windowshapemode_ce(void);
-zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC);
-SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC);
+zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val);
+SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val);
 
 
 PHP_MINIT_FUNCTION(sdl_shape);

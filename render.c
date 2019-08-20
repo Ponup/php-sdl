@@ -34,7 +34,7 @@ PHP_FUNCTION(SDL_SetRenderDrawColor)
 	long r, g, b, a;
 	SDL_Renderer *renderer;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zllll", &z_renderer, &r, &g, &b, &a) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zllll", &z_renderer, &r, &g, &b, &a) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -48,7 +48,7 @@ PHP_FUNCTION(SDL_RenderClear)
 	zval *z_renderer;
 	SDL_Renderer *renderer;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &z_renderer) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z", &z_renderer) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -62,7 +62,7 @@ PHP_FUNCTION(SDL_DestroyRenderer)
 	zval *z_renderer;
 	SDL_Renderer *renderer;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &z_renderer) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z", &z_renderer) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -76,7 +76,7 @@ PHP_FUNCTION(SDL_DestroyTexture)
 	zval *z_texture;
 	SDL_Texture *texture;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &z_texture) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z", &z_texture) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -92,11 +92,11 @@ PHP_FUNCTION(SDL_RenderFillRect)
 	SDL_Rect rect;
 	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
-	zval_to_sdl_rect(z_rect, &rect TSRMLS_CC);
+	zval_to_sdl_rect(z_rect, &rect);
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
@@ -110,11 +110,11 @@ PHP_FUNCTION(SDL_RenderDrawRect)
 	SDL_Rect rect;
 	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
-	zval_to_sdl_rect(z_rect, &rect TSRMLS_CC);
+	zval_to_sdl_rect(z_rect, &rect);
 
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
@@ -145,7 +145,7 @@ PHP_FUNCTION(SDL_RenderPresent)
 	zval *z_renderer;
 	SDL_Renderer *renderer;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &z_renderer) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z", &z_renderer) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -179,12 +179,12 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface)
 
 	SDL_Texture *texture = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zO", &z_renderer, &z_surface, get_php_sdl_surface_ce() ) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_surface, get_php_sdl_surface_ce() ) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
-	surface = zval_to_sdl_surface(z_surface TSRMLS_CC);
+	surface = zval_to_sdl_surface(z_surface);
 
 	if( renderer && surface ) {
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -200,7 +200,7 @@ PHP_FUNCTION(SDL_CreateTexture)
 
 	SDL_Texture *texture = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zllll", &z_renderer, &format, &access, &w, &h ) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zllll", &z_renderer, &format, &access, &w, &h ) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -218,7 +218,7 @@ PHP_FUNCTION(SDL_SetRenderTarget)
 	SDL_Renderer *renderer = NULL;
 	SDL_Texture *texture = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &z_renderer, &z_texture ) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zz", &z_renderer, &z_texture ) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -237,12 +237,12 @@ PHP_FUNCTION(SDL_CreateRenderer)
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &z_window, get_php_sdl_window_ce(), &index, &flags) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "Oll", &z_window, get_php_sdl_window_ce(), &index, &flags) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
 	if( z_window != NULL ) {
-		window = zval_to_sdl_window(z_window TSRMLS_CC);
+		window = zval_to_sdl_window(z_window);
 	}
 
 	renderer = SDL_CreateRenderer(window, (int)index, (Uint32)flags);
@@ -257,7 +257,7 @@ PHP_FUNCTION(SDL_RenderCopy)
 	SDL_Texture *texture = NULL;
 	SDL_Rect *srcrect = NULL, *dstrect = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzO!O!", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce()) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zzO!O!", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -266,11 +266,11 @@ PHP_FUNCTION(SDL_RenderCopy)
 
 	if(z_srcrect != NULL && Z_TYPE_P(z_srcrect) != IS_NULL) {
 		srcrect = (SDL_Rect*)emalloc(sizeof(SDL_Rect));
-		zval_to_sdl_rect(z_srcrect, srcrect TSRMLS_CC);
+		zval_to_sdl_rect(z_srcrect, srcrect);
 	}
 	if(z_dstrect != NULL && Z_TYPE_P(z_dstrect) != IS_NULL) {
 		dstrect = (SDL_Rect*)ecalloc(1, sizeof(SDL_Rect));
-		zval_to_sdl_rect(z_dstrect, dstrect TSRMLS_CC);
+		zval_to_sdl_rect(z_dstrect, dstrect);
 	}
 
 	RETURN_LONG(SDL_RenderCopy(renderer, texture, srcrect, dstrect));
@@ -288,7 +288,7 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	SDL_Point *center = NULL;
 	long flip;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzO!O!dO!l", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce(), &angle, &z_center, get_php_sdl_point_ce(), &flip) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zzO!O!dO!l", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce(), &angle, &z_center, get_php_sdl_point_ce(), &flip) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -297,15 +297,15 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 
 	if(z_srcrect != NULL && Z_TYPE_P(z_srcrect) != IS_NULL) {
 		srcrect = (SDL_Rect*)emalloc(sizeof(SDL_Rect));
-		zval_to_sdl_rect(z_srcrect, srcrect TSRMLS_CC);
+		zval_to_sdl_rect(z_srcrect, srcrect);
 	}
 	if(z_dstrect != NULL && Z_TYPE_P(z_dstrect) != IS_NULL) {
 		dstrect = (SDL_Rect*)ecalloc(1, sizeof(SDL_Rect));
-		zval_to_sdl_rect(z_dstrect, dstrect TSRMLS_CC);
+		zval_to_sdl_rect(z_dstrect, dstrect);
 	}
 	if(z_center != NULL && Z_TYPE_P(z_center) != IS_NULL) {
 		center = (SDL_Point*)ecalloc(1, sizeof(SDL_Point));
-		zval_to_sdl_point(z_center, center TSRMLS_CC);
+		zval_to_sdl_point(z_center, center);
 	}
 
 	RETURN_LONG(SDL_RenderCopyEx(renderer, texture, srcrect, dstrect, angle, center, (Uint32)flip));
@@ -317,7 +317,7 @@ PHP_FUNCTION(SDL_GetRendererOutputSize)
 	SDL_Renderer *renderer;
 	int w, h;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz/z/", &z_renderer, &z_width, &z_height) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zz/z/", &z_renderer, &z_width, &z_height) == FAILURE ) {
 		return;
 	}
 

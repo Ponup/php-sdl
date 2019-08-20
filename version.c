@@ -109,7 +109,7 @@ PHP_FUNCTION(SDL_GetVersion)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z/", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z/", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -144,7 +144,7 @@ PHP_FUNCTION(SDL_VERSION)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
 	SDL_VERSION(&version);
@@ -166,7 +166,7 @@ PHP_FUNCTION(SDL_VERSIONNUM)
 {
 	long x, y, z;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &x, &y, &z) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &x, &y, &z) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -182,7 +182,7 @@ PHP_FUNCTION(SDL_VERSION_ATLEAST)
 {
 	long x, y, z;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &x, &y, &z) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &x, &y, &z) == FAILURE) {
 		RETURN_FALSE;
 	}
 

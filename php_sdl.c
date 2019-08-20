@@ -50,17 +50,15 @@ ZEND_GET_MODULE(sdl)
 /* {{{ php_sdl_check_overflow */
 zend_bool php_sdl_check_overflow(int a, int b, int silent)
 {
-	TSRMLS_FETCH();
-
 	if(a <= 0 || b <= 0) {
 		if (!silent) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully");
+			php_error_docref(NULL, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully");
 		}
 		return 1;
 	}
 	if(a > INT_MAX / b) {
 		if (!silent) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully");
+			php_error_docref(NULL, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully");
 		}
 		return 1;
 	}

@@ -28,16 +28,16 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_mutex_ce(void);
-zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_mutex *zval_to_sdl_mutex(zval *z_val TSRMLS_DC);
+zend_bool sdl_mutex_to_zval(SDL_mutex *mutex, zval *z_val, Uint32 flags);
+SDL_mutex *zval_to_sdl_mutex(zval *z_val);
 
 zend_class_entry *get_php_sdl_sem_ce(void);
-zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_sem *zval_to_sdl_sem(zval *z_val TSRMLS_DC);
+zend_bool sdl_sem_to_zval(SDL_sem *sem, zval *z_val, Uint32 flags);
+SDL_sem *zval_to_sdl_sem(zval *z_val);
 
 zend_class_entry *get_php_sdl_cond_ce(void);
-zend_bool sdl_cond_to_zval(SDL_cond *cond, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_cond *zval_to_sdl_cond(zval *z_val TSRMLS_DC);
+zend_bool sdl_cond_to_zval(SDL_cond *cond, zval *z_val, Uint32 flags);
+SDL_cond *zval_to_sdl_cond(zval *z_val);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_sem__construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, value)

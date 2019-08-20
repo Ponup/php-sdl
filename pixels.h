@@ -37,20 +37,20 @@ typedef struct SDL_Pixels
 
 
 zend_class_entry *get_php_sdl_color_ce(void);
-zend_bool sdl_color_to_zval(SDL_Color *color, zval *value TSRMLS_DC);
-zend_bool zval_to_sdl_color(zval *value, SDL_Color *color TSRMLS_DC);
+zend_bool sdl_color_to_zval(SDL_Color *color, zval *value);
+zend_bool zval_to_sdl_color(zval *value, SDL_Color *color);
 
 zend_class_entry *get_php_sdl_pixelformat_ce(void);
-zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val TSRMLS_DC);
+zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 flags);
+SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val);
 
 zend_class_entry *get_php_sdl_palette_ce(void);
-zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_Palette *zval_to_sdl_palette(zval *z_val TSRMLS_DC);
+zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags);
+SDL_Palette *zval_to_sdl_palette(zval *z_val);
 
 zend_class_entry *get_php_sdl_pixels_ce(void);
-zend_bool sdl_pixels_to_zval(SDL_Pixels *pixels, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_Pixels *zval_to_sdl_pixels(zval *z_val TSRMLS_DC);
+zend_bool sdl_pixels_to_zval(SDL_Pixels *pixels, zval *z_val, Uint32 flags);
+SDL_Pixels *zval_to_sdl_pixels(zval *z_val);
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetPixelFormatName, 0, 0, 1)

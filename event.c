@@ -31,7 +31,7 @@ zend_class_entry *get_php_sdl_event_ce(void)
 	return php_sdl_event_ce;
 }
 
-zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
+zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 {
 	if(NULL == event) {
 		ZVAL_NULL(value);
@@ -43,49 +43,49 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 
 	object_init_ex(value, php_sdl_event_ce);
 
-	zend_update_property_long(php_sdl_event_ce, value, ZEND_STRL("type"), event->type TSRMLS_CC);
+	zend_update_property_long(php_sdl_event_ce, value, ZEND_STRL("type"), event->type);
 
 	switch(event->type) {
 		case SDL_MOUSEMOTION: {
 			zval motion;
 			object_init(&motion);
-			add_property_long(&motion, "state", event->motion.state TSRMLS_CC);
-			add_property_long(&motion, "x", event->motion.x TSRMLS_CC);
-  			add_property_long(&motion, "y", event->motion.y TSRMLS_CC);
-			add_property_zval(value, "motion", &motion TSRMLS_CC);
+			add_property_long(&motion, "state", event->motion.state);
+			add_property_long(&motion, "x", event->motion.x);
+  			add_property_long(&motion, "y", event->motion.y);
+			add_property_zval(value, "motion", &motion);
 			zval_ptr_dtor(&motion);
 			} break;
 		case SDL_MOUSEBUTTONDOWN: {
 			zval button;
 			object_init(&button);
-			add_property_long(&button, "button", event->button.button TSRMLS_CC);
-			add_property_long(&button, "x", event->button.x TSRMLS_CC);
-  			add_property_long(&button, "y", event->button.y TSRMLS_CC);
-			add_property_zval(value, "button", &button TSRMLS_CC);
+			add_property_long(&button, "button", event->button.button);
+			add_property_long(&button, "x", event->button.x);
+  			add_property_long(&button, "y", event->button.y);
+			add_property_zval(value, "button", &button);
 			zval_ptr_dtor(&button);
 			} break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP: {
     		zval keysym;
     		object_init(&keysym);
-			add_property_long(&keysym, "sym", event->key.keysym.sym TSRMLS_CC);
+			add_property_long(&keysym, "sym", event->key.keysym.sym);
 
     		zval key;
     		object_init(&key);
-			add_property_zval(&key, "keysym", &keysym TSRMLS_CC);
+			add_property_zval(&key, "keysym", &keysym);
 
-			add_property_zval(value, "key", &key TSRMLS_CC);
+			add_property_zval(value, "key", &key);
 			zval_ptr_dtor(&key);
 			} break;
 		case SDL_WINDOWEVENT: {
 			zval window;
 			object_init(&window);
-			add_property_long(&window, "event", event->window.event TSRMLS_CC);
-			add_property_long(&window, "timestamp", event->window.timestamp TSRMLS_CC);
-			add_property_long(&window, "windowID", event->window.windowID TSRMLS_CC);
-			add_property_long(&window, "data1", event->window.data1 TSRMLS_CC);
-			add_property_long(&window, "data2", event->window.data2 TSRMLS_CC);
-			add_property_zval(value, "window", &window TSRMLS_CC);
+			add_property_long(&window, "event", event->window.event);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
 			zval_ptr_dtor(&window);
 			} break;
 	}
@@ -93,12 +93,12 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value TSRMLS_DC)
 	return 1;
 }
 
-zend_bool zval_to_sdl_event(zval *value, SDL_Event *event TSRMLS_DC)
+zend_bool zval_to_sdl_event(zval *value, SDL_Event *event)
 {
 	zval *val, rv;
 	
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_event_ce) {
-		val = zend_read_property(php_sdl_event_ce, value, ZEND_STRL("type"), 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_event_ce, value, ZEND_STRL("type"), 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = event->type = (int)Z_LVAL_P(val);
 
@@ -113,12 +113,12 @@ static PHP_METHOD(SDL_Event, __construct)
 {
 	zend_error_handling error_handling;
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters_none()) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 }
 
 /* {{{ proto SDL_Event::__toString() */
@@ -132,17 +132,17 @@ static PHP_METHOD(SDL_Event, __toString)
 		return;
 	}
 
-	zval_to_sdl_event(getThis(), &event TSRMLS_CC);
+	zval_to_sdl_event(getThis(), &event);
 	buf_len = spprintf(&buf, 100, "SDL_Event(type=%d)", event.type);
 	RETVAL_STRINGL(buf, buf_len);
         efree(buf);
 }
 /* }}} */
 
-static HashTable *sdl_event_get_properties(zval *object TSRMLS_DC)
+static HashTable *sdl_event_get_properties(zval *object)
 {
 	HashTable *props;    
-	props = zend_std_get_properties(object TSRMLS_CC);
+	props = zend_std_get_properties(object);
         zval test;
         zend_string *key = zend_string_init("type", 4, 0);
         ZVAL_LONG(&test, SDL_QUIT);
@@ -156,13 +156,13 @@ PHP_FUNCTION(SDL_PollEvent)
 	SDL_Event event;
 	int ret;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
 		return;
 	}
 
 	ret = SDL_PollEvent(&event);
 
-	sdl_event_to_zval(&event, object TSRMLS_CC);
+	sdl_event_to_zval(&event, object);
 	RETURN_LONG(ret);
 }
 
@@ -172,12 +172,12 @@ PHP_FUNCTION(SDL_WaitEvent)
 	SDL_Event event;
 	int ret;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O/", &object, get_php_sdl_event_ce()) == FAILURE) {
 		return;
 	}
 
 	ret = SDL_WaitEvent(&event);
-	sdl_event_to_zval(&event, object TSRMLS_CC);
+	sdl_event_to_zval(&event, object);
 	
 	RETURN_LONG(ret);
 }
@@ -236,14 +236,14 @@ PHP_MINIT_FUNCTION(sdl_event)
 	REGISTER_LONG_CONSTANT("SDL_WINDOWEVENT_HIT_TEST", SDL_WINDOWEVENT_HIT_TEST, CONST_CS|CONST_PERSISTENT);
 
 	INIT_CLASS_ENTRY(ce_event, "SDL_Event", php_sdl_event_methods);
-	php_sdl_event_ce = zend_register_internal_class(&ce_event TSRMLS_CC);
+	php_sdl_event_ce = zend_register_internal_class(&ce_event);
 	memcpy(&php_sdl_event_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_event_handlers.get_properties = sdl_event_get_properties;
     php_sdl_event_handlers.offset = XtOffsetOf(struct php_sdl_event, zo);
 
-	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("type"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("key"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("motion"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("type"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("key"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("motion"), ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
 }

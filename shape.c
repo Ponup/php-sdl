@@ -35,13 +35,13 @@ zend_class_entry *get_php_sdl_windowshapemode_ce(void)
 }
 
 /* {{{ sdl_windowshapemode_to_zval */
-zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSRMLS_DC)
+zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val)
 {
 	if (mode) {
 		struct php_sdl_windowshapemode *intern;
 
 		object_init_ex(z_val, php_sdl_windowshapemode_ce);
-		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val TSRMLS_CC);
+		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val);
 		memcpy(&intern->mode, mode, sizeof(SDL_WindowShapeMode));
 
 		return 1;
@@ -52,7 +52,7 @@ zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val TSR
 /* }}} */
 
 /* {{{ zval_to_sdl_windowshapemode */
-SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
+SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val)
 {
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_windowshapemode_ce) {
 		zend_object* zo = Z_OBJ_P(z_val);
@@ -68,24 +68,24 @@ SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val TSRMLS_DC)
 
 /* {{{ php_sdl_windowshapemode_free
 	 */
-static void php_sdl_windowshapemode_free(zend_object *zo TSRMLS_DC)
+static void php_sdl_windowshapemode_free(zend_object *zo)
 {
 	struct php_sdl_windowshapemode *intern = (struct php_sdl_windowshapemode*)((char*)zo - XtOffsetOf(struct php_sdl_windowshapemode, zo));
 
-	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	zend_object_std_dtor(&intern->zo);
 }
 /* }}} */
 
 
 /* {{{ php_sdl_windowshapemode_new
  */
-static zend_object* php_sdl_windowshapemode_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object* php_sdl_windowshapemode_new(zend_class_entry *class_type)
 {
 	struct php_sdl_windowshapemode *intern;
 
 	intern = ecalloc(1, sizeof(struct php_sdl_windowshapemode) + zend_object_properties_size(class_type));
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->zo.handlers = (zend_object_handlers *) &php_sdl_windowshapemode_handlers;
@@ -107,14 +107,14 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 	zval *z_param;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis());
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz", &mode, &z_param)) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &mode, &z_param)) {
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 
 	if (SDL_SHAPEMODEALPHA(mode)) {
 		convert_to_long(z_param);
@@ -124,14 +124,14 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 	} else if (mode == ShapeModeColorKey) {
 		if (Z_TYPE_P( z_param) == IS_OBJECT && Z_OBJCE_P(z_param) == get_php_sdl_color_ce()) {
 			intern->mode.mode = ShapeModeColorKey;
-			zval_to_sdl_color(z_param, &intern->mode.parameters.colorKey TSRMLS_CC);
+			zval_to_sdl_color(z_param, &intern->mode.parameters.colorKey);
 		} else {
-			zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid parameter for mode=ShapeModeColorKey, SDL_Color object expected", 0 TSRMLS_CC);
+			zend_throw_exception(zend_exception_get_default(), "Invalid parameter for mode=ShapeModeColorKey, SDL_Color object expected", 0);
 		}
 
 
 	} else {
-		zend_throw_exception(zend_exception_get_default(TSRMLS_C), "Invalid mode for SDL_WindowShapeMode", 0 TSRMLS_CC);
+		zend_throw_exception(zend_exception_get_default(), "Invalid mode for SDL_WindowShapeMode", 0);
 	}
 }
 /* }}} */
@@ -147,7 +147,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis() TSRMLS_CC);
+	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis());
 	switch (intern->mode.mode) {
 		case ShapeModeDefault:
 			spprintf(&buf, 200, "SDL_WindowShapeMode(ShapeModeDefault, %u)", intern->mode.parameters.binarizationCutoff);
@@ -185,7 +185,7 @@ static const zend_function_entry php_sdl_windowshapemode_methods[] = {
 
 #define REGISTER_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("ShapeMode" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, ZEND_STRL(const_name), value TSRMLS_CC); \
+	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, ZEND_STRL(const_name), value); \
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_shape)
@@ -193,15 +193,15 @@ PHP_MINIT_FUNCTION(sdl_shape)
 	zend_class_entry ce;
 
 	INIT_CLASS_ENTRY(ce, "SDL_WindowShapeMode", php_sdl_windowshapemode_methods);
-	php_sdl_windowshapemode_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	php_sdl_windowshapemode_ce = zend_register_internal_class(&ce);
 	php_sdl_windowshapemode_ce->create_object = php_sdl_windowshapemode_new;
 	memcpy(&php_sdl_windowshapemode_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_windowshapemode_handlers.free_obj = php_sdl_windowshapemode_free;
 	php_sdl_windowshapemode_handlers.offset = XtOffsetOf(struct php_sdl_windowshapemode, zo);
 
-	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("mode"),               0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("colorKey"),           0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("binarizationCutoff"), 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("mode"),               0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("colorKey"),           0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_windowshapemode_ce, ZEND_STRL("binarizationCutoff"), 0, ZEND_ACC_PUBLIC);
 
 	/* typedef enum WindowShapeMode */
 	REGISTER_CLASS_CONST_LONG("Default",              ShapeModeDefault);

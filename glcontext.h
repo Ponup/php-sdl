@@ -26,8 +26,8 @@ extern "C" {
 #endif
 
 zend_class_entry *get_php_sdl_glcontext_ce(void);
-zend_bool  sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_GLContext zval_to_sdl_glcontext(zval *z_val TSRMLS_DC);
+zend_bool  sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags);
+SDL_GLContext zval_to_sdl_glcontext(zval *z_val);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)

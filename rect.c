@@ -41,14 +41,14 @@ zend_class_entry *get_php_sdl_rect_ce(void)
 	return php_sdl_rect_ce;
 }
 
-zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
+zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
 {
 	if (rect) {
 		object_init_ex(value, php_sdl_rect_ce);
-		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, rect->x TSRMLS_CC);
-		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y TSRMLS_CC);
-		zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w TSRMLS_CC);
-		zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, rect->x);
+		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y);
+		zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w);
+		zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h);
 
 		return 1;
 	}
@@ -56,12 +56,12 @@ zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value TSRMLS_DC)
 	return 0;
 }
 
-zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
+zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 {
 	if (pt) {
 		object_init_ex(value, php_sdl_rect_ce);
-		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, pt->x TSRMLS_CC);
-		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y TSRMLS_CC);
+		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, pt->x);
+		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, pt->y);
 
 		return 1;
 	}
@@ -69,24 +69,24 @@ zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value TSRMLS_DC)
 	return 0;
 }
 
-zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
+zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 {
 	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
 		zval *val, rv;
 
-		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->x = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->y = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->w = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->h = (int)Z_LVAL_P(val);
 
@@ -97,16 +97,16 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect TSRMLS_DC)
 	return 0;
 }
 
-zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt TSRMLS_DC)
+zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 {
 	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_point_ce) {
 		zval *val, rv;
 
-		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = pt->x = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0, &rv TSRMLS_CC);
+		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = pt->y = (int)Z_LVAL_P(val);
 
@@ -125,14 +125,14 @@ static PHP_METHOD(SDL_Rect, __construct)
 {
 	long x, y, w, h;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|llll", &x, &y, &w, &h)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|llll", &x, &y, &w, &h)) {
 		return;
 	}
 
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "w", 1, w TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h TSRMLS_CC);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "w", 1, w);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h);
 }
 /* }}} */
 
@@ -148,7 +148,7 @@ static PHP_METHOD(SDL_Rect, __toString)
 		return;
 	}
 
-	zval_to_sdl_rect(getThis(), &rect TSRMLS_CC);
+	zval_to_sdl_rect(getThis(), &rect);
 	buf_len = spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
 	RETVAL_STRINGL(buf, buf_len);
     efree(buf);
@@ -164,15 +164,15 @@ static PHP_METHOD(SDL_Point, __construct)
 	long x, y;
 	zend_error_handling error_handling;
 
-	zend_replace_error_handling(EH_THROW, NULL, &error_handling TSRMLS_CC);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y)) {
-		zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &x, &y)) {
+		zend_restore_error_handling(&error_handling);
 		return;
 	}
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
+	zend_restore_error_handling(&error_handling);
 
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x TSRMLS_CC);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y TSRMLS_CC);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x);
+	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y);
 }
 /* }}} */
 
@@ -187,7 +187,7 @@ static PHP_METHOD(SDL_Point, __toString)
 		return;
 	}
 
-	zval_to_sdl_point(getThis(), &point TSRMLS_CC);
+	zval_to_sdl_point(getThis(), &point);
 	spprintf(&buf, 100, "SDL_Point(%d,%d)", point.x, point.y);
 	RETVAL_STRING(buf);
 }
@@ -204,10 +204,10 @@ PHP_FUNCTION(SDL_RectEmpty)
 	zval *object;
 	SDL_Rect rect;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "O", &object, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(object, &rect TSRMLS_CC);
+	zval_to_sdl_rect(object, &rect);
 	
 	RETURN_BOOL(SDL_RectEmpty(&rect));
 }
@@ -224,11 +224,11 @@ PHP_FUNCTION(SDL_RectEquals)
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
-	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
+	zval_to_sdl_rect(obj1, &rect1);
+	zval_to_sdl_rect(obj2, &rect2);
 	
 	RETURN_BOOL(SDL_RectEquals(&rect1, &rect2));
 }
@@ -248,11 +248,11 @@ PHP_FUNCTION(SDL_HasIntersection)
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
-	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
+	zval_to_sdl_rect(obj1, &rect1);
+	zval_to_sdl_rect(obj2, &rect2);
 	
 	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
 }
@@ -272,14 +272,14 @@ PHP_FUNCTION(SDL_IntersectRect)
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
-	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
+	zval_to_sdl_rect(obj1, &rect1);
+	zval_to_sdl_rect(obj2, &rect2);
 	if (SDL_IntersectRect(&rect1, &rect2, &rect3)) {
 		zval_dtor(result);
-		sdl_rect_to_zval(&rect3, result TSRMLS_CC);
+		sdl_rect_to_zval(&rect3, result);
 		RETURN_TRUE;
 	}
 	RETURN_FALSE;
@@ -298,14 +298,14 @@ PHP_FUNCTION(SDL_UnionRect)
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(obj1, &rect1 TSRMLS_CC);
-	zval_to_sdl_rect(obj2, &rect2 TSRMLS_CC);
+	zval_to_sdl_rect(obj1, &rect1);
+	zval_to_sdl_rect(obj2, &rect2);
 	SDL_UnionRect(&rect1, &rect2, &rect3);
 	zval_dtor(result);
-	sdl_rect_to_zval(&rect3, result TSRMLS_CC);
+	sdl_rect_to_zval(&rect3, result);
 }
 /* }}} */
 
@@ -329,7 +329,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	SDL_Rect clip, result;
 	SDL_Point *points;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "alOz", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "alOz", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
 		return;
 	}
 	RETVAL_FALSE;
@@ -339,26 +339,26 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	}
 	points = emalloc(sizeof(SDL_Point)*count);
 
-	zval_to_sdl_rect(z_clip, &clip TSRMLS_CC);
+	zval_to_sdl_rect(z_clip, &clip);
 	for (i=0, nb=0 ; i<count ; i++) {
 		if (!(z_point = zend_hash_index_find(Z_ARRVAL_P(z_points), i))) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld missing", i);
+			php_error_docref(NULL, E_WARNING, "point #%ld missing", i);
 
 		} else if (Z_TYPE(*z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce) {
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "point #%ld is not a SDL_Point object", i);
+			php_error_docref(NULL, E_WARNING, "point #%ld is not a SDL_Point object", i);
 
 		} else {
-			zval_to_sdl_point(z_point, points+nb TSRMLS_CC);
+			zval_to_sdl_point(z_point, points+nb);
 			nb++;
 		}
 	}
 
 	if (!nb) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "no point in provided array");
+		php_error_docref(NULL, E_WARNING, "no point in provided array");
 
 	} else if (SDL_EnclosePoints(points, nb, &clip, &result)) {
 		zval_dtor(z_result);
-		sdl_rect_to_zval(&result, z_result TSRMLS_CC);
+		sdl_rect_to_zval(&result, z_result);
 		RETVAL_TRUE;
 	}
 	efree(points);
@@ -382,10 +382,10 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	SDL_Rect rect;
 	int x1, y1, x2, y2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
 		return;
 	}
-	zval_to_sdl_rect(object, &rect TSRMLS_CC);
+	zval_to_sdl_rect(object, &rect);
 	convert_to_long_ex(z_x1);
 	convert_to_long_ex(z_y1);
 	convert_to_long_ex(z_x2);
@@ -441,20 +441,20 @@ PHP_MINIT_FUNCTION(sdl_rect)
 	zend_class_entry ce_rect, ce_point;
 
 	INIT_CLASS_ENTRY(ce_rect, "SDL_Rect", php_sdl_rect_methods);
-	php_sdl_rect_ce = zend_register_internal_class(&ce_rect TSRMLS_CC);
+	php_sdl_rect_ce = zend_register_internal_class(&ce_rect);
 	memcpy(&php_sdl_rect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	zend_declare_property_long(php_sdl_rect_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_rect_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_rect_ce, "w", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_rect_ce, "h", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_rect_ce, "x", 1, 0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_rect_ce, "y", 1, 0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_rect_ce, "w", 1, 0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_rect_ce, "h", 1, 0, ZEND_ACC_PUBLIC);
 
 	INIT_CLASS_ENTRY(ce_point, "SDL_Point", php_sdl_point_methods);
-	php_sdl_point_ce = zend_register_internal_class(&ce_point TSRMLS_CC);
+	php_sdl_point_ce = zend_register_internal_class(&ce_point);
 	memcpy(&php_sdl_point_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	zend_declare_property_long(php_sdl_point_ce, "x", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_long(php_sdl_point_ce, "y", 1, 0, ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_long(php_sdl_point_ce, "x", 1, 0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_point_ce, "y", 1, 0, ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
 }

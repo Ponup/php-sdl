@@ -28,8 +28,8 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_cursor_ce(void);
-zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags TSRMLS_DC);
-SDL_GLContext zval_to_sdl_cursor(zval *z_val TSRMLS_DC);
+zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags);
+SDL_GLContext zval_to_sdl_cursor(zval *z_val);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSystemCursor, 0, 0, 1)
        ZEND_ARG_INFO(0, id)

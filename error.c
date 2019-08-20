@@ -29,7 +29,7 @@ PHP_FUNCTION(SDL_SetError) {
 	char *error;
 	int  *error_len;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &error, &error_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &error, &error_len) == FAILURE) {
 		RETURN_FALSE;
 	}
 

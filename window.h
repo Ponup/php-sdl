@@ -28,8 +28,8 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_window_ce(void);
-zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val TSRMLS_DC);
-SDL_Window *zval_to_sdl_window(zval *z_val TSRMLS_DC);
+zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val);
+SDL_Window *zval_to_sdl_window(zval *z_val);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowDisplayMode, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)

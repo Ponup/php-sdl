@@ -57,7 +57,7 @@ PHP_FUNCTION(SDL_GetPrefPath)
 	char *org = NULL, *app = NULL, *pref_path = NULL;
 	size_t org_len, app_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &org, &org_len, &app, &app_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &org, &org_len, &app, &app_len)) {
 		RETURN_FALSE;
 	}
 

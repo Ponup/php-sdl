@@ -28,9 +28,9 @@ extern "C" {
 #include "php_sdl.h"
 
 zend_class_entry *get_php_sdl_rwops_ce(void);
-zend_bool  sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf TSRMLS_DC);
-SDL_RWops *zval_to_sdl_rwops(zval *z_val TSRMLS_DC);
-void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose TSRMLS_DC);
+zend_bool  sdl_rwops_to_zval(SDL_RWops *rwops, zval *z_val, Uint32 flags, char *buf);
+SDL_RWops *zval_to_sdl_rwops(zval *z_val);
+void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autoclose);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RWFromFile, 0, 0, 2)
        ZEND_ARG_INFO(0, path)
