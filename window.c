@@ -104,7 +104,7 @@ static inline php_sdl_window_t* php_sdl_window_fetch_object(zend_object* obj)
 		intern = (struct php_sdl_window*)((char*)zox - zox->handlers->offset);\
         __ptr = intern->window; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }

@@ -42,7 +42,7 @@ zend_class_entry *get_php_sdl_cursor_ce(void)
 		intern = (struct php_sdl_cursor *)((char*)zo - zo->handlers->offset);\
         __ptr = intern->cursor; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }

@@ -60,7 +60,7 @@ zend_class_entry *get_php_sdl_glcontext_ce(void)
 		intern = (struct php_sdl_glcontext*)((char*)zox - zox->handlers->offset);\
         __ptr = intern->glcontext; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }

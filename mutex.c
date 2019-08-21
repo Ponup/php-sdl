@@ -77,7 +77,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
         intern = (struct php_sdl_mutex *)Z_OBJ_P(__id);\
         __ptr = intern->mutex; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }
@@ -88,7 +88,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
         intern = (struct php_sdl_sem *)Z_OBJ_P(__id);\
         __ptr = intern->sem; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }
@@ -99,7 +99,7 @@ zend_class_entry *get_php_sdl_cond_ce(void)
         intern = (struct php_sdl_cond *)Z_OBJ_P(__id);\
         __ptr = intern->cond; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }

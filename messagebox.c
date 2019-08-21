@@ -473,7 +473,7 @@ ZEND_END_ARG_INFO()
         intern = (struct php_sdl_messageboxdata *)Z_OBJ_P(__id);\
         __ptr = intern->data; \
         if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", intern->zo.ce->name);\
+                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }
