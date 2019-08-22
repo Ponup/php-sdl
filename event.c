@@ -76,6 +76,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 
 			add_property_zval(value, "key", &key);
 			zval_ptr_dtor(&key);
+			zval_ptr_dtor(&keysym);
 			} break;
 		case SDL_WINDOWEVENT: {
 			zval window;
