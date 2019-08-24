@@ -94,7 +94,7 @@ ZEND_END_ARG_INFO()
 */
 static PHP_METHOD(SDL_DisplayMode, __construct)
 {
-	long format, w, h, rate;
+	zend_long format, w, h, rate;
 	zend_error_handling error_handling;
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
@@ -160,7 +160,7 @@ PHP_FUNCTION(SDL_GetNumVideoDrivers)
 */
 PHP_FUNCTION(SDL_GetVideoDriver)
 {
-	long driver;
+	zend_long driver;
 	const char *name;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &driver) == FAILURE) {
@@ -194,7 +194,8 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 PHP_FUNCTION(SDL_VideoInit)
 {
 	char *name = NULL;
-	int  name_len = 0, res;
+	size_t name_len = 0;
+	int res;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|s", &name, &name_len) == FAILURE) {
 		RETURN_FALSE;
@@ -284,7 +285,7 @@ PHP_FUNCTION(SDL_GetNumVideoDisplays)
 */
 PHP_FUNCTION(SDL_GetDisplayName)
 {
-	long display;
+	zend_long display;
 	const char *name;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
@@ -310,7 +311,8 @@ PHP_FUNCTION(SDL_GetDisplayName)
  */
 PHP_FUNCTION(SDL_GetDisplayBounds)
 {
-	long display, err;
+	zend_long display;
+	long err;
 	SDL_Rect rect;
 	zval *result;
 
@@ -336,7 +338,7 @@ PHP_FUNCTION(SDL_GetDisplayBounds)
  */
 PHP_FUNCTION(SDL_GetNumDisplayModes)
 {
-	long display;
+	zend_long display;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
 		RETURN_FALSE;
@@ -363,7 +365,7 @@ PHP_FUNCTION(SDL_GetNumDisplayModes)
  */
 PHP_FUNCTION(SDL_GetDisplayMode)
 {
-	long display, mode;
+	zend_long display, mode;
 	SDL_DisplayMode dm;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &display, &mode) == FAILURE) {
@@ -383,7 +385,7 @@ PHP_FUNCTION(SDL_GetDisplayMode)
  */
 PHP_FUNCTION(SDL_GetDesktopDisplayMode)
 {
-	long display;
+	zend_long display;
 	SDL_DisplayMode dm;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
@@ -404,7 +406,7 @@ PHP_FUNCTION(SDL_GetDesktopDisplayMode)
  */
 PHP_FUNCTION(SDL_GetCurrentDisplayMode)
 {
-	long display;
+	zend_long display;
 	SDL_DisplayMode dm;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &display) == FAILURE) {
@@ -442,7 +444,7 @@ PHP_FUNCTION(SDL_GetCurrentDisplayMode)
  */
 PHP_FUNCTION(SDL_GetClosestDisplayMode)
 {
-	long display;
+	zend_long display;
 	zval *z_desired, *z_closest = NULL;
 	SDL_DisplayMode desired, closest;
 
