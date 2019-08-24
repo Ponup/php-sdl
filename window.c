@@ -308,7 +308,7 @@ PHP_FUNCTION(SDL_SetWindowPosition)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	long x, y;
+	zend_long x, y;
 	SDL_Window *window;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
@@ -325,7 +325,7 @@ PHP_FUNCTION(SDL_SetWindowPosition)
 */
 PHP_FUNCTION(SDL_WINDOWPOS_CENTERED_DISPLAY)
 {
-	long display;
+	zend_long display;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display)) {
 		return;
@@ -341,7 +341,7 @@ PHP_FUNCTION(SDL_WINDOWPOS_CENTERED_DISPLAY)
 */
 PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY)
 {
-	long display;
+	zend_long display;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display)) {
 		return;
@@ -405,7 +405,7 @@ PHP_FUNCTION(SDL_SetWindowSize)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	long x, y;
+	zend_long x, y;
 	SDL_Window *window;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
@@ -472,7 +472,7 @@ PHP_FUNCTION(SDL_SetWindowMinimumSize)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	long x, y;
+	zend_long x, y;
 	SDL_Window *window;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
@@ -540,7 +540,7 @@ PHP_FUNCTION(SDL_SetWindowMaximumSize)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	long x, y;
+	zend_long x, y;
 	SDL_Window *window;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
@@ -772,7 +772,7 @@ PHP_FUNCTION(SDL_SetWindowFullscreen)
 	struct php_sdl_window *intern;
 	zval *object;
 	SDL_Window *window;
-	long flags;
+	zend_long flags;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &object, php_sdl_window_ce, &flags) == FAILURE) {
 		return;
@@ -1026,7 +1026,7 @@ PHP_FUNCTION(SDL_GetWindowGammaRamp)
 static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 {
 	struct php_sdl_window *intern;
-	long x, y, w, h, flags;
+	zend_long x, y, w, h, flags;
 	char *title;
 	size_t title_len;
 	SDL_Window *window;
@@ -1113,7 +1113,7 @@ PHP_FUNCTION(SDL_CreateWindow)
 static PHP_METHOD(SDL_Window, __construct)
 {
 	struct php_sdl_window *intern;
-	long x, y, w, h, flags;
+	zend_long x, y, w, h, flags;
 	char *title;
 	size_t title_len;
 	zend_error_handling error_handling;
@@ -1247,7 +1247,7 @@ PHP_FUNCTION(SDL_SetWindowTitle)
 	zval *object;
 	SDL_Window *window;
 	char *title;
-	int  *title_len;
+	size_t title_len;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Os", &object, php_sdl_window_ce, &title, &title_len) == FAILURE) {
 		return;
