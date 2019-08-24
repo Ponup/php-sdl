@@ -35,15 +35,13 @@ struct php_sdl_palette {
 	Uint32        flags;
 };
 
-static zend_class_entry *php_sdl_pixelformat_ce;
 static zend_object_handlers php_sdl_pixelformat_handlers;
 struct php_sdl_pixelformat {
-	zend_object      zo;
 	SDL_PixelFormat *format;
 	Uint32           flags;
+	zend_object      zo;
 };
 
-static zend_class_entry *php_sdl_pixels_ce;
 static zend_object_handlers php_sdl_pixels_handlers;
 struct php_sdl_pixels {
 	zend_object      zo;
@@ -83,7 +81,8 @@ zend_class_entry *get_php_sdl_pixels_ce(void)
 
 #define FETCH_PIXELFORMAT(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_pixelformat *)Z_OBJ_P(__id);\
+		zend_object* zox = Z_OBJ_P(__id);\
+        intern = (struct php_sdl_pixelformat *)((char*)zox - zox->handlers->offset);\
         __ptr = intern->format; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
@@ -161,7 +160,8 @@ zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 f
 		struct php_sdl_pixelformat *intern;
 
 		object_init_ex(z_val, php_sdl_pixelformat_ce);
-		intern = (struct php_sdl_pixelformat *)Z_OBJ_P(z_val);
+		zend_object *zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_pixelformat *)((char*)zo - zo->handlers->offset);
 		intern->format = format;
 		intern->flags = flags;
 
@@ -197,7 +197,8 @@ SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val)
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_pixelformat_ce) {
 		struct php_sdl_pixelformat *intern;
 
-		intern = (struct php_sdl_pixelformat *)Z_OBJ_P(z_val);
+		zend_object *zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_pixelformat*)((char*)zo - zo->handlers->offset);
 		return intern->format;
 		}
 	return NULL;
@@ -1174,7 +1175,7 @@ static zend_object* php_sdl_palette_new(zend_class_entry *class_type)
 	 */
 static void php_sdl_pixelformat_free(zend_object *object)
 {
-	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat *) object;
+	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat*)((char*)object - object->handlers->offset);
 
 	if (intern->format) {
 		if (!(intern->flags & SDL_DONTFREE)) {
@@ -1192,7 +1193,7 @@ static zend_object* php_sdl_pixelformat_new(zend_class_entry *class_type)
 {
 	struct php_sdl_pixelformat *intern;
 
-	intern = ecalloc(1, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
+	intern = (struct php_sdl_pixelformat*)ecalloc(1, sizeof(struct php_sdl_pixelformat) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
@@ -1311,10 +1312,10 @@ static const zend_function_entry php_sdl_pixels_methods[] = {
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_pixels)
 {
-	zend_class_entry ce;
+	zend_class_entry ce_color, ce_palette, ce_pixelformat, ce_pixels;
 
-	INIT_CLASS_ENTRY(ce, "SDL_Color", php_sdl_color_methods);
-	php_sdl_color_ce = zend_register_internal_class(&ce);
+	INIT_CLASS_ENTRY(ce_color, "SDL_Color", php_sdl_color_methods);
+	php_sdl_color_ce = zend_register_internal_class(&ce_color);
 	memcpy(&php_sdl_color_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	REGISTER_COLOR_PROP("r");
@@ -1322,9 +1323,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_COLOR_PROP("b");
 	REGISTER_COLOR_PROP("a");
 
-	INIT_CLASS_ENTRY(ce, "SDL_Palette", php_sdl_palette_methods);
-	ce.create_object = php_sdl_palette_new;
-	php_sdl_palette_ce = zend_register_internal_class(&ce);
+	INIT_CLASS_ENTRY(ce_palette, "SDL_Palette", php_sdl_palette_methods);
+	php_sdl_palette_ce = zend_register_internal_class(&ce_palette);
+	php_sdl_palette_ce->create_object = php_sdl_palette_new;
 	zend_class_implements(php_sdl_palette_ce, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_palette_handlers.free_obj = php_sdl_palette_free;
@@ -1334,11 +1335,12 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_PALETTE_PROP("refcount");
 	zend_declare_property_null(php_sdl_palette_ce, ZEND_STRL("colors"), ZEND_ACC_PUBLIC);
 
-	INIT_CLASS_ENTRY(ce, "SDL_PixelFormat", php_sdl_pixelformat_methods);
-	ce.create_object = php_sdl_pixelformat_new;
-	php_sdl_pixelformat_ce = zend_register_internal_class(&ce);
+	INIT_CLASS_ENTRY(ce_pixelformat, "SDL_PixelFormat", php_sdl_pixelformat_methods);
+	php_sdl_pixelformat_ce = zend_register_internal_class(&ce_pixelformat);
+	php_sdl_pixelformat_ce->create_object = php_sdl_pixelformat_new;
 	memcpy(&php_sdl_pixelformat_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_pixelformat_handlers.free_obj = php_sdl_pixelformat_free;
+	php_sdl_pixelformat_handlers.offset = XtOffsetOf(struct php_sdl_pixelformat, zo);
 
 	REGISTER_FORMAT_PROP("format");
 	REGISTER_FORMAT_PROP("BitsPerPixel");
@@ -1357,9 +1359,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	REGISTER_FORMAT_PROP("Ashift");
 	zend_declare_property_null(php_sdl_pixelformat_ce, ZEND_STRL("palette"), ZEND_ACC_PUBLIC);
 
-	INIT_CLASS_ENTRY(ce, "SDL_Pixels", php_sdl_pixels_methods);
-	ce.create_object = php_sdl_pixels_new;
-	php_sdl_pixels_ce = zend_register_internal_class(&ce);
+	INIT_CLASS_ENTRY(ce_pixels, "SDL_Pixels", php_sdl_pixels_methods);
+	php_sdl_pixels_ce = zend_register_internal_class(&ce_pixels);
+	php_sdl_pixels_ce->create_object = php_sdl_pixels_new;
 	zend_class_implements(php_sdl_pixels_ce, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_pixels_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	php_sdl_pixels_handlers.free_obj = php_sdl_pixels_free;

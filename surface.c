@@ -166,23 +166,13 @@ PHP_FUNCTION(SDL_LoadBMP)
 {
 	char *path;
 	size_t path_len;
-	zval z_rwops;
 	SDL_Surface *surface = NULL;
-	SDL_RWops *rwops;
-	php_stream *stream;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &path, &path_len)) {
 		return;
 	}
-	stream = php_stream_open_wrapper(path, "rb", REPORT_ERRORS, NULL);
-	php_stream_to_zval_rwops(stream, &z_rwops, 0);
 
-	rwops = zval_to_sdl_rwops(&z_rwops);
-	surface = SDL_LoadBMP_RW(rwops, 0);
-
-	/* we close the SDL_RWops ourself, to free the PHP object */
-	zval_dtor(&z_rwops);
-	ZVAL_NULL(&z_rwops);
+	surface = SDL_LoadBMP(path);
 
 	sdl_surface_to_zval(surface, return_value);
 }
@@ -1295,44 +1285,45 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type)
 /* {{{ sdl_surface_read_property*/
 zval *sdl_surface_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key)
 {
+	zval tmp_member;
 	zend_object* zobject = Z_OBJ_P(object);
 	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char*)zobject - zobject->handlers->offset);
-	zval *retval = NULL, retval2,  tmp_member;
+	zval *retval = ecalloc(1, sizeof(zval));
+
  	if (!intern->surface) {
  		return retval;
 	}
+
  	if (Z_TYPE_P(member) != IS_STRING) {
 		tmp_member = *member;
 		zval_copy_ctor(&tmp_member);
 		convert_to_string(&tmp_member);
 		member = &tmp_member;
-		key = NULL;
 	}
- //	Z_SET_REFCOUNT_P(&retval2, 0);
+
  	if (!strcmp(Z_STRVAL_P(member), "flags")) {
-		ZVAL_LONG(&retval2, intern->surface->flags);
+		ZVAL_LONG(retval, intern->surface->flags);
  	} else if (!strcmp(Z_STRVAL_P(member), "w")) {
-		ZVAL_LONG(&retval2, intern->surface->w);
+		ZVAL_LONG(retval, intern->surface->w);
  	} else if (!strcmp(Z_STRVAL_P(member), "h")) {
-		ZVAL_LONG(&retval2, intern->surface->h);
+		ZVAL_LONG(retval, intern->surface->h);
  	} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
-		ZVAL_LONG(&retval2, intern->surface->pitch);
+		ZVAL_LONG(retval, intern->surface->pitch);
  	} else if (!strcmp(Z_STRVAL_P(member), "locked")) {
-		ZVAL_LONG(&retval2, intern->surface->locked);
+		ZVAL_LONG(retval, intern->surface->locked);
  	} else if (!strcmp(Z_STRVAL_P(member), "format")) {
-		sdl_pixelformat_to_zval(intern->surface->format, &retval2, SDL_DONTFREE);
+		sdl_pixelformat_to_zval(intern->surface->format, retval, SDL_DONTFREE);
  	} else if (!strcmp(Z_STRVAL_P(member), "clip_rect")) {
-		sdl_rect_to_zval(&intern->surface->clip_rect, &retval2);
+		sdl_rect_to_zval(&intern->surface->clip_rect, retval);
  	} else if (!strcmp(Z_STRVAL_P(member), "pixels")) {
 		SDL_Pixels pix;
  		pix.pitch  = intern->surface->pitch;
 		pix.h      = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
-		sdl_pixels_to_zval(&pix, &retval2, SDL_DONTFREE);
+		sdl_pixels_to_zval(&pix, retval, SDL_DONTFREE);
  	} else {
 		return retval;
 	}
-    retval = &retval2;
  	if (member == &tmp_member) {
 		zval_dtor(member);
 	}
@@ -1364,9 +1355,9 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_PROP("w");
 	REGISTER_SURFACE_PROP("h");
 	REGISTER_SURFACE_PROP("pitch");
-	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("format"),    ZEND_ACC_PUBLIC);
-	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
-	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("pixels"),    ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_pixelformat_ce, ZEND_STRL("format"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_rect_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_pixels_ce, ZEND_STRL("pixels"), ZEND_ACC_PUBLIC);
 
 	REGISTER_SURFACE_CLASS_CONST_LONG("SWSURFACE",         SDL_SWSURFACE);
 	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC",          SDL_PREALLOC);
