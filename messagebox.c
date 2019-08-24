@@ -240,7 +240,7 @@ typedef struct
 */
 static PHP_METHOD(SDL_MessageBoxColor, __construct)
 {
-	long r, g, b;
+	zend_long r, g, b;
 	zend_error_handling error_handling;
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
@@ -293,7 +293,7 @@ ZEND_END_ARG_INFO()
 */
 static PHP_METHOD(SDL_MessageBoxButtonData, __construct)
 {
-	long flags, id;
+	zend_long flags, id;
 	char *text;
 	size_t text_len;
 	zend_error_handling error_handling;
@@ -358,7 +358,7 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 {
 	struct php_sdl_messageboxdata *intern;
 	zval *z_window=NULL, *z_buttons=NULL, *z_colors=NULL;
-	long flags;
+	zend_long flags;
 	char *title, *text;
 	size_t title_len, text_len;
 	int  n, nb;
@@ -530,7 +530,7 @@ PHP_FUNCTION(SDL_ShowMessageBox)
  */
 PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 {
-	long flags;
+	zend_long flags;
 	char *title, *msg;
 	size_t title_len, msg_len;
 	zval *z_window = NULL;

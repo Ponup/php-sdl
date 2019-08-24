@@ -3,6 +3,9 @@ dnl config.m4 for the PHP SDL extension
 PHP_ARG_WITH(sdl, whether to enable SDL functions,
 [  --with-sdl[=SDLCONFIG_PATH]         Enable SDL support])
 
+PHP_ARG_ENABLE(sdl-debug, whether to enable PHP-SDL debug support,
+[  --enable-sdl-debug     Enable SDL debug support], no, no)
+
 if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
   export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2 -Wall -Wfatal-errors"
@@ -26,6 +29,12 @@ if test "$PHP_SDL" != "no"; then
   PHP_SDL_CFLAGS="$CPPFLAGS"
 
   export CPPFLAGS="$OLD_CPPFLAGS"
+
+  dnl {{{ --enable-sdl-debug
+  if test "$PHP_SDL_DEBUG" != "no"; then
+    CFLAGS="$CFLAGS -Wall -Wpedantic -g -ggdb -O0"
+  fi
+  dnl }}}
 
   if test "$PHP_SDL" == "yes"; then
     AC_PATH_PROG(SDL2_CONFIG, sdl2-config, no)

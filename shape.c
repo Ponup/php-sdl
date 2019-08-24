@@ -34,6 +34,12 @@ zend_class_entry *get_php_sdl_windowshapemode_ce(void)
 	return php_sdl_windowshapemode_ce;
 }
 
+static inline struct php_sdl_windowshapemode* php_sdl_windowshapemode_fetch_object(zend_object* obj)
+{
+	return (struct php_sdl_windowshapemode*) ((char*) obj - XtOffsetOf(struct php_sdl_windowshapemode, zo));
+}
+
+
 /* {{{ sdl_windowshapemode_to_zval */
 zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val)
 {
@@ -41,7 +47,7 @@ zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val)
 		struct php_sdl_windowshapemode *intern;
 
 		object_init_ex(z_val, php_sdl_windowshapemode_ce);
-		intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(z_val);
+		intern = php_sdl_windowshapemode_fetch_object(Z_OBJ_P(z_val));
 		memcpy(&intern->mode, mode, sizeof(SDL_WindowShapeMode));
 
 		return 1;
@@ -55,10 +61,8 @@ zend_bool sdl_windowshapemode_to_zval(SDL_WindowShapeMode *mode, zval *z_val)
 SDL_WindowShapeMode *zval_to_sdl_windowshapemode(zval *z_val)
 {
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_windowshapemode_ce) {
-		zend_object* zo = Z_OBJ_P(z_val);
-
 		struct php_sdl_windowshapemode *intern;
-		intern = (struct php_sdl_windowshapemode*)((char*)zo - zo->handlers->offset);
+		intern = php_sdl_windowshapemode_fetch_object(Z_OBJ_P(z_val));
 		return &intern->mode;
 	}
 	return NULL;
@@ -107,7 +111,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 	zval *z_param;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis());
+	intern = php_sdl_windowshapemode_fetch_object(Z_OBJ_P(getThis()));
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &mode, &z_param)) {
@@ -147,7 +151,7 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_windowshapemode *)Z_OBJ_P(getThis());
+	intern = php_sdl_windowshapemode_fetch_object(Z_OBJ_P(getThis()));
 	switch (intern->mode.mode) {
 		case ShapeModeDefault:
 			spprintf(&buf, 200, "SDL_WindowShapeMode(ShapeModeDefault, %u)", intern->mode.parameters.binarizationCutoff);

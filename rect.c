@@ -122,7 +122,7 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 */
 static PHP_METHOD(SDL_Rect, __construct)
 {
-	long x, y, w, h;
+	zend_long x = 0, y = 0, w = 0, h = 0;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|llll", &x, &y, &w, &h)) {
 		return;
@@ -160,7 +160,7 @@ static PHP_METHOD(SDL_Rect, __toString)
 */
 static PHP_METHOD(SDL_Point, __construct)
 {
-	long x, y;
+	zend_long x, y;
 	zend_error_handling error_handling;
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
@@ -323,7 +323,8 @@ PHP_FUNCTION(SDL_UnionRect)
 PHP_FUNCTION(SDL_EnclosePoints)
 {
 	zval *z_points, *z_clip, *z_result, *z_point;
-	long i, count;
+	long i;
+	zend_long count;
 	int nb;
 	SDL_Rect clip, result;
 	SDL_Point *points;

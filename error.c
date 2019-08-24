@@ -27,7 +27,7 @@
 */
 PHP_FUNCTION(SDL_SetError) {
 	char *error;
-	int  *error_len;
+	size_t error_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &error, &error_len) == FAILURE) {
 		RETURN_FALSE;

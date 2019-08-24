@@ -31,7 +31,7 @@ int le_sdl_texture;
 PHP_FUNCTION(SDL_SetRenderDrawColor)
 {
 	zval *z_renderer;
-	long r, g, b, a;
+	zend_long r, g, b, a;
 	SDL_Renderer *renderer;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zllll", &z_renderer, &r, &g, &b, &a) == FAILURE ) {
@@ -289,7 +289,7 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	double angle;
 	SDL_Point *center = NULL;
 	SDL_Point def_center;
-	long flip;
+	zend_long flip;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zzO!O!dO!l", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce(), &angle, &z_center, get_php_sdl_point_ce(), &flip) == FAILURE ) {
 		WRONG_PARAM_COUNT;

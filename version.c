@@ -164,7 +164,7 @@ PHP_FUNCTION(SDL_VERSION)
  */
 PHP_FUNCTION(SDL_VERSIONNUM)
 {
-	long x, y, z;
+	zend_long x, y, z;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &x, &y, &z) == FAILURE) {
 		RETURN_FALSE;
@@ -180,7 +180,7 @@ PHP_FUNCTION(SDL_VERSIONNUM)
  */
 PHP_FUNCTION(SDL_VERSION_ATLEAST)
 {
-	long x, y, z;
+	zend_long x, y, z;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lll", &x, &y, &z) == FAILURE) {
 		RETURN_FALSE;

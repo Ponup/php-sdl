@@ -53,7 +53,7 @@ PHP_FUNCTION(SDL_Init) {
 extern DECLSPEC int SDLCALL SDL_InitSubSystem(Uint32 flags);
 */
 PHP_FUNCTION(SDL_InitSubSystem) {
-	long flags;
+	zend_long flags;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &flags) == FAILURE) {
 		RETURN_FALSE;
@@ -85,7 +85,7 @@ PHP_FUNCTION(SDL_Quit)
 extern DECLSPEC void SDLCALL SDL_QuitSubSystem(Uint32 flags);
 */
 PHP_FUNCTION(SDL_QuitSubSystem) {
-	long flags;
+	zend_long flags;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &flags) == FAILURE) {
 		RETURN_FALSE;

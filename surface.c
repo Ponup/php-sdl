@@ -107,7 +107,7 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val)
 */
 PHP_FUNCTION(SDL_CreateRGBSurface)
 {
-	long flags, width, height, depth, rmask, gmask, bmask, amask;
+	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask)) {
@@ -183,7 +183,7 @@ PHP_FUNCTION(SDL_LoadBMP)
 static PHP_METHOD(SDL_Surface, __construct)
 {
 	struct php_sdl_surface *intern;
-	long flags, width, height, depth, rmask, gmask, bmask, amask;
+	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
 	zend_error_handling error_handling;
 
 	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis());
@@ -1176,7 +1176,7 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 PHP_FUNCTION(SDL_ConvertPixels)
 {
 	zval *z_src, *z_dst;
-	long w, h, sf, sp, df, dp;
+	zend_long w, h, sf, sp, df, dp;
 	SDL_Pixels *src, *dst;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllOllOl", &w, &h, &sf, &z_src, get_php_sdl_pixels_ce(), &sp, &df, &z_dst, get_php_sdl_pixels_ce(), &dp)) {

@@ -151,7 +151,7 @@ static zend_object* php_sdl_glcontext_new(zend_class_entry *class_type)
 PHP_FUNCTION(SDL_GL_ExtensionSupported)
 {
 	char *ext;
-	int  *ext_len;
+	size_t ext_len;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &ext, &ext_len)) {
 		return;
@@ -167,7 +167,7 @@ PHP_FUNCTION(SDL_GL_ExtensionSupported)
  */
 PHP_FUNCTION(SDL_GL_SetAttribute)
 {
-	long attr, value;
+	zend_long attr, value;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &attr, &value)) {
 		return;
@@ -184,7 +184,7 @@ PHP_FUNCTION(SDL_GL_SetAttribute)
  */
 PHP_FUNCTION(SDL_GL_GetAttribute)
 {
-	long attr;
+	zend_long attr;
 	zval *z_value;
 	int ret, value;
 
@@ -445,7 +445,7 @@ PHP_FUNCTION(SDL_GL_SwapWindow)
  */
 PHP_FUNCTION(SDL_GL_SetSwapInterval)
 {
-	long value;
+	zend_long value;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &value)) {
 		return;
