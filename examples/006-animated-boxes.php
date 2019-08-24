@@ -7,12 +7,6 @@ SDL_Init(SDL_INIT_EVERYTHING);
 $window = SDL_CreateWindow('Progress bar animation', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 400, 300, SDL_WINDOW_SHOWN | SDL_Window::RESIZABLE);
 $surf = SDL_GetWindowSurface($window);
 
-// Load the PHP Logo from a stream
-$logo = SDL_LoadBMP('spaceship.bmp');
-if($logo == null) {
-	exit('Unable to load image');
-}
-
 $time = 4;
 $step = 5;
 $color = SDL_MapRGB($surf->format, 0xff, 0x87, 0xef);
@@ -20,16 +14,10 @@ $color = SDL_MapRGB($surf->format, 0xff, 0x87, 0xef);
 // Compute rects
 $rects = [];
 for ($t = $time * $step; $t; $t--) {
-    $rects[$time * $step - $t] = new SDL_Rect(35 + ($time * $step + 1 - $t) * 15, $logo->h + 20, 10, 10);
+    $rects[$time * $step - $t] = new SDL_Rect(35 + ($time * $step + 1 - $t) * 15, 20, 10, 10);
 }
 // Display rects in ~white
 $surf->FillRects($rects, count($rects), $color);
-
-// Display the logo
-$drect = $logo->clip_rect;
-$drect->x = ($surf->clip_rect->w - $logo->w ) / 2;
-$drect->y = 10;
-$logo->Blit(NULL, $surf, $drect);
 
 SDL_UpdateWindowSurface($window);
 

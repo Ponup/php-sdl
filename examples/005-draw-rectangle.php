@@ -18,14 +18,15 @@ SDL_RenderDrawRect($renderer, $rect);
 
 SDL_RenderPresent($renderer);
 
-$iniTime = time();
+$quit = false;
 $event = new SDL_Event;
-while(true) {
+while(!$quit) {
 	SDL_PollEvent($event);
 	SDL_Delay(30);
 
-	// Stop after 5 seconds
-	if(time() - $iniTime > 5) break;
+	while(SDL_PollEvent($event)) {
+		if($event->type == SDL_QUIT) $quit = true;
+	}
 }
 
 SDL_DestroyRenderer($renderer);

@@ -8,7 +8,6 @@ SDL_Init(SDL_INIT_VIDEO);
 $window = SDL_CreateWindow('Window Events', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 $renderer = SDL_CreateRenderer($window, -1, 0);
 
-
 SDL_SetRenderDrawColor($renderer, 255, 0, 255, 255);
 
 $event = new SDL_Event;
@@ -71,7 +70,7 @@ while (!$quit) {
                         break;
                 }
                 $window->setTitle($eventText);
-                echo "[{$event->window->windowID}][{$event->window->timestamp}]\t$eventText \n";
+				printf('Event{windowID=%d, timestamp=%s, description=%s}' . PHP_EOL, $event->window->windowID, $event->window->timestamp, $eventText);
             	break;
     	}
 	}
