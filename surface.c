@@ -133,7 +133,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 PHP_FUNCTION(SDL_LoadBMP_RW)
 {
 	zval *z_rwops;
-	long freesrc;
+	zend_long freesrc;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
 
@@ -247,7 +247,7 @@ PHP_FUNCTION(SDL_SaveBMP_RW)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface, *z_rwops;
-	long freedst=0;
+	zend_long freedst = 0;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
 	int result;
@@ -291,7 +291,8 @@ PHP_FUNCTION(SDL_SaveBMP)
 	char *path;
 	SDL_Surface *surface;
 	SDL_RWops *rwops;
-	int path_len, result=-1;
+	size_t path_len;
+	int result = -1;
 	php_stream *stream;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Os", &z_surface, php_sdl_surface_ce, &path, &path_len) == FAILURE) {
@@ -353,7 +354,7 @@ PHP_FUNCTION(SDL_FillRect)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface, *z_rect;
-	long color;
+	zend_long color;
 	SDL_Rect rect;
 	SDL_Surface *surface;
 
@@ -377,7 +378,7 @@ PHP_FUNCTION(SDL_FillRects)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface, *z_rects, *z_rect;
-	long color, count;
+	zend_long color, count;
 	int i, nb;
 	SDL_Rect *rects;
 	SDL_Surface *surface;
@@ -776,7 +777,7 @@ PHP_FUNCTION(SDL_SetSurfaceRLE)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long flag;
+	zend_long flag;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_surface, php_sdl_surface_ce, &flag)) {
@@ -805,7 +806,7 @@ PHP_FUNCTION(SDL_SetColorKey)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long flag, key=0;
+	zend_long flag, key = 0;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_surface, php_sdl_surface_ce, &flag, &key)) {
@@ -869,7 +870,7 @@ PHP_FUNCTION(SDL_SetSurfaceColorMod)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long r, g, b;
+	zend_long r, g, b;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olll", &z_surface, php_sdl_surface_ce, &r, &g, &b)) {
@@ -938,7 +939,7 @@ PHP_FUNCTION(SDL_SetSurfaceAlphaMod)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long a;
+	zend_long a;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_surface, php_sdl_surface_ce, &a)) {
@@ -1000,7 +1001,7 @@ PHP_FUNCTION(SDL_SetSurfaceBlendMode)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	long mode;
+	zend_long mode;
 	SDL_Surface *surface;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_surface, php_sdl_surface_ce, &mode)) {
@@ -1123,7 +1124,7 @@ PHP_FUNCTION(SDL_ConvertSurface)
 {
 	struct php_sdl_surface *intern;
 	zval *z_src, *z_format;
-	long flags = 0;
+	zend_long flags = 0;
 	SDL_Surface *src, *dst;
 	SDL_PixelFormat *format;
 
@@ -1150,7 +1151,7 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 {
 	struct php_sdl_surface *intern;
 	zval *z_src;
-	long format, flags = 0;
+	zend_long format, flags = 0;
 	SDL_Surface *src, *dst;
 
 	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_src, php_sdl_surface_ce, &format, &flags)) {

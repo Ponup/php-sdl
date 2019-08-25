@@ -204,7 +204,7 @@ PHP_FUNCTION(SDL_AllocRW)
 PHP_FUNCTION(SDL_RWFromFile)
 {
 	char *path, *mode;
-	int path_len, mode_len;
+	size_t path_len, mode_len;
 	SDL_RWops *rwops;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &path, &path_len, &mode, &mode_len)) {
@@ -223,8 +223,8 @@ extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromConstMem(const void *mem,
 PHP_FUNCTION(SDL_RWFromConstMem)
 {
 	char *buf, *pbuf;
-	int buf_len;
-	long size=0;
+	size_t buf_len;
+	zend_long size = 0;
 	SDL_RWops *rwops;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s|l", &buf, &buf_len, &size)) {
@@ -233,7 +233,7 @@ PHP_FUNCTION(SDL_RWFromConstMem)
 	if (size<=0) {
 		size=buf_len;
 	} else if (buf_len < size) {
-		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%ld)", buf_len);
 		size = buf_len;
 	}
 
@@ -251,7 +251,7 @@ extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromMem(void *mem, int size);
 PHP_FUNCTION(SDL_RWFromMem)
 {
 	zval *z_buf;
-	long size=0;
+	zend_long size = 0;
 	SDL_RWops *rwops;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "zl", &z_buf, &size)) {
@@ -307,7 +307,7 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 PHP_FUNCTION(SDL_RWFromFP)
 {
 	zval *z_stream;
-	long autoclose=0;
+	zend_long autoclose = 0;
 	php_stream *stream;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "r|l", &z_stream, &autoclose)) {
@@ -373,7 +373,7 @@ PHP_FUNCTION(SDL_RWseek)
 	struct php_sdl_rwops *intern;
 	zval *z_rwops;
 	SDL_RWops *rwops;
-	long offset, whence;
+	zend_long offset, whence;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_rwops, php_sdl_rwops_ce, &offset, &whence) == FAILURE) {
 		return;
@@ -437,7 +437,8 @@ PHP_FUNCTION(SDL_RWread)
 {
 	struct php_sdl_rwops *intern;
 	zval *z_rwops, *z_buf;
-	long size, n=0, read;
+	zend_long size, n=0;
+	long read;
 	SDL_RWops *rwops;
 	char *buf;
 
@@ -476,8 +477,9 @@ PHP_FUNCTION(SDL_RWwrite)
 {
 	struct php_sdl_rwops *intern;
 	zval *z_rwops;
-	long size=0, n=0, write;
-	int buf_len;
+	zend_long size=0, n=0;
+	long write;
+	size_t buf_len;
 	SDL_RWops *rwops;
 	char *buf;
 
@@ -495,7 +497,7 @@ PHP_FUNCTION(SDL_RWwrite)
 		return;
 	}
 	if (buf_len < (size * n)) {
-		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%d)", buf_len);
+		php_error_docref(NULL, E_WARNING, "given size reduce to buffer size (%ld)", buf_len);
 		size = 1;
 		n = buf_len;
 	}
@@ -661,7 +663,7 @@ PHP_FUNCTION(SDL_ReadBE64)
 PHP_FUNCTION(SDL_WriteU8)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -682,7 +684,7 @@ PHP_FUNCTION(SDL_WriteU8)
 PHP_FUNCTION(SDL_WriteLE16)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -704,7 +706,7 @@ PHP_FUNCTION(SDL_WriteLE16)
 PHP_FUNCTION(SDL_WriteBE16)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -725,7 +727,7 @@ PHP_FUNCTION(SDL_WriteBE16)
 PHP_FUNCTION(SDL_WriteLE32)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -746,7 +748,7 @@ PHP_FUNCTION(SDL_WriteLE32)
 PHP_FUNCTION(SDL_WriteBE32)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -768,7 +770,7 @@ PHP_FUNCTION(SDL_WriteBE32)
 PHP_FUNCTION(SDL_WriteLE64)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 
@@ -789,7 +791,7 @@ PHP_FUNCTION(SDL_WriteLE64)
 PHP_FUNCTION(SDL_WriteBE64)
 {
 	struct php_sdl_rwops *intern;
-	long value;
+	zend_long value;
 	zval *z_rwops;
 	SDL_RWops *rwops;
 

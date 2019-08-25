@@ -110,7 +110,7 @@ PHP_FUNCTION(SDL_GetModState)
  */
 PHP_FUNCTION(SDL_SetModState)
 {
-	long modstate;
+	zend_long modstate;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &modstate)) {
 		return;
@@ -132,7 +132,7 @@ PHP_FUNCTION(SDL_SetModState)
  */
 PHP_FUNCTION(SDL_GetKeyFromScancode)
 {
-	long scancode;
+	zend_long scancode;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
 		return;
@@ -154,7 +154,7 @@ PHP_FUNCTION(SDL_GetKeyFromScancode)
  */
 PHP_FUNCTION(SDL_GetScancodeFromKey)
 {
-	long key;
+	zend_long key;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
 		return;
@@ -177,7 +177,7 @@ PHP_FUNCTION(SDL_GetScancodeFromKey)
  */
 PHP_FUNCTION(SDL_GetScancodeName)
 {
-	long scancode;
+	zend_long scancode;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
 		return;
@@ -199,7 +199,7 @@ PHP_FUNCTION(SDL_GetScancodeName)
 PHP_FUNCTION(SDL_GetScancodeFromName)
 {
 	char *name;
-	int name_len;
+	size_t name_len;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
 		return;
@@ -223,7 +223,7 @@ PHP_FUNCTION(SDL_GetScancodeFromName)
  */
 PHP_FUNCTION(SDL_GetKeyName)
 {
-	long key;
+	zend_long key;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
 		return;
@@ -245,7 +245,7 @@ PHP_FUNCTION(SDL_GetKeyName)
 PHP_FUNCTION(SDL_GetKeyFromName)
 {
 	char *name;
-	int name_len;
+	size_t name_len;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
 		return;

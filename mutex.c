@@ -474,7 +474,7 @@ static PHP_METHOD(SDL_sem, __construct)
 {
 	struct php_sdl_sem *intern;
 	zend_error_handling error_handling;
-	long value;
+	zend_long value;
 
 	intern = (struct php_sdl_sem *)Z_OBJ_P(getThis());
 
@@ -524,7 +524,7 @@ static PHP_METHOD(SDL_sem, __toString)
 PHP_FUNCTION(SDL_CreateSemaphore)
 {
 	SDL_sem *sem;
-	long value;
+	zend_long value;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &value)) {
 		return;
@@ -641,7 +641,7 @@ PHP_FUNCTION(SDL_SemWaitTimeout)
 	struct php_sdl_sem *intern;
 	zval *z_sem;
 	SDL_sem *sem;
-	long ms;
+	zend_long ms;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &z_sem, php_sdl_sem_ce, &ms) == FAILURE) {
 		return;
@@ -858,7 +858,7 @@ PHP_FUNCTION(SDL_CondWaitTimeout)
 	zval *z_cond, *z_mutex;
 	SDL_cond *cond;
 	SDL_mutex *mutex;
-	long ms;
+	zend_long ms;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOl", &z_cond, php_sdl_cond_ce, &z_mutex, php_sdl_mutex_ce, &ms) == FAILURE) {
 		return;

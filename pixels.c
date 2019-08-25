@@ -241,7 +241,7 @@ ZEND_END_ARG_INFO()
 /* {{{ proto SDL_Color::__construct(int r, int g, int b, int a) */
 static PHP_METHOD(SDL_Color, __construct)
 {
-	long r, g, b, a;
+	zend_long r, g, b, a;
 	zend_error_handling error_handling;
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
@@ -282,7 +282,7 @@ static PHP_METHOD(SDL_Color, __toString)
  */
 PHP_FUNCTION(SDL_GetPixelFormatName)
 {
-	long format;
+	zend_long format;
 	const char *name;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &format) == FAILURE) {
@@ -313,7 +313,7 @@ PHP_FUNCTION(SDL_GetPixelFormatName)
 PHP_FUNCTION(SDL_PixelFormatEnumToMasks)
 {
 	zval *z_bpp, *z_rmask, *z_gmask, *z_bmask, *z_amask;
-	long format;
+	zend_long format;
 	int bpp;
 	Uint32 rmask, gmask, bmask, amask;
 
@@ -354,7 +354,7 @@ PHP_FUNCTION(SDL_PixelFormatEnumToMasks)
  */
 PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
 {
-	long bpp, rmask, gmask, bmask, amask;
+	zend_long bpp, rmask, gmask, bmask, amask;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lllll", &bpp, &rmask, &gmask, &bmask, &amask) == FAILURE) {
 		RETURN_FALSE;
@@ -371,7 +371,7 @@ PHP_FUNCTION(SDL_MasksToPixelFormatEnum)
  */
 PHP_FUNCTION(SDL_AllocFormat)
 {
-	long index;
+	zend_long index;
 	SDL_PixelFormat *format;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &index)) {
@@ -386,7 +386,7 @@ PHP_FUNCTION(SDL_AllocFormat)
 static PHP_METHOD(SDL_PixelFormat, __construct)
 {
 	struct php_sdl_pixelformat *intern;
-	long format;
+	zend_long format;
 	zend_error_handling error_handling;
 
 	intern = (struct php_sdl_pixelformat *)Z_OBJ_P(getThis());
@@ -461,7 +461,7 @@ PHP_FUNCTION(SDL_FreeFormat)
 */
 PHP_FUNCTION(SDL_AllocPalette)
 {
-	long ncolors;
+	zend_long ncolors;
 	SDL_Palette *palette;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &ncolors)) {
@@ -476,7 +476,7 @@ PHP_FUNCTION(SDL_AllocPalette)
 static PHP_METHOD(SDL_Palette, __construct)
 {
 	struct php_sdl_palette *intern;
-	long ncolors;
+	zend_long ncolors;
 	zend_error_handling error_handling;
 
 	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
@@ -537,7 +537,7 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(SDL_Palette, offsetExists)
 {
 	struct php_sdl_palette *intern;
-	long offset;
+	zend_long offset;
 
 	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
@@ -554,7 +554,7 @@ PHP_METHOD(SDL_Palette, offsetExists)
 PHP_METHOD(SDL_Palette, offsetGet)
 {
 	struct php_sdl_palette *intern;
-	long offset;
+	zend_long offset;
 
 	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
@@ -572,7 +572,7 @@ PHP_METHOD(SDL_Palette, offsetGet)
 PHP_METHOD(SDL_Palette, offsetUnset)
 {
 	struct php_sdl_palette *intern;
-	long offset;
+	zend_long offset;
 	SDL_Color color;
 
 	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
@@ -597,7 +597,7 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(SDL_Palette, offsetSet)
 {
 	struct php_sdl_palette *intern;
-	long offset;
+	zend_long offset;
 	zval *z_color;
 	SDL_Color color;
 
@@ -659,7 +659,8 @@ PHP_FUNCTION(SDL_SetPaletteColors)
 	SDL_Palette *palette;
 	SDL_Color *colors;
 	int i, nb;
-	long first=0, ncolors=0, count;
+	zend_long first=0, ncolors=0;
+	long count;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oa|ll", &object, php_sdl_palette_ce, &z_colors, &first, &ncolors) == FAILURE) {
 		return;
@@ -742,7 +743,7 @@ PHP_FUNCTION(SDL_MapRGB)
 	struct php_sdl_pixelformat *intern;
 	zval *z_format;
 	SDL_PixelFormat *format;
-	long r, g, b;
+	zend_long r, g, b;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olll", &z_format, php_sdl_pixelformat_ce, &r, &g, &b) == FAILURE) {
 		return;
@@ -769,7 +770,7 @@ PHP_FUNCTION(SDL_MapRGBA)
 	struct php_sdl_pixelformat *intern;
 	zval *z_format;
 	SDL_PixelFormat *format;
-	long r, g, b, a;
+	zend_long r, g, b, a;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ollll", &z_format, php_sdl_pixelformat_ce, &r, &g, &b, &a) == FAILURE) {
 		return;
@@ -795,7 +796,7 @@ PHP_FUNCTION(SDL_GetRGB)
 	zval *z_format, *z_r, *z_g, *z_b;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b;
-	long pix;
+	zend_long pix;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b) == FAILURE) {
 		return;
@@ -829,7 +830,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGB)
 	zval *z_format, *z_r, *z_g, *z_b;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b;
-	long pix;
+	zend_long pix;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b) == FAILURE) {
 		return;
@@ -861,7 +862,7 @@ PHP_FUNCTION(SDL_GetRGBA)
 	zval *z_format, *z_r, *z_g, *z_b, *z_a;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b, a;
-	long pix;
+	zend_long pix;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOzzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
 		return;
@@ -890,7 +891,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 	zval *z_format, *z_r, *z_g, *z_b, *z_a;
 	SDL_PixelFormat *format;
 	Uint8 r, g, b, a;
-	long pix;
+	zend_long pix;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olzzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
 		return;
@@ -943,7 +944,7 @@ ZEND_END_ARG_INFO()
 static PHP_METHOD(SDL_Pixels, __construct)
 {
 	struct php_sdl_pixels *intern;
-	long pitch, h;
+	zend_long pitch, h;
 	zend_error_handling error_handling;
 
 	intern = (struct php_sdl_pixels *)Z_OBJ_P(getThis());
@@ -1009,7 +1010,7 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(SDL_Pixels, offsetExists)
 {
 	struct php_sdl_pixels *intern;
-	long offset;
+	zend_long offset;
 
 	intern = (struct php_sdl_pixels *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
@@ -1026,7 +1027,7 @@ PHP_METHOD(SDL_Pixels, offsetExists)
 PHP_METHOD(SDL_Pixels, offsetGet)
 {
 	struct php_sdl_pixels *intern;
-	long offset;
+	zend_long offset;
 
 	intern = (struct php_sdl_pixels *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
@@ -1044,7 +1045,7 @@ PHP_METHOD(SDL_Pixels, offsetGet)
 PHP_METHOD(SDL_Pixels, offsetUnset)
 {
 	struct php_sdl_pixels *intern;
-	long offset;
+	zend_long offset;
 
 	intern = (struct php_sdl_pixels *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
@@ -1067,7 +1068,7 @@ ZEND_END_ARG_INFO()
 PHP_METHOD(SDL_Pixels, offsetSet)
 {
 	struct php_sdl_pixels *intern;
-	long offset, value;
+	zend_long offset, value;
 
 	intern = (struct php_sdl_pixels *)Z_OBJ_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &offset, &value) == FAILURE) {
@@ -1092,7 +1093,7 @@ PHP_METHOD(SDL_Pixels, GetByte)
 {
 	struct php_sdl_pixels *intern;
 	zval *z_pixels;
-	long x, y;
+	zend_long x, y;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_pixels, php_sdl_pixels_ce, &x, &y) == FAILURE) {
 		return;
@@ -1119,7 +1120,7 @@ PHP_METHOD(SDL_Pixels, SetByte)
 {
 	struct php_sdl_pixels *intern;
 	zval *z_pixels;
-	long x, y, v;
+	zend_long x, y, v;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olll", &z_pixels, php_sdl_pixels_ce, &x, &y, &v) == FAILURE) {
 		return;

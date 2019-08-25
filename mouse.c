@@ -121,8 +121,9 @@ static PHP_METHOD(SDL_Cursor, __construct)
 	struct php_sdl_cursor *intern;
 	zend_error_handling error_handling;
 	char *data, *mask;
-	int data_len, mask_len;
-	long w, h, x, y, size;
+	size_t data_len, mask_len;
+	zend_long w, h, x, y;
+	long size;
 
 	intern = (struct php_sdl_cursor *)Z_OBJ_P(getThis());
 
@@ -191,8 +192,9 @@ static PHP_METHOD(SDL_Cursor, __toString)
 PHP_FUNCTION(SDL_CreateCursor)
 {
 	char *data, *mask;
-	int data_len, mask_len;
-	long w, h, x, y, size;
+	size_t data_len, mask_len;
+	zend_long w, h, x, y;
+	long size;
 	SDL_Cursor *cursor;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ssllll", &data, &data_len, &mask, &mask_len, &w, &h, &x, &y)) {
@@ -246,7 +248,7 @@ PHP_FUNCTION(SDL_CreateSystemCursor)
  */
 PHP_FUNCTION(SDL_CreateColorCursor)
 {
-	long x, y;
+	zend_long x, y;
 	zval *z_surface;
 	SDL_Surface *surface;
 	SDL_Cursor *cursor;
@@ -462,7 +464,7 @@ PHP_FUNCTION(SDL_WarpMouseInWindow)
 {
 	zval *z_window;
 	SDL_Window *window;
-	long x, y;
+	zend_long x, y;
 
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "Oll", &z_window, get_php_sdl_window_ce(), &x, &y)) {
 		return;

@@ -848,16 +848,14 @@ PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 		zval *ppzval;
 		rects = emalloc(max * sizeof(SDL_Rect));
 
-		for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_array)) ;
-			zend_hash_has_more_elements(Z_ARRVAL_P(z_array)) == SUCCESS ;
-			zend_hash_move_forward(Z_ARRVAL_P(z_array))) {
-                                ppzval = zend_hash_get_current_data(Z_ARRVAL_P(z_array));
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_array), ppzval) {
 				if (zval_to_sdl_rect(ppzval, rects+nb)) {
 					nb++;
 				} else {
 					php_error_docref(NULL, E_NOTICE, "Ignore rect, not a SDL_Rect object");
 				}
 		}
+		ZEND_HASH_FOREACH_END();
 	}
 	if (!nb) {
 		php_error_docref(NULL, E_WARNING, "No SDL_Rect provided");

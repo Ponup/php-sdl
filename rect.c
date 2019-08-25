@@ -139,8 +139,7 @@ static PHP_METHOD(SDL_Rect, __construct)
 /* {{{ proto SDL_Rect::__toString() */
 static PHP_METHOD(SDL_Rect, __toString)
 {
-	char *buf;
-    size_t buf_len;
+	zend_string *buf;
 	SDL_Rect rect;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -148,9 +147,8 @@ static PHP_METHOD(SDL_Rect, __toString)
 	}
 
 	zval_to_sdl_rect(getThis(), &rect);
-	buf_len = spprintf(&buf, 100, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
-	RETVAL_STRINGL(buf, buf_len);
-    efree(buf);
+	buf = strpprintf(0, "SDL_Rect(%d,%d,%d,%d)", rect.x, rect.y, rect.w, rect.h);
+	RETVAL_STR(buf);
 }
 /* }}} */
 
@@ -179,7 +177,7 @@ static PHP_METHOD(SDL_Point, __construct)
 /* {{{ proto SDL_Point::__toString() */
 static PHP_METHOD(SDL_Point, __toString)
 {
-	char *buf;
+	zend_string *buf;
 	SDL_Point point;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -187,8 +185,8 @@ static PHP_METHOD(SDL_Point, __toString)
 	}
 
 	zval_to_sdl_point(getThis(), &point);
-	spprintf(&buf, 100, "SDL_Point(%d,%d)", point.x, point.y);
-	RETVAL_STRING(buf);
+	buf = strpprintf(0, "SDL_Point(%d,%d)", point.x, point.y);
+	RETVAL_STR(buf);
 }
 /* }}} */
 

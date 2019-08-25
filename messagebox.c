@@ -393,16 +393,14 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 
 			buttons = emalloc(nb * sizeof(SDL_MessageBoxButtonData));
 
-			for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_buttons)) ;
-				zend_hash_has_more_elements(Z_ARRVAL_P(z_buttons)) == SUCCESS ;
-				zend_hash_move_forward(Z_ARRVAL_P(z_buttons))) {
-                                        ppzval = zend_hash_get_current_data(Z_ARRVAL_P(z_buttons));
+			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_buttons), ppzval) {
 					if (zval_to_sdl_messageboxbuttondata(ppzval, buttons+n)) {
 						n++;
 					} else {
 						php_error_docref(NULL, E_NOTICE, "Ignore button, not a SDL_MessageBoxButtonData object");
 					}
 			}
+			ZEND_HASH_FOREACH_END();
 			if (n) {
 				intern->data->numbuttons = n;
 				intern->data->buttons    = buttons;
@@ -413,24 +411,23 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 	}
 
 	if (z_colors) {
-		zval **ppzval = NULL;
+		zval *ppzval = NULL;
 		SDL_MessageBoxColorScheme *colors;
 
 		colors = emalloc(sizeof(SDL_MessageBoxColorScheme));
 		memset(colors, 0, sizeof(*colors));
 
 		n  = 0;
-		for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_colors)) ;
-			zend_hash_get_current_data(Z_ARRVAL_P(z_colors)) == SUCCESS ;
-			zend_hash_move_forward(Z_ARRVAL_P(z_colors))) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_colors), ppzval) {
 				if (SDL_MESSAGEBOX_COLOR_MAX == n) {
 					php_error_docref(NULL, E_NOTICE, "Ignore button, only %d accepted", SDL_MESSAGEBOX_COLOR_MAX);
-				} else if (zval_to_sdl_messageboxcolor(*ppzval, &colors->colors[n])) {
+				} else if (zval_to_sdl_messageboxcolor(ppzval, &colors->colors[n])) {
 					n++;
 				} else {
 					php_error_docref(NULL, E_NOTICE, "Ignore button, not a SDL_MessageBoxColor object");
 				}
 		}
+		ZEND_HASH_FOREACH_END();
 		if (n) {
 			if (SDL_MESSAGEBOX_COLOR_MAX != n) {
 				php_error_docref(NULL, E_NOTICE, "%d SDL_MessageBoxColors expected", SDL_MESSAGEBOX_COLOR_MAX);
