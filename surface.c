@@ -1284,14 +1284,14 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type)
 /* }}} */
 
 /* {{{ sdl_surface_read_property*/
-zval *sdl_surface_read_property(zval *object, zval *member, int type, void** cache_slot, zval *key)
+zval *sdl_surface_read_property(zval *object, zval *member, int type, void** cache_slot, zval *retval)
 {
 	zval tmp_member;
 	zend_object* zobject = Z_OBJ_P(object);
 	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char*)zobject - zobject->handlers->offset);
-	zval *retval = ecalloc(1, sizeof(zval));
 
  	if (!intern->surface) {
+ 		ZVAL_NULL(retval);
  		return retval;
 	}
 
