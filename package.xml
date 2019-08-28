@@ -16,11 +16,11 @@
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2018-09-22</date>
+  <date>2019-08-28</date>
   <time>12:00:00</time>
   <version>
-    <release>2.1.0</release>
-    <api>2.1.0</api>
+    <release>2.2.0</release>
+    <api>2.2.0</api>
   </version>
   <stability>
     <release>devel</release>
@@ -28,9 +28,9 @@
   </stability>
   <license uri="http://www.php.net/license">PHP</license>
   <notes>
-	  - Code updated to support PHP7.
-	  - Code that could be implemented in userland was removed from the extension.
-	  - Unit tests improvements/changes.
+  	  - Add support for window events. (Benoit Viguier)
+  	  - Add support for the SDL_RenderCopyEx, SDL_RenderDrawLine and SDL_RenderDrawRect functions. (Benoit Viguier)
+  	  - Fix memory leak in the SDL_RenderCopy function. (Benoit Viguier)
   </notes>
   <contents>
     <dir name="/">
@@ -143,4 +143,23 @@
   </dependencies>
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
+  <changelog>
+    <release>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+  	  <date>2019-08-28</date>
+  	  <time>12:00:00</time>
+  	  <version>
+    	<release>2.1.0</release>
+    	<api>2.1.0</api>
+  	  </version>
+  	  <notes>
+	  	  - Code updated to support PHP7.
+	  	  - Code that could be implemented in userland was removed from the extension.
+	  	  - Unit tests improvements/changes.
+  	  </notes>
+    </release>
+  </changelog>
 </package>
