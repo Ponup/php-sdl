@@ -347,7 +347,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentWindow)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value);
+	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, SDL_DONTFREE);
 }
 
 

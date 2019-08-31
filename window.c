@@ -32,7 +32,7 @@ static zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
 struct php_sdl_window {
 	SDL_Window   *window;
-	Uint32        flags;
+	int flags;
 	zend_object   zo;
 };
 
@@ -59,10 +59,14 @@ SDL_Window *zval_to_sdl_window(zval *z_val)
 }
 /* }}} */
 
-#define SDL_WINDOW_ADD_PROPERTY(n,f) \
-    z_string = zend_string_init(n,sizeof(n),0); \
-	ZVAL_LONG(&zv, (long)f); \
-	zend_hash_update(props, z_string, &zv)
+static inline void sdl_window_add_long_property(HashTable *props, const char *name, zend_long value)
+{
+	zval zvalue;
+    zend_string *zname = zend_string_init(ZEND_STRS(name), 0);
+	ZVAL_LONG(&zvalue, value);
+	zend_hash_update(props, zname, &zvalue);
+	zend_string_release(zname);
+}
 
 /* {{{ sdl_window_read_property*/
 static HashTable *sdl_window_get_properties(zval *object)
@@ -79,15 +83,16 @@ static HashTable *sdl_window_get_properties(zval *object)
 
 		SDL_GetWindowSize(intern->window, &w, &h);
 		SDL_GetWindowPosition(intern->window, &x, &y);
-		SDL_WINDOW_ADD_PROPERTY("id",    SDL_GetWindowID(intern->window));
-		SDL_WINDOW_ADD_PROPERTY("flags", SDL_GetWindowFlags(intern->window));
-		SDL_WINDOW_ADD_PROPERTY("x",     x);
-		SDL_WINDOW_ADD_PROPERTY("y",     y);
-		SDL_WINDOW_ADD_PROPERTY("w",     w);
-		SDL_WINDOW_ADD_PROPERTY("h",     h);
+		sdl_window_add_long_property(props, "id", SDL_GetWindowID(intern->window));
+		sdl_window_add_long_property(props, "flags", SDL_GetWindowFlags(intern->window));
+		sdl_window_add_long_property(props, "x", x);
+		sdl_window_add_long_property(props, "y", y);
+		sdl_window_add_long_property(props, "w", w);
+		sdl_window_add_long_property(props, "h", h);
 		ZVAL_STRING(&zv, SDL_GetWindowTitle(intern->window));
         z_string = zend_string_init("title", 6, 0);
 		zend_hash_update(props, z_string, &zv);
+		zend_string_release(z_string);
 	}
 	return props;
 }
@@ -1043,7 +1048,7 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 		object_init_ex(return_value, php_sdl_window_ce);
 		intern = php_sdl_window_fetch_object(Z_OBJ_P(return_value));
 		intern->window = window;
-		intern->flags  = 0;
+		intern->flags = 0;
 
 		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
 	}
@@ -1126,7 +1131,7 @@ static PHP_METHOD(SDL_Window, __construct)
 	zend_restore_error_handling(&error_handling);
 
 	intern->window = SDL_CreateWindow(title, x, y, w, h, flags);
-	intern->flags  = 0;
+	intern->flags = 0;
 	if (intern->window) {
 		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
 	} else {
@@ -1420,10 +1425,11 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	 */
 static void php_sdl_window_free(zend_object* zo)
 {
-	struct php_sdl_window *intern = (struct php_sdl_window*)((char*)zo - XtOffsetOf(struct php_sdl_window, zo));
-
-	if (intern->window && !(intern->flags & SDL_DONTFREE)) {
-		SDL_DestroyWindow(intern->window);
+	struct php_sdl_window *intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
+	if (intern->window) {
+		if(!(intern->flags & SDL_DONTFREE)) {
+			SDL_DestroyWindow(intern->window);
+		}
 	}
 
 	zend_object_std_dtor(&intern->zo);
@@ -1451,6 +1457,24 @@ static zend_object* php_sdl_window_new(zend_class_entry *class_type)
 }
 /* }}} */
 
+/* {{{ sdl_window_to_zval */
+zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, int flags)
+{
+	if (window) {
+		struct php_sdl_window *intern;
+
+		object_init_ex(z_val, php_sdl_window_ce);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
+		intern->window = window;
+		intern->flags = flags;
+
+		return 1;
+	}
+	ZVAL_NULL(z_val);
+	return 0;
+}
+/* }}} */
 
 #define REGISTER_WINDOW_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("SDL_WINDOW_" const_name, value, CONST_CS | CONST_PERSISTENT); \

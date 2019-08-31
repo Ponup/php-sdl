@@ -379,7 +379,7 @@ PHP_FUNCTION(SDL_GetMouseFocus)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	sdl_window_to_zval(SDL_GetMouseFocus(), return_value);
+	sdl_window_to_zval(SDL_GetMouseFocus(), return_value, SDL_DONTFREE);
 }
 
 

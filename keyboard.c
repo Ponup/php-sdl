@@ -31,7 +31,7 @@ PHP_FUNCTION(SDL_GetKeyboardFocus)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value);
+	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value, SDL_DONTFREE);
 }
 /* }}} */
 
