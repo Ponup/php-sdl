@@ -10,8 +10,8 @@ if test "$PHP_SDL" != "no"; then
   export OLD_CPPFLAGS="$CPPFLAGS"
   export CPPFLAGS="$CPPFLAGS $INCLUDES -DHAVE_SDL2 -Wall -Wfatal-errors"
 
-  REQ_PHP_VERSION="7.2.0"
-  REQ_PHP_VERSION_ID=70200
+  REQ_PHP_VERSION="7.3.0"
+  REQ_PHP_VERSION_ID=70300
   if test -z "$PHP_VERSION_ID"; then
     AC_MSG_CHECKING(PHP version)
     AC_TRY_COMPILE([#include <php_version.h>], [
