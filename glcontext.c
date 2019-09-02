@@ -72,10 +72,8 @@ zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 fla
 		struct php_sdl_glcontext *intern;
 
 		object_init_ex(z_val, php_sdl_glcontext_ce);
-		intern = (struct php_sdl_glcontext *)Z_OBJ_P(z_val);
-// @todo check if this is needed instead:
-//		zend_object* zo = Z_OBJ_P(z_val);
-//		intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
+		zend_object* zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
 		intern->glcontext = glcontext;
 		intern->flags = flags;
 
@@ -132,9 +130,7 @@ static zend_object* php_sdl_glcontext_new(zend_class_entry *class_type)
 
 	intern->glcontext = NULL;
 	
-	php_sdl_glcontext_handlers.offset = XtOffsetOf(struct php_sdl_glcontext, zo);
-    php_sdl_glcontext_handlers.free_obj = php_sdl_glcontext_free;
-	intern->zo.handlers = &php_sdl_glcontext_handlers;
+	intern->zo.handlers = (zend_object_handlers*)&php_sdl_glcontext_handlers;
 
 	return &intern->zo; 
 }
@@ -275,7 +271,7 @@ PHP_FUNCTION(SDL_GL_CreateContext)
 	window = zval_to_sdl_window(z_window);
 	if (window) {
 		context = SDL_GL_CreateContext(window);
-		sdl_glcontext_to_zval(context, return_value, 0);
+		sdl_glcontext_to_zval(context, return_value, SDL_DONTFREE);
 	} else {
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
