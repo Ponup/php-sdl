@@ -37,6 +37,8 @@
       <file role="doc" name="LICENSE"/>
       <file role="doc" name="EXPERIMENTAL"/>
       <file role="src" name="config.m4"/>
+    </dir>
+    <dir name="src">
       <file role="src" name="php_sdl.c"/>
       <file role="src" name="php_sdl.h"/>
       <file role="src" name="blendmode.c"/>
@@ -85,49 +87,49 @@
       <file role="src" name="video.h"/>
       <file role="src" name="window.c"/>
       <file role="src" name="window.h"/>
-      <dir name="examples">
-        <file role="doc" name="001-sdl-version.php"/>
-        <file role="doc" name="002-error-messagebox.php"/>
-        <file role="doc" name="003-messagebox-inputs.php"/>
-        <file role="doc" name="004-draw-points.php"/>
-        <file role="doc" name="005-draw-rectangle.php"/>
-        <file role="doc" name="006-animated-boxes.php"/>
-        <file role="doc" name="007-mouse-events.php"/>
-        <file role="doc" name="008-shaped-window.php"/>
-        <file role="doc" name="bootstrap.php"/>
-        <file role="doc" name="p01_shape24.bmp"/>
-        <file role="doc" name="p01_shape32alpha.bmp"/>
-        <file role="doc" name="spaceship.bmp"/>
-      </dir>
-      <dir name="tests">
-        <file role="test" name="001-extension-loading.phpt"/>
-        <file role="test" name="002-init-and-shutdown.phpt"/>
-        <file role="test" name="003-init-and-quit-subsystems.phpt"/>
-        <file role="test" name="004-cpuinfo.phpt"/>
-        <file role="test" name="005-video.phpt"/>
-        <file role="test" name="006-rect.phpt"/>
-        <file role="test" name="007-rect-oo.phpt"/>
-        <file role="test" name="008-error.phpt"/>
-        <file role="test" name="009-color.phpt"/>
-        <file role="test" name="010-palette.phpt"/>
-        <file role="test" name="011-palette-oo.phpt"/>
-        <file role="test" name="012-pixelformat.phpt"/>
-        <file role="test" name="013-pixelformat-oo.phpt"/>
-        <file role="test" name="014-version.phpt"/>
-        <file role="test" name="015-rwops.phpt"/>
-        <file role="test" name="016-rwops-oo.phpt"/>
-        <file role="test" name="017-rwops-stream.phpt"/>
-        <file role="test" name="018-power.phpt"/>
-        <file role="test" name="019-platform.phpt"/>
-        <file role="test" name="020-surface.phpt"/>
-        <file role="test" name="021-surface-oo.phpt"/>
-        <file role="test" name="022-pixels.phpt"/>
-        <file role="test" name="023-messagebox.phpt"/>
-        <file role="test" name="024-mutex.phpt"/>
-        <file role="test" name="025-mutex-oo.phpt"/>
-        <file role="test" name="026-filesystem.phpt"/>
-        <file role="test" name="test-functions.php"/>
-      </dir>
+    </dir>
+    <dir name="examples">
+      <file role="doc" name="001-sdl-version.php"/>
+      <file role="doc" name="002-error-messagebox.php"/>
+      <file role="doc" name="003-messagebox-inputs.php"/>
+      <file role="doc" name="004-draw-points.php"/>
+      <file role="doc" name="005-draw-rectangle.php"/>
+      <file role="doc" name="006-animated-boxes.php"/>
+      <file role="doc" name="007-mouse-events.php"/>
+      <file role="doc" name="008-shaped-window.php"/>
+      <file role="doc" name="bootstrap.php"/>
+      <file role="doc" name="p01_shape24.bmp"/>
+      <file role="doc" name="p01_shape32alpha.bmp"/>
+      <file role="doc" name="spaceship.bmp"/>
+    </dir>
+    <dir name="tests">
+      <file role="test" name="001-extension-loading.phpt"/>
+      <file role="test" name="002-init-and-shutdown.phpt"/>
+      <file role="test" name="003-init-and-quit-subsystems.phpt"/>
+      <file role="test" name="004-cpuinfo.phpt"/>
+      <file role="test" name="005-video.phpt"/>
+      <file role="test" name="006-rect.phpt"/>
+      <file role="test" name="007-rect-oo.phpt"/>
+      <file role="test" name="008-error.phpt"/>
+      <file role="test" name="009-color.phpt"/>
+      <file role="test" name="010-palette.phpt"/>
+      <file role="test" name="011-palette-oo.phpt"/>
+      <file role="test" name="012-pixelformat.phpt"/>
+      <file role="test" name="013-pixelformat-oo.phpt"/>
+      <file role="test" name="014-version.phpt"/>
+      <file role="test" name="015-rwops.phpt"/>
+      <file role="test" name="016-rwops-oo.phpt"/>
+      <file role="test" name="017-rwops-stream.phpt"/>
+      <file role="test" name="018-power.phpt"/>
+      <file role="test" name="019-platform.phpt"/>
+      <file role="test" name="020-surface.phpt"/>
+      <file role="test" name="021-surface-oo.phpt"/>
+      <file role="test" name="022-pixels.phpt"/>
+      <file role="test" name="023-messagebox.phpt"/>
+      <file role="test" name="024-mutex.phpt"/>
+      <file role="test" name="025-mutex-oo.phpt"/>
+      <file role="test" name="026-filesystem.phpt"/>
+      <file role="test" name="test-functions.php"/>
     </dir>
   </contents>
   <dependencies>
@@ -143,36 +145,36 @@
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
   <changelog>
-  	  <release>
-  	  	  <date>2019-08-28</date>
-  	  	  <time>12:00:00</time>
-  	  	  <version>
-    		<release>2.2.0</release>
-    		<api>2.2.0</api>
-  	  	  </version>
-  	  	  <stability>
-    		<release>devel</release>
-    		<api>devel</api>
-  	  	  </stability>
-  	  	  <license uri="http://www.php.net/license">PHP</license>
-  	  	  <notes>
+    <release>
+      <date>2019-08-28</date>
+      <time>12:00:00</time>
+      <version>
+        <release>2.2.0</release>
+        <api>2.2.0</api>
+      </version>
+      <stability>
+        <release>devel</release>
+        <api>devel</api>
+      </stability>
+      <license uri="http://www.php.net/license">PHP</license>
+      <notes>
   	  	  	  - Add support for window events. (Benoit Viguier)
   	  	  	  - Add support for the SDL_RenderCopyEx, SDL_RenderDrawLine and SDL_RenderDrawRect functions. (Benoit Viguier)
   	  	  	  - Fix memory leak in the SDL_RenderCopy function. (Benoit Viguier)
   	  	  </notes>
-  	  </release>
+    </release>
     <release>
       <stability>
         <release>beta</release>
         <api>beta</api>
       </stability>
-  	  <date>2018-09-22</date>
-  	  <time>12:00:00</time>
-  	  <version>
-    	<release>2.1.0</release>
-    	<api>2.1.0</api>
-  	  </version>
-  	  <notes>
+      <date>2018-09-22</date>
+      <time>12:00:00</time>
+      <version>
+        <release>2.1.0</release>
+        <api>2.1.0</api>
+      </version>
+      <notes>
 	  	  - Code updated to support PHP7.
 	  	  - Code that could be implemented in userland was removed from the extension.
 	  	  - Unit tests improvements/changes.
