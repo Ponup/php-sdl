@@ -3,7 +3,6 @@ error group test
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skip_test_not_complete();
 ?>
 --FILE--
 <?php

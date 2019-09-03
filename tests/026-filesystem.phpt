@@ -3,7 +3,6 @@ Tests for functions beloning to the filesystem "module".
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
 ?>
 --FILE--
 <?php

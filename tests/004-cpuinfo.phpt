@@ -3,7 +3,6 @@ cpuinfo group test
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
 ?>
 --FILE--
 <?php 
