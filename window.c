@@ -62,7 +62,7 @@ SDL_Window *zval_to_sdl_window(zval *z_val)
 static inline void sdl_window_add_long_property(HashTable *props, const char *name, zend_long value)
 {
 	zval zvalue;
-    zend_string *zname = zend_string_init(ZEND_STRS(name), 0);
+    zend_string *zname = zend_string_init(name, strlen(name), 0);
 	ZVAL_LONG(&zvalue, value);
 	zend_hash_update(props, zname, &zvalue);
 	zend_string_release(zname);
