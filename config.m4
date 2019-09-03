@@ -55,31 +55,6 @@ if test "$PHP_SDL" != "no"; then
   PHP_SUBST(SDL_SHARED_LIBADD)
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
-  sources="
-php_sdl.c
-blendmode.c
-cpuinfo.c
-error.c
-event.c
-filesystem.c
-glcontext.c
-keyboard.c
-messagebox.c
-mouse.c
-mutex.c
-pixels.c
-platform.c
-power.c
-rect.c
-render.c
-rwops.c
-sdl.c
-shape.c
-surface.c
-timer.c
-version.c
-video.c
-window.c
-"
-  PHP_NEW_EXTENSION(sdl, $sources, $ext_shared,, $PHP_SDL_CFLAGS)
+  SDL_SOURCE_FILES="`find src -name "*.c"`"
+  PHP_NEW_EXTENSION(sdl, $SDL_SOURCE_FILES, $ext_shared,, $PHP_SDL_CFLAGS)
 fi
