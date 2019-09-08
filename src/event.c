@@ -89,6 +89,29 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 			add_property_zval(value, "window", &window);
 			zval_ptr_dtor(&window);
 			} break;
+		case SDL_JOYBUTTONDOWN:
+		case SDL_JOYBUTTONUP: {
+			zval joybutton;
+			object_init(&joybutton);
+			add_property_long(&joybutton, "type", event->jbutton.type);
+			add_property_long(&joybutton, "timestamp", event->jbutton.timestamp);
+			add_property_long(&joybutton, "which", event->jbutton.which);
+			add_property_long(&joybutton, "button", event->jbutton.button);
+			add_property_long(&joybutton, "state", event->jbutton.state);
+			add_property_zval(value, "jbutton", &joybutton);
+			zval_ptr_dtor(&joybutton);
+		} break;
+		case SDL_JOYAXISMOTION: {
+			zval jaxis;
+			object_init(&jaxis);
+			add_property_long(&jaxis, "type", event->jaxis.type);
+			add_property_long(&jaxis, "timestamp", event->jaxis.timestamp);
+			add_property_long(&jaxis, "which", event->jaxis.which);
+			add_property_long(&jaxis, "axis", event->jaxis.axis);
+			add_property_long(&jaxis, "value", event->jaxis.value);
+			add_property_zval(value, "jaxis", &jaxis);
+			zval_ptr_dtor(&jaxis);
+		} break;
 	}
 
 	return 1;
@@ -218,6 +241,11 @@ PHP_MINIT_FUNCTION(sdl_event)
 	REGISTER_LONG_CONSTANT("SDL_MOUSEBUTTONDOWN", SDL_MOUSEBUTTONDOWN, CONST_CS|CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_MOUSEBUTTONUP", SDL_MOUSEBUTTONUP, CONST_CS|CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_MOUSEWHEEL", SDL_MOUSEWHEEL, CONST_CS|CONST_PERSISTENT);
+	
+	// Joystick
+	REGISTER_LONG_CONSTANT("SDL_JOYAXISMOTION", SDL_JOYAXISMOTION, CONST_CS|CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_JOYBUTTONDOWN", SDL_JOYBUTTONDOWN, CONST_CS|CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_JOYBUTTONUP", SDL_JOYBUTTONUP, CONST_CS|CONST_PERSISTENT);
 
 	REGISTER_LONG_CONSTANT("SDL_WINDOWEVENT_SHOWN", SDL_WINDOWEVENT_SHOWN, CONST_CS|CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_WINDOWEVENT_HIDDEN", SDL_WINDOWEVENT_HIDDEN, CONST_CS|CONST_PERSISTENT);

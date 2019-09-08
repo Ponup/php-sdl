@@ -17,8 +17,8 @@
   +----------------------------------------------------------------------+
 */
 
-
 #include "php_sdl.h"
+
 #include "blendmode.h"
 #include "cpuinfo.h"
 #include "error.h"
@@ -42,6 +42,7 @@
 #include "version.h"
 #include "video.h"
 #include "window.h"
+#include "joystick.h"
 
 #ifdef COMPILE_DL_SDL
 ZEND_GET_MODULE(sdl)
@@ -95,6 +96,7 @@ PHP_MINIT_FUNCTION(sdl)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_version)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_video)
 		&& SUCCESS == PHP_MINIT_CALL(sdl_window)
+		&& SUCCESS == PHP_MINIT_CALL(sdl_joystick)
 		) {
 		return SUCCESS;
 	}
@@ -412,6 +414,16 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_CondBroadcast,                      arginfo_SDL_cond)
 	ZEND_FE(SDL_CondWaitTimeout,                    arginfo_SDL_CondWaitTimeout)
 	ZEND_FE(SDL_DestroyCond,                        arginfo_SDL_cond)
+
+	// Joystick
+	ZEND_FE(SDL_NumJoysticks, arginfo_SDL_NumJoysticks)
+	ZEND_FE(SDL_JoystickOpen, arginfo_SDL_JoystickOpen)
+	ZEND_FE(SDL_JoystickClose, arginfo_SDL_JoystickClose)
+	ZEND_FE(SDL_JoystickNumButtons, arginfo_SDL_JoystickNumButtons)
+	ZEND_FE(SDL_JoystickName, arginfo_SDL_JoystickName)
+	ZEND_FE(SDL_JoystickGetAxis, arginfo_SDL_JoystickGetAxis)
+	ZEND_FE(SDL_JoystickNameForIndex, arginfo_SDL_JoystickNameForIndex)
+	ZEND_FE(SDL_IsGameController, arginfo_SDL_IsGameController)
 
 	// Rwops
 	ZEND_FE(SDL_AllocRW,                      arginfo_none)

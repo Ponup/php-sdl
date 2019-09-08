@@ -52,6 +52,7 @@ tests/*.exp
 tests/*.log
 tests/*.sh
 tests/*.out
+tests/*.php
 nbproject
 php_test_results*.txt
 configure.ac
