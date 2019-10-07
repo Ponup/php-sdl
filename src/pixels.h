@@ -35,8 +35,8 @@ typedef struct SDL_Pixels
     Uint8 *pixels;
 } SDL_Pixels;
 
-zend_class_entry *php_sdl_pixelformat_ce;
-zend_class_entry *php_sdl_pixels_ce;
+extern zend_class_entry *php_sdl_pixelformat_ce;
+extern zend_class_entry *php_sdl_pixels_ce;
 
 zend_class_entry *get_php_sdl_color_ce(void);
 zend_bool sdl_color_to_zval(SDL_Color *color, zval *value);
