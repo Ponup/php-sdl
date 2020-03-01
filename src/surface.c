@@ -1356,9 +1356,9 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_PROP("w");
 	REGISTER_SURFACE_PROP("h");
 	REGISTER_SURFACE_PROP("pitch");
-	zend_declare_property_null(php_sdl_pixelformat_ce, ZEND_STRL("format"), ZEND_ACC_PUBLIC);
-	zend_declare_property_null(php_sdl_rect_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
-	zend_declare_property_null(php_sdl_pixels_ce, ZEND_STRL("pixels"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(get_php_sdl_pixelformat_ce(), ZEND_STRL("format"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(get_php_sdl_rect_ce(), ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(get_php_sdl_pixels_ce(), ZEND_STRL("pixels"), ZEND_ACC_PUBLIC);
 
 	REGISTER_SURFACE_CLASS_CONST_LONG("SWSURFACE",         SDL_SWSURFACE);
 	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC",          SDL_PREALLOC);

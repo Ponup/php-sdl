@@ -27,8 +27,6 @@ extern "C" {
 
 #include "php_sdl.h"
 
-zend_class_entry *php_sdl_rect_ce;
-
 zend_class_entry *get_php_sdl_point_ce(void);
 zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value);
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt);

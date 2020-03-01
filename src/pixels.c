@@ -35,6 +35,7 @@ struct php_sdl_palette {
 	Uint32        flags;
 };
 
+static zend_class_entry *php_sdl_pixelformat_ce;
 static zend_object_handlers php_sdl_pixelformat_handlers;
 struct php_sdl_pixelformat {
 	SDL_PixelFormat *format;
@@ -42,6 +43,7 @@ struct php_sdl_pixelformat {
 	zend_object      zo;
 };
 
+static zend_class_entry *php_sdl_pixels_ce;
 static zend_object_handlers php_sdl_pixels_handlers;
 struct php_sdl_pixels {
 	zend_object      zo;
