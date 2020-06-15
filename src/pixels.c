@@ -87,6 +87,10 @@ static inline struct php_sdl_palette* php_sdl_palette_from_obj(zend_object *obj)
 
 #define PHP_SDL_PALETTE_P(zv)  php_sdl_palette_from_obj(Z_OBJ_P((zv)))
 
+static inline struct php_sdl_pixelformat* php_sdl_pixelformat_from_obj(zend_object *obj) {
+	return (struct php_sdl_pixelformat*)((char*)(obj) - XtOffsetOf(struct php_sdl_pixelformat, zo));
+}
+
 #define FETCH_PIXELFORMAT(__ptr, __id, __check) \
 { \
 		zend_object* zox = Z_OBJ_P(__id);\
@@ -97,6 +101,8 @@ static inline struct php_sdl_palette* php_sdl_palette_from_obj(zend_object *obj)
                 RETURN_FALSE;\
         }\
 }
+
+#define PHP_SDL_PIXELFORMAT_P(zv)  php_sdl_pixelformat_from_obj(Z_OBJ_P((zv)))
 
 zend_bool sdl_color_to_zval(SDL_Color *color, zval *value)
 {
@@ -168,8 +174,7 @@ zend_bool sdl_pixelformat_to_zval(SDL_PixelFormat *format, zval *z_val, Uint32 f
 		struct php_sdl_pixelformat *intern;
 
 		object_init_ex(z_val, php_sdl_pixelformat_ce);
-		zend_object *zo = Z_OBJ_P(z_val);
-		intern = (struct php_sdl_pixelformat *)((char*)zo - zo->handlers->offset);
+		intern = PHP_SDL_PIXELFORMAT_P(z_val);
 		intern->format = format;
 		intern->flags = flags;
 
@@ -205,8 +210,7 @@ SDL_PixelFormat *zval_to_sdl_pixelformat(zval *z_val)
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_pixelformat_ce) {
 		struct php_sdl_pixelformat *intern;
 
-		zend_object *zo = Z_OBJ_P(z_val);
-		intern = (struct php_sdl_pixelformat*)((char*)zo - zo->handlers->offset);
+		intern = PHP_SDL_PIXELFORMAT_P(z_val);
 		return intern->format;
 		}
 	return NULL;
@@ -397,7 +401,7 @@ static PHP_METHOD(SDL_PixelFormat, __construct)
 	zend_long format;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_pixelformat *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PIXELFORMAT_P(getThis());
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &format)) {
@@ -426,7 +430,7 @@ static PHP_METHOD(SDL_PixelFormat, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_pixelformat *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PIXELFORMAT_P(getThis());
 	spprintf(&buf, 100, "SDL_PixelFormat(%s)", SDL_GetPixelFormatName(intern->format->format));
 	RETVAL_STRING(buf);
 }
@@ -1276,7 +1280,7 @@ static zval *sdl_palette_write_property(zval *object, zval *member, zval *value,
 	 */
 static void php_sdl_pixelformat_free(zend_object *object)
 {
-	struct php_sdl_pixelformat *intern = (struct php_sdl_pixelformat*)((char*)object - object->handlers->offset);
+	struct php_sdl_pixelformat *intern = php_sdl_pixelformat_from_obj(object);
 
 	if (intern->format) {
 		if (!(intern->flags & SDL_DONTFREE)) {
@@ -1303,6 +1307,139 @@ static zend_object* php_sdl_pixelformat_new(zend_class_entry *class_type)
 	intern->zo.handlers = (zend_object_handlers *) &php_sdl_pixelformat_handlers;
 
 	return &intern->zo;
+}
+/* }}} */
+
+/* {{{ sdl_pixelformat_read_property*/
+zval *sdl_pixelformat_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv)
+{
+	struct php_sdl_pixelformat *intern;
+	zval *retval, tmp_member;
+
+    intern = PHP_SDL_PIXELFORMAT_P(object);
+
+	if (Z_TYPE_P(member) != IS_STRING) {
+		zend_string *_str = zval_try_get_string_func(member);
+        if (UNEXPECTED(!_str)) {
+            return &EG(uninitialized_zval);
+        }
+        ZVAL_STR(&tmp_member, _str);
+        member = &tmp_member;
+        cache_slot = NULL;
+	}
+
+	if (!intern->format) {
+		return zend_std_read_property(object, member, type, cache_slot, rv);
+	}
+
+	retval = rv;
+
+	if (!strcmp(Z_STRVAL_P(member), "format")) {
+		ZVAL_LONG(retval, intern->format->format);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "BitsPerPixel")) {
+		ZVAL_LONG(retval, intern->format->BitsPerPixel);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "BytesPerPixel")) {
+		ZVAL_LONG(retval, intern->format->BytesPerPixel);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Rmask")) {
+		ZVAL_LONG(retval, intern->format->Rmask);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Gmask")) {
+		ZVAL_LONG(retval, intern->format->Gmask);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Bmask")) {
+		ZVAL_LONG(retval, intern->format->Bmask);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Amask")) {
+		ZVAL_LONG(retval, intern->format->Amask);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Rloss")) {
+		ZVAL_LONG(retval, intern->format->Rloss);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Gloss")) {
+		ZVAL_LONG(retval, intern->format->Gloss);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Bloss")) {
+		ZVAL_LONG(retval, intern->format->Bloss);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Aloss")) {
+		ZVAL_LONG(retval, intern->format->Aloss);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Rshift")) {
+		ZVAL_LONG(retval, intern->format->Rshift);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Gshift")) {
+		ZVAL_LONG(retval, intern->format->Gshift);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Bshift")) {
+		ZVAL_LONG(retval, intern->format->Bshift);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "Ashift")) {
+		ZVAL_LONG(retval, intern->format->Ashift);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "palette")) {
+		sdl_palette_to_zval(intern->format->palette, retval, SDL_DONTFREE);
+
+	} else {
+		retval = zend_std_read_property(object, member, type, cache_slot, rv);
+		if (member == &tmp_member) {
+			zval_ptr_dtor_str(&tmp_member);
+		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
+	}
+	return retval;
+}
+/* }}} */
+
+#define SDL_PIXELFORMAT_ADD_PROPERTY(n,f) \
+	ZVAL_LONG(&zv, f); \
+	zend_hash_str_update(props, n, sizeof(n)-1, &zv);
+
+/* {{{ sdl_pixelformat_read_property*/
+static HashTable *sdl_pixelformat_get_properties(zval *object)
+{
+	HashTable *props;
+	zval zv;
+	struct php_sdl_pixelformat *intern;
+
+    intern = PHP_SDL_PIXELFORMAT_P(object);
+
+	props = zend_std_get_properties(object);
+
+	if (intern->format) {
+		SDL_PIXELFORMAT_ADD_PROPERTY("format",        intern->format->format);
+		SDL_PIXELFORMAT_ADD_PROPERTY("BitsPerPixel",  intern->format->BitsPerPixel);
+		SDL_PIXELFORMAT_ADD_PROPERTY("BytesPerPixel", intern->format->BytesPerPixel);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Rmask",         intern->format->Rmask);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Gmask",         intern->format->Gmask);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Bmask",         intern->format->Bmask);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Amask",         intern->format->Amask);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Rloss",         intern->format->Rloss);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Gloss",         intern->format->Gloss);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Bloss",         intern->format->Bloss);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Aloss",         intern->format->Aloss);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Rshift",        intern->format->Rshift);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Gshift",        intern->format->Rshift);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Bshift",        intern->format->Rshift);
+		SDL_PIXELFORMAT_ADD_PROPERTY("Ashift",        intern->format->Rshift);
+
+		sdl_palette_to_zval(intern->format->palette, &zv, SDL_DONTFREE);
+		zend_hash_str_update(props, "palette", sizeof("palette")-1, &zv);
+	}
+	return props;
+}
+/* }}} */
+
+/* {{{ sdl_pixelformat_write_property */
+static zval *sdl_pixelformat_write_property(zval *object, zval *member, zval *value, void **cache_slot)
+{
+	php_error_docref(NULL, E_ERROR, "Not supported, SDL_PixelFormat is read-only");
 }
 /* }}} */
 
@@ -1443,6 +1580,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	php_sdl_pixelformat_ce = zend_register_internal_class(&ce_pixelformat);
 	php_sdl_pixelformat_ce->create_object = php_sdl_pixelformat_new;
 	memcpy(&php_sdl_pixelformat_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    php_sdl_pixelformat_handlers.read_property  = sdl_pixelformat_read_property;
+    php_sdl_pixelformat_handlers.get_properties = sdl_pixelformat_get_properties;
+    php_sdl_pixelformat_handlers.write_property = sdl_pixelformat_write_property;
 	php_sdl_pixelformat_handlers.free_obj = php_sdl_pixelformat_free;
 	php_sdl_pixelformat_handlers.offset = XtOffsetOf(struct php_sdl_pixelformat, zo);
 
