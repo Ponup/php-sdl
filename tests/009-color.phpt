@@ -3,8 +3,6 @@ SDL_Color test
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --FILE--
 <?php
 echo "Color\n";

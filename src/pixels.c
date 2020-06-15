@@ -319,7 +319,7 @@ PHP_FUNCTION(SDL_PixelFormatEnumToMasks)
 	int bpp;
 	Uint32 rmask, gmask, bmask, amask;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lzzzzz", &format, &z_bpp, &z_rmask, &z_gmask, &z_bmask, &z_amask) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz/z/z/z/z/", &format, &z_bpp, &z_rmask, &z_gmask, &z_bmask, &z_amask) == FAILURE) {
 		RETURN_FALSE;
 	}
 	if (SDL_PixelFormatEnumToMasks((Uint32)format, &bpp, &rmask, &gmask, &bmask, &amask)) {
@@ -800,7 +800,7 @@ PHP_FUNCTION(SDL_GetRGB)
 	Uint8 r, g, b;
 	zend_long pix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOz/z/z/", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b) == FAILURE) {
 		return;
 	}
 	FETCH_PIXELFORMAT(format, z_format, 1);
@@ -834,7 +834,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGB)
 	Uint8 r, g, b;
 	zend_long pix;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olz/z/z/", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b) == FAILURE) {
 		return;
 	}
 	FETCH_PIXELFORMAT(format, z_format, 1);
@@ -866,7 +866,7 @@ PHP_FUNCTION(SDL_GetRGBA)
 	Uint8 r, g, b, a;
 	zend_long pix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOzzzz", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lOz/z/z/z/", &pix, &z_format, php_sdl_pixelformat_ce, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
 		return;
 	}
 	FETCH_PIXELFORMAT(format, z_format, 1);
@@ -895,7 +895,7 @@ PHP_METHOD(SDL_PixelFormat, GetRGBA)
 	Uint8 r, g, b, a;
 	zend_long pix;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olzzzz", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Olz/z/z/z/", &z_format, php_sdl_pixelformat_ce, &pix, &z_r, &z_g, &z_b, &z_a) == FAILURE) {
 		return;
 	}
 	FETCH_PIXELFORMAT(format, z_format, 1);
@@ -924,7 +924,7 @@ PHP_FUNCTION(SDL_CalculateGammaRamp)
 	Uint16 ramp[256];
 	int i;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dz", &gamma, &z_ramp) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "dz/", &gamma, &z_ramp) == FAILURE) {
 		RETURN_FALSE;
 	}
 	SDL_CalculateGammaRamp((float)gamma, ramp);
