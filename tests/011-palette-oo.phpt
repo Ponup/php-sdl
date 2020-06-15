@@ -3,8 +3,6 @@ SDL_Palette test, object mode
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --FILE--
 <?php
 echo "= Alloc\n";

@@ -30,9 +30,9 @@ struct php_sdl_color {
 static zend_class_entry *php_sdl_palette_ce;
 static zend_object_handlers php_sdl_palette_handlers;
 struct php_sdl_palette {
-	zend_object   zo;
 	SDL_Palette   *palette;
 	Uint32        flags;
+	zend_object   zo;
 };
 
 static zend_class_entry *php_sdl_pixelformat_ce;
@@ -71,15 +71,21 @@ zend_class_entry *get_php_sdl_pixels_ce(void)
 	return php_sdl_pixels_ce;
 }
 
+static inline struct php_sdl_palette* php_sdl_palette_from_obj(zend_object *obj) {
+	return (struct php_sdl_palette*)((char*)(obj) - XtOffsetOf(struct php_sdl_palette, zo));
+}
+
 #define FETCH_PALETTE(__ptr, __id, __check) \
 { \
-        intern = (struct php_sdl_palette *)Z_OBJ_P(__id);\
+        intern = PHP_SDL_PALETTE_P(__id);\
         __ptr = intern->palette; \
         if (__check && !__ptr) {\
                 php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
                 RETURN_FALSE;\
         }\
 }
+
+#define PHP_SDL_PALETTE_P(zv)  php_sdl_palette_from_obj(Z_OBJ_P((zv)))
 
 #define FETCH_PIXELFORMAT(__ptr, __id, __check) \
 { \
@@ -143,7 +149,7 @@ zend_bool sdl_palette_to_zval(SDL_Palette *palette, zval *z_val, Uint32 flags)
 		struct php_sdl_palette *intern;
 
 		object_init_ex(z_val, php_sdl_palette_ce);
-		intern = (struct php_sdl_palette *)Z_OBJ_P(z_val);
+		intern = PHP_SDL_PALETTE_P(z_val);
 		intern->palette = palette;
 		intern->flags = flags;
 
@@ -226,7 +232,7 @@ SDL_Palette *zval_to_sdl_palette(zval *z_val)
 	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_palette_ce) {
 		struct php_sdl_palette *intern;
 
-		intern = (struct php_sdl_palette *)Z_OBJ_P(z_val);
+		intern = PHP_SDL_PALETTE_P(z_val);
 		return intern->palette;
 		}
 	return NULL;
@@ -481,7 +487,7 @@ static PHP_METHOD(SDL_Palette, __construct)
 	zend_long ncolors;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &ncolors)) {
@@ -510,7 +516,7 @@ static PHP_METHOD(SDL_Palette, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	spprintf(&buf, 100, "SDL_Palette(%d)", intern->palette ? intern->palette->ncolors : 0);
 	RETVAL_STRING(buf);
 }
@@ -522,7 +528,7 @@ static PHP_METHOD(SDL_Palette, count)
 {
 	struct php_sdl_palette *intern;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
@@ -541,7 +547,7 @@ PHP_METHOD(SDL_Palette, offsetExists)
 	struct php_sdl_palette *intern;
 	zend_long offset;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
 		return;
 	}
@@ -558,7 +564,7 @@ PHP_METHOD(SDL_Palette, offsetGet)
 	struct php_sdl_palette *intern;
 	zend_long offset;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
 		return;
 	}
@@ -577,7 +583,7 @@ PHP_METHOD(SDL_Palette, offsetUnset)
 	zend_long offset;
 	SDL_Color color;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &offset) == FAILURE) {
 		return;
 	}
@@ -603,7 +609,7 @@ PHP_METHOD(SDL_Palette, offsetSet)
 	zval *z_color;
 	SDL_Color color;
 
-	intern = (struct php_sdl_palette *)Z_OBJ_P(getThis());
+	intern = PHP_SDL_PALETTE_P(getThis());
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lO", &offset, &z_color, php_sdl_color_ce) == FAILURE) {
 		return;
 	}
@@ -1144,7 +1150,7 @@ PHP_METHOD(SDL_Pixels, SetByte)
 	 */
 static void php_sdl_palette_free(zend_object *object)
 {
-	struct php_sdl_palette *intern = (struct php_sdl_palette *) object;
+	struct php_sdl_palette *intern = php_sdl_palette_from_obj(object);
 
 	if (intern->palette) {
 		if (!(intern->flags & SDL_DONTFREE)) {
@@ -1162,7 +1168,7 @@ static zend_object* php_sdl_palette_new(zend_class_entry *class_type)
 {
 	struct php_sdl_palette *intern;
 
-	intern = ecalloc(1, sizeof(*intern));
+    intern = ecalloc(1, sizeof(struct php_sdl_palette) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
@@ -1171,6 +1177,98 @@ static zend_object* php_sdl_palette_new(zend_class_entry *class_type)
 	intern->zo.handlers = (zend_object_handlers *) &php_sdl_palette_handlers;
 
 	return &intern->zo;
+}
+/* }}} */
+
+/* {{{ sdl_palette_read_property*/
+zval *sdl_palette_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv)
+{
+	struct php_sdl_palette *intern = PHP_SDL_PALETTE_P(object);
+	zval *retval, tmp_member;
+
+	if (Z_TYPE_P(member) != IS_STRING) {
+		zend_string *_str = zval_try_get_string_func(member);
+        if (UNEXPECTED(!_str)) {
+            return &EG(uninitialized_zval);
+        }
+        ZVAL_STR(&tmp_member, _str);
+        member = &tmp_member;
+        cache_slot = NULL;
+	}
+
+	if (!intern->palette) {
+	    return zend_std_read_property(object, member, type, cache_slot, rv);
+	}
+
+    retval = rv;
+
+	if (!strcmp(Z_STRVAL_P(member), "ncolors")) {
+		ZVAL_LONG(retval, intern->palette->ncolors);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "version")) {
+		ZVAL_LONG(retval, intern->palette->version);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "refcount")) {
+		ZVAL_LONG(retval, intern->palette->refcount);
+
+	} else if (!strcmp(Z_STRVAL_P(member), "colors")) {
+		int i;
+		zval z_color;
+		array_init(retval);
+		for (i=0 ; i<intern->palette->ncolors ; i++) {
+			sdl_color_to_zval(&intern->palette->colors[i], &z_color );
+			add_next_index_zval(retval, &z_color);
+		}
+
+	} else {
+		retval = zend_std_read_property(object, member, type, cache_slot, rv);
+		if (member == &tmp_member) {
+			zval_ptr_dtor_str(&tmp_member);
+		}
+		return retval;
+	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
+	}
+	return retval;
+}
+/* }}} */
+
+#define SDL_PALETTE_ADD_PROPERTY(n,f) \
+	ZVAL_LONG(&zv, f); \
+	zend_hash_str_update(props, n, sizeof(n)-1, &zv);
+
+/* {{{ sdl_palette_get_properties*/
+static HashTable *sdl_palette_get_properties(zval *object)
+{
+	HashTable *props;
+	zval zv, z_color;
+	int i;
+	struct php_sdl_palette *intern = PHP_SDL_PALETTE_P(object);
+
+	props = zend_std_get_properties(object);
+
+	if (intern->palette) {
+		SDL_PALETTE_ADD_PROPERTY("ncolors",  intern->palette->ncolors);
+		SDL_PALETTE_ADD_PROPERTY("version",  intern->palette->version);
+		SDL_PALETTE_ADD_PROPERTY("refcount", intern->palette->refcount);
+
+		array_init(&zv);
+		for (i=0 ; i<intern->palette->ncolors ; i++) {
+			sdl_color_to_zval(&intern->palette->colors[i], &z_color );
+			add_next_index_zval(&zv, &z_color);
+		}
+		zend_hash_str_update(props, "colors", sizeof("colors")-1, &zv);
+	}
+	return props;
+}
+/* }}} */
+
+/* {{{ sdl_palette_write_property */
+static zval *sdl_palette_write_property(zval *object, zval *member, zval *value, void **cache_slot)
+{
+	php_error_docref(NULL, E_ERROR, "Not supported, use SDL_SetPaletteColors() or SDL_Palette::SetColors()");
 }
 /* }}} */
 
@@ -1331,6 +1429,9 @@ PHP_MINIT_FUNCTION(sdl_pixels)
 	php_sdl_palette_ce->create_object = php_sdl_palette_new;
 	zend_class_implements(php_sdl_palette_ce, 1, zend_ce_arrayaccess);
 	memcpy(&php_sdl_palette_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	php_sdl_palette_handlers.read_property  = sdl_palette_read_property;
+    php_sdl_palette_handlers.get_properties = sdl_palette_get_properties;
+    php_sdl_palette_handlers.write_property = sdl_palette_write_property;
 	php_sdl_palette_handlers.free_obj = php_sdl_palette_free;
 
 	REGISTER_PALETTE_PROP("ncolors");
