@@ -3,8 +3,6 @@ SDL_version test suite
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --INI--
 error_reporting = 32767;
 --FILE--
@@ -26,7 +24,7 @@ SDL_VERSION($version);
 var_dump(array_key_exists('major', $version) && array_key_exists('minor', $version) && array_key_exists('patch', $version));
 var_dump(12030 === SDL_VERSIONNUM(10,20,30));
 var_dump(SDL_VERSION_ATLEAST(2,0,0));
-var_dump(SDL_VERSION_ATLEAST(2,0,5));
+var_dump(SDL_VERSION_ATLEAST(2,0,25));
 var_dump(is_string(SDL_GetRevision()));
 var_dump(is_integer(SDL_GetRevisionNumber()));
 

@@ -144,7 +144,7 @@ PHP_FUNCTION(SDL_VERSION)
 	SDL_version version;
 	zval *version_array;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &version_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z/", &version_array) == FAILURE) {
 		RETURN_FALSE;
 	}
 	SDL_VERSION(&version);
