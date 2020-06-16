@@ -3,8 +3,6 @@ SDL_Pixels test
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --INI--
 error_reporting = 32767;
 --FILE--

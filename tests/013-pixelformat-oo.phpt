@@ -3,8 +3,6 @@ SDL_PixelFormat test, object mode
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --FILE--
 <?php
 echo "= Palette\n";
@@ -51,8 +49,6 @@ string(42) "SDL_PixelFormat(SDL_PIXELFORMAT_INDEX4LSB)"
 int(0)
 = Result
 object(SDL_PixelFormat)#%d (16) {
-  ["format"]=>
-  int(303039488)
   ["BitsPerPixel"]=>
   int(4)
   ["BytesPerPixel"]=>
@@ -269,6 +265,8 @@ object(SDL_PixelFormat)#%d (16) {
       }
     }
   }
+  ["format"]=>
+  int(303039488)
 }
 = RGB
 int(8)
