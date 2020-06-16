@@ -1279,6 +1279,7 @@ static HashTable *sdl_palette_get_properties(zval *object)
 static zval *sdl_palette_write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
 	php_error_docref(NULL, E_ERROR, "Not supported, use SDL_SetPaletteColors() or SDL_Palette::SetColors()");
+	return value;
 }
 /* }}} */
 
@@ -1446,6 +1447,7 @@ static HashTable *sdl_pixelformat_get_properties(zval *object)
 static zval *sdl_pixelformat_write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
 	php_error_docref(NULL, E_ERROR, "Not supported, SDL_PixelFormat is read-only");
+	return value;
 }
 /* }}} */
 
@@ -1551,9 +1553,10 @@ static HashTable *sdl_pixels_get_properties(zval *object)
 /* }}} */
 
 /* {{{ sdl_pixels_write_property */
-void sdl_pixels_write_property(zval *object, zval *member, zval *value, const zval *key)
+static zval *sdl_pixels_write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
 	php_error_docref(NULL, E_ERROR, "Not supported, SDL_Pixels is read-only");
+	return value;
 }
 /* }}} */
 
