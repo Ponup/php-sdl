@@ -3,8 +3,6 @@ rect group test, procedural mode
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --FILE--
 <?php
 echo "+++ Empty (true)\n";
@@ -67,7 +65,7 @@ var_dump(SDL_EnclosePoints($pts, 6, $r4, $res2), $res2);
 Done
 --EXPECTF--
 +++ Empty (true)
-object(SDL_Rect)#1 (4) {
+object(SDL_Rect)#1 (5) {
   ["x"]=>
   int(0)
   ["y"]=>
@@ -76,10 +74,12 @@ object(SDL_Rect)#1 (4) {
   int(0)
   ["h"]=>
   int(0)
+  ["clip_rect"]=>
+  NULL
 }
 bool(true)
 +++ Empty (false)
-object(SDL_Rect)#2 (4) {
+object(SDL_Rect)#2 (5) {
   ["x"]=>
   int(1)
   ["y"]=>
@@ -88,6 +88,8 @@ object(SDL_Rect)#2 (4) {
   int(3)
   ["h"]=>
   int(4)
+  ["clip_rect"]=>
+  NULL
 }
 bool(false)
 +++ Equal (true)
@@ -99,7 +101,7 @@ bool(false)
 +++ Inter (true)
 bool(true)
 bool(true)
-object(SDL_Rect)#6 (4) {
+object(SDL_Rect)#6 (5) {
   ["x"]=>
   int(16)
   ["y"]=>
@@ -108,6 +110,8 @@ object(SDL_Rect)#6 (4) {
   int(14)
   ["h"]=>
   int(13)
+  ["clip_rect"]=>
+  NULL
 }
 +++ Inter (false)
 bool(false)
@@ -115,7 +119,7 @@ bool(false)
 NULL
 +++ Union
 NULL
-object(SDL_Rect)#6 (4) {
+object(SDL_Rect)#6 (5) {
   ["x"]=>
   int(10)
   ["y"]=>
@@ -124,9 +128,11 @@ object(SDL_Rect)#6 (4) {
   int(28)
   ["h"]=>
   int(31)
+  ["clip_rect"]=>
+  NULL
 }
 NULL
-object(SDL_Rect)#%d (4) {
+object(SDL_Rect)#%d (5) {
   ["x"]=>
   int(10)
   ["y"]=>
@@ -135,6 +141,8 @@ object(SDL_Rect)#%d (4) {
   int(110)
   ["h"]=>
   int(20)
+  ["clip_rect"]=>
+  NULL
 }
 +++ InterLine
 bool(true)
@@ -146,7 +154,7 @@ bool(false)
 +++ EnclosePoints
 string(67) "SDL_Point(20,14) SDL_Point(13,20) SDL_Point(24,20) SDL_Point(20,28)"
 bool(true)
-object(SDL_Rect)#%d (4) {
+object(SDL_Rect)#%d (5) {
   ["x"]=>
   int(13)
   ["y"]=>
@@ -155,6 +163,8 @@ object(SDL_Rect)#%d (4) {
   int(12)
   ["h"]=>
   int(15)
+  ["clip_rect"]=>
+  NULL
 }
 
 Warning: SDL_EnclosePoints(): point #4 is not a SDL_Point object in %s/006-rect.php on line %d

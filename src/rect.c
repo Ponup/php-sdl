@@ -270,7 +270,7 @@ PHP_FUNCTION(SDL_IntersectRect)
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
@@ -296,7 +296,7 @@ PHP_FUNCTION(SDL_UnionRect)
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
@@ -328,7 +328,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	SDL_Rect clip, result;
 	SDL_Point *points;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "alOz", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "alOz/", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
 		return;
 	}
 	RETVAL_FALSE;
@@ -381,7 +381,7 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	SDL_Rect rect;
 	int x1, y1, x2, y2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzzz", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/z/z/", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
 		return;
 	}
 	zval_to_sdl_rect(object, &rect);
