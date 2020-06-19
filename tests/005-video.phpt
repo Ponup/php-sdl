@@ -3,6 +3,7 @@ video group test
 --SKIPIF--
 <?php
 require 'test-functions.php';
+skipIfTravis();
 --FILE--
 <?php
 echo "== VideoDriver ==\n";
