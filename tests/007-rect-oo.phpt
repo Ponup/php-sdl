@@ -53,7 +53,7 @@ var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
 Done
 --EXPECTF--
 +++ Empty (true)
-object(SDL_Rect)#1 (5) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(0)
   ["y"]=>
@@ -62,13 +62,11 @@ object(SDL_Rect)#1 (5) {
   int(0)
   ["h"]=>
   int(0)
-  ["clip_rect"]=>
-  NULL
 }
 string(17) "SDL_Rect(0,0,0,0)"
 bool(true)
 +++ Empty (false)
-object(SDL_Rect)#2 (5) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(1)
   ["y"]=>
@@ -77,8 +75,6 @@ object(SDL_Rect)#2 (5) {
   int(3)
   ["h"]=>
   int(4)
-  ["clip_rect"]=>
-  NULL
 }
 string(17) "SDL_Rect(1,2,3,4)"
 bool(false)
@@ -91,7 +87,7 @@ bool(false)
 +++ Inter (true)
 bool(true)
 bool(true)
-object(SDL_Rect)#6 (5) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(16)
   ["y"]=>
@@ -100,8 +96,6 @@ object(SDL_Rect)#6 (5) {
   int(14)
   ["h"]=>
   int(13)
-  ["clip_rect"]=>
-  NULL
 }
 +++ Inter (false)
 bool(false)
@@ -109,7 +103,7 @@ bool(false)
 NULL
 +++ Uninon
 NULL
-object(SDL_Rect)#6 (5) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(10)
   ["y"]=>
@@ -118,11 +112,9 @@ object(SDL_Rect)#6 (5) {
   int(28)
   ["h"]=>
   int(31)
-  ["clip_rect"]=>
-  NULL
 }
 NULL
-object(SDL_Rect)#6 (5) {
+object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(10)
   ["y"]=>
@@ -131,8 +123,6 @@ object(SDL_Rect)#6 (5) {
   int(110)
   ["h"]=>
   int(20)
-  ["clip_rect"]=>
-  NULL
 }
 +++ InterLine
 bool(true)
