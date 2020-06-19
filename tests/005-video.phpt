@@ -3,8 +3,6 @@ video group test
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
-?>
 --FILE--
 <?php
 echo "== VideoDriver ==\n";
@@ -44,7 +42,7 @@ int(0)
 SDL_VideoInit():int(0)
 SDL_GetCurrentVideoDriver():string(%d) "%s"
 SDL_GetNumVideoDisplays():int(%d)
-SDL_GetDisplayName(0):string(9) "Color LCD"
+SDL_GetDisplayName(0):string(%d) "%s"
 SDL_GetDisplayBounds(0):int(0)
 object(SDL_Rect)#1 (4) {
   ["x"]=>
@@ -52,9 +50,9 @@ object(SDL_Rect)#1 (4) {
   ["y"]=>
   int(0)
   ["w"]=>
-  int(1680)
+  int(%d)
   ["h"]=>
-  int(1050)
+  int(%d)
 }
 SDL_GetNumDisplayModes(0):int(%d)
 SDL_GetDisplayMode(0,0):object(SDL_DisplayMode)#2 (4) {

@@ -46,6 +46,8 @@ int(0)
 int(0)
 = Result
 object(SDL_PixelFormat)#%d (16) {
+  ["format"]=>
+  int(303039488)
   ["BitsPerPixel"]=>
   int(4)
   ["BytesPerPixel"]=>
@@ -262,8 +264,6 @@ object(SDL_PixelFormat)#%d (16) {
       }
     }
   }
-  ["format"]=>
-  int(303039488)
 }
 = RGB
 int(8)

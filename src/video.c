@@ -316,7 +316,7 @@ PHP_FUNCTION(SDL_GetDisplayBounds)
 	SDL_Rect rect;
 	zval *result;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &display, &result) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "lz/", &display, &result) == FAILURE) {
 		RETURN_FALSE;
 	}
 	err = SDL_GetDisplayBounds((int)display, &rect);
