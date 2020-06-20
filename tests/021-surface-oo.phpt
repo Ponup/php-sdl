@@ -3,11 +3,11 @@ SDL_Surface test, procedural mode
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
 ?>
 --FILE--
 <?php
 echo "= Create Palette\n";
+/* The flags (first parameter) are no longer used in SDL2 */
 $spal = new SDL_Surface(0, 150, 100, 8, 0, 0, 0, 0);
 var_dump("$spal");
 var_dump($spal->w, $spal->h, $spal->format->palette->ncolors, $spal->pixels);
@@ -57,7 +57,7 @@ $scol->Free()
 = Done
 --EXPECTF--
 = Create Palette
-string(40) "SDL_Surface(0,150,100,8,0x0,0x0,0x0,0x0)"
+string(40) "SDL_Surface(%d,150,100,8,0x0,0x0,0x0,0x0)"
 int(150)
 int(100)
 int(256)
@@ -70,7 +70,7 @@ object(SDL_Pixels)#%d (3) {
   int(15200)
 }
 = Create True colors
-string(57) "SDL_Surface(0,150,100,32,0xff000000,0xff0000,0xff00,0xff)"
+string(57) "SDL_Surface(%d,150,100,32,0xff000000,0xff0000,0xff00,0xff)"
 int(150)
 int(100)
 NULL
