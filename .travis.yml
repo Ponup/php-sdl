@@ -1,32 +1,11 @@
 language: php
 
-php:
-  - 7.3
-
-env:
-  - REPORT_EXIT_STATUS=1
+services:
+  - docker
 
 before_install:
-  - sudo add-apt-repository -y ppa:team-xbmc/ppa
-  - sudo apt-get update -qq
-  - |
-    travis_retry curl -L https://www.libsdl.org/release/SDL2-2.0.8.tar.gz | tar xz
-    pushd SDL2-2.0.8
-    ./configure
-    make
-    sudo make install
-    popd
-
-install:
-  - sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
-
-before_script:
-  - phpize
-  - ./configure --quiet
-  - make all install
-  - echo "extension=sdl.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-  - chmod +x run-tests.php
+  - docker build -t ponup/php-sdl .
 
 script:
-  - ./run-tests.php -q -p $(which php) --show-diff
+  - docker run --rm ponup/php-sdl 
 
