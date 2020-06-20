@@ -40,7 +40,7 @@ PHP_FUNCTION(SDL_GetPowerInfo)
 	zval *z_secs = NULL, *z_pct = NULL;
 	zend_bool has_secs, has_pct;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|zz", &z_secs, &z_pct) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|z/z/", &z_secs, &z_pct) == FAILURE) {
 		RETURN_FALSE;
 	}
 
