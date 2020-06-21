@@ -28,9 +28,10 @@ $texture = SDL_CreateTextureFromSurface($renderer, $image);
 $drect = $image->clip_rect;
 SDL_FreeSurface($image);
 
-SDL_SetRenderDrawColor($renderer, 255, 0, 255, 255);
+SDL_SetRenderDrawColor($renderer, 0xbb, 0xcc, 0xdd, 0xff);
 SDL_RenderClear($renderer);
 SDL_RenderPresent($renderer);
+
 $rotCenter = new SDL_Point(10, 10);
 $event = new SDL_Event;
 $destRect = new SDL_Rect;
@@ -80,7 +81,7 @@ while (!$quit) {
 		$update = false;
 	}
 
-	SDL_Delay(25);
+	SDL_Delay(5);
 }
 
 if ($joystickFound) {

@@ -4,7 +4,9 @@
 PHP-SDL
 =======
 
-SDL (Simple DirectMedia Layer) bindings for the PHP language.
+SDL (Simple DirectMedia Layer) bindings for the PHP language. The extension allows you to create multimedia desktop applications with windows, input handling, events, and more.
+
+[<img src="input-handling-example.gif" width="250" />](input-handling-example.gif)
 
 ## Installation
 
@@ -33,7 +35,7 @@ to your _php.ini_ file.
 
 The SDL extension mimics in almost every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](https://wiki.libsdl.org/APIByCategory).
 
-### Example
+## Examples
 
 Standard SDL2 API is available in procedural style:
 
@@ -51,8 +53,17 @@ And is also available in object oriented style:
     unset($window); // will destroy the window
 ```
 
-Building
-========
+Complete examples can be found in the [examples](examples) folder.
+
+## Projects using the extension
+
+* [CubeCraft](https://github.com/Ponup/cubecraft)
+* [Conway's game of life](https://github.com/Ponup/conways-game-of-life)
+* [PhpOkoban](https://github.com/b-viguier/PhpOkoban)
+* [Inphpinity](https://github.com/b-viguier/Inphpinity)
+* [PhPresent](https://github.com/b-viguier/PhPresent)
+
+## Building
 
 To compile your new extension, you will have to execute the following steps:
 
@@ -66,13 +77,6 @@ $ [sudo] make install
 
 ## Support and feature requests
 
-Please submit anything that needs our attention to [issues section](https://github.com/php-sdl/extension/issues) on Github. We are commited to attend any request in a short timespan if it's a sensible matter.
+Please submit anything that needs our attention to the [issues section](https://github.com/php-sdl/extension/issues) on Github. We are commited to attend any request in a short timespan if it's a sensible matter.
 
 
-## Projects using this extension
-
-* [CubeCraft](https://github.com/Ponup/cubecraft)
-* [Conway's game of life](https://github.com/Ponup/conways-game-of-life)
-* [PhpOkoban](https://github.com/b-viguier/PhpOkoban)
-* [Inphpinity](https://github.com/b-viguier/Inphpinity)
-* [PhPresent](https://github.com/b-viguier/PhPresent)
