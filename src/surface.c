@@ -806,14 +806,15 @@ PHP_FUNCTION(SDL_SetColorKey)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface;
-	zend_long flag, key = 0;
+	zend_bool flag;
+	zend_long key = 0;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_surface, php_sdl_surface_ce, &flag, &key)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ob|l", &z_surface, php_sdl_surface_ce, &flag, &key)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
-	RETURN_LONG(SDL_SetColorKey(surface, (int)flag, (Uint32)key));
+	RETURN_LONG(SDL_SetColorKey(surface, flag ? SDL_TRUE : SDL_FALSE, (Uint32)key));
 }
 /* }}} */
 

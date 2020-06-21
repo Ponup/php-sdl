@@ -20,6 +20,10 @@ $image = SDL_LoadBMP("spaceship.bmp");
 if ($image === null) {
 	exit('Unable to load image');
 }
+$windowSurface = SDL_GetWindowSurface($window);
+$color = SDL_MapRGB($windowSurface->format, 0xff, 0xff, 0xff);
+SDL_SetColorKey($image, true, $color);
+
 $texture = SDL_CreateTextureFromSurface($renderer, $image);
 $drect = $image->clip_rect;
 SDL_FreeSurface($image);

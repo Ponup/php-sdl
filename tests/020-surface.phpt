@@ -21,9 +21,9 @@ var_dump(SDL_LockSurface($spal), $spal->locked);
 var_dump(SDL_UnlockSurface($spal), $spal->locked);
 
 echo "= ColorKey\n";
-var_dump(SDL_SetColorKey($spal, 1, 127));
+var_dump(SDL_SetColorKey($spal, true, 127));
 var_dump(SDL_GetColorKey($spal, $key), $key);
-var_dump(SDL_SetColorKey($spal, 0));
+var_dump(SDL_SetColorKey($spal, false));
 var_dump(SDL_GetColorKey($spal, $key));
 
 echo "= ColorMod\n";
