@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require 'bootstrap.php';
 
 SDL_Init(SDL_INIT_EVERYTHING);
@@ -27,23 +29,22 @@ $cursor->Set();
 $event = new SDL_Event;
 
 $color = SDL_MapRGB($surf->format, 0xef, 0xff, 0x87);
-for($t = $time * $step; $t; $t--) {
+for ($t = $time * $step; $t; $t--) {
 
     if (!($t % $step)) {
-		$secondsLeft = $t / $step;
-		SDL_SetWindowTitle($window, "Will be closed in $secondsLeft seconds");
+        $secondsLeft = $t / $step;
+        SDL_SetWindowTitle($window, "Will be closed in $secondsLeft seconds");
     }
 
     // Display 1 rect in ~red
     $surf->FillRect($rects[$time * $step - $t], $color);
-	SDL_UpdateWindowSurfaceRects($window, array($rects[$time * $step - $t]));
+    SDL_UpdateWindowSurfaceRects($window, array($rects[$time * $step - $t]));
 
     usleep(1000000 / $step);
 
-	while(SDL_PollEvent($event)) {
-		if($event->type == SDL_QUIT) break;
-	}
+    while (SDL_PollEvent($event)) {
+        if ($event->type == SDL_QUIT) break;
+    }
 }
 
 SDL_DestroyWindow($window);
-

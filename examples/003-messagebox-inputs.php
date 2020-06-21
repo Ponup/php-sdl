@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 require 'bootstrap.php';
 
-if(false === SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, 'Message box title', 'This is an example message box')) {
+if (false === SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, 'Message box title', 'This is an example message box')) {
 	fprintf(STDERR, 'Unable to show simple message box');
 	return;
 }
@@ -22,4 +24,3 @@ $dialog = new SDL_MessageBoxData(SDL_MessageBoxData::INFORMATION, "Message box d
 $dialog->Show($buttonId);
 
 echo 'Button selection: ', var_export($buttonId), PHP_EOL;
-

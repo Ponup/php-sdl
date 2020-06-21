@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require 'bootstrap.php';
 
 $window = SDL_CreateWindow('Primitive drawing example', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);

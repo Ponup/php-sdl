@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require 'bootstrap.php';
 
 $quit = false;
@@ -8,16 +10,18 @@ SDL_Init(SDL_INIT_VIDEO);
 $window = SDL_CreateWindow('Window Events', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 $renderer = SDL_CreateRenderer($window, -1, 0);
 
-SDL_SetRenderDrawColor($renderer, 255, 0, 255, 255);
+SDL_SetRenderDrawColor($renderer, 100, 0, 0, 0);
+SDL_RenderClear($renderer);
+SDL_RenderPresent($renderer);
 
 $event = new SDL_Event;
 while (!$quit) {
-	while(SDL_PollEvent($event)) {
-    	switch ($event->type) {
-        	case SDL_QUIT:
-            	$quit = true;
-            	break;
-        	case SDL_WINDOWEVENT:
+    while (SDL_PollEvent($event)) {
+        switch ($event->type) {
+            case SDL_QUIT:
+                $quit = true;
+                break;
+            case SDL_WINDOWEVENT:
                 $eventText = 'unknown';
                 switch ($event->window->event) {
                     case SDL_WINDOWEVENT_SHOWN:
@@ -70,10 +74,10 @@ while (!$quit) {
                         break;
                 }
                 $window->setTitle($eventText);
-				printf('Event{windowID=%d, timestamp=%s, description=%s}' . PHP_EOL, $event->window->windowID, $event->window->timestamp, $eventText);
-            	break;
-    	}
-	}
+                printf('Event{windowID=%d, timestamp=%s, description=%s}' . PHP_EOL, $event->window->windowID, $event->window->timestamp, $eventText);
+                break;
+        }
+    }
 
     SDL_Delay(5);
 }
