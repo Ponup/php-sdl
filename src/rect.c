@@ -71,7 +71,7 @@ zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 
 zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 {
-	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_rect_ce) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_rect_ce)) {
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv);
@@ -99,7 +99,7 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 {
-	if (Z_TYPE(*value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_point_ce) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_point_ce)) {
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_point_ce, value, "x", 1, 0, &rv);

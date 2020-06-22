@@ -49,6 +49,11 @@ var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
 var_dump($x1, $y1, $x2, $y2);
 $x1=0; $y1=2; $x2=40; $y2=6;
 var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
+
+echo '+++ Test subclasses of SDL_Rect can be passed to SDL functions', PHP_EOL;
+class CustomRect extends \SDL_Rect {}
+$customRect = new CustomRect(10, 20, 30, 40);
+var_dump(SDL_RectEmpty($customRect));
 ?>
 Done
 --EXPECTF--
@@ -131,5 +136,6 @@ int(15)
 int(29)
 int(24)
 bool(false)
++++ Test subclasses of SDL_Rect can be passed to SDL functions
+bool(false)
 Done
-
