@@ -3,7 +3,6 @@ SDL_power test suite
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
 ?>
 --FILE--
 <?php

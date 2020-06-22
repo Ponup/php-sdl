@@ -3,7 +3,6 @@ SDL_Surface test, procedural mode
 --SKIPIF--
 <?php
 require 'test-functions.php';
-skipIncompleteTest();
 ?>
 --FILE--
 <?php
@@ -25,7 +24,8 @@ var_dump(SDL_SetColorKey($spal, true, 127));
 var_dump(SDL_GetColorKey($spal, $key), $key);
 var_dump(SDL_SetColorKey($spal, false));
 var_dump(SDL_GetColorKey($spal, $key));
-
+var_dump(SDL_GetError());
+SDL_ClearError();
 echo "= ColorMod\n";
 var_dump(SDL_SetSurfaceColorMod($scol, 1, 2, 3));
 var_dump(SDL_GetSurfaceColorMod($scol, $r, $g, $b), $r, $g, $b);
@@ -81,6 +81,7 @@ int(0)
 int(127)
 int(0)
 int(-1)
+string(31) "Surface doesn't have a colorkey"
 = ColorMod
 int(0)
 int(0)

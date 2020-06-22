@@ -186,7 +186,8 @@ static PHP_METHOD(SDL_Surface, __construct)
 	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
 	zend_error_handling error_handling;
 
-	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis());
+	zend_object* zo = Z_OBJ_P(getThis());
+	intern = (struct php_sdl_surface*)((char*)zo - zo->handlers->offset);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask)) {
@@ -217,7 +218,9 @@ static PHP_METHOD(SDL_Surface, __toString)
 		return;
 	}
 
-	intern = (struct php_sdl_surface *)Z_OBJ_P(getThis());
+	zend_object* zo = Z_OBJ_P(getThis());
+	intern = (struct php_sdl_surface*)((char*)zo - zo->handlers->offset);
+
 	if (intern->surface) {
 		buf_len = spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
 			intern->surface->flags, intern->surface->w, intern->surface->h,
@@ -839,7 +842,7 @@ PHP_FUNCTION(SDL_GetColorKey)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_key)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/", &z_surface, php_sdl_surface_ce, &z_key)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -906,7 +909,7 @@ PHP_FUNCTION(SDL_GetSurfaceColorMod)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzz", &z_surface, php_sdl_surface_ce, &z_r, &z_g, &z_b)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/z/", &z_surface, php_sdl_surface_ce, &z_r, &z_g, &z_b)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -972,7 +975,7 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_a)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/", &z_surface, php_sdl_surface_ce, &z_a)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -1034,7 +1037,7 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode)
 	SDL_Surface *surface;
 	int result;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_mode)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/", &z_surface, php_sdl_surface_ce, &z_mode)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -1098,7 +1101,7 @@ PHP_FUNCTION(SDL_GetClipRect)
 	SDL_Rect rect;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_surface, php_sdl_surface_ce, &z_rect)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/", &z_surface, php_sdl_surface_ce, &z_rect)) {
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
@@ -1272,7 +1275,7 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type)
 {
 	struct php_sdl_surface *intern;
 
-	intern = (struct php_sdl_surface*)ecalloc(1, sizeof(struct php_sdl_surface) + zend_object_properties_size(class_type));
+	intern = (struct php_sdl_surface*)zend_object_alloc(sizeof(struct php_sdl_surface), class_type);
 
 	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
