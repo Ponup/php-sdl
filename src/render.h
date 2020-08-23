@@ -93,6 +93,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateTexture, 0, 0, 5)
 	ZEND_ARG_INFO(0, h)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QueryTexture, 0, 0, 5)
+	ZEND_ARG_INFO(0, texture)
+	ZEND_ARG_INFO(1, format)
+	ZEND_ARG_INFO(1, access)
+	ZEND_ARG_INFO(1, w)
+	ZEND_ARG_INFO(1, h)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderTarget, 0, 0, 2)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_INFO(0, texture)
@@ -138,6 +146,7 @@ PHP_FUNCTION(SDL_RenderPresent);
 PHP_FUNCTION(SDL_RenderDrawPoint);
 PHP_FUNCTION(SDL_CreateTextureFromSurface);
 PHP_FUNCTION(SDL_CreateTexture);
+PHP_FUNCTION(SDL_QueryTexture);
 PHP_FUNCTION(SDL_SetRenderTarget);
 PHP_FUNCTION(SDL_CreateRenderer);
 PHP_FUNCTION(SDL_RenderCopy);

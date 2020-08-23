@@ -216,6 +216,7 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
 	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
 	ZEND_FE(SDL_CreateTexture, arginfo_SDL_CreateTexture)
+	ZEND_FE(SDL_QueryTexture, arginfo_SDL_QueryTexture)
 	ZEND_FE(SDL_SetRenderTarget, arginfo_SDL_SetRenderTarget)
 	ZEND_FE(SDL_GetRendererOutputSize, arginfo_SDL_GetRendererOutputSize)
 

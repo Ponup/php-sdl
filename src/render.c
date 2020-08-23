@@ -334,6 +334,33 @@ PHP_FUNCTION(SDL_GetRendererOutputSize)
 	ZVAL_LONG(z_height, h);
 }
 
+PHP_FUNCTION(SDL_QueryTexture)
+{
+	zval *z_texture, *z_format, *z_access, *z_width, *z_height;
+	SDL_Texture *texture;
+	int w, h, access, result;
+	Uint32 format;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zz/z/z/z/", &z_texture, &z_format, &z_access, &z_width, &z_height) == FAILURE ) {
+		return;
+	}
+
+	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+
+	result = SDL_QueryTexture(texture, &format, &access, &w, &h);
+
+	zval_dtor(z_format);
+	ZVAL_LONG(z_format, format);
+	zval_dtor(z_access);
+	ZVAL_LONG(z_access, access);
+	zval_dtor(z_width);
+	ZVAL_LONG(z_width, (long)w);
+	zval_dtor(z_height);
+	ZVAL_LONG(z_height, (long)h);
+
+	RETURN_LONG(result);
+}
+
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_render)
 {
