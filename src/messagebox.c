@@ -66,9 +66,9 @@ zend_bool sdl_messageboxcolor_to_zval(const SDL_MessageBoxColor *color, zval *va
 {
 	if (color) {
 		object_init_ex(value, php_sdl_messageboxcolor_ce);
-		zend_update_property_long(php_sdl_messageboxcolor_ce, value, "r", 1, color->r);
-		zend_update_property_long(php_sdl_messageboxcolor_ce, value, "g", 1, color->g);
-		zend_update_property_long(php_sdl_messageboxcolor_ce, value, "b", 1, color->b);
+		zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "r", 1, color->r);
+		zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "g", 1, color->g);
+		zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "b", 1, color->b);
 
 		return 1;
 	}
@@ -82,9 +82,9 @@ zend_bool sdl_messageboxbuttondata_to_zval(const SDL_MessageBoxButtonData *data,
 {
 	if (data) {
 		object_init_ex(value, php_sdl_messageboxbuttondata_ce);
-		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("flags"), data->flags);
-		zend_update_property_long(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("buttonid"), data->buttonid);
-		zend_update_property_string(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("text"), data->text);
+		zend_update_property_long(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("flags"), data->flags);
+		zend_update_property_long(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("buttonid"), data->buttonid);
+		zend_update_property_string(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("text"), data->text);
 
 		return 1;
 	}
@@ -119,15 +119,15 @@ zend_bool zval_to_sdl_messageboxcolor(zval *value, SDL_MessageBoxColor *color)
 
 		/* we convert the properties, without copy: yes ! */
 
-		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "r", 1, 0, &rv);
+		val = zend_read_property(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "r", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = color->r = (Uint8)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "g", 1, 0, &rv);
+		val = zend_read_property(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "g", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = color->g = (Uint8)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxcolor_ce, value, "b", 1, 0, &rv);
+		val = zend_read_property(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(value), "b", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = color->b = (Uint8)Z_LVAL_P(val);
 
@@ -147,15 +147,15 @@ zend_bool zval_to_sdl_messageboxbuttondata(zval *value, SDL_MessageBoxButtonData
 
 		/* we convert the properties, without copy: yes ! */
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("flags"), 0, &rv);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("flags"), 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = data->flags = (Uint32)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("buttonid"), 0, &rv);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("buttonid"), 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = data->buttonid = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_messageboxbuttondata_ce, value, ZEND_STRL("text"), 0, &rv);
+		val = zend_read_property(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("text"), 0, &rv);
 		convert_to_string(val);
 		data->text = Z_STRVAL_P(val);
 
@@ -250,9 +250,9 @@ static PHP_METHOD(SDL_MessageBoxColor, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	zend_update_property_long(php_sdl_messageboxcolor_ce, getThis(), "r", 1, r&255);
-	zend_update_property_long(php_sdl_messageboxcolor_ce, getThis(), "g", 1, g&255);
-	zend_update_property_long(php_sdl_messageboxcolor_ce, getThis(), "b", 1, b&255);
+	zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(getThis()), "r", 1, r&255);
+	zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(getThis()), "g", 1, g&255);
+	zend_update_property_long(php_sdl_messageboxcolor_ce, PHP7to8_OBJ_PROP(getThis()), "b", 1, b&255);
 }
 /* }}} */
 
@@ -305,9 +305,9 @@ static PHP_METHOD(SDL_MessageBoxButtonData, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("flags"), flags);
-	zend_update_property_long(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("buttonid"), (int)id);
-	zend_update_property_string(php_sdl_messageboxbuttondata_ce, getThis(), ZEND_STRL("text"), text);
+	zend_update_property_long(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(getThis()), ZEND_STRL("flags"), flags);
+	zend_update_property_long(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(getThis()), ZEND_STRL("buttonid"), (int)id);
+	zend_update_property_string(php_sdl_messageboxbuttondata_ce, PHP7to8_OBJ_PROP(getThis()), ZEND_STRL("text"), text);
 }
 /* }}} */
 

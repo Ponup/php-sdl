@@ -43,7 +43,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 
 	object_init_ex(value, php_sdl_event_ce);
 
-	zend_update_property_long(php_sdl_event_ce, value, ZEND_STRL("type"), event->type);
+	zend_update_property_long(php_sdl_event_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("type"), event->type);
 
 	switch(event->type) {
 		case SDL_MOUSEMOTION: {
@@ -122,7 +122,7 @@ zend_bool zval_to_sdl_event(zval *value, SDL_Event *event)
 	zval *val, rv;
 	
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJCE_P(value) == php_sdl_event_ce) {
-		val = zend_read_property(php_sdl_event_ce, value, ZEND_STRL("type"), 0, &rv);
+		val = zend_read_property(php_sdl_event_ce, PHP7to8_OBJ_PROP(value), ZEND_STRL("type"), 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = event->type = (int)Z_LVAL_P(val);
 
@@ -163,14 +163,11 @@ static PHP_METHOD(SDL_Event, __toString)
 }
 /* }}} */
 
-static HashTable *sdl_event_get_properties(zval *object)
+static HashTable *sdl_event_get_properties(sdl_compat_object_handler_type *object)
 {
 	HashTable *props;    
 	props = zend_std_get_properties(object);
-        zval test;
-        zend_string *key = zend_string_init("type", 4, 0);
-        ZVAL_LONG(&test, SDL_QUIT);
-        zend_hash_update(props, key, &test);
+
 	return props;
 }
 

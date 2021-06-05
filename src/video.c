@@ -41,7 +41,7 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 }
 
 #define update_displaymode_prop(z_value, name, value) \
-	zend_update_property_long(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), value)
+	zend_update_property_long(php_sdl_displaymode_ce, PHP7to8_OBJ_PROP(z_value), ZEND_STRL(name), value)
 
 zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
 {
@@ -61,9 +61,9 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
 #define read_displaymode_prop(z_value, name, value) \
 { \
 	zval *val, rv; \
-	val = zend_read_property(php_sdl_displaymode_ce, z_value, ZEND_STRL(name), 0, &rv); \
+	val = zend_read_property(php_sdl_displaymode_ce, PHP7to8_OBJ_PROP(z_value), ZEND_STRL(name), 0, &rv); \
 	convert_to_long(val); \
-	Z_LVAL_P(val) = value = (int)Z_LVAL_P(val); \
+	Z_LVAL_P(val) = (value) = (int)Z_LVAL_P(val); \
 }
 
 zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display)
@@ -526,7 +526,7 @@ PHP_FUNCTION(SDL_DisableScreenSaver)
 
 /* {{{ php_sdl_displaymode_methods[] */
 static const zend_function_entry php_sdl_displaymode_methods[] = {
-	PHP_ME(SDL_DisplayMode, __construct, arginfo_SDL_DisplayMode__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_DisplayMode, __construct, arginfo_SDL_DisplayMode__construct, ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_DisplayMode, __toString,  arginfo_video_none,                 ZEND_ACC_PUBLIC)
 
 	PHP_FE_END
@@ -543,8 +543,8 @@ PHP_MINIT_FUNCTION(sdl_video)
 	memcpy(&php_sdl_displaymode_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("format"),       0, ZEND_ACC_PUBLIC);
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("w"),                        0, ZEND_ACC_PUBLIC);
-	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("h"),                        0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("w"),            0, ZEND_ACC_PUBLIC);
+	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("h"),            0, ZEND_ACC_PUBLIC);
 	zend_declare_property_long(php_sdl_displaymode_ce, ZEND_STRL("refresh_rate"), 0, ZEND_ACC_PUBLIC);
 
 	return SUCCESS;
