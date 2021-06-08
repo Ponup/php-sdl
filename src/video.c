@@ -41,7 +41,7 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 }
 
 #define update_displaymode_prop(z_value, name, value) \
-	zend_update_property_long(php_sdl_displaymode_ce, PHP7to8_OBJ_PROP(z_value), ZEND_STRL(name), value)
+	zend_update_property_long(php_sdl_displaymode_ce, Z_OBJ_P(z_value), ZEND_STRL(name), value)
 
 zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
 {
@@ -61,7 +61,7 @@ zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
 #define read_displaymode_prop(z_value, name, value) \
 { \
 	zval *val, rv; \
-	val = zend_read_property(php_sdl_displaymode_ce, PHP7to8_OBJ_PROP(z_value), ZEND_STRL(name), 0, &rv); \
+	val = zend_read_property(php_sdl_displaymode_ce, Z_OBJ_P(z_value), ZEND_STRL(name), 0, &rv); \
 	convert_to_long(val); \
 	Z_LVAL_P(val) = (value) = (int)Z_LVAL_P(val); \
 }

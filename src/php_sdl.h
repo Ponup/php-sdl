@@ -51,18 +51,6 @@ extern "C" {
 extern "C" {
 #endif
 
-
-#if PHP_MAJOR_VERSION >= 8
-#define PHP7to8_OBJ_PROP(zv) Z_OBJ_P(zv)
-#define sdl_compat_object_handler_type zend_object
-#define sdl_compat_member_name_type zend_string
-#else
-#define PHP7to8_OBJ_PROP(zv) (zv)
-#define sdl_compat_object_handler_type zval
-#define sdl_compat_member_name_type zval
-#endif
-
-
 extern zend_module_entry sdl_module_entry;
 #define phpext_sdl_ptr &sdl_module_entry
 

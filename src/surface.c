@@ -1292,26 +1292,13 @@ static inline struct php_sdl_surface* php_sdl_surface_from_obj(zend_object *obj)
 }
 
 /* {{{ sdl_surface_read_property*/
-zval *sdl_surface_read_property(sdl_compat_object_handler_type *object, sdl_compat_member_name_type *member, int type, void **cache_slot, zval *retval)
+zval *sdl_surface_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *retval)
 {
 	struct php_sdl_surface *intern;
 	char *member_val;
 
-#if PHP_MAJOR_VERSION < 8
-	zval tmp_member;
- 	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-	}
-
-	intern = php_sdl_surface_from_obj(Z_OBJ_P((object)));
-	member_val = Z_STRVAL_P(member);
-#else
 	intern = php_sdl_surface_from_obj(object);
 	member_val = ZSTR_VAL(member);
-#endif
 
 	if (!intern->surface) {
 		retval = zend_std_read_property(object, member, type, cache_slot, retval);
@@ -1342,11 +1329,7 @@ zval *sdl_surface_read_property(sdl_compat_object_handler_type *object, sdl_comp
 		retval = zend_std_read_property(object, member, type, cache_slot, retval);
 		return retval;
 	}
-#if PHP_MAJOR_VERSION < 8
- 	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
-#endif
+
 	return retval;
 }
 /* }}} */
