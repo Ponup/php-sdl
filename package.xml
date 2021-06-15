@@ -16,11 +16,12 @@
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2019-09-08</date>
+  <!-- Current version -->
+  <date>2020-08-23</date>
   <time>12:00:00</time>
   <version>
-    <release>2.3.0</release>
-    <api>2.3.0</api>
+    <release>2.4.0</release>
+    <api>2.4.0</api>
   </version>
   <stability>
     <release>devel</release>
@@ -28,9 +29,15 @@
   </stability>
   <license uri="http://www.php.net/license">PHP</license>
   <notes>
-  	  - Fix out of bounds error (remicollet)
-  	  - Add basic joystick/gamepad support (santiagolizardo)
+  	  - Fix duplicate symbols (remicollet)
+  	  - Fix parameters passed by reference in rect module (kea)
+  	  - Port SDL_Palette and SDL_PixelFormat to PHP7 (kea)
+  	  - Fix surface props initialisation (kea)
+  	  - Fix surface and powerinfo params by ref (kea)
+  	  - Fix SDL_Rect inheritance issue (santiagolizardo)
+  	  - Add SQL_QueryTexture binding (kea)
   </notes>
+  <!--/Current version -->
   <contents>
     <dir name="/">
       <file role="doc" name="CREDITS"/>
@@ -98,6 +105,8 @@
         <file role="doc" name="006-animated-boxes.php"/>
         <file role="doc" name="007-input-handling.php"/>
         <file role="doc" name="008-shaped-window.php"/>
+        <file role="doc" name="009-window-events.php"/>
+        <file role="doc" name="010-draw-lines.php"/>
         <file role="doc" name="bootstrap.php"/>
         <file role="doc" name="p01_shape24.bmp"/>
         <file role="doc" name="p01_shape32alpha.bmp"/>
@@ -131,6 +140,7 @@
         <file role="test" name="025-mutex-oo.phpt"/>
         <file role="test" name="026-filesystem.phpt"/>
         <file role="test" name="027-joystick.phpt"/>
+        <file role="test" name="028-point.phpt"/>
         <file role="test" name="test-functions.php"/>
       </dir>
     </dir>
@@ -138,16 +148,33 @@
   <dependencies>
     <required>
       <php>
-        <min>7.3.0</min>
+        <min>7.4.0</min>
       </php>
       <pearinstaller>
-        <min>1.9.0</min>
+        <min>1.10.0</min>
       </pearinstaller>
     </required>
   </dependencies>
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
   <changelog>
+  	  <release>
+  <date>2019-09-08</date>
+  <time>12:00:00</time>
+  <version>
+    <release>2.3.0</release>
+    <api>2.3.0</api>
+  </version>
+  <stability>
+    <release>devel</release>
+    <api>devel</api>
+  </stability>
+  <license uri="http://www.php.net/license">PHP</license>
+  <notes>
+  	  - Fix out of bounds error (remicollet)
+  	  - Add basic joystick/gamepad support (santiagolizardo)
+  </notes>
+  	  </release>
     <release>
       <date>2019-09-02</date>
       <time>12:00:00</time>
