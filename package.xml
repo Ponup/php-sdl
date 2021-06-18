@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+<package xmlns="http://pear.php.net/dtd/package-2.0"
+  xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
   <name>sdl</name>
   <channel>pecl.php.net</channel>
   <summary>SDL for PHP</summary>
@@ -17,11 +19,11 @@
     <active>yes</active>
   </lead>
   <!-- Current version -->
-  <date>2020-08-23</date>
+  <date>2021-06-18</date>
   <time>12:00:00</time>
   <version>
-    <release>2.4.0</release>
-    <api>2.4.0</api>
+    <release>2.5.0</release>
+    <api>2.5.0</api>
   </version>
   <stability>
     <release>devel</release>
@@ -29,13 +31,8 @@
   </stability>
   <license uri="http://www.php.net/license">PHP</license>
   <notes>
-  	  - Fix duplicate symbols (remicollet)
-  	  - Fix parameters passed by reference in rect module (kea)
-  	  - Port SDL_Palette and SDL_PixelFormat to PHP7 (kea)
-  	  - Fix surface props initialisation (kea)
-  	  - Fix surface and powerinfo params by ref (kea)
-  	  - Fix SDL_Rect inheritance issue (santiagolizardo)
-  	  - Add SQL_QueryTexture binding (kea)
+    - Add support for PHP8 (Manuel Baldassarri)
+    - Remove support for PHP7 (Manuel Baldassarri)
   </notes>
   <!--/Current version -->
   <contents>
@@ -147,7 +144,7 @@
   <dependencies>
     <required>
       <php>
-        <min>7.4.0</min>
+        <min>8.0.0</min>
       </php>
       <pearinstaller>
         <min>1.10.0</min>
@@ -157,23 +154,45 @@
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
   <changelog>
-  	  <release>
-  <date>2019-09-08</date>
-  <time>12:00:00</time>
-  <version>
-    <release>2.3.0</release>
-    <api>2.3.0</api>
-  </version>
-  <stability>
-    <release>devel</release>
-    <api>devel</api>
-  </stability>
-  <license uri="http://www.php.net/license">PHP</license>
-  <notes>
+    <release>
+      <date>2020-08-23</date>
+      <time>12:00:00</time>
+      <version>
+        <release>2.4.0</release>
+        <api>2.4.0</api>
+      </version>
+      <stability>
+        <release>devel</release>
+        <api>devel</api>
+      </stability>
+      <license uri="http://www.php.net/license">PHP</license>
+      <notes>
+  	  - Fix duplicate symbols (remicollet)
+  	  - Fix parameters passed by reference in rect module (kea)
+  	  - Port SDL_Palette and SDL_PixelFormat to PHP7 (kea)
+  	  - Fix surface props initialisation (kea)
+  	  - Fix surface and powerinfo params by ref (kea)
+  	  - Fix SDL_Rect inheritance issue (santiagolizardo)
+  	  - Add SQL_QueryTexture binding (kea)
+      </notes>
+    </release>
+    <release>
+      <date>2019-09-08</date>
+      <time>12:00:00</time>
+      <version>
+        <release>2.3.0</release>
+        <api>2.3.0</api>
+      </version>
+      <stability>
+        <release>devel</release>
+        <api>devel</api>
+      </stability>
+      <license uri="http://www.php.net/license">PHP</license>
+      <notes>
   	  - Fix out of bounds error (remicollet)
   	  - Add basic joystick/gamepad support (santiagolizardo)
-  </notes>
-  	  </release>
+      </notes>
+    </release>
     <release>
       <date>2019-09-02</date>
       <time>12:00:00</time>
@@ -189,7 +208,7 @@
       <notes>
   	  - Fix undefined symbol (sdl_window_to_zval)
   	  - Tidy up GL context creation 
-  </notes>
+      </notes>
     </release>
     <release>
       <date>2019-08-28</date>
@@ -204,10 +223,10 @@
       </stability>
       <license uri="http://www.php.net/license">PHP</license>
       <notes>
-  	  	  	  - Add support for window events. (Benoit Viguier)
-  	  	  	  - Add support for the SDL_RenderCopyEx, SDL_RenderDrawLine and SDL_RenderDrawRect functions. (Benoit Viguier)
-  	  	  	  - Fix memory leak in the SDL_RenderCopy function. (Benoit Viguier)
-  	  	  </notes>
+        - Add support for window events. (Benoit Viguier)
+        - Add support for the SDL_RenderCopyEx, SDL_RenderDrawLine and SDL_RenderDrawRect functions. (Benoit Viguier)
+        - Fix memory leak in the SDL_RenderCopy function. (Benoit Viguier)
+      </notes>
     </release>
     <release>
       <stability>
@@ -224,7 +243,7 @@
 	  	  - Code updated to support PHP7.
 	  	  - Code that could be implemented in userland was removed from the extension.
 	  	  - Unit tests improvements/changes.
-  	  </notes>
+      </notes>
     </release>
   </changelog>
 </package>
