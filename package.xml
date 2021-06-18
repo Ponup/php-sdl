@@ -42,7 +42,6 @@
     <dir name="/">
       <file role="doc" name="CREDITS"/>
       <file role="doc" name="LICENSE"/>
-      <file role="doc" name="EXPERIMENTAL"/>
       <file role="src" name="config.m4"/>
       <dir name="src">
         <file role="src" name="php_sdl.c"/>
