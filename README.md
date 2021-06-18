@@ -14,7 +14,7 @@ SDL (Simple DirectMedia Layer) bindings for the PHP language. The extension allo
 
 * C compiler
 * Automake tools
-* PHP devel
+* PHP8 devel
 * libSDL2 devel libraries and headers
 * UN*X OS (eg Linux, Macos)
 
