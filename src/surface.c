@@ -1195,15 +1195,15 @@ PHP_FUNCTION(SDL_ConvertPixels)
 	}
 	if (h < 0 || h > src->h || h > dst->h) {
 		h = (src->h > dst->h ? dst->h : src->h);
-		php_error_docref(NULL, E_NOTICE, "Bad value for height, will use %lld", h);
+		php_error_docref(NULL, E_NOTICE, "Bad value for height, will use %ld", h);
 	}
 	if (sp != src->pitch) {
 		sp = src->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for source pitch, will use %lld", sp);
+		php_error_docref(NULL, E_NOTICE, "Bad value for source pitch, will use %ld", sp);
 	}
 	if (dp != dst->pitch) {
 		dp = dst->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for destination pitch, will use %lld", dp);
+		php_error_docref(NULL, E_NOTICE, "Bad value for destination pitch, will use %ld", dp);
 	}
 	RETVAL_LONG(SDL_ConvertPixels(w, h, sf, src->pixels, sp, df, src->pixels, dp));
 }

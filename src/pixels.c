@@ -690,15 +690,15 @@ PHP_FUNCTION(SDL_SetPaletteColors)
 	if (ncolors <= 0) {
 		ncolors = count;
 	} else if (ncolors > count) {
-		php_error_docref(NULL, E_NOTICE, "Invalid color number, %ld will be used instead of %lld", count, ncolors);
+		php_error_docref(NULL, E_NOTICE, "Invalid color number, %ld will be used instead of %ld", count, ncolors);
 		ncolors = count;
 	}
 	if (first >= intern->palette->ncolors) {
-		php_error_docref(NULL, E_WARNING, "Invalid first color index, %lld >= %d", first, intern->palette->ncolors);
+		php_error_docref(NULL, E_WARNING, "Invalid first color index, %ld >= %d", first, intern->palette->ncolors);
 		RETURN_LONG(-1);
 	}
 	if (first+ncolors > intern->palette->ncolors) {
-		php_error_docref(NULL, E_WARNING, "Invalid color number, %lld > %d", first+ncolors, intern->palette->ncolors);
+		php_error_docref(NULL, E_WARNING, "Invalid color number, %ld > %d", first+ncolors, intern->palette->ncolors);
 		RETURN_LONG(-1);
 	}
 	colors = emalloc(sizeof(SDL_Color) * ncolors);
@@ -1120,7 +1120,7 @@ PHP_METHOD(SDL_Pixels, GetByte)
 	intern = PHP_SDL_PIXELS_P(z_pixels);
 
 	if (x < 0 || x >= intern->pixels.pitch || y < 0 || y >= intern->pixels.h) {
-		php_error_docref(NULL, E_NOTICE, "Invalid position (%lld,%lld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
+		php_error_docref(NULL, E_NOTICE, "Invalid position (%ld,%ld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
 		RETURN_FALSE;
 	}
 	RETVAL_LONG(intern->pixels.pixels[y*intern->pixels.pitch+x]);
@@ -1147,7 +1147,7 @@ PHP_METHOD(SDL_Pixels, SetByte)
 	intern = PHP_SDL_PIXELS_P(z_pixels);
 
 	if (x < 0 || x >= intern->pixels.pitch || y < 0 || y >= intern->pixels.h) {
-		php_error_docref(NULL, E_NOTICE, "Invalid position (%lld,%lld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
+		php_error_docref(NULL, E_NOTICE, "Invalid position (%ld,%ld) in SDL_Pixels (%d,%d)", x, y, intern->pixels.pitch, intern->pixels.h);
 		RETURN_FALSE;
 	}
 	RETVAL_LONG(intern->pixels.pixels[y*intern->pixels.pitch+x]);
