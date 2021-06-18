@@ -69,12 +69,12 @@ static inline void sdl_window_add_long_property(HashTable *props, const char *na
 }
 
 /* {{{ sdl_window_read_property*/
-static HashTable *sdl_window_get_properties(zval *object)
+static HashTable *sdl_window_get_properties(zend_object *object)
 {
 	HashTable *props;
     zend_string* z_string;
 	zval zv;
-	struct php_sdl_window* intern = php_sdl_window_fetch_object(Z_OBJ_P(object));
+	struct php_sdl_window* intern = php_sdl_window_fetch_object(object);
 
 	props = zend_std_get_properties(object);
 

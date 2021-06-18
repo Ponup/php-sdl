@@ -189,7 +189,7 @@ static const zend_function_entry php_sdl_windowshapemode_methods[] = {
 
 #define REGISTER_CLASS_CONST_LONG(const_name, value) \
 	REGISTER_LONG_CONSTANT("ShapeMode" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, ZEND_STRL(const_name), value); \
+	zend_declare_class_constant_long(php_sdl_windowshapemode_ce, const_name, sizeof(const_name)-1, value); \
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_shape)

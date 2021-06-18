@@ -113,7 +113,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask)) {
 		return;
 	}
-	surface = SDL_CreateRGBSurface(flags, width, height, depth, rmask, gmask, bmask, amask);
+	surface = SDL_CreateRGBSurface(flags, (int)width, (int)height, (int)depth, rmask, gmask, bmask, amask);
 	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
@@ -196,7 +196,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->surface = SDL_CreateRGBSurface(flags, width, height, depth, rmask, gmask, bmask, amask);
+	intern->surface = SDL_CreateRGBSurface(flags, (int)width, (int)height, (int)depth, rmask, gmask, bmask, amask);
 	if (intern->surface) {
 		/* copy flags to be able to check before access to surface */
 		intern->flags = intern->surface->flags;
@@ -1195,15 +1195,15 @@ PHP_FUNCTION(SDL_ConvertPixels)
 	}
 	if (h < 0 || h > src->h || h > dst->h) {
 		h = (src->h > dst->h ? dst->h : src->h);
-		php_error_docref(NULL, E_NOTICE, "Bad value for height, will use %ld", h);\
+		php_error_docref(NULL, E_NOTICE, "Bad value for height, will use %lld", h);
 	}
 	if (sp != src->pitch) {
 		sp = src->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for source pitch, will use %ld", sp);\
+		php_error_docref(NULL, E_NOTICE, "Bad value for source pitch, will use %lld", sp);
 	}
 	if (dp != dst->pitch) {
 		dp = dst->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for destination pitch, will use %ld", dp);\
+		php_error_docref(NULL, E_NOTICE, "Bad value for destination pitch, will use %lld", dp);
 	}
 	RETVAL_LONG(SDL_ConvertPixels(w, h, sf, src->pixels, sp, df, src->pixels, dp));
 }
@@ -1287,51 +1287,49 @@ static zend_object* php_sdl_surface_new(zend_class_entry *class_type)
 }
 /* }}} */
 
+static inline struct php_sdl_surface* php_sdl_surface_from_obj(zend_object *obj) {
+	return (struct php_sdl_surface *) ((char *) (obj) - obj->handlers->offset);
+}
+
 /* {{{ sdl_surface_read_property*/
-zval *sdl_surface_read_property(zval *object, zval *member, int type, void** cache_slot, zval *retval)
+zval *sdl_surface_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *retval)
 {
-	zval tmp_member;
-	zend_object* zobject = Z_OBJ_P(object);
-	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char*)zobject - zobject->handlers->offset);
+	struct php_sdl_surface *intern;
+	char *member_val;
 
- 	if (!intern->surface) {
- 		ZVAL_NULL(retval);
- 		return retval;
+	intern = php_sdl_surface_from_obj(object);
+	member_val = ZSTR_VAL(member);
+
+	if (!intern->surface) {
+		retval = zend_std_read_property(object, member, type, cache_slot, retval);
+		return retval;
 	}
 
- 	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-	}
-
- 	if (!strcmp(Z_STRVAL_P(member), "flags")) {
+	if (!strcmp(member_val, "flags")) {
 		ZVAL_LONG(retval, intern->surface->flags);
- 	} else if (!strcmp(Z_STRVAL_P(member), "w")) {
+ 	} else if (!strcmp(member_val, "w")) {
 		ZVAL_LONG(retval, intern->surface->w);
- 	} else if (!strcmp(Z_STRVAL_P(member), "h")) {
+ 	} else if (!strcmp(member_val, "h")) {
 		ZVAL_LONG(retval, intern->surface->h);
- 	} else if (!strcmp(Z_STRVAL_P(member), "pitch")) {
+ 	} else if (!strcmp(member_val, "pitch")) {
 		ZVAL_LONG(retval, intern->surface->pitch);
- 	} else if (!strcmp(Z_STRVAL_P(member), "locked")) {
+ 	} else if (!strcmp(member_val, "locked")) {
 		ZVAL_LONG(retval, intern->surface->locked);
- 	} else if (!strcmp(Z_STRVAL_P(member), "format")) {
+ 	} else if (!strcmp(member_val, "format")) {
 		sdl_pixelformat_to_zval(intern->surface->format, retval, SDL_DONTFREE);
- 	} else if (!strcmp(Z_STRVAL_P(member), "clip_rect")) {
+ 	} else if (!strcmp(member_val, "clip_rect")) {
 		sdl_rect_to_zval(&intern->surface->clip_rect, retval);
- 	} else if (!strcmp(Z_STRVAL_P(member), "pixels")) {
+ 	} else if (!strcmp(member_val, "pixels")) {
 		SDL_Pixels pix;
  		pix.pitch  = intern->surface->pitch;
 		pix.h      = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
 		sdl_pixels_to_zval(&pix, retval, SDL_DONTFREE);
  	} else {
+		retval = zend_std_read_property(object, member, type, cache_slot, retval);
 		return retval;
 	}
- 	if (member == &tmp_member) {
-		zval_dtor(member);
-	}
+
 	return retval;
 }
 /* }}} */

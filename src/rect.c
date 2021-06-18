@@ -45,10 +45,10 @@ zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
 {
 	if (rect) {
 		object_init_ex(value, php_sdl_rect_ce);
-		zend_update_property_long(php_sdl_rect_ce, value, "x", 1, rect->x);
-		zend_update_property_long(php_sdl_rect_ce, value, "y", 1, rect->y);
-		zend_update_property_long(php_sdl_rect_ce, value, "w", 1, rect->w);
-		zend_update_property_long(php_sdl_rect_ce, value, "h", 1, rect->h);
+		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "x", 1, rect->x);
+		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "y", 1, rect->y);
+		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "w", 1, rect->w);
+		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "h", 1, rect->h);
 
 		return 1;
 	}
@@ -60,8 +60,8 @@ zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 {
 	if (pt) {
 		object_init_ex(value, php_sdl_point_ce);
-		zend_update_property_long(php_sdl_point_ce, value, "x", 1, pt->x);
-		zend_update_property_long(php_sdl_point_ce, value, "y", 1, pt->y);
+		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "x", 1, pt->x);
+		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "y", 1, pt->y);
 
 		return 1;
 	}
@@ -74,19 +74,19 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 	if (instanceof_function(Z_OBJCE_P(value), php_sdl_rect_ce)) {
 		zval *val, rv;
 
-		val = zend_read_property(php_sdl_rect_ce, value, "x", 1, 0, &rv);
+		val = zend_read_property(php_sdl_rect_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->x = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "y", 1, 0, &rv);
+		val = zend_read_property(php_sdl_rect_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->y = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "w", 1, 0, &rv);
+		val = zend_read_property(php_sdl_rect_ce, Z_OBJ_P(value), "w", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->w = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_rect_ce, value, "h", 1, 0, &rv);
+		val = zend_read_property(php_sdl_rect_ce, Z_OBJ_P(value), "h", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = rect->h = (int)Z_LVAL_P(val);
 
@@ -102,11 +102,11 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 	if (instanceof_function(Z_OBJCE_P(value), php_sdl_point_ce)) {
 		zval *val, rv;
 
-		val = zend_read_property(php_sdl_point_ce, value, "x", 1, 0, &rv);
+		val = zend_read_property(php_sdl_point_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = pt->x = (int)Z_LVAL_P(val);
 
-		val = zend_read_property(php_sdl_point_ce, value, "y", 1, 0, &rv);
+		val = zend_read_property(php_sdl_point_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
 		convert_to_long(val);
 		Z_LVAL_P(val) = pt->y = (int)Z_LVAL_P(val);
 
@@ -129,10 +129,10 @@ static PHP_METHOD(SDL_Rect, __construct)
 		return;
 	}
 
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "x", 1, x);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "y", 1, y);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "w", 1, w);
-	zend_update_property_long(php_sdl_rect_ce, getThis(), "h", 1, h);
+	zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(getThis()), "x", 1, x);
+	zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(getThis()), "y", 1, y);
+	zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(getThis()), "w", 1, w);
+	zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(getThis()), "h", 1, h);
 }
 /* }}} */
 
@@ -169,8 +169,8 @@ static PHP_METHOD(SDL_Point, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	zend_update_property_long(php_sdl_point_ce, getThis(), "x", 1, x);
-	zend_update_property_long(php_sdl_point_ce, getThis(), "y", 1, y);
+	zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(getThis()), "x", 1, x);
+	zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(getThis()), "y", 1, y);
 }
 /* }}} */
 
