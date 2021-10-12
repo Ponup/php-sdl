@@ -1,0 +1,18 @@
+// vim:ft=javascript
+
+ARG_ENABLE('sdl', 'Whether to enable SDL2 support', 'no');
+
+if(PHP_SDL != 'no') {
+    CHECK_LIB("SDL2.lib", "sdl", PHP_SDL);
+    CHECK_LIB("SDL2main.lib", "sdl", PHP_SDL);
+    CHECK_LIB("SDL2test.lib", "sdl", PHP_SDL);
+
+    var sdl_sources = 'php_sdl.c blendmode.c cpuinfo.c error.c event.c filesystem.c glcontext.c joystick.c keyboard.c messagebox.c mouse.c mutex.c pixels.c platform.c power.c rect.c render.c rwops.c sdl.c shape.c surface.c timer.c version.c video.c window.c';
+
+	EXTENSION('sdl', sdl_sources, PHP_SDL_SHARED);
+
+    var sdl_headers = 'php_sdl.h blendmode.h cpuinfo.h error.h event.h filesystem.h glcontext.h joystick.h keyboard.h messagebox.h mouse.h mutex.h pixels.h platform.h power.h rect.h render.h rwops.h sdl.h shape.h surface.h timer.h version.h video.h window.h';
+
+	PHP_INSTALL_HEADERS('ext/sdl', sdl_headers);
+	AC_DEFINE('HAVE_SDL', 1);
+}
