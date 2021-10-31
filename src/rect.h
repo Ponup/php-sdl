@@ -39,7 +39,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, /*unused*/0, /*ret ref*/0, /
        ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
        ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
        ZEND_ARG_TYPE_INFO(0, w, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
+       ZEND_ARG_TYPE_INFO(0, h, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 
