@@ -58,3 +58,4 @@ php_test_results*.txt
 configure.ac
 .vscode
 .DS_Store
+tags

@@ -100,6 +100,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_IntersectLine, 0, 0, 4)
        ZEND_ARG_INFO(1, Y2)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PointInRect, 0, 0, 2)
+       ZEND_ARG_OBJ_INFO(0, point, SDL_Point, 0)
+       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+ZEND_END_ARG_INFO()
+
 PHP_FUNCTION(SDL_RectEmpty);
 PHP_FUNCTION(SDL_RectEquals);
 PHP_FUNCTION(SDL_HasIntersection);
@@ -107,6 +112,7 @@ PHP_FUNCTION(SDL_IntersectRect);
 PHP_FUNCTION(SDL_UnionRect);
 PHP_FUNCTION(SDL_EnclosePoints);
 PHP_FUNCTION(SDL_IntersectRectAndLine);
+PHP_FUNCTION(SDL_PointInRect);
 
 PHP_MINIT_FUNCTION(sdl_rect);
 

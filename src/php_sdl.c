@@ -262,6 +262,7 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
 	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
 	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
+	ZEND_FE(SDL_PointInRect,				arginfo_SDL_PointInRect)
 
 	// Events
 	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)

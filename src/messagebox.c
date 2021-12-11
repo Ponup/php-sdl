@@ -508,6 +508,8 @@ PHP_FUNCTION(SDL_ShowMessageBox)
 		zval_dtor(z_id);
 		ZVAL_LONG(z_id, (long)id);
 	}
+
+	RETVAL_LONG(res);
 }
 /* }}} */
 

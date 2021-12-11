@@ -405,6 +405,24 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 }
 /* }}} */
 
+PHP_FUNCTION(SDL_PointInRect)
+{
+	zval *z_point, *z_rect;
+	SDL_Point point;
+	SDL_Rect rect;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_point, php_sdl_point_ce, &z_rect, php_sdl_rect_ce) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_rect(z_rect, &rect);
+	zval_to_sdl_point(z_point, &point);
+
+	if (SDL_PointInRect(&point, &rect)) {
+		RETURN_TRUE;
+	}
+	RETURN_FALSE;
+}
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
