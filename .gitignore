@@ -59,3 +59,4 @@ configure.ac
 .vscode
 .DS_Store
 tags
+*.dep
