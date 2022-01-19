@@ -1,6 +1,3 @@
-
-[![Build Status](https://travis-ci.org/Ponup/php-sdl.svg?branch=master)](https://travis-ci.org/Ponup/php-sdl)
-
 PHP-SDL
 =======
 
