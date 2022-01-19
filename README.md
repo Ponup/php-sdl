@@ -69,9 +69,9 @@ To compile your new extension, you will have to execute the following steps:
 
 ```bash
 phpize
-./configure [--enable--sdl] 
+./configure [--with--sdl] 
 make
 make test
-[sudo] make install
+sudo make install
 ```
 

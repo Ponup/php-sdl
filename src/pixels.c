@@ -548,9 +548,9 @@ static PHP_METHOD(SDL_Palette, count)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_offset, 0, 0, 1)
-	   ZEND_ARG_INFO(0, offset)
-ZEND_END_ARG_INFO()
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Palette_offsetExists, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
 
 /* {{{ proto SDL_Palette, offsetExists(int offset) */
 PHP_METHOD(SDL_Palette, offsetExists)
@@ -569,6 +569,10 @@ PHP_METHOD(SDL_Palette, offsetExists)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Palette_offsetGet, 0, 1, IS_MIXED, 1)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
+
 /* {{{ proto SDL_Palette, offsetGet(int offset) */
 PHP_METHOD(SDL_Palette, offsetGet)
 {
@@ -586,6 +590,10 @@ PHP_METHOD(SDL_Palette, offsetGet)
 	sdl_color_to_zval(intern->palette->colors+offset, return_value);
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Palette_offsetUnset, 0, 1, IS_VOID, 0)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
 
 /* {{{ proto SDL_Palette, offsetUnset(int offset) */
 PHP_METHOD(SDL_Palette, offsetUnset)
@@ -607,10 +615,11 @@ PHP_METHOD(SDL_Palette, offsetUnset)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Palette_offsetSet, 0, 0, 2)
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Palette_offsetSet, 0, 2, IS_VOID, 0)
 	   ZEND_ARG_INFO(0, offset)
 	   ZEND_ARG_INFO(0, color)
 ZEND_END_ARG_INFO()
+
 
 /* {{{ proto SDL_Palette, offsetSet(int offset, int value) */
 PHP_METHOD(SDL_Palette, offsetSet)
@@ -1021,9 +1030,9 @@ static PHP_METHOD(SDL_Pixels, count)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_offset, 0, 0, 1)
-	   ZEND_ARG_INFO(0, offset)
-ZEND_END_ARG_INFO()
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Pixels_offsetExists, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
 
 /* {{{ proto SDL_Pixels, offsetExists(int offset) */
 PHP_METHOD(SDL_Pixels, offsetExists)
@@ -1041,6 +1050,10 @@ PHP_METHOD(SDL_Pixels, offsetExists)
 	RETURN_TRUE;
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Pixels_offsetGet, 0, 1, IS_MIXED, 1)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
 
 /* {{{ proto SDL_Pixels, offsetGet(int offset) */
 PHP_METHOD(SDL_Pixels, offsetGet)
@@ -1060,6 +1073,10 @@ PHP_METHOD(SDL_Pixels, offsetGet)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Pixels_offsetUnset, 0, 1, IS_VOID, 0)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO();
+
 /* {{{ proto SDL_Pixels, offsetUnset(int offset) */
 PHP_METHOD(SDL_Pixels, offsetUnset)
 {
@@ -1078,7 +1095,7 @@ PHP_METHOD(SDL_Pixels, offsetUnset)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Pixels_offsetSet, 0, 0, 2)
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_SDL_Pixels_offsetSet, 0, 2, IS_VOID, 0)
 	   ZEND_ARG_INFO(0, offset)
 	   ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
@@ -1525,10 +1542,10 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_ME(SDL_Palette, __construct,   arginfo_SDL_AllocPalette,        ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, __toString,    arginfo_palette_none,            ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, count,         arginfo_palette_none,            ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Palette, offsetExists,  arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Palette, offsetGet,     arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetExists,  arginfo_SDL_Palette_offsetExists,ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetGet,     arginfo_SDL_Palette_offsetGet,   ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Palette, offsetSet,     arginfo_SDL_Palette_offsetSet,   ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Palette, offsetUnset,   arginfo_SDL_Palette_offset,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetUnset,   arginfo_SDL_Palette_offsetUnset, ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
 	PHP_FALIAS(Free,             SDL_FreePalette,           arginfo_palette_none)
@@ -1560,10 +1577,10 @@ static const zend_function_entry php_sdl_pixels_methods[] = {
 	PHP_ME(SDL_Pixels,    __construct,   arginfo_SDL_Pixels__construct,     ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    __toString,    arginfo_format_none,               ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    count,         arginfo_format_none,               ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Pixels,    offsetExists,  arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Pixels,    offsetGet,     arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetExists,  arginfo_SDL_Pixels_offsetExists,   ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetGet,     arginfo_SDL_Pixels_offsetGet,      ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    offsetSet,     arginfo_SDL_Pixels_offsetSet,      ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Pixels,    offsetUnset,   arginfo_SDL_Pixels_offset,         ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels,    offsetUnset,   arginfo_SDL_Pixels_offsetUnset,    ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    GetByte,       arginfo_SDL_Pixels_GetByte,        ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Pixels,    SetByte,       arginfo_SDL_Pixels_SetByte,        ZEND_ACC_PUBLIC)
 	PHP_FE_END
