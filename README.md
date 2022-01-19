@@ -14,7 +14,7 @@ SDL (Simple DirectMedia Layer) bindings for the PHP language. The extension allo
 
 * C compiler
 * Automake tools
-* PHP8 devel
+* PHP8.1 devel
 * libSDL2 devel libraries and headers
 * UN*X OS (eg Linux, Macos)
 
@@ -40,17 +40,17 @@ The SDL extension mimics in almost every single aspect to the official C library
 Standard SDL2 API is available in procedural style:
 
 ```php
-    $window = SDL_CreateWindow( "Foo window", 500, 50, 350, 300, SDL_WINDOW_SHOWN+SDL_WINDOW_RESIZABLE);
-    SDL_SetWindowTitle($window, "Some new title");
-    SDL_DestroyWindow($window);
+$window = SDL_CreateWindow( "Foo window", 500, 50, 350, 300, SDL_WINDOW_SHOWN+SDL_WINDOW_RESIZABLE);
+SDL_SetWindowTitle($window, "Some new title");
+SDL_DestroyWindow($window);
 ```
 
 And is also available in object oriented style:
 
 ```php
-    $window = new SDL_Window( "Foo window", 100, 50, 350, 300, SDL_Window::SHOWN|SDL_Window::RESIZABLE);
-    $window->SetTitle("Some new title");
-    unset($window); // will destroy the window
+$window = new SDL_Window( "Foo window", 100, 50, 350, 300, SDL_Window::SHOWN|SDL_Window::RESIZABLE);
+$window->SetTitle("Some new title");
+unset($window); // will destroy the window
 ```
 
 Complete examples can be found in the [examples](examples) folder.
@@ -68,15 +68,10 @@ Complete examples can be found in the [examples](examples) folder.
 To compile your new extension, you will have to execute the following steps:
 
 ```bash
-$ phpize
-$ ./configure [--enable--sdl] 
-$ make
-$ make test
-$ [sudo] make install
+phpize
+./configure [--enable--sdl] 
+make
+make test
+[sudo] make install
 ```
-
-## Support and feature requests
-
-Please submit anything that needs our attention to the [issues section](https://github.com/php-sdl/extension/issues) on Github. We are commited to attend any request in a short timespan if it's a sensible matter.
-
 
