@@ -1,0 +1,16 @@
+name: Build and test
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v1
+        - name: Build and tag image
+          run: docker build -t ponup/php-sdl .
+        - name: Run tests
+          run: docker run --rm ponup/php-sdl 
