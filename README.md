@@ -1,3 +1,5 @@
+[![Build and test](https://github.com/Ponup/php-sdl/actions/workflows/build-test.yml/badge.svg)](https://github.com/Ponup/php-sdl/actions/workflows/build-test.yml)
+
 PHP-SDL
 =======
 
