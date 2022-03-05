@@ -23,23 +23,45 @@
 static zend_class_entry *php_sdl_rect_ce;
 static zend_object_handlers php_sdl_rect_handlers;
 struct php_sdl_rect {
-	zend_object   zo;
+	zend_object zo;
+};
+
+static zend_class_entry *php_sdl_frect_ce;
+static zend_object_handlers php_sdl_frect_handlers;
+struct php_sdl_frect {
+	zend_object zo;
 };
 
 static zend_class_entry *php_sdl_point_ce;
 static zend_object_handlers php_sdl_point_handlers;
 struct php_sdl_point {
-	zend_object   zo;
+	zend_object zo;
 };
+
+static zend_class_entry *php_sdl_fpoint_ce;
+static zend_object_handlers php_sdl_fpoint_handlers;
+struct php_sdl_fpoint {
+	zend_object zo;
+};
+
+zend_class_entry *get_php_sdl_rect_ce(void)
+{
+	return php_sdl_rect_ce;
+}
+
+zend_class_entry *get_php_sdl_frect_ce(void)
+{
+	return php_sdl_frect_ce;
+}
 
 zend_class_entry *get_php_sdl_point_ce(void)
 {
 	return php_sdl_point_ce;
 }
 
-zend_class_entry *get_php_sdl_rect_ce(void)
+zend_class_entry *get_php_sdl_fpoint_ce(void)
 {
-	return php_sdl_rect_ce;
+	return php_sdl_fpoint_ce;
 }
 
 zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
@@ -57,12 +79,40 @@ zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
 	return 0;
 }
 
+zend_bool sdl_frect_to_zval(SDL_FRect *rect, zval *value)
+{
+	if (rect) {
+		object_init_ex(value, php_sdl_frect_ce);
+		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "x", 1, rect->x);
+		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "y", 1, rect->y);
+		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "w", 1, rect->w);
+		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "h", 1, rect->h);
+
+		return 1;
+	}
+	ZVAL_NULL(value);
+	return 0;
+}
+
 zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 {
 	if (pt) {
 		object_init_ex(value, php_sdl_point_ce);
 		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "x", 1, pt->x);
 		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "y", 1, pt->y);
+
+		return 1;
+	}
+	ZVAL_NULL(value);
+	return 0;
+}
+
+zend_bool sdl_fpoint_to_zval(SDL_FPoint *pt, zval *value)
+{
+	if (pt) {
+		object_init_ex(value, php_sdl_fpoint_ce);
+		zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(value), "x", 1, pt->x);
+		zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(value), "y", 1, pt->y);
 
 		return 1;
 	}
@@ -98,6 +148,34 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 	return 0;
 }
 
+zend_bool zval_to_sdl_frect(zval *value, SDL_FRect *rect)
+{
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_frect_ce)) {
+		zval *val, rv;
+
+		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->x = (float)Z_LVAL_P(val);
+
+		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->y = (float)Z_LVAL_P(val);
+
+		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "w", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->w = (float)Z_LVAL_P(val);
+
+		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "h", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = rect->h = (float)Z_LVAL_P(val);
+
+		return 1;
+	}
+	/* create an empty rect */
+	memset(rect, 0, sizeof(SDL_FRect));
+	return 0;
+}
+
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 {
 	if (instanceof_function(Z_OBJCE_P(value), php_sdl_point_ce)) {
@@ -115,6 +193,26 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 	}
 	/* create an empty point */
 	memset(pt, 0, sizeof(SDL_Point));
+	return 0;
+}
+
+zend_bool zval_to_sdl_fpoint(zval *value, SDL_FPoint *pt)
+{
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_fpoint_ce)) {
+		zval *val, rv;
+
+		val = zend_read_property(php_sdl_fpoint_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = pt->x = (float)Z_LVAL_P(val);
+
+		val = zend_read_property(php_sdl_fpoint_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
+		convert_to_long(val);
+		Z_LVAL_P(val) = pt->y = (float)Z_LVAL_P(val);
+
+		return 1;
+	}
+	/* create an empty point */
+	memset(pt, 0, sizeof(SDL_FPoint));
 	return 0;
 }
 
@@ -137,7 +235,6 @@ PHP_METHOD(SDL_Rect, __construct)
 }
 /* }}} */
 
-
 /* {{{ proto SDL_Rect::__toString() */
 PHP_METHOD(SDL_Rect, __toString)
 {
@@ -153,6 +250,37 @@ PHP_METHOD(SDL_Rect, __toString)
 	RETVAL_STR(buf);
 }
 /* }}} */
+
+PHP_METHOD(SDL_FRect, __construct)
+{
+	double x = 0, y = 0, w = 0, h = 0;
+
+	ZEND_PARSE_PARAMETERS_START(4, 4)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+		Z_PARAM_DOUBLE(w)
+		Z_PARAM_DOUBLE(h)
+	ZEND_PARSE_PARAMETERS_END();
+
+	zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(getThis()), "x", 1, x);
+	zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(getThis()), "y", 1, y);
+	zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(getThis()), "w", 1, w);
+	zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(getThis()), "h", 1, h);
+}
+
+PHP_METHOD(SDL_FRect, __toString)
+{
+	zend_string *buf;
+	SDL_FRect rect;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_frect(getThis(), &rect);
+	buf = strpprintf(0, "SDL_FRect(%f,%f,%f,%f)", rect.x, rect.y, rect.w, rect.h);
+	RETVAL_STR(buf);
+}
 
 /* {{{ proto SDL_Point::__construct(, int x, int y)
 
@@ -192,6 +320,32 @@ PHP_METHOD(SDL_Point, __toString)
 }
 /* }}} */
 
+PHP_METHOD(SDL_FPoint, __construct)
+{
+	double x = 0, y = 0;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_DOUBLE(x)
+		Z_PARAM_DOUBLE(y)
+	ZEND_PARSE_PARAMETERS_END();
+
+	zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(getThis()), "x", 1, x);
+	zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(getThis()), "y", 1, y);
+}
+
+PHP_METHOD(SDL_FPoint, __toString)
+{
+	zend_string *buf;
+	SDL_FPoint point;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	zval_to_sdl_fpoint(getThis(), &point);
+	buf = strpprintf(0, "SDL_Point(%f,%f)", point.x, point.y);
+	RETVAL_STR(buf);
+}
 
 /* {{{ proto bool SDL_RectEmpty(SDL_Rect rect)
 
@@ -429,11 +583,15 @@ PHP_MINIT_FUNCTION(sdl_rect)
 {
 	php_sdl_rect_ce = register_class_SDL_Rect();
 	memcpy(&php_sdl_rect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	//php_sdl_rect_handlers.offset = XtOffsetOf(struct php_sdl_rect, zo);
+
+	php_sdl_frect_ce = register_class_SDL_FRect();
+	memcpy(&php_sdl_frect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	php_sdl_point_ce = register_class_SDL_Point();
 	memcpy(&php_sdl_point_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	//php_sdl_point_handlers.offset = XtOffsetOf(struct php_sdl_point, zo);
+
+	php_sdl_fpoint_ce = register_class_SDL_FPoint();
+	memcpy(&php_sdl_fpoint_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	return SUCCESS;
 }

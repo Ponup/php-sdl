@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: b79204a20c71be2887fa93c39b925772548bcdba */
+ * Stub hash: 9d9e9814577f18056034403f47ffb34b5e527e00 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_PointInRect, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_OBJ_INFO(0, p, SDL_Point, 0)
@@ -92,6 +92,22 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Rect_IntersectLine, 0,
 	ZEND_ARG_TYPE_INFO(1, Y2, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_SDL_FPoint___construct, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_SDL_FPoint___toString arginfo_class_SDL_Point___toString
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_SDL_FRect___construct, 0, 0, 4)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, w, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, h, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_SDL_FRect___toString arginfo_class_SDL_Point___toString
+
 
 ZEND_FUNCTION(SDL_PointInRect);
 ZEND_FUNCTION(SDL_RectEmpty);
@@ -105,6 +121,10 @@ ZEND_METHOD(SDL_Point, __construct);
 ZEND_METHOD(SDL_Point, __toString);
 ZEND_METHOD(SDL_Rect, __construct);
 ZEND_METHOD(SDL_Rect, __toString);
+ZEND_METHOD(SDL_FPoint, __construct);
+ZEND_METHOD(SDL_FPoint, __toString);
+ZEND_METHOD(SDL_FRect, __construct);
+ZEND_METHOD(SDL_FRect, __toString);
 
 
 static const zend_function_entry ext_functions[] = {
@@ -136,6 +156,20 @@ static const zend_function_entry class_SDL_Rect_methods[] = {
 	ZEND_ME_MAPPING(Intersect, SDL_IntersectRect, arginfo_class_SDL_Rect_Intersect, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(Union, SDL_UnionRect, arginfo_class_SDL_Rect_Union, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(IntersectLine, SDL_IntersectRectAndLine, arginfo_class_SDL_Rect_IntersectLine, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_SDL_FPoint_methods[] = {
+	ZEND_ME(SDL_FPoint, __construct, arginfo_class_SDL_FPoint___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(SDL_FPoint, __toString, arginfo_class_SDL_FPoint___toString, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_SDL_FRect_methods[] = {
+	ZEND_ME(SDL_FRect, __construct, arginfo_class_SDL_FRect___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(SDL_FRect, __toString, arginfo_class_SDL_FRect___toString, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -190,6 +224,62 @@ static zend_class_entry *register_class_SDL_Rect(void)
 	ZVAL_UNDEF(&property_h_default_value);
 	zend_string *property_h_name = zend_string_init("h", sizeof("h") - 1, 1);
 	zend_declare_typed_property(class_entry, property_h_name, &property_h_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_h_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_SDL_FPoint(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "SDL_FPoint", class_SDL_FPoint_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+
+	zval property_x_default_value;
+	ZVAL_UNDEF(&property_x_default_value);
+	zend_string *property_x_name = zend_string_init("x", sizeof("x") - 1, 1);
+	zend_declare_typed_property(class_entry, property_x_name, &property_x_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_x_name);
+
+	zval property_y_default_value;
+	ZVAL_UNDEF(&property_y_default_value);
+	zend_string *property_y_name = zend_string_init("y", sizeof("y") - 1, 1);
+	zend_declare_typed_property(class_entry, property_y_name, &property_y_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_y_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_SDL_FRect(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_CLASS_ENTRY(ce, "SDL_FRect", class_SDL_FRect_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+
+	zval property_x_default_value;
+	ZVAL_UNDEF(&property_x_default_value);
+	zend_string *property_x_name = zend_string_init("x", sizeof("x") - 1, 1);
+	zend_declare_typed_property(class_entry, property_x_name, &property_x_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_x_name);
+
+	zval property_y_default_value;
+	ZVAL_UNDEF(&property_y_default_value);
+	zend_string *property_y_name = zend_string_init("y", sizeof("y") - 1, 1);
+	zend_declare_typed_property(class_entry, property_y_name, &property_y_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_y_name);
+
+	zval property_w_default_value;
+	ZVAL_UNDEF(&property_w_default_value);
+	zend_string *property_w_name = zend_string_init("w", sizeof("w") - 1, 1);
+	zend_declare_typed_property(class_entry, property_w_name, &property_w_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
+	zend_string_release(property_w_name);
+
+	zval property_h_default_value;
+	ZVAL_UNDEF(&property_h_default_value);
+	zend_string *property_h_name = zend_string_init("h", sizeof("h") - 1, 1);
+	zend_declare_typed_property(class_entry, property_h_name, &property_h_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_DOUBLE));
 	zend_string_release(property_h_name);
 
 	return class_entry;

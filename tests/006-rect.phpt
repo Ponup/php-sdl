@@ -61,6 +61,15 @@ var_dump($pts[0]." ".$pts[1]." ".$pts[2]." ".$pts[3]);
 var_dump(SDL_EnclosePoints($pts, 0, $r1, $res1), $res1);
 $pts[]="foo";
 var_dump(SDL_EnclosePoints($pts, 6, $r4, $res2), $res2);
+
+echo "+++ SDL_FRect\n";
+$r = new SDL_FRect(1.1, 2.2, 3.3, 4.4);
+var_dump($r);
+
+echo "+++ SDL_FPoint\n";
+$r = new SDL_FPoint(1.1, 2.2);
+var_dump($r);
+
 ?>
 Done
 --EXPECTF--
@@ -160,5 +169,23 @@ Warning: SDL_EnclosePoints(): point #4 is not a SDL_Point object in %s/006-rect.
 Warning: SDL_EnclosePoints(): point #5 missing in %s/006-rect.php on line %d
 bool(false)
 NULL
++++ SDL_FRect
+object(SDL_FRect)#11 (4) {
+  ["x"]=>
+  float(1.1)
+  ["y"]=>
+  float(2.2)
+  ["w"]=>
+  float(3.3)
+  ["h"]=>
+  float(4.4)
+}
++++ SDL_FPoint
+object(SDL_FPoint)#2 (2) {
+  ["x"]=>
+  float(1.1)
+  ["y"]=>
+  float(2.2)
+}
 Done
 

@@ -43,3 +43,23 @@ class SDL_Rect
     /** @alias SDL_IntersectRectAndLine */
     public function IntersectLine(int &$X1, int &$Y1, int &$X2, int &$Y2): bool {}
 }
+
+class SDL_FPoint
+{
+    public float $x;
+    public float $y;
+
+    public function __construct(float $x, float $y) {}
+    public function __toString(): string {}
+}
+
+class SDL_FRect
+{
+    public float $x;
+    public float $y;
+    public float $w;
+    public float $h;
+
+    public function __construct(float $x, float $y, float $w, float $h) {}
+    public function __toString(): string {}
+}
