@@ -48,7 +48,7 @@ $x1=0; $y1=10; $x2=40; $y2=30;
 var_dump(SDL_IntersectRectAndLine($r1, $x1, $y1, $x2, $y2));
 var_dump($x1, $y1, $x2, $y2);
 $x1=0; $y1=2; $x2=40; $y2=6;
-var_dump($r1->IntersectLine($x1, $y1, $x2, $y2));
+var_dump(SDL_IntersectRectAndLine($r1, $x1, $y1, $x2, $y2));
 
 echo "+++ EnclosePoints\n";
 $pts = array(

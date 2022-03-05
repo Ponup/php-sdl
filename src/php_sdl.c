@@ -33,6 +33,7 @@
 #include "power.h"
 #include "pixels.h"
 #include "rect.h"
+#include "rect_arginfo.h"
 #include "render.h"
 #include "rwops.h"
 #include "sdl.h"
@@ -255,11 +256,11 @@ static zend_function_entry sdl_functions[] = {
 	//PHP_FALIAS(SDL_BlitScaled,    SDL_UpperBlitScaled,    arginfo_SDL_UpperBlit)
 
 	// Rect
-	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
-	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
-	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
+	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_RectEmpty)
+	ZEND_FE(SDL_RectEquals,					arginfo_SDL_RectEquals)
+	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_HasIntersection)
 	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_IntersectRect)
-	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
+	ZEND_FE(SDL_UnionRect,					arginfo_SDL_UnionRect)
 	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
 	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
 	ZEND_FE(SDL_PointInRect,				arginfo_SDL_PointInRect)

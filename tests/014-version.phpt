@@ -4,7 +4,7 @@ SDL_version test suite
 <?php
 require 'test-functions.php';
 --INI--
-error_reporting = 32767;
+error_reporting = E_ALL & ~E_DEPRECATED;
 --FILE--
 <?php
 echo '= Constants', PHP_EOL;
