@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 9d9e9814577f18056034403f47ffb34b5e527e00 */
+ * Stub hash: b651cf1e4fe3661eec5954edc7d62636e1914987 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_PointInRect, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_OBJ_INFO(0, p, SDL_Point, 0)
@@ -45,6 +45,21 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 5, 
 	ZEND_ARG_TYPE_INFO(1, Y1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, X2, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(1, Y2, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_FRectEmpty, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, r, SDL_FRect, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_HasIntersectionF, 0, 2, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, A, SDL_FRect, 0)
+	ZEND_ARG_OBJ_INFO(0, B, SDL_FRect, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_IntersectFRect, 0, 3, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, A, SDL_FRect, 0)
+	ZEND_ARG_OBJ_INFO(0, B, SDL_FRect, 0)
+	ZEND_ARG_OBJ_INFO(1, result, SDL_FRect, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_SDL_Point___construct, 0, 0, 2)
@@ -108,6 +123,17 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_SDL_FRect___toString arginfo_class_SDL_Point___toString
 
+#define arginfo_class_SDL_FRect_Empty arginfo_class_SDL_Rect_Empty
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_FRect_HasIntersection, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, B, SDL_FRect, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_FRect_Intersect, 0, 2, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_INFO(0, B, SDL_FRect, 0)
+	ZEND_ARG_OBJ_INFO(1, result, SDL_FRect, 1)
+ZEND_END_ARG_INFO()
+
 
 ZEND_FUNCTION(SDL_PointInRect);
 ZEND_FUNCTION(SDL_RectEmpty);
@@ -117,6 +143,9 @@ ZEND_FUNCTION(SDL_IntersectRect);
 ZEND_FUNCTION(SDL_UnionRect);
 ZEND_FUNCTION(SDL_EnclosePoints);
 ZEND_FUNCTION(SDL_IntersectRectAndLine);
+ZEND_FUNCTION(SDL_FRectEmpty);
+ZEND_FUNCTION(SDL_HasIntersectionF);
+ZEND_FUNCTION(SDL_IntersectFRect);
 ZEND_METHOD(SDL_Point, __construct);
 ZEND_METHOD(SDL_Point, __toString);
 ZEND_METHOD(SDL_Rect, __construct);
@@ -136,6 +165,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(SDL_UnionRect, arginfo_SDL_UnionRect)
 	ZEND_FE(SDL_EnclosePoints, arginfo_SDL_EnclosePoints)
 	ZEND_FE(SDL_IntersectRectAndLine, arginfo_SDL_IntersectRectAndLine)
+	ZEND_FE(SDL_FRectEmpty, arginfo_SDL_FRectEmpty)
+	ZEND_FE(SDL_HasIntersectionF, arginfo_SDL_HasIntersectionF)
+	ZEND_FE(SDL_IntersectFRect, arginfo_SDL_IntersectFRect)
 	ZEND_FE_END
 };
 
@@ -170,6 +202,9 @@ static const zend_function_entry class_SDL_FPoint_methods[] = {
 static const zend_function_entry class_SDL_FRect_methods[] = {
 	ZEND_ME(SDL_FRect, __construct, arginfo_class_SDL_FRect___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(SDL_FRect, __toString, arginfo_class_SDL_FRect___toString, ZEND_ACC_PUBLIC)
+	ZEND_ME_MAPPING(Empty, SDL_FRectEmpty, arginfo_class_SDL_FRect_Empty, ZEND_ACC_PUBLIC)
+	ZEND_ME_MAPPING(HasIntersection, SDL_HasIntersectionF, arginfo_class_SDL_FRect_HasIntersection, ZEND_ACC_PUBLIC)
+	ZEND_ME_MAPPING(Intersect, SDL_IntersectFRect, arginfo_class_SDL_FRect_Intersect, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 

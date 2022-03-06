@@ -154,20 +154,20 @@ zend_bool zval_to_sdl_frect(zval *value, SDL_FRect *rect)
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = rect->x = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = rect->x = (float)Z_DVAL_P(val);
 
 		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = rect->y = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = rect->y = (float)Z_DVAL_P(val);
 
 		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "w", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = rect->w = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = rect->w = (float)Z_DVAL_P(val);
 
 		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "h", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = rect->h = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = rect->h = (float)Z_DVAL_P(val);
 
 		return 1;
 	}
@@ -202,12 +202,12 @@ zend_bool zval_to_sdl_fpoint(zval *value, SDL_FPoint *pt)
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_fpoint_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = pt->x = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = pt->x = (float)Z_DVAL_P(val);
 
 		val = zend_read_property(php_sdl_fpoint_ce, Z_OBJ_P(value), "y", 1, 0, &rv);
-		convert_to_long(val);
-		Z_LVAL_P(val) = pt->y = (float)Z_LVAL_P(val);
+		convert_to_double(val);
+		Z_DVAL_P(val) = pt->y = (float)Z_DVAL_P(val);
 
 		return 1;
 	}
@@ -343,7 +343,7 @@ PHP_METHOD(SDL_FPoint, __toString)
 	}
 
 	zval_to_sdl_fpoint(getThis(), &point);
-	buf = strpprintf(0, "SDL_Point(%f,%f)", point.x, point.y);
+	buf = strpprintf(0, "SDL_FPoint(%f,%f)", point.x, point.y);
 	RETVAL_STR(buf);
 }
 
@@ -366,6 +366,18 @@ PHP_FUNCTION(SDL_RectEmpty)
 }
 /* }}} */
 
+PHP_FUNCTION(SDL_FRectEmpty)
+{
+	zval *object;
+	SDL_FRect rect;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_frect_ce) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_frect(object, &rect);
+
+	RETURN_BOOL((rect.w <= 0.0f) || (rect.h <= 0.0f));
+}
 
 /* {{{ proto bool SDL_RectEquals(SDL_Rect a, SDL_Rect b)
 
@@ -411,6 +423,53 @@ PHP_FUNCTION(SDL_HasIntersection)
 }
 /* }}} */
 
+PHP_FUNCTION(SDL_HasIntersectionF)
+{
+	zval *obj1, *obj2;
+	SDL_FRect A, B;
+	float Amin, Amax, Bmin, Bmax;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_frect(obj1, &A);
+	zval_to_sdl_frect(obj2, &B);
+
+	/** SDL_HasIntersectionF not yet available as public API (SDL <= 2.0.20) */
+	/* Horizontal intersection */
+	Amin = A.x;
+	Amax = Amin + A.w;
+	Bmin = B.x;
+	Bmax = Bmin + B.w;
+	if (Bmin > Amin) {
+		Amin = Bmin;
+	}
+	if (Bmax < Amax) {
+		Amax = Bmax;
+	}
+	if (Amax <= Amin) {
+		RETURN_FALSE;
+	}
+
+	/* Vertical intersection */
+	Amin = A.y;
+	Amax = Amin + A.h;
+	Bmin = B.y;
+	Bmax = Bmin + B.h;
+	if (Bmin > Amin) {
+		Amin = Bmin;
+	}
+	if (Bmax < Amax) {
+		Amax = Bmax;
+	}
+	if (Amax <= Amin) {
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+//	RETURN_BOOL(SDL_HasIntersectionF(&rect1, &rect2));
+}
+
 /* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
 
  *  \brief Calculate the intersection of two rectangles.
@@ -438,6 +497,65 @@ PHP_FUNCTION(SDL_IntersectRect)
 	RETURN_FALSE;
 }
 /* }}} */
+
+
+PHP_FUNCTION(SDL_IntersectFRect)
+{
+	zval *obj1, *obj2, *result;
+	SDL_FRect A, B, resultRect;
+	float Amin, Amax, Bmin, Bmax;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce, &result) == FAILURE) {
+		return;
+	}
+	zval_to_sdl_frect(obj1, &A);
+	zval_to_sdl_frect(obj2, &B);
+
+	/** SDL_IntersectFRect does not exists (SDL <= 2.0.20) */
+	/* Special cases for empty rects */
+	if ((A.w <= 0.0f) || (A.h <= 0.0f) || (B.w <= 0.0f) || (B.h <= 0.0f)) {
+		resultRect.w = 0;
+		resultRect.h = 0;
+
+		zval_ptr_dtor(result);
+		sdl_frect_to_zval(&resultRect, result);
+
+		RETURN_FALSE;
+	}
+
+	/* Horizontal intersection */
+	Amin = A.x;
+	Amax = Amin + A.w;
+	Bmin = B.x;
+	Bmax = Bmin + B.w;
+	if (Bmin > Amin)
+		Amin = Bmin;
+	resultRect.x = Amin;
+	if (Bmax < Amax)
+		Amax = Bmax;
+	resultRect.w = Amax - Amin;
+
+	/* Vertical intersection */
+	Amin = A.y;
+	Amax = Amin + A.h;
+	Bmin = B.y;
+	Bmax = Bmin + B.h;
+	if (Bmin > Amin)
+		Amin = Bmin;
+	resultRect.y = Amin;
+	if (Bmax < Amax)
+		Amax = Bmax;
+	resultRect.h = Amax - Amin;
+
+	if (!((resultRect.w <= 0.0f) || (resultRect.h <= 0.0f))) { // !SDL_FRectEmpty
+		zval_ptr_dtor(result);
+		sdl_frect_to_zval(&resultRect, result);
+
+		RETURN_TRUE;
+	}
+
+	RETURN_FALSE;
+}
 
 /* {{{ proto bool SDL_UnionRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
 
