@@ -33,6 +33,7 @@
 #include "power.h"
 #include "pixels.h"
 #include "rect.h"
+#include "rect_arginfo.h"
 #include "render.h"
 #include "rwops.h"
 #include "sdl.h"
@@ -220,6 +221,13 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetRenderTarget, arginfo_SDL_SetRenderTarget)
 	ZEND_FE(SDL_GetRendererOutputSize, arginfo_SDL_GetRendererOutputSize)
 
+	ZEND_FE(SDL_RenderDrawPointF, arginfo_SDL_RenderDrawPointF)
+	ZEND_FE(SDL_RenderDrawLineF, arginfo_SDL_RenderDrawLineF)
+	ZEND_FE(SDL_RenderDrawRectF, arginfo_SDL_RenderDrawRectF)
+	ZEND_FE(SDL_RenderFillRectF, arginfo_SDL_RenderFillRectF)
+	ZEND_FE(SDL_RenderCopyF, arginfo_SDL_RenderCopyF)
+	ZEND_FE(SDL_RenderCopyExF, arginfo_SDL_RenderCopyExF)
+
 	// Surface
 	ZEND_FE(SDL_CreateRGBSurface,			arginfo_SDL_CreateRGBSurface)
 	ZEND_FE(SDL_FreeSurface,				arginfo_SDL_Surface)
@@ -255,14 +263,18 @@ static zend_function_entry sdl_functions[] = {
 	//PHP_FALIAS(SDL_BlitScaled,    SDL_UpperBlitScaled,    arginfo_SDL_UpperBlit)
 
 	// Rect
-	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_Rect)
-	ZEND_FE(SDL_RectEquals,					arginfo_SDL_Rect2)
-	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_Rect2)
+	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_RectEmpty)
+	ZEND_FE(SDL_RectEquals,					arginfo_SDL_RectEquals)
+	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_HasIntersection)
 	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_IntersectRect)
-	ZEND_FE(SDL_UnionRect,					arginfo_SDL_Rect3)
+	ZEND_FE(SDL_UnionRect,					arginfo_SDL_UnionRect)
 	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
 	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
 	ZEND_FE(SDL_PointInRect,				arginfo_SDL_PointInRect)
+
+	ZEND_FE(SDL_FRectEmpty,					arginfo_SDL_FRectEmpty)
+	ZEND_FE(SDL_HasIntersectionF,			arginfo_SDL_HasIntersectionF)
+	ZEND_FE(SDL_IntersectFRect,				arginfo_SDL_IntersectFRect)
 
 	// Events
 	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)

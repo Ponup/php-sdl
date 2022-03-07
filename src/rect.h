@@ -35,84 +35,11 @@ zend_class_entry *get_php_sdl_rect_ce(void);
 zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value);
 zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect__construct, /*unused*/0, /*ret ref*/0, /*req num args*/0)
-       ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, y, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, w, IS_LONG, 0)
-       ZEND_ARG_TYPE_INFO(0, h, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+zend_class_entry *get_php_sdl_frect_ce(void);
+zend_bool zval_to_sdl_frect(zval *value, SDL_FRect *rect);
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Point__construct, 0, 0, 2)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
-ZEND_END_ARG_INFO()
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect2, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect3, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRect, 0, 0, 3)
-       ZEND_ARG_OBJ_INFO(0, rectA, SDL_Rect, 0)
-       ZEND_ARG_OBJ_INFO(0, rectB, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_Result, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, result)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_EnclosePoints, 0, 0, 4)
-       ZEND_ARG_ARRAY_INFO(0, point, 0)
-       ZEND_ARG_INFO(0, count)
-       ZEND_ARG_OBJ_INFO(0, clip, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, rect)
-ZEND_END_ARG_INFO()
-
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_IntersectRectAndLine, 0, 0, 5)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-       ZEND_ARG_INFO(1, X1)
-       ZEND_ARG_INFO(1, Y1)
-       ZEND_ARG_INFO(1, X2)
-       ZEND_ARG_INFO(1, Y2)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Rect_IntersectLine, 0, 0, 4)
-       ZEND_ARG_INFO(1, X1)
-       ZEND_ARG_INFO(1, Y1)
-       ZEND_ARG_INFO(1, X2)
-       ZEND_ARG_INFO(1, Y2)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_PointInRect, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(0, point, SDL_Point, 0)
-       ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-ZEND_END_ARG_INFO()
-
-PHP_FUNCTION(SDL_RectEmpty);
-PHP_FUNCTION(SDL_RectEquals);
-PHP_FUNCTION(SDL_HasIntersection);
-PHP_FUNCTION(SDL_IntersectRect);
-PHP_FUNCTION(SDL_UnionRect);
-PHP_FUNCTION(SDL_EnclosePoints);
-PHP_FUNCTION(SDL_IntersectRectAndLine);
-PHP_FUNCTION(SDL_PointInRect);
+zend_class_entry *get_php_sdl_fpoint_ce(void);
+zend_bool zval_to_sdl_fpoint(zval *value, SDL_FPoint *rect);
 
 PHP_MINIT_FUNCTION(sdl_rect);
 
