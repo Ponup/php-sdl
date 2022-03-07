@@ -135,6 +135,50 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRendererOutputSize, 0, 0, 3)
 	ZEND_ARG_INFO(1, h)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawPointF, 0, 3, IS_LONG, 0)
+	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawLineF, 0, 5, IS_LONG, 0)
+	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_TYPE_INFO(0, x1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y1, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, x2, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO(0, y2, IS_DOUBLE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawRectF, 0, 2, IS_LONG, 0)
+	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_OBJ_INFO(0, rect, SDL_FRect, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_SDL_RenderFillRectF arginfo_SDL_RenderDrawRectF
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyF, 0, 4, IS_LONG, 0)
+	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
+	ZEND_ARG_OBJ_INFO(0, srcrect, SDL_Rect, 1)
+	ZEND_ARG_OBJ_INFO(0, dstrect, SDL_FRect, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyExF, 0, 7, IS_LONG, 0)
+	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, srcrect, SDL_Rect, 1, "null")
+	ZEND_ARG_OBJ_INFO(0, dstrect, SDL_FRect, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, angle, IS_DOUBLE, 0, "0.0")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, center, SDL_FPoint, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flip, IS_LONG, 0, "SDL_FLIP_NONE")
+ZEND_END_ARG_INFO()
+
+
 PHP_FUNCTION(SDL_SetRenderDrawColor);
 PHP_FUNCTION(SDL_RenderClear);
 PHP_FUNCTION(SDL_DestroyRenderer);
@@ -152,6 +196,12 @@ PHP_FUNCTION(SDL_CreateRenderer);
 PHP_FUNCTION(SDL_RenderCopy);
 PHP_FUNCTION(SDL_RenderCopyEx);
 PHP_FUNCTION(SDL_GetRendererOutputSize);
+ZEND_FUNCTION(SDL_RenderDrawPointF);
+ZEND_FUNCTION(SDL_RenderDrawLineF);
+ZEND_FUNCTION(SDL_RenderDrawRectF);
+ZEND_FUNCTION(SDL_RenderFillRectF);
+ZEND_FUNCTION(SDL_RenderCopyF);
+ZEND_FUNCTION(SDL_RenderCopyExF);
 
 PHP_MINIT_FUNCTION(sdl_render);
 

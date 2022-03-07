@@ -221,6 +221,13 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetRenderTarget, arginfo_SDL_SetRenderTarget)
 	ZEND_FE(SDL_GetRendererOutputSize, arginfo_SDL_GetRendererOutputSize)
 
+	ZEND_FE(SDL_RenderDrawPointF, arginfo_SDL_RenderDrawPointF)
+	ZEND_FE(SDL_RenderDrawLineF, arginfo_SDL_RenderDrawLineF)
+	ZEND_FE(SDL_RenderDrawRectF, arginfo_SDL_RenderDrawRectF)
+	ZEND_FE(SDL_RenderFillRectF, arginfo_SDL_RenderFillRectF)
+	ZEND_FE(SDL_RenderCopyF, arginfo_SDL_RenderCopyF)
+	ZEND_FE(SDL_RenderCopyExF, arginfo_SDL_RenderCopyExF)
+
 	// Surface
 	ZEND_FE(SDL_CreateRGBSurface,			arginfo_SDL_CreateRGBSurface)
 	ZEND_FE(SDL_FreeSurface,				arginfo_SDL_Surface)
