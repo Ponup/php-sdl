@@ -20,7 +20,7 @@ SDL (Simple DirectMedia Layer) bindings for the PHP language. The extension allo
 ### Via PECL
 
 ```bash
-pecl install sdl-devel
+pecl install sdl-beta
 ```
 
 Then add 
@@ -53,6 +53,13 @@ unset($window); // will destroy the window
 ```
 
 Complete examples can be found in the [examples](examples) folder.
+
+## Related projects
+
+* [PHP-SDL_Mixer](https://github.com/kea/php-sdl-mixer)
+* [PHP-SDL_Image](https://github.com/kea/php-sdl-image)
+* [PHP-OpenGL](https://github.com/ponup/php-opengl)
+* [PHP-OpenAL](https://github.com/Ponup/php-openal)
 
 ## Projects using the extension
 
