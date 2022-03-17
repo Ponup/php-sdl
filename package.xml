@@ -73,6 +73,8 @@
         <file role="src" name="power.h"/>
         <file role="src" name="rect.c"/>
         <file role="src" name="rect.h"/>
+        <file role="src" name="rect.stub.php"/>
+        <file role="src" name="rect_arginfo.h"/>
         <file role="src" name="render.c"/>
         <file role="src" name="render.h"/>
         <file role="src" name="rwops.c"/>
