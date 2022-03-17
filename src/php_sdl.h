@@ -1,7 +1,5 @@
 /*
   +----------------------------------------------------------------------+
-  | PHP Version 7                                                        |
-  +----------------------------------------------------------------------+
   | Copyright (c) 1997-2018 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
@@ -32,7 +30,7 @@ extern "C" {
 #include <php.h>
 #include <zend_exceptions.h>
 
-#define PHP_SDL_VERSION "2.5.0"
+#define PHP_SDL_VERSION "2.6.0"
 
 #if defined(__APPLE__) && defined(__MACH__)
 #include <SDL2/SDL.h>

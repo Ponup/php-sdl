@@ -19,20 +19,22 @@
     <active>yes</active>
   </lead>
   <!-- Current version -->
-  <date>2021-06-18</date>
+  <date>2022-03-17</date>
   <time>12:00:00</time>
   <version>
-    <release>2.5.0</release>
-    <api>2.5.0</api>
+    <release>2.6.0</release>
+    <api>2.6.0</api>
   </version>
   <stability>
-    <release>devel</release>
-    <api>devel</api>
+    <release>beta</release>
+    <api>beta</api>
   </stability>
-  <license uri="http://www.php.net/license">PHP</license>
+  <license uri="https://www.php.net/license">PHP</license>
   <notes>
-    - Add support for PHP8 (Manuel Baldassarri)
-    - Remove support for PHP7 (Manuel Baldassarri)
+	- Add float rect and float point render functions (Manuel Baldassarri)
+	- Add config file for Windows (Zorobabel)
+	- Fix PECL build (Manuel Baldassarri)
+	- Rename width parameter in SDL_Rect constructor (Manuel Baldassarri)
   </notes>
   <!--/Current version -->
   <contents>
@@ -156,6 +158,23 @@
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
   <changelog>
+  	<release>
+  		  <date>2021-06-18</date>
+  		  <time>12:00:00</time>
+  		  <version>
+    		<release>2.5.0</release>
+    		<api>2.5.0</api>
+  		  </version>
+  		  <stability>
+    		<release>devel</release>
+    		<api>devel</api>
+  		  </stability>
+  		  <license uri="http://www.php.net/license">PHP</license>
+  		  <notes>
+    		- Add support for PHP8 (Manuel Baldassarri)
+    		- Remove support for PHP7 (Manuel Baldassarri)
+  		  </notes>
+  	</release>
     <release>
       <date>2020-08-23</date>
       <time>12:00:00</time>
