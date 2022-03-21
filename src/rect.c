@@ -697,6 +697,8 @@ PHP_FUNCTION(SDL_PointInRect)
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_rect)
 {
+	zend_register_functions(NULL, ext_functions, NULL, type);
+
 	php_sdl_rect_ce = register_class_SDL_Rect();
 	memcpy(&php_sdl_rect_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
@@ -708,6 +710,15 @@ PHP_MINIT_FUNCTION(sdl_rect)
 
 	php_sdl_fpoint_ce = register_class_SDL_FPoint();
 	memcpy(&php_sdl_fpoint_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+
+	return SUCCESS;
+}
+/* }}} */
+
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
+PHP_MSHUTDOWN_FUNCTION(sdl_rect)
+{
+	zend_unregister_functions(ext_functions, -1, NULL);
 
 	return SUCCESS;
 }
