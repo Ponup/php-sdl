@@ -20,6 +20,12 @@
 #include "zend_interfaces.h"
 #include "zend_operators.h"
 
+/* for PHP 8.0 */
+#ifndef ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX
+#define ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null) \
+        ZEND_BEGIN_ARG_INFO_EX(name, 0, return_reference, required_num_args)
+#endif
+
 static zend_class_entry *php_sdl_color_ce;
 static zend_object_handlers php_sdl_color_handlers;
 struct php_sdl_color {
