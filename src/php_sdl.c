@@ -31,7 +31,6 @@
 #include "power.h"
 #include "pixels.h"
 #include "rect.h"
-#include "rect_arginfo.h"
 #include "render.h"
 #include "rwops.h"
 #include "sdl.h"
@@ -68,6 +67,7 @@ zend_bool php_sdl_check_overflow(int a, int b, int silent)
 
 
 #define PHP_MINIT_CALL(func) PHP_MINIT(func)(INIT_FUNC_ARGS_PASSTHRU)
+#define PHP_MSHUTDOWN_CALL(func) PHP_MSHUTDOWN(func)(SHUTDOWN_FUNC_ARGS_PASSTHRU)
 
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(sdl)
@@ -107,6 +107,8 @@ PHP_MINIT_FUNCTION(sdl)
 /* {{{ PHP_MSHUTDOWN_FUNCTION */
 PHP_MSHUTDOWN_FUNCTION(sdl)
 {
+	PHP_MSHUTDOWN_CALL(sdl_rect);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -259,20 +261,6 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_ConvertPixels,				arginfo_SDL_ConvertPixels)
 	//PHP_FALIAS(SDL_BlitSurface,   SDL_UpperBlit,          arginfo_SDL_UpperBlit)
 	//PHP_FALIAS(SDL_BlitScaled,    SDL_UpperBlitScaled,    arginfo_SDL_UpperBlit)
-
-	// Rect
-	ZEND_FE(SDL_RectEmpty,					arginfo_SDL_RectEmpty)
-	ZEND_FE(SDL_RectEquals,					arginfo_SDL_RectEquals)
-	ZEND_FE(SDL_HasIntersection,			arginfo_SDL_HasIntersection)
-	ZEND_FE(SDL_IntersectRect,				arginfo_SDL_IntersectRect)
-	ZEND_FE(SDL_UnionRect,					arginfo_SDL_UnionRect)
-	ZEND_FE(SDL_IntersectRectAndLine,		arginfo_SDL_IntersectRectAndLine)
-	ZEND_FE(SDL_EnclosePoints,				arginfo_SDL_EnclosePoints)
-	ZEND_FE(SDL_PointInRect,				arginfo_SDL_PointInRect)
-
-	ZEND_FE(SDL_FRectEmpty,					arginfo_SDL_FRectEmpty)
-	ZEND_FE(SDL_HasIntersectionF,			arginfo_SDL_HasIntersectionF)
-	ZEND_FE(SDL_IntersectFRect,				arginfo_SDL_IntersectFRect)
 
 	// Events
 	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)

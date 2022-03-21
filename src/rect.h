@@ -40,6 +40,7 @@ zend_class_entry *get_php_sdl_fpoint_ce(void);
 zend_bool zval_to_sdl_fpoint(zval *value, SDL_FPoint *rect);
 
 PHP_MINIT_FUNCTION(sdl_rect);
+PHP_MSHUTDOWN_FUNCTION(sdl_rect);
 
 #ifdef  __cplusplus
 } // extern "C" 
