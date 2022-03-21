@@ -26,7 +26,6 @@ var_dump(12030 === SDL_VERSIONNUM(10,20,30));
 var_dump(SDL_VERSION_ATLEAST(2,0,0));
 var_dump(SDL_VERSION_ATLEAST(2,0,25));
 var_dump(is_string(SDL_GetRevision()));
-var_dump(is_integer(SDL_GetRevisionNumber()));
 
 echo '= Done', PHP_EOL;
 ?>
@@ -47,6 +46,5 @@ bool(true)
 bool(true)
 bool(true)
 bool(false)
-bool(true)
 bool(true)
 = Done

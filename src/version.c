@@ -18,12 +18,6 @@
 
 #include <SDL_revision.h>
 
-/*
-  +----------------------------------------------------------------------+
-  | wrapper for SDL2/SDL_version.h                                       |
-  +----------------------------------------------------------------------+
-*/
-
 #include "php_sdl.h"
 #include "version.h"
 
@@ -56,24 +50,6 @@ PHP_FUNCTION(SDL_GetRevision)
 	}
 
 	RETURN_STRING(SDL_GetRevision());
-}
-/* }}} */
-
-/* {{{ proto int SDL_GetRevisionNumber()
-
- *  \brief Get the revision number of SDL that is linked against your program.
- *
- *  Returns a number uniquely identifying the exact revision of the SDL
- *  library in use. It is an incrementing number based on commits to
- *  hg.libsdl.org.
- */
-PHP_FUNCTION(SDL_GetRevisionNumber)
-{
-	if (zend_parse_parameters_none() == FAILURE) {
-		RETURN_FALSE;
-	}
-
-	RETURN_LONG(SDL_GetRevisionNumber());
 }
 /* }}} */
 
