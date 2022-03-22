@@ -59,6 +59,7 @@ PHP_FUNCTION(SDL_GetRevision)
 }
 /* }}} */
 
+#ifdef HAVE_SDL_GETREVISIONNUMBER
 /* {{{ proto int SDL_GetRevisionNumber()
 
  *  \brief Get the revision number of SDL that is linked against your program.
@@ -76,6 +77,7 @@ PHP_FUNCTION(SDL_GetRevisionNumber)
 	RETURN_LONG(SDL_GetRevisionNumber());
 }
 /* }}} */
+#endif
 
 /* {{{ proto void SDL_GetVersion(array &version)
 

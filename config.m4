@@ -55,6 +55,10 @@ if test "$PHP_SDL" != "no"; then
   PHP_SUBST(SDL_SHARED_LIBADD)
   AC_DEFINE(HAVE_SDL2, 1, [ ])
 
+  PHP_CHECK_LIBRARY(SDL2, SDL_GetRevisionNumber, [
+    AC_DEFINE(HAVE_SDL_GETREVISIONNUMBER, 1, [ ])
+  ])
+
   SDL_SOURCE_FILES="src/blendmode.c \
 	src/cpuinfo.c \
 	src/error.c \
