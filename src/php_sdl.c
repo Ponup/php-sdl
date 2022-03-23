@@ -193,7 +193,9 @@ static zend_function_entry sdl_functions[] = {
 
 	// Version
 	ZEND_FE(SDL_GetRevision,		arginfo_sdl_version_none)
-	ZEND_FE(SDL_GetRevisionNumber,		arginfo_sdl_version_none)
+#ifdef HAVE_SDL_GETREVISIONNUMBER
+	ZEND_DEP_FE(SDL_GetRevisionNumber,		arginfo_sdl_version_none)
+#endif
 	ZEND_FE(SDL_GetVersion,			arginfo_SDL_GetVersion)
 	ZEND_FE(SDL_VERSION,			arginfo_SDL_VERSION)
 	ZEND_FE(SDL_VERSIONNUM,			arginfo_SDL_VERSIONNUM)
