@@ -30,6 +30,8 @@ extension=sdl.so
 ```
 to your _php.ini_ file.
 
+> If you have no idea about your ini file position you can run `php -i | grep ini` and see the list of you ini files.
+
 ## Documentation
 
 The SDL extension mimics in almost every single aspect to the official C library, so until we write our own documentation, refer to the [C counterpart](https://wiki.libsdl.org/APIByCategory).
