@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2022 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -20,25 +20,29 @@
 
 static zend_class_entry *php_sdl_rect_ce;
 static zend_object_handlers php_sdl_rect_handlers;
-struct php_sdl_rect {
+struct php_sdl_rect
+{
 	zend_object zo;
 };
 
 static zend_class_entry *php_sdl_frect_ce;
 static zend_object_handlers php_sdl_frect_handlers;
-struct php_sdl_frect {
+struct php_sdl_frect
+{
 	zend_object zo;
 };
 
 static zend_class_entry *php_sdl_point_ce;
 static zend_object_handlers php_sdl_point_handlers;
-struct php_sdl_point {
+struct php_sdl_point
+{
 	zend_object zo;
 };
 
 static zend_class_entry *php_sdl_fpoint_ce;
 static zend_object_handlers php_sdl_fpoint_handlers;
-struct php_sdl_fpoint {
+struct php_sdl_fpoint
+{
 	zend_object zo;
 };
 
@@ -64,7 +68,8 @@ zend_class_entry *get_php_sdl_fpoint_ce(void)
 
 zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
 {
-	if (rect) {
+	if (rect)
+	{
 		object_init_ex(value, php_sdl_rect_ce);
 		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "x", 1, rect->x);
 		zend_update_property_long(php_sdl_rect_ce, Z_OBJ_P(value), "y", 1, rect->y);
@@ -79,7 +84,8 @@ zend_bool sdl_rect_to_zval(SDL_Rect *rect, zval *value)
 
 zend_bool sdl_frect_to_zval(SDL_FRect *rect, zval *value)
 {
-	if (rect) {
+	if (rect)
+	{
 		object_init_ex(value, php_sdl_frect_ce);
 		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "x", 1, rect->x);
 		zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(value), "y", 1, rect->y);
@@ -94,7 +100,8 @@ zend_bool sdl_frect_to_zval(SDL_FRect *rect, zval *value)
 
 zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 {
-	if (pt) {
+	if (pt)
+	{
 		object_init_ex(value, php_sdl_point_ce);
 		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "x", 1, pt->x);
 		zend_update_property_long(php_sdl_point_ce, Z_OBJ_P(value), "y", 1, pt->y);
@@ -107,7 +114,8 @@ zend_bool sdl_point_to_zval(SDL_Point *pt, zval *value)
 
 zend_bool sdl_fpoint_to_zval(SDL_FPoint *pt, zval *value)
 {
-	if (pt) {
+	if (pt)
+	{
 		object_init_ex(value, php_sdl_fpoint_ce);
 		zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(value), "x", 1, pt->x);
 		zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(value), "y", 1, pt->y);
@@ -120,7 +128,8 @@ zend_bool sdl_fpoint_to_zval(SDL_FPoint *pt, zval *value)
 
 zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 {
-	if (instanceof_function(Z_OBJCE_P(value), php_sdl_rect_ce)) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_rect_ce))
+	{
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_rect_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
@@ -148,7 +157,8 @@ zend_bool zval_to_sdl_rect(zval *value, SDL_Rect *rect)
 
 zend_bool zval_to_sdl_frect(zval *value, SDL_FRect *rect)
 {
-	if (instanceof_function(Z_OBJCE_P(value), php_sdl_frect_ce)) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_frect_ce))
+	{
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_frect_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
@@ -176,7 +186,8 @@ zend_bool zval_to_sdl_frect(zval *value, SDL_FRect *rect)
 
 zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 {
-	if (instanceof_function(Z_OBJCE_P(value), php_sdl_point_ce)) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_point_ce))
+	{
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_point_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
@@ -196,7 +207,8 @@ zend_bool zval_to_sdl_point(zval *value, SDL_Point *pt)
 
 zend_bool zval_to_sdl_fpoint(zval *value, SDL_FPoint *pt)
 {
-	if (instanceof_function(Z_OBJCE_P(value), php_sdl_fpoint_ce)) {
+	if (instanceof_function(Z_OBJCE_P(value), php_sdl_fpoint_ce))
+	{
 		zval *val, rv;
 
 		val = zend_read_property(php_sdl_fpoint_ce, Z_OBJ_P(value), "x", 1, 0, &rv);
@@ -222,7 +234,8 @@ PHP_METHOD(SDL_Rect, __construct)
 {
 	zend_long x = 0, y = 0, w = 0, h = 0;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llll", &x, &y, &w, &h)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|llll", &x, &y, &w, &h))
+	{
 		return;
 	}
 
@@ -239,7 +252,8 @@ PHP_METHOD(SDL_Rect, __toString)
 	zend_string *buf;
 	SDL_Rect rect;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
@@ -254,10 +268,10 @@ PHP_METHOD(SDL_FRect, __construct)
 	double x = 0, y = 0, w = 0, h = 0;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4)
-		Z_PARAM_DOUBLE(x)
-		Z_PARAM_DOUBLE(y)
-		Z_PARAM_DOUBLE(w)
-		Z_PARAM_DOUBLE(h)
+	Z_PARAM_DOUBLE(x)
+	Z_PARAM_DOUBLE(y)
+	Z_PARAM_DOUBLE(w)
+	Z_PARAM_DOUBLE(h)
 	ZEND_PARSE_PARAMETERS_END();
 
 	zend_update_property_double(php_sdl_frect_ce, Z_OBJ_P(getThis()), "x", 1, x);
@@ -271,7 +285,8 @@ PHP_METHOD(SDL_FRect, __toString)
 	zend_string *buf;
 	SDL_FRect rect;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
@@ -290,7 +305,8 @@ PHP_METHOD(SDL_Point, __construct)
 	zend_error_handling error_handling;
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &x, &y)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &x, &y))
+	{
 		zend_restore_error_handling(&error_handling);
 		return;
 	}
@@ -301,14 +317,14 @@ PHP_METHOD(SDL_Point, __construct)
 }
 /* }}} */
 
-
 /* {{{ proto SDL_Point::__toString() */
 PHP_METHOD(SDL_Point, __toString)
 {
 	zend_string *buf;
 	SDL_Point point;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
@@ -323,8 +339,8 @@ PHP_METHOD(SDL_FPoint, __construct)
 	double x = 0, y = 0;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_DOUBLE(x)
-		Z_PARAM_DOUBLE(y)
+	Z_PARAM_DOUBLE(x)
+	Z_PARAM_DOUBLE(y)
 	ZEND_PARSE_PARAMETERS_END();
 
 	zend_update_property_double(php_sdl_fpoint_ce, Z_OBJ_P(getThis()), "x", 1, x);
@@ -336,7 +352,8 @@ PHP_METHOD(SDL_FPoint, __toString)
 	zend_string *buf;
 	SDL_FPoint point;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
@@ -355,11 +372,12 @@ PHP_FUNCTION(SDL_RectEmpty)
 	zval *object;
 	SDL_Rect rect;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_rect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(object, &rect);
-	
+
 	RETURN_BOOL(SDL_RectEmpty(&rect));
 }
 /* }}} */
@@ -369,7 +387,8 @@ PHP_FUNCTION(SDL_FRectEmpty)
 	zval *object;
 	SDL_FRect rect;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_frect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_frect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_frect(object, &rect);
@@ -387,16 +406,16 @@ PHP_FUNCTION(SDL_RectEquals)
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
-	
+
 	RETURN_BOOL(SDL_RectEquals(&rect1, &rect2));
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_HasIntersection(SDL_Rect a, SDL_Rect b)
 
@@ -404,19 +423,20 @@ PHP_FUNCTION(SDL_RectEquals)
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
  extern DECLSPEC SDL_bool SDLCALL SDL_HasIntersection(const SDL_Rect * A,
-                                                      const SDL_Rect * B);
+													  const SDL_Rect * B);
  */
 PHP_FUNCTION(SDL_HasIntersection)
 {
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
-	
+
 	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
 }
 /* }}} */
@@ -427,7 +447,8 @@ PHP_FUNCTION(SDL_HasIntersectionF)
 	SDL_FRect A, B;
 	float Amin, Amax, Bmin, Bmax;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_frect(obj1, &A);
@@ -439,13 +460,16 @@ PHP_FUNCTION(SDL_HasIntersectionF)
 	Amax = Amin + A.w;
 	Bmin = B.x;
 	Bmax = Bmin + B.w;
-	if (Bmin > Amin) {
+	if (Bmin > Amin)
+	{
 		Amin = Bmin;
 	}
-	if (Bmax < Amax) {
+	if (Bmax < Amax)
+	{
 		Amax = Bmax;
 	}
-	if (Amax <= Amin) {
+	if (Amax <= Amin)
+	{
 		RETURN_FALSE;
 	}
 
@@ -454,18 +478,21 @@ PHP_FUNCTION(SDL_HasIntersectionF)
 	Amax = Amin + A.h;
 	Bmin = B.y;
 	Bmax = Bmin + B.h;
-	if (Bmin > Amin) {
+	if (Bmin > Amin)
+	{
 		Amin = Bmin;
 	}
-	if (Bmax < Amax) {
+	if (Bmax < Amax)
+	{
 		Amax = Bmax;
 	}
-	if (Amax <= Amin) {
+	if (Amax <= Amin)
+	{
 		RETURN_FALSE;
 	}
 
 	RETURN_TRUE;
-//	RETURN_BOOL(SDL_HasIntersectionF(&rect1, &rect2));
+	//	RETURN_BOOL(SDL_HasIntersectionF(&rect1, &rect2));
 }
 
 /* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
@@ -474,20 +501,22 @@ PHP_FUNCTION(SDL_HasIntersectionF)
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
  extern DECLSPEC SDL_bool SDLCALL SDL_IntersectRect(const SDL_Rect * A,
-                                                    const SDL_Rect * B,
-                                                    SDL_Rect * result);
+													const SDL_Rect * B,
+													SDL_Rect * result);
  */
 PHP_FUNCTION(SDL_IntersectRect)
 {
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
-	if (SDL_IntersectRect(&rect1, &rect2, &rect3)) {
+	if (SDL_IntersectRect(&rect1, &rect2, &rect3))
+	{
 		zval_ptr_dtor(result);
 		sdl_rect_to_zval(&rect3, result);
 		RETURN_TRUE;
@@ -496,14 +525,14 @@ PHP_FUNCTION(SDL_IntersectRect)
 }
 /* }}} */
 
-
 PHP_FUNCTION(SDL_IntersectFRect)
 {
 	zval *obj1, *obj2, *result;
 	SDL_FRect A, B, resultRect;
 	float Amin, Amax, Bmin, Bmax;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_frect_ce, &obj2, php_sdl_frect_ce, &result) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_frect(obj1, &A);
@@ -511,7 +540,8 @@ PHP_FUNCTION(SDL_IntersectFRect)
 
 	/** SDL_IntersectFRect does not exists (SDL <= 2.0.20) */
 	/* Special cases for empty rects */
-	if ((A.w <= 0.0f) || (A.h <= 0.0f) || (B.w <= 0.0f) || (B.h <= 0.0f)) {
+	if ((A.w <= 0.0f) || (A.h <= 0.0f) || (B.w <= 0.0f) || (B.h <= 0.0f))
+	{
 		resultRect.w = 0;
 		resultRect.h = 0;
 
@@ -545,7 +575,8 @@ PHP_FUNCTION(SDL_IntersectFRect)
 		Amax = Bmax;
 	resultRect.h = Amax - Amin;
 
-	if (!((resultRect.w <= 0.0f) || (resultRect.h <= 0.0f))) { // !SDL_FRectEmpty
+	if (!((resultRect.w <= 0.0f) || (resultRect.h <= 0.0f)))
+	{ // !SDL_FRectEmpty
 		zval_ptr_dtor(result);
 		sdl_frect_to_zval(&resultRect, result);
 
@@ -559,15 +590,16 @@ PHP_FUNCTION(SDL_IntersectFRect)
 
  *  \brief Calculate the union of two rectangles.
  extern DECLSPEC void SDLCALL SDL_UnionRect(const SDL_Rect * A,
-                                            const SDL_Rect * B,
-                                            SDL_Rect * result);
+											const SDL_Rect * B,
+											SDL_Rect * result);
  */
 PHP_FUNCTION(SDL_UnionRect)
 {
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOz/", &obj1, php_sdl_rect_ce, &obj2, php_sdl_rect_ce, &result) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(obj1, &rect1);
@@ -578,17 +610,15 @@ PHP_FUNCTION(SDL_UnionRect)
 }
 /* }}} */
 
-
-
 /* {{{ proto bool SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
 
  *  \brief Calculate a minimal rectangle enclosing a set of points
  *
  *  \return SDL_TRUE if any points were within the clipping rect
  extern DECLSPEC SDL_bool SDLCALL SDL_EnclosePoints(const SDL_Point * points,
-                                                    int count,
-                                                    const SDL_Rect * clip,
-                                                    SDL_Rect * result);
+													int count,
+													const SDL_Rect * clip,
+													SDL_Rect * result);
  */
 PHP_FUNCTION(SDL_EnclosePoints)
 {
@@ -599,34 +629,42 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	SDL_Rect clip, result;
 	SDL_Point *points;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "alOz/", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "alOz/", &z_points, &count, &z_clip, php_sdl_rect_ce, &z_result) == FAILURE)
+	{
 		return;
 	}
 	RETVAL_FALSE;
 
-	if (count<=0) {
+	if (count <= 0)
+	{
 		count = zend_hash_next_free_element(Z_ARRVAL_P(z_points));
 	}
-	points = emalloc(sizeof(SDL_Point)*count);
+	points = emalloc(sizeof(SDL_Point) * count);
 
 	zval_to_sdl_rect(z_clip, &clip);
-	for (i=0, nb=0 ; i<count ; i++) {
-		if (!(z_point = zend_hash_index_find(Z_ARRVAL_P(z_points), i))) {
+	for (i = 0, nb = 0; i < count; i++)
+	{
+		if (!(z_point = zend_hash_index_find(Z_ARRVAL_P(z_points), i)))
+		{
 			php_error_docref(NULL, E_WARNING, "point #%ld missing", i);
-
-		} else if (Z_TYPE(*z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce) {
+		}
+		else if (Z_TYPE(*z_point) != IS_OBJECT || Z_OBJCE_P(z_point) != php_sdl_point_ce)
+		{
 			php_error_docref(NULL, E_WARNING, "point #%ld is not a SDL_Point object", i);
-
-		} else {
-			zval_to_sdl_point(z_point, points+nb);
+		}
+		else
+		{
+			zval_to_sdl_point(z_point, points + nb);
 			nb++;
 		}
 	}
 
-	if (!nb) {
+	if (!nb)
+	{
 		php_error_docref(NULL, E_WARNING, "no point in provided array");
-
-	} else if (SDL_EnclosePoints(points, nb, &clip, &result)) {
+	}
+	else if (SDL_EnclosePoints(points, nb, &clip, &result))
+	{
 		zval_ptr_dtor(z_result);
 		sdl_rect_to_zval(&result, z_result);
 		RETVAL_TRUE;
@@ -635,16 +673,15 @@ PHP_FUNCTION(SDL_EnclosePoints)
 }
 /* }}} */
 
-
 /* {{{ proto bool SDL_IntersectRectAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
 
  *  \brief Calculate the intersection of a rectangle and line segment.
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
  extern DECLSPEC SDL_bool SDLCALL SDL_IntersectRectAndLine(const SDL_Rect *
-                                                           rect, int *X1,
-                                                           int *Y1, int *X2,
-                                                           int *Y2);
+														   rect, int *X1,
+														   int *Y1, int *X2,
+														   int *Y2);
  */
 PHP_FUNCTION(SDL_IntersectRectAndLine)
 {
@@ -652,7 +689,8 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	SDL_Rect rect;
 	int x1, y1, x2, y2;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/z/z/", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/z/z/", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(object, &rect);
@@ -665,7 +703,8 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	x2 = (int)Z_LVAL_P(z_x2);
 	y2 = (int)Z_LVAL_P(z_y2);
 
-	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2)) {
+	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2))
+	{
 		Z_LVAL_P(z_x1) = x1;
 		Z_LVAL_P(z_y1) = y1;
 		Z_LVAL_P(z_x2) = x2;
@@ -682,13 +721,15 @@ PHP_FUNCTION(SDL_PointInRect)
 	SDL_Point point;
 	SDL_Rect rect;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_point, php_sdl_point_ce, &z_rect, php_sdl_rect_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_point, php_sdl_point_ce, &z_rect, php_sdl_rect_ce) == FAILURE)
+	{
 		return;
 	}
 	zval_to_sdl_rect(z_rect, &rect);
 	zval_to_sdl_point(z_point, &point);
 
-	if (SDL_PointInRect(&point, &rect)) {
+	if (SDL_PointInRect(&point, &rect))
+	{
 		RETURN_TRUE;
 	}
 	RETURN_FALSE;

@@ -57,7 +57,7 @@ var_dump($fr2->HasIntersection($fr4));
 var_dump($fr2->Intersect($fr4, $x));
 var_dump($x); unset($x);
 
-echo "+++ Uninon\n";
+echo "+++ Union\n";
 var_dump($r2->Union($r3, $x));
 var_dump($x); unset($x);
 var_dump($r2->Union($r4, $x));
@@ -164,7 +164,7 @@ NULL
 bool(false)
 bool(false)
 NULL
-+++ Uninon
++++ Union
 NULL
 object(SDL_Rect)#%d (4) {
   ["x"]=>

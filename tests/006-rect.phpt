@@ -6,6 +6,9 @@ require 'test-functions.php';
 --FILE--
 <?php
 echo "+++ Empty (true)\n";
+$r = new SDL_Rect();
+echo $r, PHP_EOL;
+
 $r = new SDL_Rect(0,0,0,0);
 var_dump($r);
 var_dump(SDL_RectEmpty($r));
@@ -94,6 +97,7 @@ var_dump($r);
 Done
 --EXPECTF--
 +++ Empty (true)
+SDL_Rect(0,0,0,0)
 object(SDL_Rect)#%d (4) {
   ["x"]=>
   int(0)
@@ -238,7 +242,7 @@ object(SDL_FRect)#%d (4) {
   float(4.4)
 }
 +++ SDL_FPoint
-object(SDL_FPoint)#2 (2) {
+object(SDL_FPoint)#%d (2) {
   ["x"]=>
   float(1.1)
   ["y"]=>
