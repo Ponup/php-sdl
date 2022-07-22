@@ -25,12 +25,6 @@ extern "C"
 
 #include "php_sdl.h"
 
-#define ARG_PASS_BY_REF 1
-#define ARG_NOT_PASS_BY_REF 0
-
-#define ARG_ALLOW_NULL 1
-#define ARG_NOT_ALLOW_NULL 0
-
   ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_NumJoysticks, 0, 0, 0)
   ZEND_END_ARG_INFO()
   PHP_FUNCTION(SDL_NumJoysticks);

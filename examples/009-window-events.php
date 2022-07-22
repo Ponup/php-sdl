@@ -16,6 +16,17 @@ SDL_RenderPresent($renderer);
 
 $event = new SDL_Event;
 while (!$quit) {
+	$keyboardState = SDL_GetKeyboardState($numkeys);
+    if($keyboardState[SDL_SCANCODE_RETURN]) {
+        echo 'SDL_SCANCODE_RETURN pressed', PHP_EOL;
+    }
+    if($keyboardState[SDL_SCANCODE_RIGHT]) {
+        echo 'SDL_SCANCODE_RIGHT pressed', PHP_EOL;
+    }
+    if($keyboardState[SDL_SCANCODE_UP]) {
+        echo 'SDL_SCANCODE_UP pressed', PHP_EOL;
+    }
+
     while (SDL_PollEvent($event)) {
         switch ($event->type) {
             case SDL_QUIT:

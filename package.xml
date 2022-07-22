@@ -19,11 +19,11 @@
     <active>yes</active>
   </lead>
   <!-- Current version -->
-  <date>2022-03-17</date>
+  <date>2022-07-22</date>
   <time>12:00:00</time>
   <version>
-    <release>2.6.0</release>
-    <api>2.6.0</api>
+    <release>2.7.0</release>
+    <api>2.7.0</api>
   </version>
   <stability>
     <release>beta</release>
@@ -31,10 +31,7 @@
   </stability>
   <license uri="https://www.php.net/license">PHP</license>
   <notes>
-	- Add float rect and float point render functions (Manuel Baldassarri)
-	- Add config file for Windows (Zorobabel)
-	- Fix PECL build (Manuel Baldassarri)
-	- Rename width parameter in SDL_Rect constructor (Manuel Baldassarri)
+  	  - Fix SDL_GetKeyboardState (https://github.com/Ponup/php-sdl/issues/68)
   </notes>
   <!--/Current version -->
   <contents>
@@ -158,6 +155,26 @@
   <providesextension>sdl</providesextension>
   <extsrcrelease/>
   <changelog>
+  	  <release>
+  <date>2022-03-17</date>
+  <time>12:00:00</time>
+  <version>
+    <release>2.6.0</release>
+    <api>2.6.0</api>
+  </version>
+  <stability>
+    <release>beta</release>
+    <api>beta</api>
+  </stability>
+  <license uri="https://www.php.net/license">PHP</license>
+  <notes>
+	- Add float rect and float point render functions (Manuel Baldassarri)
+	- Add config file for Windows (Zorobabel)
+	- Fix PECL build (Manuel Baldassarri)
+	- Rename width parameter in SDL_Rect constructor (Manuel Baldassarri)
+  </notes>
+
+  	  </release>
   	<release>
   		  <date>2021-06-18</date>
   		  <time>12:00:00</time>

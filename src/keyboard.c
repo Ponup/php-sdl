@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2022 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -26,19 +26,15 @@ extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
  */
 PHP_FUNCTION(SDL_GetKeyboardFocus)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	sdl_window_to_zval(SDL_GetKeyboardFocus(), return_value, SDL_DONTFREE);
 }
 /* }}} */
 
-/* {{{ proto array SDL_GetKeyboardState([int &numkeys [, bool allkeys=true ]])
-
-	Standard SDL API
-		with allkeys=true  return an array of scancode => state array
-	PHP Specific, (to reduce memory)
-		with allkeys=false return an array of scancode (which are set)
+/* {{{ proto array SDL_GetKeyboardState([int &numkeys])
 
  *  \brief Get a snapshot of the current state of the keyboard.
  *
@@ -58,31 +54,26 @@ PHP_FUNCTION(SDL_GetKeyboardFocus)
 PHP_FUNCTION(SDL_GetKeyboardState)
 {
 	zval *z_numkeys = NULL;
-	int i, nb, numkeys;
-	zend_bool allkeys=1;
+	int i, numkeys;
 	const Uint8 *state;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|zb", &z_numkeys, &allkeys)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|z", &z_numkeys))
+	{
 		return;
 	}
 	state = SDL_GetKeyboardState(&numkeys);
 	array_init(return_value);
-	for (nb=i=0 ; i<numkeys ; i++) {
-		if (allkeys) {
-			add_next_index_long(return_value, state[i]);
-			nb++;
-		} else if (state[i]) {
-			add_next_index_long(return_value, i);
-			nb++;
-		}
+	for (i = 0; i < numkeys; i++)
+	{
+		add_next_index_long(return_value, state[i]);
 	}
-	if (z_numkeys) {
-		zval_dtor(z_numkeys);
-		ZVAL_LONG(z_numkeys, nb);
+
+	if (z_numkeys)
+	{
+		ZEND_TRY_ASSIGN_REF_LONG(z_numkeys, numkeys);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetModState(void)
 
@@ -91,13 +82,13 @@ PHP_FUNCTION(SDL_GetKeyboardState)
  */
 PHP_FUNCTION(SDL_GetModState)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GetModState());
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_SetModState(int modstate)
 
@@ -110,13 +101,13 @@ PHP_FUNCTION(SDL_SetModState)
 {
 	zend_long modstate;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &modstate)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &modstate))
+	{
 		return;
 	}
 	SDL_SetModState(modstate);
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetKeyFromScancode(int scancode)
 
@@ -132,13 +123,13 @@ PHP_FUNCTION(SDL_GetKeyFromScancode)
 {
 	zend_long scancode;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GetKeyFromScancode(scancode));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetScancodeFromKey(int key)
 
@@ -154,13 +145,13 @@ PHP_FUNCTION(SDL_GetScancodeFromKey)
 {
 	zend_long key;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GetScancodeFromKey(key));
 }
 /* }}} */
-
 
 /* {{{ proto string SDL_GetScancodeName(int scancode)
 
@@ -177,13 +168,13 @@ PHP_FUNCTION(SDL_GetScancodeName)
 {
 	zend_long scancode;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &scancode))
+	{
 		return;
 	}
 	RETVAL_STRING(SDL_GetScancodeName(scancode));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetScancodeFromName(string name)
 
@@ -199,13 +190,13 @@ PHP_FUNCTION(SDL_GetScancodeFromName)
 	char *name;
 	size_t name_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GetScancodeFromName(name));
 }
 /* }}} */
-
 
 /* {{{ proto string SDL_GetKeyName(int key)
 
@@ -223,13 +214,13 @@ PHP_FUNCTION(SDL_GetKeyName)
 {
 	zend_long key;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &key))
+	{
 		return;
 	}
 	RETVAL_STRING(SDL_GetKeyName(key));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetKeyFromName(string name)
 
@@ -245,13 +236,13 @@ PHP_FUNCTION(SDL_GetKeyFromName)
 	char *name;
 	size_t name_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &name, &name_len))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GetKeyFromName(name));
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_StartTextInput(void)
 
@@ -265,13 +256,13 @@ PHP_FUNCTION(SDL_GetKeyFromName)
  */
 PHP_FUNCTION(SDL_StartTextInput)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	SDL_StartTextInput();
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_IsTextInputActive(void)
 
@@ -283,13 +274,13 @@ PHP_FUNCTION(SDL_StartTextInput)
  */
 PHP_FUNCTION(SDL_IsTextInputActive)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	RETVAL_BOOL(SDL_IsTextInputActive());
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_StopTextInput(void)
 
@@ -302,7 +293,8 @@ PHP_FUNCTION(SDL_IsTextInputActive)
  */
 PHP_FUNCTION(SDL_StopTextInput)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	SDL_StopTextInput();
@@ -322,15 +314,16 @@ PHP_FUNCTION(SDL_SetTextInputRect)
 	zval *z_rect;
 	SDL_Rect rect;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_rect, get_php_sdl_rect_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_rect, get_php_sdl_rect_ce()))
+	{
 		return;
 	}
-	if (zval_to_sdl_rect(z_rect, &rect)) {
+	if (zval_to_sdl_rect(z_rect, &rect))
+	{
 		SDL_SetTextInputRect(&rect);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_HasScreenKeyboardSupport(void)
 
@@ -345,13 +338,13 @@ PHP_FUNCTION(SDL_SetTextInputRect)
  */
 PHP_FUNCTION(SDL_HasScreenKeyboardSupport)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	RETVAL_BOOL(SDL_HasScreenKeyboardSupport());
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_IsScreenKeyboardShown(SDL_Window window)
 
@@ -369,16 +362,17 @@ PHP_FUNCTION(SDL_IsScreenKeyboardShown)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce()))
+	{
 		return;
 	}
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		RETVAL_BOOL(SDL_IsScreenKeyboardShown(window));
 	}
 }
 /* }}} */
-
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_keyboard)
