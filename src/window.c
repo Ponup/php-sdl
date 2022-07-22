@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2022 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -28,15 +28,16 @@
 
 static zend_class_entry *php_sdl_window_ce;
 static zend_object_handlers php_sdl_window_handlers;
-struct php_sdl_window {
-	SDL_Window   *window;
+struct php_sdl_window
+{
+	SDL_Window *window;
 	int flags;
-	zend_object   zo;
+	zend_object zo;
 };
 
 typedef struct php_sdl_window php_sdl_window_t;
 
-static inline php_sdl_window_t* php_sdl_window_fetch_object(zend_object* obj);
+static inline php_sdl_window_t *php_sdl_window_fetch_object(zend_object *obj);
 
 zend_class_entry *get_php_sdl_window_ce(void)
 {
@@ -46,11 +47,12 @@ zend_class_entry *get_php_sdl_window_ce(void)
 /* {{{ zval_to_sdl_window */
 SDL_Window *zval_to_sdl_window(zval *z_val)
 {
-	if (z_val && Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_window_ce) {
-		zend_object* zo = Z_OBJ_P(z_val);
+	if (z_val && Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_window_ce)
+	{
+		zend_object *zo = Z_OBJ_P(z_val);
 
 		struct php_sdl_window *intern;
-		intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
+		intern = (struct php_sdl_window *)((char *)zo - zo->handlers->offset);
 		return intern->window;
 	}
 	return NULL;
@@ -60,7 +62,7 @@ SDL_Window *zval_to_sdl_window(zval *z_val)
 static inline void sdl_window_add_long_property(HashTable *props, const char *name, zend_long value)
 {
 	zval zvalue;
-    zend_string *zname = zend_string_init(name, strlen(name), 0);
+	zend_string *zname = zend_string_init(name, strlen(name), 0);
 	ZVAL_LONG(&zvalue, value);
 	zend_hash_update(props, zname, &zvalue);
 	zend_string_release(zname);
@@ -70,13 +72,14 @@ static inline void sdl_window_add_long_property(HashTable *props, const char *na
 static HashTable *sdl_window_get_properties(zend_object *object)
 {
 	HashTable *props;
-    zend_string* z_string;
+	zend_string *z_string;
 	zval zv;
-	struct php_sdl_window* intern = php_sdl_window_fetch_object(object);
+	struct php_sdl_window *intern = php_sdl_window_fetch_object(object);
 
 	props = zend_std_get_properties(object);
 
-	if (intern->window) {
+	if (intern->window)
+	{
 		int w, h, x, y;
 
 		SDL_GetWindowSize(intern->window, &w, &h);
@@ -88,7 +91,7 @@ static HashTable *sdl_window_get_properties(zend_object *object)
 		sdl_window_add_long_property(props, "w", w);
 		sdl_window_add_long_property(props, "h", h);
 		ZVAL_STRING(&zv, SDL_GetWindowTitle(intern->window));
-        z_string = zend_string_init("title", 6, 0);
+		z_string = zend_string_init("title", 6, 0);
 		zend_hash_update(props, z_string, &zv);
 		zend_string_release(z_string);
 	}
@@ -96,22 +99,22 @@ static HashTable *sdl_window_get_properties(zend_object *object)
 }
 /* }}} */
 
-static inline php_sdl_window_t* php_sdl_window_fetch_object(zend_object* obj)
+static inline php_sdl_window_t *php_sdl_window_fetch_object(zend_object *obj)
 {
-	return (php_sdl_window_t*) ((char*) obj - XtOffsetOf(php_sdl_window_t, zo));
+	return (php_sdl_window_t *)((char *)obj - XtOffsetOf(php_sdl_window_t, zo));
 }
 
-#define FETCH_WINDOW(__ptr, __id, __check) \
-{ \
-		zend_object* zox = Z_OBJ_P(__id);\
-		intern = (struct php_sdl_window*)((char*)zox - zox->handlers->offset);\
-        __ptr = intern->window; \
-        if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
-                RETURN_FALSE;\
-        }\
-}
-
+#define FETCH_WINDOW(__ptr, __id, __check)                                                         \
+	{                                                                                              \
+		zend_object *zox = Z_OBJ_P(__id);                                                          \
+		intern = (struct php_sdl_window *)((char *)zox - zox->handlers->offset);                   \
+		__ptr = intern->window;                                                                    \
+		if (__check && !__ptr)                                                                     \
+		{                                                                                          \
+			php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name)); \
+			RETURN_FALSE;                                                                          \
+		}                                                                                          \
+	}
 
 /* {{{ proto void SDL_GetWindowDisplayIndex(SDL_Window window)
 
@@ -127,7 +130,8 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -151,8 +155,8 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
  *  \sa SDL_GetWindowDisplayMode()
  *  \sa SDL_SetWindowFullscreen()
  extern DECLSPEC int SDLCALL SDL_SetWindowDisplayMode(SDL_Window * window,
-                                                      const SDL_DisplayMode
-                                                          * mode);
+													  const SDL_DisplayMode
+														  * mode);
  */
 PHP_FUNCTION(SDL_SetWindowDisplayMode)
 {
@@ -161,11 +165,13 @@ PHP_FUNCTION(SDL_SetWindowDisplayMode)
 	SDL_Window *window;
 	SDL_DisplayMode mode;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_mode, get_php_sdl_displaymode_ce()) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_mode, get_php_sdl_displaymode_ce()) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	if (zval_to_sdl_displaymode(z_mode, &mode)) {
+	if (zval_to_sdl_displaymode(z_mode, &mode))
+	{
 		RETVAL_LONG(SDL_SetWindowDisplayMode(window, &mode));
 	}
 }
@@ -179,7 +185,7 @@ PHP_FUNCTION(SDL_SetWindowDisplayMode)
  *  \sa SDL_SetWindowDisplayMode()
  *  \sa SDL_SetWindowFullscreen()
  extern DECLSPEC int SDLCALL SDL_GetWindowDisplayMode(SDL_Window * window,
-                                                      SDL_DisplayMode * mode);
+													  SDL_DisplayMode * mode);
  */
 PHP_FUNCTION(SDL_GetWindowDisplayMode)
 {
@@ -189,19 +195,20 @@ PHP_FUNCTION(SDL_GetWindowDisplayMode)
 	SDL_DisplayMode mode;
 	int res;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_window, php_sdl_window_ce, &z_mode) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_window, php_sdl_window_ce, &z_mode) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	res = SDL_GetWindowDisplayMode(window, &mode);
-	if (0==res) {
+	if (0 == res)
+	{
 		zval_dtor(z_mode);
 		sdl_displaymode_to_zval(&mode, z_mode);
 	}
 	RETVAL_LONG(res);
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetWindowPixelFormat(SDL_Window window)
 
@@ -214,14 +221,14 @@ PHP_FUNCTION(SDL_GetWindowPixelFormat)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	RETVAL_LONG(SDL_GetWindowPixelFormat(window));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GetWindowID(SDL_Window window)
 
@@ -234,7 +241,8 @@ PHP_FUNCTION(SDL_GetWindowID)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -253,7 +261,8 @@ PHP_FUNCTION(SDL_GetWindowFlags)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -268,7 +277,7 @@ PHP_FUNCTION(SDL_GetWindowFlags)
  *  \param window The window for which the icon should be set.
  *  \param icon The icon for the window.
  extern DECLSPEC void SDLCALL SDL_SetWindowIcon(SDL_Window * window,
-                                                SDL_Surface * icon);
+												SDL_Surface * icon);
  */
 PHP_FUNCTION(SDL_SetWindowIcon)
 {
@@ -277,15 +286,19 @@ PHP_FUNCTION(SDL_SetWindowIcon)
 	SDL_Window *window;
 	SDL_Surface *icon;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_icon, get_php_sdl_surface_ce())) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_icon, get_php_sdl_surface_ce()))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	icon = zval_to_sdl_surface(z_icon);
 
-	if (icon) {
+	if (icon)
+	{
 		SDL_SetWindowIcon(window, icon);
-	} else {
+	}
+	else
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Surface object");
 	}
 }
@@ -297,15 +310,15 @@ PHP_FUNCTION(SDL_SetWindowIcon)
  *
  *  \param window   The window to reposition.
  *  \param x        The x coordinate of the window, ::SDL_WINDOWPOS_CENTERED, or
-                    ::SDL_WINDOWPOS_UNDEFINED.
+					::SDL_WINDOWPOS_UNDEFINED.
  *  \param y        The y coordinate of the window, ::SDL_WINDOWPOS_CENTERED, or
-                    ::SDL_WINDOWPOS_UNDEFINED.
+					::SDL_WINDOWPOS_UNDEFINED.
  *
  *  \note The window coordinate origin is the upper left of the display.
  *
  *  \sa SDL_GetWindowPosition()
  extern DECLSPEC void SDLCALL SDL_SetWindowPosition(SDL_Window * window,
-                                                    int x, int y);
+													int x, int y);
  */
 PHP_FUNCTION(SDL_SetWindowPosition)
 {
@@ -314,7 +327,8 @@ PHP_FUNCTION(SDL_SetWindowPosition)
 	zend_long x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -330,13 +344,13 @@ PHP_FUNCTION(SDL_WINDOWPOS_CENTERED_DISPLAY)
 {
 	zend_long display;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_WINDOWPOS_CENTERED_DISPLAY(display));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_WINDOWPOS_UNDEFINED_DISPLAY(int)
 
@@ -346,7 +360,8 @@ PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY)
 {
 	zend_long display;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "l", &display))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_WINDOWPOS_UNDEFINED_DISPLAY(display));
@@ -363,31 +378,33 @@ PHP_FUNCTION(SDL_WINDOWPOS_UNDEFINED_DISPLAY)
  *
  *  \sa SDL_SetWindowPosition()
  extern DECLSPEC void SDLCALL SDL_GetWindowPosition(SDL_Window * window,
-                                                    int *x, int *y);
+													int *x, int *y);
  */
 PHP_FUNCTION(SDL_GetWindowPosition)
 {
 	struct php_sdl_window *intern;
-	zval *z_window, *z_x=NULL, *z_y=NULL;
+	zval *z_window, *z_x = NULL, *z_y = NULL;
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	SDL_GetWindowPosition(window, &x, &y);
-	if (z_x) {
+	if (z_x)
+	{
 		zval_dtor(z_x);
 		ZVAL_LONG(z_x, x);
 	}
-	if (z_y) {
+	if (z_y)
+	{
 		zval_dtor(z_y);
 		ZVAL_LONG(z_y, y);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_SetWindowSize(SDL Window window, int x, int y)
 
@@ -402,7 +419,7 @@ PHP_FUNCTION(SDL_GetWindowPosition)
  *
  *  \sa SDL_GetWindowSize()
  extern DECLSPEC void SDLCALL SDL_SetWindowSize(SDL_Window * window, int w,
-                                                int h);
+												int h);
  */
 PHP_FUNCTION(SDL_SetWindowSize)
 {
@@ -411,7 +428,8 @@ PHP_FUNCTION(SDL_SetWindowSize)
 	zend_long x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -429,31 +447,33 @@ PHP_FUNCTION(SDL_SetWindowSize)
  *
  *  \sa SDL_SetWindowSize()
  extern DECLSPEC void SDLCALL SDL_GetWindowSize(SDL_Window * window, int *w,
-                                                int *h);
+												int *h);
  */
 PHP_FUNCTION(SDL_GetWindowSize)
 {
 	struct php_sdl_window *intern;
-	zval *z_window, *z_x=NULL, *z_y=NULL;
+	zval *z_window, *z_x = NULL, *z_y = NULL;
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/", &z_window, php_sdl_window_ce, &z_x, &z_y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	SDL_GetWindowSize(window, &x, &y);
-	if (z_x) {
+	if (z_x)
+	{
 		zval_dtor(z_x);
 		ZVAL_LONG(z_x, x);
 	}
-	if (z_y) {
+	if (z_y)
+	{
 		zval_dtor(z_y);
 		ZVAL_LONG(z_y, y);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_SetWindowMinimumSize(SDL Window window, int x, int y)
 
@@ -469,7 +489,7 @@ PHP_FUNCTION(SDL_GetWindowSize)
  *  \sa SDL_GetWindowMinimumSize()
  *  \sa SDL_SetWindowMaximumSize()
  extern DECLSPEC void SDLCALL SDL_SetWindowMinimumSize(SDL_Window * window,
-                                                       int min_w, int min_h);
+													   int min_w, int min_h);
  */
 PHP_FUNCTION(SDL_SetWindowMinimumSize)
 {
@@ -478,7 +498,8 @@ PHP_FUNCTION(SDL_SetWindowMinimumSize)
 	zend_long x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -497,31 +518,33 @@ PHP_FUNCTION(SDL_SetWindowMinimumSize)
  *  \sa SDL_GetWindowMaximumSize()
  *  \sa SDL_SetWindowMinimumSize()
  extern DECLSPEC void SDLCALL SDL_GetWindowMinimumSize(SDL_Window * window,
-                                                       int *w, int *h);
+													   int *w, int *h);
  */
 PHP_FUNCTION(SDL_GetWindowMinimumSize)
 {
 	struct php_sdl_window *intern;
-	zval *z_window, *z_x=NULL, *z_y=NULL;
+	zval *z_window, *z_x = NULL, *z_y = NULL;
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	SDL_GetWindowMinimumSize(window, &x, &y);
-	if (z_x) {
+	if (z_x)
+	{
 		zval_dtor(z_x);
 		ZVAL_LONG(z_x, x);
 	}
-	if (z_y) {
+	if (z_y)
+	{
 		zval_dtor(z_y);
 		ZVAL_LONG(z_y, y);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_SetWindowMaximumSize(SDL Window window, int x, int y)
 
@@ -537,7 +560,7 @@ PHP_FUNCTION(SDL_GetWindowMinimumSize)
  *  \sa SDL_GetWindowMaximumSize()
  *  \sa SDL_SetWindowMinimumSize()
  extern DECLSPEC void SDLCALL SDL_SetWindowMaximumSize(SDL_Window * window,
-                                                       int max_w, int max_h);
+													   int max_w, int max_h);
  */
 PHP_FUNCTION(SDL_SetWindowMaximumSize)
 {
@@ -546,7 +569,8 @@ PHP_FUNCTION(SDL_SetWindowMaximumSize)
 	zend_long x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oll", &z_window, php_sdl_window_ce, &x, &y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -565,25 +589,28 @@ PHP_FUNCTION(SDL_SetWindowMaximumSize)
  *  \sa SDL_GetWindowMinimumSize()
  *  \sa SDL_SetWindowMaximumSize()
  extern DECLSPEC void SDLCALL SDL_GetWindowMaximumSize(SDL_Window * window,
-                                                       int *w, int *h);
+													   int *w, int *h);
  */
 PHP_FUNCTION(SDL_GetWindowMaximumSize)
 {
 	struct php_sdl_window *intern;
-	zval *z_window, *z_x=NULL, *z_y=NULL;
+	zval *z_window, *z_x = NULL, *z_y = NULL;
 	int x, y;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O|zz", &z_window, php_sdl_window_ce, &z_x, &z_y))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	SDL_GetWindowMaximumSize(window, &x, &y);
-	if (z_x) {
+	if (z_x)
+	{
 		zval_dtor(z_x);
 		ZVAL_LONG(z_x, x);
 	}
-	if (z_y) {
+	if (z_y)
+	{
 		zval_dtor(z_y);
 		ZVAL_LONG(z_y, y);
 	}
@@ -605,23 +632,23 @@ PHP_FUNCTION(SDL_GetWindowMaximumSize)
  *
  *  \sa SDL_GetWindowFlags()
  extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window * window,
-                                                    SDL_bool bordered);
+													SDL_bool bordered);
  */
 PHP_FUNCTION(SDL_SetWindowBordered)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	zend_bool bordered;
+	bool bordered;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ob", &z_window, php_sdl_window_ce, &bordered)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ob", &z_window, php_sdl_window_ce, &bordered))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	SDL_SetWindowBordered(window, (bordered ? SDL_TRUE : SDL_FALSE));
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_ShowWindow(SDL_Window window)
 
@@ -636,7 +663,8 @@ PHP_FUNCTION(SDL_ShowWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -644,7 +672,6 @@ PHP_FUNCTION(SDL_ShowWindow)
 	SDL_ShowWindow(window);
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_HideWindow(SDL_Window window)
 
@@ -659,7 +686,8 @@ PHP_FUNCTION(SDL_HideWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -667,7 +695,6 @@ PHP_FUNCTION(SDL_HideWindow)
 	SDL_HideWindow(window);
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_RaiseWindow(SDL_Window window)
 
@@ -680,7 +707,8 @@ PHP_FUNCTION(SDL_RaiseWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -688,7 +716,6 @@ PHP_FUNCTION(SDL_RaiseWindow)
 	SDL_RaiseWindow(window);
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_MaximizeWindow(SDL_Window window)
 
@@ -703,7 +730,8 @@ PHP_FUNCTION(SDL_MaximizeWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -711,7 +739,6 @@ PHP_FUNCTION(SDL_MaximizeWindow)
 	SDL_MaximizeWindow(window);
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_MinimizeWindow(SDL_Window window)
 
@@ -726,7 +753,8 @@ PHP_FUNCTION(SDL_MinimizeWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -734,7 +762,6 @@ PHP_FUNCTION(SDL_MinimizeWindow)
 	SDL_MinimizeWindow(window);
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_RestoreWindow(SDL_Window window)
 
@@ -750,7 +777,8 @@ PHP_FUNCTION(SDL_RestoreWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -768,7 +796,7 @@ PHP_FUNCTION(SDL_RestoreWindow)
  *  \sa SDL_SetWindowDisplayMode()
  *  \sa SDL_GetWindowDisplayMode()
  extern DECLSPEC int SDLCALL SDL_SetWindowFullscreen(SDL_Window * window,
-                                                     Uint32 flags);
+													 Uint32 flags);
  */
 PHP_FUNCTION(SDL_SetWindowFullscreen)
 {
@@ -777,7 +805,8 @@ PHP_FUNCTION(SDL_SetWindowFullscreen)
 	SDL_Window *window;
 	zend_long flags;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &object, php_sdl_window_ce, &flags) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol", &object, php_sdl_window_ce, &flags) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -785,7 +814,6 @@ PHP_FUNCTION(SDL_SetWindowFullscreen)
 	RETVAL_LONG(SDL_SetWindowFullscreen(window, (Uint32)flags));
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_GetWindowSurface(SDL_Window window)
 
@@ -809,7 +837,8 @@ PHP_FUNCTION(SDL_GetWindowSurface)
 	SDL_Window *window = NULL;
 	SDL_Surface *surface = NULL;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -828,8 +857,8 @@ PHP_FUNCTION(SDL_GetWindowSurface)
  *  \sa SDL_GetWindowSurface()
  *  \sa SDL_UpdateWindowSurfaceRect()
  extern DECLSPEC int SDLCALL SDL_UpdateWindowSurfaceRects(SDL_Window * window,
-                                                          const SDL_Rect * rects,
-                                                          int numrects);
+														  const SDL_Rect * rects,
+														  int numrects);
  */
 PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 {
@@ -840,35 +869,46 @@ PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
 	SDL_Window *window;
 	SDL_Rect *rects;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oa|l", &z_window, php_sdl_window_ce, &z_array, &num)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oa|l", &z_window, php_sdl_window_ce, &z_array, &num))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 
-	nb  = 0;
+	nb = 0;
 	max = (int)(num ? num : zend_hash_num_elements(Z_ARRVAL_P(z_array)));
-	if (max) {
+	if (max)
+	{
 		zval *ppzval;
 		rects = emalloc(max * sizeof(SDL_Rect));
 
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_array), ppzval) {
-				if (zval_to_sdl_rect(ppzval, rects+nb)) {
-					nb++;
-				} else {
-					php_error_docref(NULL, E_NOTICE, "Ignore rect, not a SDL_Rect object");
-				}
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_array), ppzval)
+		{
+			if (zval_to_sdl_rect(ppzval, rects + nb))
+			{
+				nb++;
+			}
+			else
+			{
+				php_error_docref(NULL, E_NOTICE, "Ignore rect, not a SDL_Rect object");
+			}
 		}
 		ZEND_HASH_FOREACH_END();
 	}
-	if (!nb) {
+	if (!nb)
+	{
 		php_error_docref(NULL, E_WARNING, "No SDL_Rect provided");
-	} else {
-		if (num && nb<max) {
+	}
+	else
+	{
+		if (num && nb < max)
+		{
 			php_error_docref(NULL, E_NOTICE, "Only %d SDL_Rect provided, %d expected", nb, max);
 		}
 		RETVAL_LONG(SDL_UpdateWindowSurfaceRects(window, rects, nb));
 	}
-	if (max) {
+	if (max)
+	{
 		efree(rects);
 	}
 }
@@ -883,16 +923,17 @@ PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
  *
  *  \sa SDL_GetWindowGrab()
  extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window * window,
-                                                SDL_bool grabbed);
+												SDL_bool grabbed);
  */
 PHP_FUNCTION(SDL_SetWindowGrab)
 {
 	struct php_sdl_window *intern;
 	zval *z_window;
-	zend_bool grabbed;
+	bool grabbed;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ob", &z_window, php_sdl_window_ce, &grabbed)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ob", &z_window, php_sdl_window_ce, &grabbed))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -915,7 +956,8 @@ PHP_FUNCTION(SDL_GetWindowGrab)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -939,14 +981,14 @@ PHP_FUNCTION(SDL_SetWindowBrightness)
 	double brightness;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Od", &z_window, php_sdl_window_ce, &brightness)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Od", &z_window, php_sdl_window_ce, &brightness))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	RETVAL_LONG(SDL_SetWindowBrightness(window, (float)brightness));
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_GetWindowBrightness(SDL Window window)
 
@@ -963,7 +1005,8 @@ PHP_FUNCTION(SDL_GetWindowBrightness)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
@@ -986,9 +1029,9 @@ PHP_FUNCTION(SDL_GetWindowBrightness)
  *  \return 0 on success, or -1 if gamma ramps are unsupported.
  *
  extern DECLSPEC int SDLCALL SDL_GetWindowGammaRamp(SDL_Window * window,
-                                                    Uint16 * red,
-                                                    Uint16 * green,
-                                                    Uint16 * blue);
+													Uint16 * red,
+													Uint16 * green,
+													Uint16 * blue);
  */
 PHP_FUNCTION(SDL_GetWindowGammaRamp)
 {
@@ -996,16 +1039,18 @@ PHP_FUNCTION(SDL_GetWindowGammaRamp)
 	zval *z_window, *z_r, *z_g, *z_b;
 	SDL_Window *window;
 	Uint16 r[256], g[256], b[256];
-// 	zval *tmp;
+	// 	zval *tmp;
 	int i, ret;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzz", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzz", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b))
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 
 	ret = SDL_GetWindowGammaRamp(window, r, g, b);
-	if (ret == 0) {
+	if (ret == 0)
+	{
 		zval_dtor(z_r);
 		array_init(z_r);
 		zval_dtor(z_g);
@@ -1013,7 +1058,8 @@ PHP_FUNCTION(SDL_GetWindowGammaRamp)
 		zval_dtor(z_b);
 		array_init(z_b);
 
-		for (i=0 ; i<256 ; i++) {
+		for (i = 0; i < 256; i++)
+		{
 			add_next_index_long(z_r, r[i]);
 			add_next_index_long(z_g, g[i]);
 			add_next_index_long(z_b, b[i]);
@@ -1023,7 +1069,6 @@ PHP_FUNCTION(SDL_GetWindowGammaRamp)
 }
 /* }}} */
 
-
 static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 {
 	struct php_sdl_window *intern;
@@ -1032,17 +1077,20 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 	size_t title_len;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags))
+	{
 		return;
 	}
-	switch(opt) {
-		case 1:
-			window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
-			break;
-		default:
-			window = SDL_CreateWindow(title, x, y, w, h, flags);
+	switch (opt)
+	{
+	case 1:
+		window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
+		break;
+	default:
+		window = SDL_CreateWindow(title, x, y, w, h, flags);
 	}
-	if (window) {
+	if (window)
+	{
 		object_init_ex(return_value, php_sdl_window_ce);
 		intern = php_sdl_window_fetch_object(Z_OBJ_P(return_value));
 		intern->window = window;
@@ -1101,8 +1149,8 @@ PHP_FUNCTION(SDL_CreateShapedWindow)
  *
  *  \sa SDL_DestroyWindow()
  extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindow(const char *title,
-                                                       int x, int y, int w,
-                                                       int h, Uint32 flags);
+													   int x, int y, int w,
+													   int h, Uint32 flags);
 */
 PHP_FUNCTION(SDL_CreateWindow)
 {
@@ -1122,7 +1170,8 @@ static PHP_METHOD(SDL_Window, __construct)
 	intern = php_sdl_window_fetch_object(Z_OBJ_P(getThis()));
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags))
+	{
 		zend_restore_error_handling(&error_handling);
 		return;
 	}
@@ -1130,40 +1179,45 @@ static PHP_METHOD(SDL_Window, __construct)
 
 	intern->window = SDL_CreateWindow(title, x, y, w, h, flags);
 	intern->flags = 0;
-	if (intern->window) {
+	if (intern->window)
+	{
 		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
-	} else {
+	}
+	else
+	{
 		zend_throw_exception(zend_exception_get_default(), "Can't create window", 0);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto SDL_Window::__toString() */
 static PHP_METHOD(SDL_Window, __toString)
 {
 	struct php_sdl_window *intern;
 	char *buf = NULL;
-    int buf_len;
+	int buf_len;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
 	intern = php_sdl_window_fetch_object(Z_OBJ_P(getThis()));
-	if (0 && intern->window) {
+	if (0 && intern->window)
+	{
 		int x, y, w, h;
 
 		SDL_GetWindowPosition(intern->window, &x, &y);
 		SDL_GetWindowSize(intern->window, &w, &h);
 		buf_len = spprintf(&buf, 0, "SDL_Window(\"%s\",%d,%d,%d,%d,%u)", SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
 		RETURN_STRINGL(buf, buf_len);
-	} else {
+	}
+	else
+	{
 		RETURN_STRING("SDL_Window()");
 	}
 }
 /* }}} */
-
 
 /* {{{ proto SDL_UpdateWindowSurface(SDL_Window window)
 
@@ -1181,14 +1235,14 @@ PHP_FUNCTION(SDL_UpdateWindowSurface)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	RETURN_LONG(SDL_UpdateWindowSurface(window));
 }
 /* }}} */
-
 
 /* {{{ proto SDL_DestroyWindow(SDL_Window window)
 
@@ -1201,7 +1255,8 @@ PHP_FUNCTION(SDL_DestroyWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -1210,7 +1265,6 @@ PHP_FUNCTION(SDL_DestroyWindow)
 	intern->window = NULL;
 }
 /* }}} */
-
 
 /* {{{ proto string SDL_GetWindowTitle(SDL_Window window)
 
@@ -1225,7 +1279,8 @@ PHP_FUNCTION(SDL_GetWindowTitle)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -1240,7 +1295,7 @@ PHP_FUNCTION(SDL_GetWindowTitle)
  *
  *  \sa SDL_GetWindowTitle()
  extern DECLSPEC void SDLCALL SDL_SetWindowTitle(SDL_Window * window,
-                                                 const char *title);
+												 const char *title);
  */
 PHP_FUNCTION(SDL_SetWindowTitle)
 {
@@ -1250,7 +1305,8 @@ PHP_FUNCTION(SDL_SetWindowTitle)
 	char *title;
 	size_t title_len;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Os", &object, php_sdl_window_ce, &title, &title_len) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Os", &object, php_sdl_window_ce, &title, &title_len) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -1258,7 +1314,6 @@ PHP_FUNCTION(SDL_SetWindowTitle)
 	SDL_SetWindowTitle(window, title);
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_IsShapedWindow(SDL_Window window)
 
@@ -1276,7 +1331,8 @@ PHP_FUNCTION(SDL_IsShapedWindow)
 	zval *object;
 	SDL_Window *window;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, object, 1);
@@ -1308,20 +1364,24 @@ PHP_FUNCTION(SDL_SetWindowShape)
 	SDL_WindowShapeMode *mode;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OOO", &z_window, php_sdl_window_ce,
-			&z_surface, get_php_sdl_surface_ce(), &z_mode, get_php_sdl_windowshapemode_ce()) == FAILURE) {
+									 &z_surface, get_php_sdl_surface_ce(), &z_mode, get_php_sdl_windowshapemode_ce()) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	surface = zval_to_sdl_surface(z_surface);
-	mode    = zval_to_sdl_windowshapemode(z_mode);
-	if (!surface) {
+	mode = zval_to_sdl_windowshapemode(z_mode);
+	if (!surface)
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Surface object");
-
-	} else if (!mode) {
+	}
+	else if (!mode)
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_WindowShapeMode object");
-
-	} else {
-	  RETVAL_LONG(SDL_SetWindowShape(window, surface, mode));
+	}
+	else
+	{
+		RETVAL_LONG(SDL_SetWindowShape(window, surface, mode));
 	}
 }
 /* }}} */
@@ -1349,12 +1409,14 @@ PHP_FUNCTION(SDL_GetShapedWindowMode)
 	SDL_WindowShapeMode mode;
 	int ret;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce, &z_mode) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce, &z_mode) == FAILURE)
+	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
 	ret = SDL_GetShapedWindowMode(window, &mode);
-	if (ret==0) {
+	if (ret == 0)
+	{
 		zval_dtor(z_mode);
 		sdl_windowshapemode_to_zval(&mode, z_mode);
 	}
@@ -1363,69 +1425,70 @@ PHP_FUNCTION(SDL_GetShapedWindowMode)
 /* }}} */
 
 static const zend_function_entry php_sdl_window_methods[] = {
-	PHP_ME(SDL_Window, __construct,     arginfo_SDL_CreateWindow, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_Window, __toString,      arginfo_window_none,      ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Window, __construct, arginfo_SDL_CreateWindow, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
+		PHP_ME(SDL_Window, __toString, arginfo_window_none, ZEND_ACC_PUBLIC)
 
 	/* non-static functions */
-	PHP_FALIAS(UpdateSurface,      SDL_UpdateWindowSurface,      arginfo_window_none)
-	PHP_FALIAS(Destroy,            SDL_DestroyWindow,            arginfo_window_none)
-	PHP_FALIAS(GetTitle,           SDL_GetWindowTitle,           arginfo_window_none)
-	PHP_FALIAS(SetTitle,           SDL_SetWindowTitle,           arginfo_SDL_Window_SetTitle)
-	PHP_FALIAS(GetDisplayIndex,    SDL_GetWindowDisplayIndex,    arginfo_window_none)
-	PHP_FALIAS(Show,               SDL_ShowWindow,               arginfo_window_none)
-	PHP_FALIAS(Hide,               SDL_HideWindow,               arginfo_window_none)
-	PHP_FALIAS(Raise,              SDL_RaiseWindow,              arginfo_window_none)
-	PHP_FALIAS(Maximize,           SDL_MaximizeWindow,           arginfo_window_none)
-	PHP_FALIAS(Minimize,           SDL_MinimizeWindow,           arginfo_window_none)
-	PHP_FALIAS(Restore,            SDL_RestoreWindow,            arginfo_window_none)
-	PHP_FALIAS(GetSurface,         SDL_GetWindowSurface,         arginfo_window_none)
-	PHP_FALIAS(SetDisplayMode,     SDL_SetWindowDisplayMode,     arginfo_SDL_Window_SetDisplayMode)
-	PHP_FALIAS(GetDisplayMode,     SDL_GetWindowDisplayMode,     arginfo_SDL_Window_GetDisplayMode)
-	PHP_FALIAS(GetPixelFormat,     SDL_GetWindowPixelFormat,     arginfo_window_none)
-	PHP_FALIAS(GetID,              SDL_GetWindowID,              arginfo_window_none)
-	PHP_FALIAS(GetFlags,           SDL_GetWindowFlags,           arginfo_window_none)
-	PHP_FALIAS(SetIcon,            SDL_SetWindowIcon,            arginfo_SDL_Window_SetIcon)
-	PHP_FALIAS(SetPosition,        SDL_SetWindowPosition,        arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetPosition,        SDL_GetWindowPosition,        arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetSize,            SDL_SetWindowSize,            arginfo_SDL_Window_SetSize)
-	PHP_FALIAS(GetSize,            SDL_GetWindowSize,            arginfo_SDL_Window_GetSize)
-	PHP_FALIAS(SetMinimumSize,     SDL_SetWindowMinimumSize,     arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetMinimumSize,     SDL_GetWindowMinimumSize,     arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetMaximumSize,     SDL_SetWindowMaximumSize,     arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(GetMaximumSize,     SDL_GetWindowMaximumSize,     arginfo_SDL_Window_GetPosition)
-	PHP_FALIAS(SetBordered,        SDL_SetWindowBordered,        arginfo_SDL_Window_SetBordered)
-	PHP_FALIAS(SetFullscreen,      SDL_SetWindowFullscreen,      arginfo_SDL_Window_SetFullscreen)
-	PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
-	PHP_FALIAS(SetGrab,            SDL_SetWindowGrab,            arginfo_SDL_Window_SetGrab)
-	PHP_FALIAS(GetGrab,            SDL_GetWindowGrab,            arginfo_window_none)
-	PHP_FALIAS(SetBrightness,      SDL_SetWindowBrightness,      arginfo_SDL_Window_SetBrightness)
-	PHP_FALIAS(GetBrightness,      SDL_GetWindowBrightness,      arginfo_window_none)
-	PHP_FALIAS(GetGammaRamp,       SDL_GetWindowGammaRamp,       arginfo_SDL_Window_GetGammaRamp)
-	PHP_FALIAS(GL_CreateContext,   SDL_GL_CreateContext,         arginfo_window_none)
-	PHP_FALIAS(GL_MakeCurrent,     SDL_GL_MakeCurrent,           arginfo_SDL_GLContext)
-#if SDL_VERSION_ATLEAST(2,0,1)
-	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize,       arginfo_SDL_Window_GetPosition)
+	PHP_FALIAS(UpdateSurface, SDL_UpdateWindowSurface, arginfo_window_none)
+		PHP_FALIAS(Destroy, SDL_DestroyWindow, arginfo_window_none)
+			PHP_FALIAS(GetTitle, SDL_GetWindowTitle, arginfo_window_none)
+				PHP_FALIAS(SetTitle, SDL_SetWindowTitle, arginfo_SDL_Window_SetTitle)
+					PHP_FALIAS(GetDisplayIndex, SDL_GetWindowDisplayIndex, arginfo_window_none)
+						PHP_FALIAS(Show, SDL_ShowWindow, arginfo_window_none)
+							PHP_FALIAS(Hide, SDL_HideWindow, arginfo_window_none)
+								PHP_FALIAS(Raise, SDL_RaiseWindow, arginfo_window_none)
+									PHP_FALIAS(Maximize, SDL_MaximizeWindow, arginfo_window_none)
+										PHP_FALIAS(Minimize, SDL_MinimizeWindow, arginfo_window_none)
+											PHP_FALIAS(Restore, SDL_RestoreWindow, arginfo_window_none)
+												PHP_FALIAS(GetSurface, SDL_GetWindowSurface, arginfo_window_none)
+													PHP_FALIAS(SetDisplayMode, SDL_SetWindowDisplayMode, arginfo_SDL_Window_SetDisplayMode)
+														PHP_FALIAS(GetDisplayMode, SDL_GetWindowDisplayMode, arginfo_SDL_Window_GetDisplayMode)
+															PHP_FALIAS(GetPixelFormat, SDL_GetWindowPixelFormat, arginfo_window_none)
+																PHP_FALIAS(GetID, SDL_GetWindowID, arginfo_window_none)
+																	PHP_FALIAS(GetFlags, SDL_GetWindowFlags, arginfo_window_none)
+																		PHP_FALIAS(SetIcon, SDL_SetWindowIcon, arginfo_SDL_Window_SetIcon)
+																			PHP_FALIAS(SetPosition, SDL_SetWindowPosition, arginfo_SDL_Window_SetPosition)
+																				PHP_FALIAS(GetPosition, SDL_GetWindowPosition, arginfo_SDL_Window_GetPosition)
+																					PHP_FALIAS(SetSize, SDL_SetWindowSize, arginfo_SDL_Window_SetSize)
+																						PHP_FALIAS(GetSize, SDL_GetWindowSize, arginfo_SDL_Window_GetSize)
+																							PHP_FALIAS(SetMinimumSize, SDL_SetWindowMinimumSize, arginfo_SDL_Window_SetPosition)
+																								PHP_FALIAS(GetMinimumSize, SDL_GetWindowMinimumSize, arginfo_SDL_Window_GetPosition)
+																									PHP_FALIAS(SetMaximumSize, SDL_SetWindowMaximumSize, arginfo_SDL_Window_SetPosition)
+																										PHP_FALIAS(GetMaximumSize, SDL_GetWindowMaximumSize, arginfo_SDL_Window_GetPosition)
+																											PHP_FALIAS(SetBordered, SDL_SetWindowBordered, arginfo_SDL_Window_SetBordered)
+																												PHP_FALIAS(SetFullscreen, SDL_SetWindowFullscreen, arginfo_SDL_Window_SetFullscreen)
+																													PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
+																														PHP_FALIAS(SetGrab, SDL_SetWindowGrab, arginfo_SDL_Window_SetGrab)
+																															PHP_FALIAS(GetGrab, SDL_GetWindowGrab, arginfo_window_none)
+																																PHP_FALIAS(SetBrightness, SDL_SetWindowBrightness, arginfo_SDL_Window_SetBrightness)
+																																	PHP_FALIAS(GetBrightness, SDL_GetWindowBrightness, arginfo_window_none)
+																																		PHP_FALIAS(GetGammaRamp, SDL_GetWindowGammaRamp, arginfo_SDL_Window_GetGammaRamp)
+																																			PHP_FALIAS(GL_CreateContext, SDL_GL_CreateContext, arginfo_window_none)
+																																				PHP_FALIAS(GL_MakeCurrent, SDL_GL_MakeCurrent, arginfo_SDL_GLContext)
+#if SDL_VERSION_ATLEAST(2, 0, 1)
+																																					PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize, arginfo_SDL_Window_GetPosition)
 #endif
-	PHP_FALIAS(GL_Swap,            SDL_GL_SwapWindow,            arginfo_window_none)
-	PHP_FALIAS(WarpMouse,          SDL_WarpMouseInWindow,        arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(IsShaped,           SDL_IsShapedWindow,           arginfo_window_none)
-	PHP_FALIAS(SetShape,           SDL_SetWindowShape,           arginfo_SDL_Window_SetShape)
-	PHP_FALIAS(GetShapedMode,      SDL_GetShapedWindowMode,      arginfo_SDL_Window_GetShapedMode)
+																																						PHP_FALIAS(GL_Swap, SDL_GL_SwapWindow, arginfo_window_none)
+																																							PHP_FALIAS(WarpMouse, SDL_WarpMouseInWindow, arginfo_SDL_Window_SetPosition)
+																																								PHP_FALIAS(IsShaped, SDL_IsShapedWindow, arginfo_window_none)
+																																									PHP_FALIAS(SetShape, SDL_SetWindowShape, arginfo_SDL_Window_SetShape)
+																																										PHP_FALIAS(GetShapedMode, SDL_GetShapedWindowMode, arginfo_SDL_Window_GetShapedMode)
 
 	/* static methods */
-	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentWindow),    arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	ZEND_FENTRY(GetMouseFocus,      ZEND_FN(SDL_GetMouseFocus),          arginfo_window_none,         ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(GL_GetCurrent, ZEND_FN(SDL_GL_GetCurrentWindow), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+		ZEND_FENTRY(GetMouseFocus, ZEND_FN(SDL_GetMouseFocus), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 
-	PHP_FE_END
-};
+			PHP_FE_END};
 
 /* {{{ php_sdl_window_free
-	 */
-static void php_sdl_window_free(zend_object* zo)
+ */
+static void php_sdl_window_free(zend_object *zo)
 {
-	struct php_sdl_window *intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
-	if (intern->window) {
-		if(!(intern->flags & SDL_DONTFREE)) {
+	struct php_sdl_window *intern = (struct php_sdl_window *)((char *)zo - zo->handlers->offset);
+	if (intern->window)
+	{
+		if (!(intern->flags & SDL_DONTFREE))
+		{
 			SDL_DestroyWindow(intern->window);
 		}
 	}
@@ -1436,19 +1499,19 @@ static void php_sdl_window_free(zend_object* zo)
 
 /* {{{ php_sdl_window_new
  */
-static zend_object* php_sdl_window_new(zend_class_entry *class_type)
+static zend_object *php_sdl_window_new(zend_class_entry *class_type)
 {
 	struct php_sdl_window *intern;
 
-	intern = (struct php_sdl_window*)ecalloc(1, sizeof(struct php_sdl_window) + zend_object_properties_size(class_type));
+	intern = (struct php_sdl_window *)ecalloc(1, sizeof(struct php_sdl_window) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
 
-	intern->window  = NULL;
+	intern->window = NULL;
 
 	php_sdl_window_handlers.offset = XtOffsetOf(struct php_sdl_window, zo);
-    php_sdl_window_handlers.free_obj = php_sdl_window_free;
+	php_sdl_window_handlers.free_obj = php_sdl_window_free;
 	intern->zo.handlers = &php_sdl_window_handlers;
 
 	return &intern->zo;
@@ -1458,12 +1521,13 @@ static zend_object* php_sdl_window_new(zend_class_entry *class_type)
 /* {{{ sdl_window_to_zval */
 zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, int flags)
 {
-	if (window) {
+	if (window)
+	{
 		struct php_sdl_window *intern;
 
 		object_init_ex(z_val, php_sdl_window_ce);
-		zend_object* zo = Z_OBJ_P(z_val);
-		intern = (struct php_sdl_window*)((char*)zo - zo->handlers->offset);
+		zend_object *zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_window *)((char *)zo - zo->handlers->offset);
 		intern->window = window;
 		intern->flags = flags;
 
@@ -1474,13 +1538,13 @@ zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, int flags)
 }
 /* }}} */
 
-#define REGISTER_WINDOW_CLASS_CONST_LONG(const_name, value) \
+#define REGISTER_WINDOW_CLASS_CONST_LONG(const_name, value)                               \
 	REGISTER_LONG_CONSTANT("SDL_WINDOW_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL(const_name), value); \
+	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL(const_name), value);
 
-#define REGISTER_WINDOWPOS_CLASS_CONST_LONG(const_name, value) \
+#define REGISTER_WINDOWPOS_CLASS_CONST_LONG(const_name, value)                               \
 	REGISTER_LONG_CONSTANT("SDL_WINDOWPOS_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL("POS_" const_name), value); \
+	zend_declare_class_constant_long(php_sdl_window_ce, ZEND_STRL("POS_" const_name), value);
 
 #define REGISTER_WINDOW_PROP(name) \
 	zend_declare_property_long(php_sdl_window_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC)
@@ -1505,28 +1569,28 @@ PHP_MINIT_FUNCTION(sdl_window)
 	REGISTER_WINDOW_PROP("w");
 	REGISTER_WINDOW_PROP("h");
 
-	zend_declare_property_null(php_sdl_window_ce, ZEND_STRL("title"),  ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_window_ce, ZEND_STRL("title"), ZEND_ACC_PUBLIC);
 
-	REGISTER_WINDOW_CLASS_CONST_LONG("FULLSCREEN",         SDL_WINDOW_FULLSCREEN);
-	REGISTER_WINDOW_CLASS_CONST_LONG("OPENGL",             SDL_WINDOW_OPENGL);
-	REGISTER_WINDOW_CLASS_CONST_LONG("SHOWN",              SDL_WINDOW_SHOWN);
-	REGISTER_WINDOW_CLASS_CONST_LONG("HIDDEN",             SDL_WINDOW_HIDDEN);
-	REGISTER_WINDOW_CLASS_CONST_LONG("BORDERLESS",         SDL_WINDOW_BORDERLESS);
-	REGISTER_WINDOW_CLASS_CONST_LONG("RESIZABLE",          SDL_WINDOW_RESIZABLE);
-	REGISTER_WINDOW_CLASS_CONST_LONG("MINIMIZED",          SDL_WINDOW_MINIMIZED);
-	REGISTER_WINDOW_CLASS_CONST_LONG("MAXIMIZED",          SDL_WINDOW_MAXIMIZED);
-	REGISTER_WINDOW_CLASS_CONST_LONG("INPUT_GRABBED",      SDL_WINDOW_INPUT_GRABBED);
-	REGISTER_WINDOW_CLASS_CONST_LONG("INPUT_FOCUS",        SDL_WINDOW_INPUT_FOCUS);
-	REGISTER_WINDOW_CLASS_CONST_LONG("MOUSE_FOCUS",        SDL_WINDOW_MOUSE_FOCUS);
+	REGISTER_WINDOW_CLASS_CONST_LONG("FULLSCREEN", SDL_WINDOW_FULLSCREEN);
+	REGISTER_WINDOW_CLASS_CONST_LONG("OPENGL", SDL_WINDOW_OPENGL);
+	REGISTER_WINDOW_CLASS_CONST_LONG("SHOWN", SDL_WINDOW_SHOWN);
+	REGISTER_WINDOW_CLASS_CONST_LONG("HIDDEN", SDL_WINDOW_HIDDEN);
+	REGISTER_WINDOW_CLASS_CONST_LONG("BORDERLESS", SDL_WINDOW_BORDERLESS);
+	REGISTER_WINDOW_CLASS_CONST_LONG("RESIZABLE", SDL_WINDOW_RESIZABLE);
+	REGISTER_WINDOW_CLASS_CONST_LONG("MINIMIZED", SDL_WINDOW_MINIMIZED);
+	REGISTER_WINDOW_CLASS_CONST_LONG("MAXIMIZED", SDL_WINDOW_MAXIMIZED);
+	REGISTER_WINDOW_CLASS_CONST_LONG("INPUT_GRABBED", SDL_WINDOW_INPUT_GRABBED);
+	REGISTER_WINDOW_CLASS_CONST_LONG("INPUT_FOCUS", SDL_WINDOW_INPUT_FOCUS);
+	REGISTER_WINDOW_CLASS_CONST_LONG("MOUSE_FOCUS", SDL_WINDOW_MOUSE_FOCUS);
 	REGISTER_WINDOW_CLASS_CONST_LONG("FULLSCREEN_DESKTOP", SDL_WINDOW_FULLSCREEN_DESKTOP);
-	REGISTER_WINDOW_CLASS_CONST_LONG("FOREIGN",            SDL_WINDOW_FOREIGN);
+	REGISTER_WINDOW_CLASS_CONST_LONG("FOREIGN", SDL_WINDOW_FOREIGN);
 #if SDL_COMPILEDVERSION > 2000
-	REGISTER_WINDOW_CLASS_CONST_LONG("ALLOW_HIGHDPI",      SDL_WINDOW_ALLOW_HIGHDPI);
+	REGISTER_WINDOW_CLASS_CONST_LONG("ALLOW_HIGHDPI", SDL_WINDOW_ALLOW_HIGHDPI);
 #endif
-	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED_MASK",  SDL_WINDOWPOS_UNDEFINED_MASK);
-	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED",       SDL_WINDOWPOS_UNDEFINED);
-	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED_MASK",   SDL_WINDOWPOS_CENTERED_MASK);
-	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED",        SDL_WINDOWPOS_CENTERED);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED_MASK", SDL_WINDOWPOS_UNDEFINED_MASK);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("UNDEFINED", SDL_WINDOWPOS_UNDEFINED);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED_MASK", SDL_WINDOWPOS_CENTERED_MASK);
+	REGISTER_WINDOWPOS_CLASS_CONST_LONG("CENTERED", SDL_WINDOWPOS_CENTERED);
 
 	return SUCCESS;
 }
