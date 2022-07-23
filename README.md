@@ -46,18 +46,11 @@ SDL_SetWindowTitle($window, "Some new title");
 SDL_DestroyWindow($window);
 ```
 
-And is also available in object oriented style:
-
-```php
-$window = new SDL_Window( "Foo window", 100, 50, 350, 300, SDL_Window::SHOWN|SDL_Window::RESIZABLE);
-$window->SetTitle("Some new title");
-unset($window); // will destroy the window
-```
-
 Complete examples can be found in the [examples](examples) folder.
 
 ## Related projects
 
+* [PHP-SDL_TTF](https://github.com/Ponup/php-sdl-ttf)
 * [PHP-SDL_Mixer](https://github.com/kea/php-sdl-mixer)
 * [PHP-SDL_Image](https://github.com/kea/php-sdl-image)
 * [PHP-OpenGL](https://github.com/ponup/php-opengl)
