@@ -127,6 +127,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderCopyEx, 0, 0, 7)
 	ZEND_ARG_INFO(0, flip)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderSetLogicalSize, 0, 0, 3)
+	ZEND_ARG_INFO(0, renderer)
+	ZEND_ARG_INFO(0, w)
+	ZEND_ARG_INFO(0, h)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRendererOutputSize, 0, 0, 3)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_INFO(1, w)
@@ -193,6 +199,7 @@ PHP_FUNCTION(SDL_SetRenderTarget);
 PHP_FUNCTION(SDL_CreateRenderer);
 PHP_FUNCTION(SDL_RenderCopy);
 PHP_FUNCTION(SDL_RenderCopyEx);
+PHP_FUNCTION(SDL_RenderSetLogicalSize);
 PHP_FUNCTION(SDL_GetRendererOutputSize);
 ZEND_FUNCTION(SDL_RenderDrawPointF);
 ZEND_FUNCTION(SDL_RenderDrawLineF);

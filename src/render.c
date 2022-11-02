@@ -312,6 +312,21 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	RETURN_LONG(SDL_RenderCopyEx(renderer, texture, srcrect, dstrect, angle, center, (Uint32)flip));
 }
 
+PHP_FUNCTION(SDL_RenderSetLogicalSize)
+{
+	zval *z_renderer;
+	zend_long w, h;
+	SDL_Renderer *renderer;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zll", &z_renderer, &w, &h) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+    renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	RETURN_LONG(SDL_RenderSetLogicalSize(renderer, w, h));
+}
+
 PHP_FUNCTION(SDL_GetRendererOutputSize)
 {
 	zval *z_renderer, *z_width=NULL, *z_height=NULL;
