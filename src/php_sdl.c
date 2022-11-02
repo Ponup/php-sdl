@@ -207,6 +207,7 @@ static zend_function_entry sdl_functions[] = {
 
 	// Render
 	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
+	ZEND_FE(SDL_CreateSoftwareRenderer, arginfo_SDL_CreateSoftwareRenderer)
 	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
 	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
 	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)

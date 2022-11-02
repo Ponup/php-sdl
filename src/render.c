@@ -247,6 +247,24 @@ PHP_FUNCTION(SDL_CreateRenderer)
 	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
 }
 
+PHP_FUNCTION(SDL_CreateSoftwareRenderer)
+{
+	zval *z_surface;
+	SDL_Surface *surface = NULL;
+	SDL_Renderer *renderer = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_surface, get_php_sdl_surface_ce()) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	if( z_surface != NULL ) {
+		surface = zval_to_sdl_surface(z_surface);
+	}
+
+	renderer = SDL_CreateSoftwareRenderer(surface);
+	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
+}
+
 PHP_FUNCTION(SDL_RenderCopy)
 {
 	zval *z_renderer, *z_texture;

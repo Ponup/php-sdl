@@ -110,6 +110,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRenderer, 0, 0, 3)
 	ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSoftwareRenderer, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderCopy, 0, 0, 4)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_INFO(0, texture)
@@ -197,6 +201,7 @@ PHP_FUNCTION(SDL_CreateTexture);
 PHP_FUNCTION(SDL_QueryTexture);
 PHP_FUNCTION(SDL_SetRenderTarget);
 PHP_FUNCTION(SDL_CreateRenderer);
+PHP_FUNCTION(SDL_CreateSoftwareRenderer);
 PHP_FUNCTION(SDL_RenderCopy);
 PHP_FUNCTION(SDL_RenderCopyEx);
 PHP_FUNCTION(SDL_RenderSetLogicalSize);
