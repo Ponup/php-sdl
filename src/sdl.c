@@ -112,6 +112,24 @@ PHP_FUNCTION(SDL_WasInit) {
 }
 /* }}} */
 
+/* {{{ proto int SDL_SetHint(string hint, string value)
+
+extern DECLSPEC Uint32 SDLCALL SDL_SetHint(char *hint, char *value);
+*/
+PHP_FUNCTION(SDL_SetHint) {
+	char *hint;
+	size_t hint_len;
+	char *value;
+	size_t value_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &hint, &hint_len, &value, &value_len) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	RETURN_LONG(SDL_SetHint(hint, value));
+}
+/* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(sdl_sdl)
 {
@@ -128,6 +146,8 @@ PHP_MINIT_FUNCTION(sdl_sdl)
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVENTS",          SDL_INIT_EVENTS,            CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_INIT_NOPARACHUTE",     SDL_INIT_NOPARACHUTE,       CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_INIT_EVERYTHING",      SDL_INIT_EVERYTHING,        CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_STRING_CONSTANT("SDL_HINT_RENDER_SCALE_QUALITY", SDL_HINT_RENDER_SCALE_QUALITY, CONST_CS | CONST_PERSISTENT);
 
 	return SUCCESS;
 }

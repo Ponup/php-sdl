@@ -146,6 +146,7 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_Quit,						arginfo_SDL_Quit)
 	ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
 	ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
+	ZEND_FE(SDL_SetHint,					arginfo_SDL_SetHint)
 
 	// Window
 	ZEND_FE(SDL_CreateWindow,				arginfo_SDL_CreateWindow)
