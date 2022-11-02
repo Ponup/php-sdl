@@ -18,6 +18,7 @@
 #include "render.h"
 #include "window.h"
 #include "surface.h"
+#include "pixels.h"
 #include "rect.h"
 
 #define SDL_RENDERER_RES_NAME "SDL Renderer"
@@ -207,6 +208,35 @@ PHP_FUNCTION(SDL_CreateTexture)
 	if( renderer ) {
 		texture = SDL_CreateTexture(renderer, format, access, w, h);
 		RETURN_RES(zend_register_resource(texture, le_sdl_texture));
+	}
+}
+
+PHP_FUNCTION(SDL_UpdateTexture)
+{
+	zval *z_texture, *z_rect, *z_pixels;
+	zend_long pitch;
+
+	SDL_Rect def_rect;
+	SDL_Rect *rect = NULL;
+	SDL_Texture *texture = NULL;
+	SDL_Pixels *pixels;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO!Ol", &z_texture, &z_rect, get_php_sdl_rect_ce(), &z_pixels, get_php_sdl_pixels_ce(), &pitch ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+	if(z_rect != NULL && Z_TYPE_P(z_rect) != IS_NULL) {
+		rect = &def_rect;
+		zval_to_sdl_rect(z_rect, rect);
+	}
+
+	if (!(pixels = zval_to_sdl_pixels(z_pixels)))
+	{
+		php_error_docref(NULL, E_WARNING, "Invalid source SDL_Pixels object");
+	}
+	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+
+	if( texture ) {
+		RETURN_LONG(SDL_UpdateTexture(texture, rect, pixels, pitch));
 	}
 }
 
