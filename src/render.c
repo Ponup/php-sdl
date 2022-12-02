@@ -334,12 +334,12 @@ PHP_FUNCTION(SDL_GetRendererOutputSize)
 
 PHP_FUNCTION(SDL_QueryTexture)
 {
-	zval *z_texture, *z_format, *z_access, *z_width, *z_height;
+	zval *z_texture, *z_format = NULL, *z_access = NULL, *z_width = NULL, *z_height = NULL;
 	SDL_Texture *texture;
 	int w, h, access, result;
 	Uint32 format;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zz/z/z/z/", &z_texture, &z_format, &z_access, &z_width, &z_height) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z|zzzz", &z_texture, &z_format, &z_access, &z_width, &z_height) == FAILURE ) {
 		return;
 	}
 
@@ -347,14 +347,14 @@ PHP_FUNCTION(SDL_QueryTexture)
 
 	result = SDL_QueryTexture(texture, &format, &access, &w, &h);
 
-	zval_dtor(z_format);
-	ZVAL_LONG(z_format, format);
-	zval_dtor(z_access);
-	ZVAL_LONG(z_access, access);
-	zval_dtor(z_width);
-	ZVAL_LONG(z_width, (long)w);
-	zval_dtor(z_height);
-	ZVAL_LONG(z_height, (long)h);
+	if(z_format)
+		ZEND_TRY_ASSIGN_REF_LONG(z_format, format);
+	if(z_access)
+		ZEND_TRY_ASSIGN_REF_LONG(z_access, access);
+	if(z_width)
+		ZEND_TRY_ASSIGN_REF_LONG(z_width, w);
+	if(z_height)
+		ZEND_TRY_ASSIGN_REF_LONG(z_height, h);
 
 	RETURN_LONG(result);
 }
@@ -366,12 +366,10 @@ PHP_FUNCTION(SDL_RenderDrawPointF)
 	double x, y;
 
 	ZEND_PARSE_PARAMETERS_START(3, 3);
-		//Z_PARAM_OBJECT_OF_CLASS(RENDERER, sdl_renderer_ce)
 		Z_PARAM_ZVAL(RENDERER)
 		Z_PARAM_DOUBLE(x)
 		Z_PARAM_DOUBLE(y)
 	ZEND_PARSE_PARAMETERS_END();
-//	renderer = php_sdl_renderer_from_zval_p(RENDERER);
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(RENDERER), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
 	int result = SDL_RenderDrawPointF(renderer, (float) x, (float) y);
