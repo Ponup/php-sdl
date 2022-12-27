@@ -109,6 +109,9 @@ static PHP_METHOD(SDL_DisplayMode, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_DisplayMode___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto SDL_DisplayMode::__toString() */
 static PHP_METHOD(SDL_DisplayMode, __toString)
 {
@@ -525,7 +528,7 @@ PHP_FUNCTION(SDL_DisableScreenSaver)
 /* {{{ php_sdl_displaymode_methods[] */
 static const zend_function_entry php_sdl_displaymode_methods[] = {
 	PHP_ME(SDL_DisplayMode, __construct, arginfo_SDL_DisplayMode__construct, ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_DisplayMode, __toString,  arginfo_video_none,                 ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_DisplayMode, __toString,  arginfo_class_SDL_DisplayMode___toString,                 ZEND_ACC_PUBLIC)
 
 	PHP_FE_END
 };

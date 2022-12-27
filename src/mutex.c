@@ -331,6 +331,8 @@ static PHP_METHOD(SDL_mutex, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Mutex___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_mutex::__toString() */
 static PHP_METHOD(SDL_mutex, __toString)
@@ -492,6 +494,8 @@ static PHP_METHOD(SDL_sem, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Sem___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_sem::__toString() */
 static PHP_METHOD(SDL_sem, __toString)
@@ -696,6 +700,8 @@ static PHP_METHOD(SDL_cond, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_cond___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_cond::__toString() */
 static PHP_METHOD(SDL_cond, __toString)
@@ -896,7 +902,7 @@ PHP_FUNCTION(SDL_DestroyCond)
 /* {{{ sdl_mutex_methods[] */
 static const zend_function_entry php_sdl_mutex_methods[] = {
 	PHP_ME(SDL_mutex,       __construct,                arginfo_none,          ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_mutex,       __toString,                 arginfo_none,          ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_mutex,       __toString,                 arginfo_class_SDL_Mutex___toString,          ZEND_ACC_PUBLIC)
 
 	/* non-static method */
 	PHP_FALIAS(Lock,        SDL_LockMutex,              arginfo_none)
@@ -912,7 +918,7 @@ static const zend_function_entry php_sdl_mutex_methods[] = {
 /* {{{ sdl_sem_methods[] */
 static const zend_function_entry php_sdl_sem_methods[] = {
 	PHP_ME(SDL_sem,        __construct,                arginfo_SDL_sem__construct, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_sem,        __toString,                 arginfo_none,               ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_sem,        __toString,                 arginfo_class_SDL_Sem___toString,               ZEND_ACC_PUBLIC)
 
 	/* non-static method */
 	PHP_FALIAS(Wait,        SDL_SemWait,               arginfo_none)
@@ -930,7 +936,7 @@ static const zend_function_entry php_sdl_sem_methods[] = {
 /* {{{ sdl_cond_methods[] */
 static const zend_function_entry php_sdl_cond_methods[] = {
 	PHP_ME(SDL_cond,        __construct,               arginfo_none, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_cond,        __toString,                arginfo_none,               ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_cond,        __toString,                arginfo_class_SDL_cond___toString,               ZEND_ACC_PUBLIC)
 
 	/* non-static method */
 	PHP_FALIAS(Wait,        SDL_CondWait,              arginfo_SDL_Cond_Wait)
