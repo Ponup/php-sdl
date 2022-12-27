@@ -18,6 +18,7 @@
 #include "render.h"
 #include "window.h"
 #include "surface.h"
+#include "pixels.h"
 #include "rect.h"
 
 #define SDL_RENDERER_RES_NAME "SDL Renderer"
@@ -210,6 +211,35 @@ PHP_FUNCTION(SDL_CreateTexture)
 	}
 }
 
+PHP_FUNCTION(SDL_UpdateTexture)
+{
+	zval *z_texture, *z_rect, *z_pixels;
+	zend_long pitch;
+
+	SDL_Rect def_rect;
+	SDL_Rect *rect = NULL;
+	SDL_Texture *texture = NULL;
+	SDL_Pixels *pixels;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO!Ol", &z_texture, &z_rect, get_php_sdl_rect_ce(), &z_pixels, get_php_sdl_pixels_ce(), &pitch ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+	if(z_rect != NULL && Z_TYPE_P(z_rect) != IS_NULL) {
+		rect = &def_rect;
+		zval_to_sdl_rect(z_rect, rect);
+	}
+
+	if (!(pixels = zval_to_sdl_pixels(z_pixels)))
+	{
+		php_error_docref(NULL, E_WARNING, "Invalid source SDL_Pixels object");
+	}
+	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+
+	if( texture ) {
+		RETURN_LONG(SDL_UpdateTexture(texture, rect, pixels, pitch));
+	}
+}
+
 PHP_FUNCTION(SDL_SetRenderTarget)
 {
 	zval *z_renderer, *z_texture;
@@ -244,6 +274,24 @@ PHP_FUNCTION(SDL_CreateRenderer)
 	}
 
 	renderer = SDL_CreateRenderer(window, (int)index, (Uint32)flags);
+	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
+}
+
+PHP_FUNCTION(SDL_CreateSoftwareRenderer)
+{
+	zval *z_surface;
+	SDL_Surface *surface = NULL;
+	SDL_Renderer *renderer = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_surface, get_php_sdl_surface_ce()) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	if( z_surface != NULL ) {
+		surface = zval_to_sdl_surface(z_surface);
+	}
+
+	renderer = SDL_CreateSoftwareRenderer(surface);
 	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
 }
 
@@ -310,6 +358,21 @@ PHP_FUNCTION(SDL_RenderCopyEx)
 	}
 
 	RETURN_LONG(SDL_RenderCopyEx(renderer, texture, srcrect, dstrect, angle, center, (Uint32)flip));
+}
+
+PHP_FUNCTION(SDL_RenderSetLogicalSize)
+{
+	zval *z_renderer;
+	zend_long w, h;
+	SDL_Renderer *renderer;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zll", &z_renderer, &w, &h) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+    renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	RETURN_LONG(SDL_RenderSetLogicalSize(renderer, w, h));
 }
 
 PHP_FUNCTION(SDL_GetRendererOutputSize)
@@ -384,14 +447,13 @@ PHP_FUNCTION(SDL_RenderDrawLineF)
 	double x1, y1, x2, y2;
 
 	ZEND_PARSE_PARAMETERS_START(5, 5);
-		//Z_PARAM_OBJECT_OF_CLASS(RENDERER, sdl_renderer_ce)
 		Z_PARAM_ZVAL(RENDERER)
 		Z_PARAM_DOUBLE(x1)
 		Z_PARAM_DOUBLE(y1)
 		Z_PARAM_DOUBLE(x2)
 		Z_PARAM_DOUBLE(y2)
 	ZEND_PARSE_PARAMETERS_END();
-	//renderer = php_sdl_renderer_from_zval_p(RENDERER);
+
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(RENDERER), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
 	int result = SDL_RenderDrawLineF(renderer, (float) x1, (float) y1, (float) x2, (float) y2);
@@ -407,11 +469,10 @@ PHP_FUNCTION(SDL_RenderDrawRectF)
 	SDL_FRect rect;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2);
-		//Z_PARAM_OBJECT_OF_CLASS(RENDERER, sdl_renderer_ce)
 		Z_PARAM_ZVAL(RENDERER)
 		Z_PARAM_OBJECT_OF_CLASS(RECT, get_php_sdl_frect_ce())
 	ZEND_PARSE_PARAMETERS_END();
-	//renderer = php_sdl_renderer_from_zval_p(RENDERER);
+
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(RENDERER), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 	zval_to_sdl_frect(RECT, &rect);
 	int result = SDL_RenderDrawRectF(renderer, (const SDL_FRect*) &rect);
@@ -426,11 +487,9 @@ PHP_FUNCTION(SDL_RenderFillRectF)
 	SDL_FRect rect;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2);
-		//Z_PARAM_OBJECT_OF_CLASS(RENDERER, sdl_renderer_ce)
 		Z_PARAM_ZVAL(RENDERER)
 		Z_PARAM_OBJECT_OF_CLASS(RECT, get_php_sdl_frect_ce())
 	ZEND_PARSE_PARAMETERS_END();
-	//renderer = php_sdl_renderer_from_zval_p(RENDERER);
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(RENDERER), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 	zval_to_sdl_frect(RECT, &rect);
 	int result = SDL_RenderFillRectF(renderer, (const SDL_FRect*) &rect);
@@ -449,14 +508,12 @@ PHP_FUNCTION(SDL_RenderCopyF)
 	SDL_FRect def_dstrect;
 
 	ZEND_PARSE_PARAMETERS_START(4, 4);
-		//Z_PARAM_OBJECT_OF_CLASS(RENDERER, sdl_renderer_ce)
 		Z_PARAM_ZVAL(RENDERER)
-		// Z_PARAM_OBJECT_OF_CLASS(TEXTURE, sdl_texture_ce)
 		Z_PARAM_ZVAL(TEXTURE)
 		Z_PARAM_OBJECT_OF_CLASS_OR_NULL(SRCRECT, get_php_sdl_rect_ce())
 		Z_PARAM_OBJECT_OF_CLASS_OR_NULL(DSTRECT, get_php_sdl_frect_ce())
 	ZEND_PARSE_PARAMETERS_END();
-	//renderer = php_sdl_renderer_from_zval_p(RENDERER);
+
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(RENDERER), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(TEXTURE), SDL_TEXTURE_RES_NAME, le_sdl_texture);
 

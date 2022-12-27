@@ -54,6 +54,13 @@ ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_Quit);
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetHint, 0, 0, 2)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_SetHint);
+
+
 PHP_MINIT_FUNCTION(sdl_sdl);
 
 #ifdef  __cplusplus

@@ -6,6 +6,8 @@ require 'bootstrap.php';
 
 $window = SDL_CreateWindow('Primitive drawing example', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 $renderer = SDL_CreateRenderer($window, 0, SDL_RENDERER_SOFTWARE);
+SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+SDL_RenderSetLogicalSize($renderer, 640, 480);
 
 SDL_SetRenderDrawColor($renderer, 255, 0, 0, 255);
 SDL_RenderClear($renderer);
