@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2022 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -25,7 +25,6 @@ extern "C" {
 #include "php_sdl.h"
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderDrawColor, 0, 0, 5)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_INFO(0, r)
 	ZEND_ARG_INFO(0, g)
@@ -34,12 +33,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderDrawColor, 0, 0, 5)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderClear, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DestroyRenderer, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 ZEND_END_ARG_INFO()
 
@@ -48,10 +45,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_DestroyTexture, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderFillRect, 0, 0, 2)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-	//ZEND_ARG_INFO(0, rect)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawRect, 0, 0, 2)
@@ -68,7 +63,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawLine, 0, 0, 4)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderPresent, 0, 0, 1)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 ZEND_END_ARG_INFO()
 
@@ -79,7 +73,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderDrawPoint, 0, 0, 3)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateTextureFromSurface, 0, 0, 2)
-	ZEND_ARG_INFO(0, renderer)//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
+	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
 ZEND_END_ARG_INFO()
 
@@ -98,12 +92,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpdateTexture, 0, 0, 4)
 	ZEND_ARG_INFO(0, pitch)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QueryTexture, 0, 0, 5)
-	ZEND_ARG_INFO(0, texture)
-	ZEND_ARG_INFO(1, format)
-	ZEND_ARG_INFO(1, access)
-	ZEND_ARG_INFO(1, w)
-	ZEND_ARG_INFO(1, h)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QueryTexture, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
+	ZEND_ARG_TYPE_INFO(1, format, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, access, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, w, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(1, h, IS_LONG, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderTarget, 0, 0, 2)
@@ -151,14 +145,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetRendererOutputSize, 0, 0, 3)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawPointF, 0, 3, IS_LONG, 0)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawLineF, 0, 5, IS_LONG, 0)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_TYPE_INFO(0, x1, IS_DOUBLE, 0)
 	ZEND_ARG_TYPE_INFO(0, y1, IS_DOUBLE, 0)
@@ -167,7 +159,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawLineF, 0, 5, IS_LO
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderDrawRectF, 0, 2, IS_LONG, 0)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_OBJ_INFO(0, rect, SDL_FRect, 0)
 ZEND_END_ARG_INFO()
@@ -175,7 +166,6 @@ ZEND_END_ARG_INFO()
 #define arginfo_SDL_RenderFillRectF arginfo_SDL_RenderDrawRectF
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyF, 0, 4, IS_LONG, 0)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
 	ZEND_ARG_OBJ_INFO(0, srcrect, SDL_Rect, 1)
@@ -183,7 +173,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyF, 0, 4, IS_LONG, 
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyExF, 0, 7, IS_LONG, 0)
-	//ZEND_ARG_OBJ_INFO(0, renderer, SDL_Renderer, 0)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, srcrect, SDL_Rect, 1, "null")
@@ -192,7 +181,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_RenderCopyExF, 0, 7, IS_LONG
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, center, SDL_FPoint, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flip, IS_LONG, 0, "SDL_FLIP_NONE")
 ZEND_END_ARG_INFO()
-
 
 PHP_FUNCTION(SDL_SetRenderDrawColor);
 PHP_FUNCTION(SDL_RenderClear);

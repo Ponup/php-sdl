@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2018 The PHP Group                                |
+  | Copyright (c) 1997-2022 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -138,6 +138,8 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_WindowShapeMode___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_WindowShapeMode::__toString() */
 static PHP_METHOD(SDL_WindowShapeMode, __toString)
@@ -172,14 +174,10 @@ static PHP_METHOD(SDL_WindowShapeMode, __toString)
 }
 /* }}} */
 
-/* generic arginfo */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_none, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ php_sdl_windowshapemode_methods[] */
 static const zend_function_entry php_sdl_windowshapemode_methods[] = {
 	PHP_ME(SDL_WindowShapeMode,  __construct,  arginfo_SDL_WindowShapeMode__construct,    ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_WindowShapeMode,  __toString,   arginfo_none,                              ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_WindowShapeMode,  __toString,   arginfo_class_SDL_WindowShapeMode___toString, ZEND_ACC_PUBLIC)
 
 	PHP_FE_END
 };

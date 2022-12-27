@@ -295,6 +295,9 @@ static PHP_METHOD(SDL_Color, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Color___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto SDL_Color::__toString() */
 static PHP_METHOD(SDL_Color, __toString)
 {
@@ -453,6 +456,9 @@ static PHP_METHOD(SDL_PixelFormat, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_PixelFormat___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto SDL_PixelFormat::__toString() */
 static PHP_METHOD(SDL_PixelFormat, __toString)
 {
@@ -546,6 +552,9 @@ static PHP_METHOD(SDL_Palette, __construct)
 	}
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Palette___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Palette::__toString() */
 static PHP_METHOD(SDL_Palette, __toString)
@@ -1054,6 +1063,9 @@ static PHP_METHOD(SDL_Pixels, __construct)
 	}
 }
 /* }}} */
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Pixels___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_Pixels::__toString() */
 static PHP_METHOD(SDL_Pixels, __toString)
@@ -1636,7 +1648,7 @@ static zval *sdl_pixels_write_property(zend_object *object, zend_string *name, z
 /* {{{ php_sdl_color_methods[] */
 static const zend_function_entry php_sdl_color_methods[] = {
 	PHP_ME(SDL_Color, __construct, arginfo_SDL_Color__construct, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
-		PHP_ME(SDL_Color, __toString, arginfo_palette_none, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Color, __toString, arginfo_class_SDL_Color___toString, ZEND_ACC_PUBLIC)
 
 			PHP_FE_END};
 /* }}} */
@@ -1644,12 +1656,12 @@ static const zend_function_entry php_sdl_color_methods[] = {
 /* {{{ php_sdl_palette_methods[] */
 static const zend_function_entry php_sdl_palette_methods[] = {
 	PHP_ME(SDL_Palette, __construct, arginfo_SDL_AllocPalette, ZEND_ACC_PUBLIC)
-		PHP_ME(SDL_Palette, __toString, arginfo_palette_none, ZEND_ACC_PUBLIC)
-			PHP_ME(SDL_Palette, count, arginfo_palette_none, ZEND_ACC_PUBLIC)
-				PHP_ME(SDL_Palette, offsetExists, arginfo_SDL_Palette_offsetExists, ZEND_ACC_PUBLIC)
-					PHP_ME(SDL_Palette, offsetGet, arginfo_SDL_Palette_offsetGet, ZEND_ACC_PUBLIC)
-						PHP_ME(SDL_Palette, offsetSet, arginfo_SDL_Palette_offsetSet, ZEND_ACC_PUBLIC)
-							PHP_ME(SDL_Palette, offsetUnset, arginfo_SDL_Palette_offsetUnset, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, __toString, arginfo_class_SDL_Palette___toString, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, count, arginfo_palette_none, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetExists, arginfo_SDL_Palette_offsetExists, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetGet, arginfo_SDL_Palette_offsetGet, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetSet, arginfo_SDL_Palette_offsetSet, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Palette, offsetUnset, arginfo_SDL_Palette_offsetUnset, ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
 	PHP_FALIAS(Free, SDL_FreePalette, arginfo_palette_none)
@@ -1661,9 +1673,9 @@ static const zend_function_entry php_sdl_palette_methods[] = {
 /* {{{ php_sdl_pixelformat_methods[] */
 static const zend_function_entry php_sdl_pixelformat_methods[] = {
 	PHP_ME(SDL_PixelFormat, __construct, arginfo_SDL_AllocFormat, ZEND_ACC_PUBLIC)
-		PHP_ME(SDL_PixelFormat, __toString, arginfo_palette_none, ZEND_ACC_PUBLIC)
-			PHP_ME(SDL_PixelFormat, GetRGB, arginfo_SDL_PixelFormat_GetRGB, ZEND_ACC_PUBLIC)
-				PHP_ME(SDL_PixelFormat, GetRGBA, arginfo_SDL_PixelFormat_GetRGBA, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, __toString, arginfo_class_SDL_PixelFormat___toString, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, GetRGB, arginfo_SDL_PixelFormat_GetRGB, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_PixelFormat, GetRGBA, arginfo_SDL_PixelFormat_GetRGBA, ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
 	PHP_FALIAS(Free, SDL_FreeFormat, arginfo_format_none)
@@ -1677,15 +1689,15 @@ static const zend_function_entry php_sdl_pixelformat_methods[] = {
 /* {{{ php_sdl_pixels_methods[] */
 static const zend_function_entry php_sdl_pixels_methods[] = {
 	PHP_ME(SDL_Pixels, __construct, arginfo_SDL_Pixels__construct, ZEND_ACC_PUBLIC)
-		PHP_ME(SDL_Pixels, __toString, arginfo_format_none, ZEND_ACC_PUBLIC)
-			PHP_ME(SDL_Pixels, count, arginfo_format_none, ZEND_ACC_PUBLIC)
-				PHP_ME(SDL_Pixels, offsetExists, arginfo_SDL_Pixels_offsetExists, ZEND_ACC_PUBLIC)
-					PHP_ME(SDL_Pixels, offsetGet, arginfo_SDL_Pixels_offsetGet, ZEND_ACC_PUBLIC)
-						PHP_ME(SDL_Pixels, offsetSet, arginfo_SDL_Pixels_offsetSet, ZEND_ACC_PUBLIC)
-							PHP_ME(SDL_Pixels, offsetUnset, arginfo_SDL_Pixels_offsetUnset, ZEND_ACC_PUBLIC)
-								PHP_ME(SDL_Pixels, GetByte, arginfo_SDL_Pixels_GetByte, ZEND_ACC_PUBLIC)
-									PHP_ME(SDL_Pixels, SetByte, arginfo_SDL_Pixels_SetByte, ZEND_ACC_PUBLIC)
-										PHP_FE_END};
+	PHP_ME(SDL_Pixels, __toString, arginfo_class_SDL_Pixels___toString, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, count, arginfo_format_none, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, offsetExists, arginfo_SDL_Pixels_offsetExists, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, offsetGet, arginfo_SDL_Pixels_offsetGet, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, offsetSet, arginfo_SDL_Pixels_offsetSet, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, offsetUnset, arginfo_SDL_Pixels_offsetUnset, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, GetByte, arginfo_SDL_Pixels_GetByte, ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Pixels, SetByte, arginfo_SDL_Pixels_SetByte, ZEND_ACC_PUBLIC)
+	PHP_FE_END};
 /* }}} */
 
 #define REGISTER_COLOR_PROP(name) \

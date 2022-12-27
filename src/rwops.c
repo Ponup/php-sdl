@@ -142,6 +142,9 @@ static PHP_METHOD(SDL_RWops, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_RWops___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto SDL_RWops::__toString() */
 static PHP_METHOD(SDL_RWops, __toString)
 {
@@ -812,7 +815,7 @@ ZEND_END_ARG_INFO()
 /* {{{ sdl_rwops_methods[] */
 static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_ME(SDL_RWops,        __construct,       arginfo_rwops_none,    ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_RWops,        __toString,        arginfo_rwops_none,    ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_RWops,        __toString,        arginfo_class_SDL_RWops___toString,    ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
 	PHP_FALIAS(Free,         SDL_FreeRW,        arginfo_rwops_none)

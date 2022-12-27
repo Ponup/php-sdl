@@ -1190,6 +1190,9 @@ static PHP_METHOD(SDL_Window, __construct)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_Window___toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 /* {{{ proto SDL_Window::__toString() */
 static PHP_METHOD(SDL_Window, __toString)
 {
@@ -1426,7 +1429,7 @@ PHP_FUNCTION(SDL_GetShapedWindowMode)
 
 static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_ME(SDL_Window, __construct, arginfo_SDL_CreateWindow, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
-		PHP_ME(SDL_Window, __toString, arginfo_window_none, ZEND_ACC_PUBLIC)
+		PHP_ME(SDL_Window, __toString, arginfo_class_SDL_Window___toString, ZEND_ACC_PUBLIC)
 
 	/* non-static functions */
 	PHP_FALIAS(UpdateSurface, SDL_UpdateWindowSurface, arginfo_window_none)

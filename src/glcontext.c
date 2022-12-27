@@ -15,7 +15,6 @@
   +----------------------------------------------------------------------+
 */
 
-
 /*
   +----------------------------------------------------------------------+
   | wrapper for SDL2/SDL_video.h (only SDL_GLContext)                    |
@@ -37,12 +36,12 @@
 
 static zend_class_entry *php_sdl_glcontext_ce;
 static zend_object_handlers php_sdl_glcontext_handlers;
-struct php_sdl_glcontext {
+struct php_sdl_glcontext
+{
 	SDL_GLContext glcontext;
-	Uint32        flags;
-	zend_object   zo;
+	Uint32 flags;
+	zend_object zo;
 };
-
 
 /* {{{ get_php_sdl_glcontext_ce */
 zend_class_entry *get_php_sdl_glcontext_ce(void)
@@ -51,27 +50,28 @@ zend_class_entry *get_php_sdl_glcontext_ce(void)
 }
 /* }}} */
 
-
-#define FETCH_GLCONTEXT(__ptr, __id, __check) \
-{ \
-		zend_object* zox = Z_OBJ_P(__id);\
-		intern = (struct php_sdl_glcontext*)((char*)zox - zox->handlers->offset);\
-        __ptr = intern->glcontext; \
-        if (__check && !__ptr) {\
-                php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name));\
-                RETURN_FALSE;\
-        }\
-}
+#define FETCH_GLCONTEXT(__ptr, __id, __check)                                                      \
+	{                                                                                              \
+		zend_object *zox = Z_OBJ_P(__id);                                                          \
+		intern = (struct php_sdl_glcontext *)((char *)zox - zox->handlers->offset);                \
+		__ptr = intern->glcontext;                                                                 \
+		if (__check && !__ptr)                                                                     \
+		{                                                                                          \
+			php_error_docref(NULL, E_WARNING, "Invalid %s object", ZSTR_VAL(intern->zo.ce->name)); \
+			RETURN_FALSE;                                                                          \
+		}                                                                                          \
+	}
 
 /* {{{ sdl_glcontext_to_zval */
 zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 flags)
 {
-	if (glcontext) {
+	if (glcontext)
+	{
 		struct php_sdl_glcontext *intern;
 
 		object_init_ex(z_val, php_sdl_glcontext_ce);
-		zend_object* zo = Z_OBJ_P(z_val);
-		intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
+		zend_object *zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_glcontext *)((char *)zo - zo->handlers->offset);
 		intern->glcontext = glcontext;
 		intern->flags = flags;
 
@@ -82,30 +82,31 @@ zend_bool sdl_glcontext_to_zval(SDL_GLContext glcontext, zval *z_val, Uint32 fla
 }
 /* }}} */
 
-
 /* {{{ zval_to_sdl_glcontext */
 SDL_GLContext zval_to_sdl_glcontext(zval *z_val)
 {
 	struct php_sdl_glcontext *intern;
 
-	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_glcontext_ce) {
-		zend_object* zo = Z_OBJ_P(z_val);
-		intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
+	if (Z_TYPE_P(z_val) == IS_OBJECT && Z_OBJCE_P(z_val) == php_sdl_glcontext_ce)
+	{
+		zend_object *zo = Z_OBJ_P(z_val);
+		intern = (struct php_sdl_glcontext *)((char *)zo - zo->handlers->offset);
 		return intern->glcontext;
 	}
 	return NULL;
 }
 /* }}} */
 
-
 /* {{{ php_sdl_glcontext_free
-	 */
+ */
 static void php_sdl_glcontext_free(zend_object *zo)
 {
-	struct php_sdl_glcontext* intern = (struct php_sdl_glcontext*)((char*)zo - zo->handlers->offset);
+	struct php_sdl_glcontext *intern = (struct php_sdl_glcontext *)((char *)zo - zo->handlers->offset);
 
-	if (intern->glcontext) {
-		if (!(intern->flags & SDL_DONTFREE)) {
+	if (intern->glcontext)
+	{
+		if (!(intern->flags & SDL_DONTFREE))
+		{
 			SDL_GL_DeleteContext(intern->glcontext);
 		}
 	}
@@ -114,40 +115,39 @@ static void php_sdl_glcontext_free(zend_object *zo)
 }
 /* }}} */
 
-
 /* {{{ php_sdl_glcontext_new
  */
-static zend_object* php_sdl_glcontext_new(zend_class_entry *class_type)
+static zend_object *php_sdl_glcontext_new(zend_class_entry *class_type)
 {
 	struct php_sdl_glcontext *intern;
 
-	intern = (struct php_sdl_glcontext*)ecalloc(1, sizeof(struct php_sdl_glcontext) + zend_object_properties_size(class_type));
+	intern = (struct php_sdl_glcontext *)ecalloc(1, sizeof(struct php_sdl_glcontext) + zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type);
 	object_properties_init(&intern->zo, class_type);
 
 	intern->glcontext = NULL;
-	
-	intern->zo.handlers = (zend_object_handlers*)&php_sdl_glcontext_handlers;
 
-	return &intern->zo; 
+	intern->zo.handlers = (zend_object_handlers *)&php_sdl_glcontext_handlers;
+
+	return &intern->zo;
 }
 /* }}} */
-
 
 /* {{{ proto bool SDL_GL_ExtensionSupported(string extension)
 
  *  \brief Return true if an OpenGL extension is supported for the current
  *         context.
  extern DECLSPEC SDL_bool SDLCALL SDL_GL_ExtensionSupported(const char
-                                                            *extension);
+															*extension);
  */
 PHP_FUNCTION(SDL_GL_ExtensionSupported)
 {
 	char *ext;
 	size_t ext_len;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &ext, &ext_len)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "s", &ext, &ext_len))
+	{
 		return;
 	}
 	RETVAL_BOOL(SDL_GL_ExtensionSupported(ext) == SDL_TRUE);
@@ -163,13 +163,13 @@ PHP_FUNCTION(SDL_GL_SetAttribute)
 {
 	zend_long attr, value;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &attr, &value)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &attr, &value))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GL_SetAttribute((SDL_GLattr)attr, (int)value));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GL_GetAttribute(int attr, int &value)
 
@@ -182,18 +182,19 @@ PHP_FUNCTION(SDL_GL_GetAttribute)
 	zval *z_value;
 	int ret, value;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &attr, &z_value)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lz", &attr, &z_value))
+	{
 		return;
 	}
 	ret = SDL_GL_GetAttribute((SDL_GLattr)attr, &value);
-	if (ret == 0) {
+	if (ret == 0)
+	{
 		zval_dtor(z_value);
 		ZVAL_LONG(z_value, value);
 	}
 	RETVAL_LONG(ret);
 }
 /* }}} */
-
 
 /* {{{ proto SDL_GLContext::__construct(void) */
 PHP_METHOD(SDL_GLContext, __construct)
@@ -206,26 +207,32 @@ PHP_METHOD(SDL_GLContext, __construct)
 	intern = (struct php_sdl_glcontext *)Z_OBJ_P(getThis());
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce()))
+	{
 		zend_restore_error_handling(&error_handling);
 		return;
 	}
 	zend_restore_error_handling(&error_handling);
 
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		intern->glcontext = SDL_GL_CreateContext(window);
-		if (intern->glcontext) {
+		if (intern->glcontext)
+		{
 			intern->flags = 0;
-		} else {
+		}
+		else
+		{
 			zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
 		}
-	} else {
+	}
+	else
+	{
 		zend_throw_exception(zend_exception_get_default(), "Invalid SDL_Window object", 0);
 	}
 }
 /* }}} */
-
 
 /* {{{ proto SDL_GLContext::__toString() */
 PHP_METHOD(SDL_GLContext, __toString)
@@ -233,20 +240,26 @@ PHP_METHOD(SDL_GLContext, __toString)
 	struct php_sdl_glcontext *intern;
 	char *buf;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 
 	intern = (struct php_sdl_glcontext *)Z_OBJ_P(getThis());
-	if (intern->glcontext) {
+	if (intern->glcontext)
+	{
 		spprintf(&buf, 100, "SDL_GLContext(%lx)", (long)intern->glcontext);
 		RETVAL_STRING(buf);
-	} else {
+	}
+	else
+	{
 		RETVAL_STRING("SDL_GLContext()");
 	}
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_GLContext__toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 /* {{{ proto SDL_GLContext SDL_GL_CreateContext(SDL_Window window)
 
@@ -255,7 +268,7 @@ PHP_METHOD(SDL_GLContext, __toString)
  *
  *  \sa SDL_GL_DeleteContext()
  extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window *
-                                                            window);
+															window);
  */
 PHP_FUNCTION(SDL_GL_CreateContext)
 {
@@ -263,19 +276,22 @@ PHP_FUNCTION(SDL_GL_CreateContext)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "O", &z_window, get_php_sdl_window_ce()))
+	{
 		return;
 	}
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		context = SDL_GL_CreateContext(window);
 		sdl_glcontext_to_zval(context, return_value, SDL_DONTFREE);
-	} else {
+	}
+	else
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
 /* }}} */
-
 
 /* {{{ proto void SDL_GL_DeleteContext(SDL_GLContext context)
 
@@ -290,7 +306,8 @@ PHP_FUNCTION(SDL_GL_DeleteContext)
 	zval *z_context;
 	SDL_GLContext context;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_context, php_sdl_glcontext_ce) == FAILURE) {
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_context, php_sdl_glcontext_ce) == FAILURE)
+	{
 		return;
 	}
 	FETCH_GLCONTEXT(context, z_context, 1);
@@ -300,15 +317,14 @@ PHP_FUNCTION(SDL_GL_DeleteContext)
 }
 /* }}} */
 
-
-#if SDL_VERSION_ATLEAST(2,0,1)
+#if SDL_VERSION_ATLEAST(2, 0, 1)
 /* {{{ proto int SDL_GL_MakeCurrent(SDL_Window window, SDL_GLContext context)
 
  *  \brief Set up an OpenGL context for rendering into an OpenGL window.
  *
  *  \note The context must have been created with a compatible window.
  extern DECLSPEC int SDLCALL SDL_GL_MakeCurrent(SDL_Window * window,
-                                                SDL_GLContext context);
+												SDL_GLContext context);
  */
 PHP_FUNCTION(SDL_GL_MakeCurrent)
 {
@@ -317,19 +333,22 @@ PHP_FUNCTION(SDL_GL_MakeCurrent)
 	SDL_GLContext context;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, get_php_sdl_window_ce(), &z_context, php_sdl_glcontext_ce)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, get_php_sdl_window_ce(), &z_context, php_sdl_glcontext_ce))
+	{
 		return;
 	}
 	FETCH_GLCONTEXT(context, z_context, 1);
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		RETVAL_LONG(SDL_GL_MakeCurrent(window, context));
-	} else {
+	}
+	else
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
 /* }}} */
-
 
 /* {{{ proto SDL_Window SDL_GL_GetCurrentWindow(void)
 
@@ -338,12 +357,12 @@ PHP_FUNCTION(SDL_GL_MakeCurrent)
  */
 PHP_FUNCTION(SDL_GL_GetCurrentWindow)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, SDL_DONTFREE);
 }
-
 
 /* {{{ proto SDL_GLContext SDL_GL_GetCurrentContext(void)
 
@@ -352,7 +371,8 @@ PHP_FUNCTION(SDL_GL_GetCurrentWindow)
  */
 PHP_FUNCTION(SDL_GL_GetCurrentContext)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, SDL_DONTFREE);
@@ -374,7 +394,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
  *  \sa SDL_GetWindowSize()
  *  \sa SDL_CreateWindow()
  extern DECLSPEC void SDLCALL SDL_GL_GetDrawableSize(SDL_Window * window, int *w,
-                                                     int *h);
+													 int *h);
  */
 PHP_FUNCTION(SDL_GL_GetDrawableSize)
 {
@@ -382,17 +402,21 @@ PHP_FUNCTION(SDL_GL_GetDrawableSize)
 	SDL_Window *window;
 	int w, h;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozz", &z_window, get_php_sdl_window_ce(), &z_w, &z_h)) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozz", &z_window, get_php_sdl_window_ce(), &z_w, &z_h))
+	{
 		return;
 	}
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		SDL_GL_GetDrawableSize(window, &w, &h);
 		zval_dtor(z_w);
 		ZVAL_LONG(z_w, w);
 		zval_dtor(z_h);
 		ZVAL_LONG(z_h, h);
-	} else {
+	}
+	else
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
@@ -410,18 +434,21 @@ PHP_FUNCTION(SDL_GL_SwapWindow)
 	zval *z_window;
 	SDL_Window *window;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, get_php_sdl_window_ce())) {
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, get_php_sdl_window_ce()))
+	{
 		return;
 	}
 	window = zval_to_sdl_window(z_window);
-	if (window) {
+	if (window)
+	{
 		SDL_GL_SwapWindow(window);
-	} else {
+	}
+	else
+	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GL_SetSwapInterval(int interval)
 
@@ -441,13 +468,13 @@ PHP_FUNCTION(SDL_GL_SetSwapInterval)
 {
 	zend_long value;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &value)) {
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "l", &value))
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GL_SetSwapInterval((int)value));
 }
 /* }}} */
-
 
 /* {{{ proto int SDL_GL_GetSwapInterval()
 
@@ -464,37 +491,35 @@ PHP_FUNCTION(SDL_GL_SetSwapInterval)
  */
 PHP_FUNCTION(SDL_GL_GetSwapInterval)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE)
+	{
 		return;
 	}
 	RETVAL_LONG(SDL_GL_GetSwapInterval());
 }
 /* }}} */
 
-
 /* {{{ sdl_glcontext_methods[] */
 static const zend_function_entry php_sdl_glcontext_methods[] = {
-	PHP_ME(SDL_GLContext,       __construct,                arginfo_SDL_GLContext__construct,     ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-	PHP_ME(SDL_GLContext,       __toString,                 arginfo_none,                         ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_GLContext, __construct, arginfo_SDL_GLContext__construct, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
+		PHP_ME(SDL_GLContext, __toString, arginfo_class_SDL_GLContext__toString, ZEND_ACC_PUBLIC)
 
 	/* non-static method */
-	PHP_FALIAS(Delete,          SDL_GL_DeleteContext,       arginfo_none)
+	PHP_FALIAS(Delete, SDL_GL_DeleteContext, arginfo_none)
 
 	/* static functions */
-	ZEND_FENTRY(GL_GetCurrent,      ZEND_FN(SDL_GL_GetCurrentContext),    arginfo_none,           ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_FENTRY(GL_GetCurrent, ZEND_FN(SDL_GL_GetCurrentContext), arginfo_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 
-	ZEND_FE_END
-};
+		ZEND_FE_END};
 /* }}} */
 
-#define REGISTER_GL_CLASS_CONST_LONG(const_name, value) \
+#define REGISTER_GL_CLASS_CONST_LONG(const_name, value)                               \
 	REGISTER_LONG_CONSTANT("SDL_GL_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_glcontext_ce, const_name, sizeof(const_name)-1, value)
+	zend_declare_class_constant_long(php_sdl_glcontext_ce, const_name, sizeof(const_name) - 1, value)
 
-#define REGISTER_GLCONTEXT_CLASS_CONST_LONG(const_name, value) \
+#define REGISTER_GLCONTEXT_CLASS_CONST_LONG(const_name, value)                                \
 	REGISTER_LONG_CONSTANT("SDL_GL_CONTEXT_" const_name, value, CONST_CS | CONST_PERSISTENT); \
-	zend_declare_class_constant_long(php_sdl_glcontext_ce, const_name, sizeof(const_name)-1, value)
-
+	zend_declare_class_constant_long(php_sdl_glcontext_ce, const_name, sizeof(const_name) - 1, value)
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_glcontext)
@@ -509,44 +534,44 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 	php_sdl_glcontext_handlers.offset = XtOffsetOf(struct php_sdl_glcontext, zo);
 
 	/* typedef enum SDL_GLattr; */
-	REGISTER_GL_CLASS_CONST_LONG("RED_SIZE",                       SDL_GL_RED_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("GREEN_SIZE",                     SDL_GL_GREEN_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("BLUE_SIZE",                      SDL_GL_BLUE_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("ALPHA_SIZE",                     SDL_GL_ALPHA_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("BUFFER_SIZE",                    SDL_GL_BUFFER_SIZE),
-	REGISTER_GL_CLASS_CONST_LONG("DOUBLEBUFFER",                   SDL_GL_DOUBLEBUFFER);
-	REGISTER_GL_CLASS_CONST_LONG("DEPTH_SIZE",                     SDL_GL_DEPTH_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("STENCIL_SIZE",                   SDL_GL_STENCIL_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("ACCUM_RED_SIZE",                 SDL_GL_ACCUM_RED_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("ACCUM_GREEN_SIZE",               SDL_GL_ACCUM_GREEN_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("ACCUM_BLUE_SIZE",                SDL_GL_ACCUM_BLUE_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("ACCUM_ALPHA_SIZE",               SDL_GL_ACCUM_ALPHA_SIZE);
-	REGISTER_GL_CLASS_CONST_LONG("STEREO",                         SDL_GL_STEREO);
-	REGISTER_GL_CLASS_CONST_LONG("MULTISAMPLEBUFFERS",             SDL_GL_MULTISAMPLEBUFFERS);
-	REGISTER_GL_CLASS_CONST_LONG("MULTISAMPLESAMPLES",             SDL_GL_MULTISAMPLESAMPLES),
-	REGISTER_GL_CLASS_CONST_LONG("ACCELERATED_VISUAL",             SDL_GL_ACCELERATED_VISUAL);
-	REGISTER_GL_CLASS_CONST_LONG("RETAINED_BACKING",               SDL_GL_RETAINED_BACKING);
-	REGISTER_GL_CLASS_CONST_LONG("SHARE_WITH_CURRENT_CONTEXT",     SDL_GL_SHARE_WITH_CURRENT_CONTEXT);
+	REGISTER_GL_CLASS_CONST_LONG("RED_SIZE", SDL_GL_RED_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("GREEN_SIZE", SDL_GL_GREEN_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("BLUE_SIZE", SDL_GL_BLUE_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("ALPHA_SIZE", SDL_GL_ALPHA_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("BUFFER_SIZE", SDL_GL_BUFFER_SIZE),
+		REGISTER_GL_CLASS_CONST_LONG("DOUBLEBUFFER", SDL_GL_DOUBLEBUFFER);
+	REGISTER_GL_CLASS_CONST_LONG("DEPTH_SIZE", SDL_GL_DEPTH_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("STENCIL_SIZE", SDL_GL_STENCIL_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("ACCUM_RED_SIZE", SDL_GL_ACCUM_RED_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("ACCUM_GREEN_SIZE", SDL_GL_ACCUM_GREEN_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("ACCUM_BLUE_SIZE", SDL_GL_ACCUM_BLUE_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("ACCUM_ALPHA_SIZE", SDL_GL_ACCUM_ALPHA_SIZE);
+	REGISTER_GL_CLASS_CONST_LONG("STEREO", SDL_GL_STEREO);
+	REGISTER_GL_CLASS_CONST_LONG("MULTISAMPLEBUFFERS", SDL_GL_MULTISAMPLEBUFFERS);
+	REGISTER_GL_CLASS_CONST_LONG("MULTISAMPLESAMPLES", SDL_GL_MULTISAMPLESAMPLES),
+		REGISTER_GL_CLASS_CONST_LONG("ACCELERATED_VISUAL", SDL_GL_ACCELERATED_VISUAL);
+	REGISTER_GL_CLASS_CONST_LONG("RETAINED_BACKING", SDL_GL_RETAINED_BACKING);
+	REGISTER_GL_CLASS_CONST_LONG("SHARE_WITH_CURRENT_CONTEXT", SDL_GL_SHARE_WITH_CURRENT_CONTEXT);
 
-#if SDL_VERSION_ATLEAST(2,0,1)	
-	REGISTER_GL_CLASS_CONST_LONG("FRAMEBUFFER_SRGB_CAPABLE",       SDL_GL_FRAMEBUFFER_SRGB_CAPABLE);
+#if SDL_VERSION_ATLEAST(2, 0, 1)
+	REGISTER_GL_CLASS_CONST_LONG("FRAMEBUFFER_SRGB_CAPABLE", SDL_GL_FRAMEBUFFER_SRGB_CAPABLE);
 #endif
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MAJOR_VERSION",           SDL_GL_CONTEXT_MAJOR_VERSION);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MINOR_VERSION",           SDL_GL_CONTEXT_MINOR_VERSION);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("EGL",                     SDL_GL_CONTEXT_EGL);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("FLAGS",                   SDL_GL_CONTEXT_FLAGS);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_MASK",            SDL_GL_CONTEXT_PROFILE_MASK);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MAJOR_VERSION", SDL_GL_CONTEXT_MAJOR_VERSION);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("MINOR_VERSION", SDL_GL_CONTEXT_MINOR_VERSION);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("EGL", SDL_GL_CONTEXT_EGL);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("FLAGS", SDL_GL_CONTEXT_FLAGS);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_MASK", SDL_GL_CONTEXT_PROFILE_MASK);
 
 	/* typedef enum SDL_GLprofile; */
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_CORE",            SDL_GL_CONTEXT_PROFILE_CORE);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_COMPATIBILITY",   SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_ES",              SDL_GL_CONTEXT_PROFILE_ES);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_CORE", SDL_GL_CONTEXT_PROFILE_CORE);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_COMPATIBILITY", SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_ES", SDL_GL_CONTEXT_PROFILE_ES);
 
 	/* typedef enum SDL_GLcontextFlag; */
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("DEBUG_FLAG",              SDL_GL_CONTEXT_DEBUG_FLAG);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("DEBUG_FLAG", SDL_GL_CONTEXT_DEBUG_FLAG);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("FORWARD_COMPATIBLE_FLAG", SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("ROBUST_ACCESS_FLAG",      SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG);
-	REGISTER_GLCONTEXT_CLASS_CONST_LONG("RESET_ISOLATION_FLAG",    SDL_GL_CONTEXT_RESET_ISOLATION_FLAG);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("ROBUST_ACCESS_FLAG", SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG);
+	REGISTER_GLCONTEXT_CLASS_CONST_LONG("RESET_ISOLATION_FLAG", SDL_GL_CONTEXT_RESET_ISOLATION_FLAG);
 
 	return SUCCESS;
 }
