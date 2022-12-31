@@ -227,16 +227,18 @@ PHP_FUNCTION(SDL_UpdateTexture)
 	if(z_rect != NULL && Z_TYPE_P(z_rect) != IS_NULL) {
 		rect = &def_rect;
 		zval_to_sdl_rect(z_rect, rect);
+		rect = NULL; 
 	}
 
 	if (!(pixels = zval_to_sdl_pixels(z_pixels)))
 	{
 		php_error_docref(NULL, E_WARNING, "Invalid source SDL_Pixels object");
 	}
+
 	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
 
 	if( texture ) {
-		RETURN_LONG(SDL_UpdateTexture(texture, rect, pixels, pitch));
+		RETURN_LONG(SDL_UpdateTexture(texture, rect, pixels->pixels, pitch));
 	}
 }
 

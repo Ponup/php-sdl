@@ -122,11 +122,12 @@ PHP_FUNCTION(SDL_SetHint) {
 	char *value;
 	size_t value_len;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &hint, &hint_len, &value, &value_len) == FAILURE) {
-		RETURN_FALSE;
-	}
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+	Z_PARAM_STRING(hint, hint_len)
+	Z_PARAM_STRING(value, value_len)
+	ZEND_PARSE_PARAMETERS_END();
 
-	RETURN_LONG(SDL_SetHint(hint, value));
+	RETURN_LONG(SDL_SetHint(hint, value) == SDL_TRUE);
 }
 /* }}} */
 

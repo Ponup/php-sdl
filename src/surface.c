@@ -114,7 +114,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 	{
 		return;
 	}
-	surface = SDL_CreateRGBSurface(flags, (int)width, (int)height, (int)depth, rmask, gmask, bmask, amask);
+	surface = SDL_CreateRGBSurface((Uint32)flags, (int)width, (int)height, (int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask);
 	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
@@ -1228,10 +1228,10 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 PHP_FUNCTION(SDL_ConvertPixels)
 {
 	zval *z_src, *z_dst;
-	zend_long w, h, sf, sp, df, dp;
+	zend_long w, h, src_format, src_pitch, dst_format, dst_pitch;
 	SDL_Pixels *src, *dst;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllOllOl", &w, &h, &sf, &z_src, get_php_sdl_pixels_ce(), &sp, &df, &z_dst, get_php_sdl_pixels_ce(), &dp))
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllOllOl", &w, &h, &src_format, &z_src, get_php_sdl_pixels_ce(), &src_pitch, &dst_format, &z_dst, get_php_sdl_pixels_ce(), &dst_pitch))
 	{
 		return;
 	}
@@ -1243,22 +1243,8 @@ PHP_FUNCTION(SDL_ConvertPixels)
 	{
 		php_error_docref(NULL, E_WARNING, "Invalid destination SDL_Pixels object");
 	}
-	if (h < 0 || h > src->h || h > dst->h)
-	{
-		h = (src->h > dst->h ? dst->h : src->h);
-		php_error_docref(NULL, E_NOTICE, "Bad value for height, will use %ld", h);
-	}
-	if (sp != src->pitch)
-	{
-		sp = src->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for source pitch, will use %ld", sp);
-	}
-	if (dp != dst->pitch)
-	{
-		dp = dst->pitch;
-		php_error_docref(NULL, E_NOTICE, "Bad value for destination pitch, will use %ld", dp);
-	}
-	RETVAL_LONG(SDL_ConvertPixels(w, h, sf, src->pixels, sp, df, src->pixels, dp));
+
+	RETVAL_LONG(SDL_ConvertPixels(w, h, src_format, src->pixels, src_pitch, dst_format, dst->pixels, dst_pitch));
 }
 /* }}} */
 
@@ -1392,8 +1378,6 @@ zval *sdl_surface_read_property(zend_object *object, zend_string *member, int ty
 	else if (!strcmp(member_val, "pixels"))
 	{
 		SDL_Pixels pix;
-		pix.pitch = intern->surface->pitch;
-		pix.h = intern->surface->h;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
 		sdl_pixels_to_zval(&pix, retval, SDL_DONTFREE);
 	}

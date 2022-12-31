@@ -28,8 +28,6 @@ extern "C" {
 /* PHP specific struct to manage memory access */
 typedef struct SDL_Pixels
 {
-    int    h;
-    int    pitch;
     Uint8 *pixels;
 } SDL_Pixels;
 
