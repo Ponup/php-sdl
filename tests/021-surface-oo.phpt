@@ -61,26 +61,14 @@ string(40) "SDL_Surface(%d,150,100,8,0x0,0x0,0x0,0x0)"
 int(150)
 int(100)
 int(256)
-object(SDL_Pixels)#%d (3) {
-  ["pitch"]=>
-  int(152)
-  ["h"]=>
-  int(100)
-  ["count"]=>
-  int(15200)
+object(SDL_Pixels)#%d (0) {
 }
 = Create True colors
 string(57) "SDL_Surface(%d,150,100,32,0xff000000,0xff0000,0xff00,0xff)"
 int(150)
 int(100)
 NULL
-object(SDL_Pixels)#%d (3) {
-  ["pitch"]=>
-  int(600)
-  ["h"]=>
-  int(100)
-  ["count"]=>
-  int(60000)
+object(SDL_Pixels)#%d (0) {
 }
 = Lock
 bool(false)
