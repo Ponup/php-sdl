@@ -26,7 +26,8 @@ var_dump(12030 === SDL_VERSIONNUM(10,20,30));
 var_dump(SDL_VERSION_ATLEAST(2,0,0));
 var_dump(SDL_VERSION_ATLEAST(2,0,25));
 var_dump(is_string(SDL_GetRevision()));
-var_dump(is_integer(SDL_GetRevisionNumber()));
+SDL_GetVersion($linkedVersion);
+var_dump(array_key_exists('major', $linkedVersion) && array_key_exists('minor', $linkedVersion) && array_key_exists('patch', $linkedVersion));
 
 echo '= Done', PHP_EOL;
 ?>
