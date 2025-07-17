@@ -137,13 +137,13 @@ static PHP_METHOD(SDL_Cursor, __construct)
 
 	if (w <= 0 || w & 7 || h <= 0)
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid cursor size", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid cursor size", 0);
 		return;
 	}
 	size = w / 8 * h;
 	if (data_len != size || mask_len != size)
 	{
-		zend_throw_exception_ex(zend_exception_get_default(), 0, "Invalid data or mask, size must be %ld", size);
+		zend_throw_exception_ex(zend_ce_exception, 0, "Invalid data or mask, size must be %ld", size);
 		return;
 	}
 	intern->cursor = SDL_CreateCursor((Uint8 *)data, (Uint8 *)mask, (int)w, (int)h, (int)x, (int)y);
@@ -153,7 +153,7 @@ static PHP_METHOD(SDL_Cursor, __construct)
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */

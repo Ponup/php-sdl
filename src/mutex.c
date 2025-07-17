@@ -326,7 +326,7 @@ static PHP_METHOD(SDL_mutex, __construct)
 	  if (intern->mutex) {
 		  intern->flags = 0;
 	  } else {
-		  zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		  zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	  }
 }
 /* }}} */
@@ -489,7 +489,7 @@ static PHP_METHOD(SDL_sem, __construct)
 	if (intern->sem) {
 		intern->flags = 0;
 	} else {
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */
@@ -695,7 +695,7 @@ static PHP_METHOD(SDL_cond, __construct)
 	if (intern->cond) {
 		intern->flags = 0;
 	} else {
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */

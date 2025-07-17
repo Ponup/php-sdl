@@ -1185,7 +1185,7 @@ static PHP_METHOD(SDL_Window, __construct)
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), "Can't create window", 0);
+		zend_throw_exception(zend_ce_exception, "Can't create window", 0);
 	}
 }
 /* }}} */
