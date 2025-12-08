@@ -128,12 +128,12 @@ static PHP_METHOD(SDL_WindowShapeMode, __construct)
 			intern->mode.mode = ShapeModeColorKey;
 			zval_to_sdl_color(z_param, &intern->mode.parameters.colorKey);
 		} else {
-			zend_throw_exception(zend_exception_get_default(), "Invalid parameter for mode=ShapeModeColorKey, SDL_Color object expected", 0);
+			zend_throw_exception(zend_ce_exception, "Invalid parameter for mode=ShapeModeColorKey, SDL_Color object expected", 0);
 		}
 
 
 	} else {
-		zend_throw_exception(zend_exception_get_default(), "Invalid mode for SDL_WindowShapeMode", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid mode for SDL_WindowShapeMode", 0);
 	}
 }
 /* }}} */

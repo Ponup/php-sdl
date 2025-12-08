@@ -224,12 +224,12 @@ PHP_METHOD(SDL_GLContext, __construct)
 		}
 		else
 		{
-			zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+			zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 		}
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid SDL_Window object", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid SDL_Window object", 0);
 	}
 }
 /* }}} */

@@ -137,7 +137,7 @@ static PHP_METHOD(SDL_RWops, __construct)
 	if (intern->rwops) {
 		intern->flags = 0;
 	} else {
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */

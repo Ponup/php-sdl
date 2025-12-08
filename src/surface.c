@@ -206,7 +206,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */

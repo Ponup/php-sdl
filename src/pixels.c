@@ -453,7 +453,7 @@ static PHP_METHOD(SDL_PixelFormat, __construct)
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */
@@ -550,7 +550,7 @@ static PHP_METHOD(SDL_Palette, __construct)
 	}
 	else
 	{
-		zend_throw_exception(zend_exception_get_default(), SDL_GetError(), 0);
+		zend_throw_exception(zend_ce_exception, SDL_GetError(), 0);
 	}
 }
 /* }}} */
@@ -630,7 +630,7 @@ PHP_METHOD(SDL_Palette, offsetGet)
 	}
 	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors))
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid offset in SDL_Pixels", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid offset in SDL_Pixels", 0);
 		RETURN_FALSE;
 	}
 	sdl_color_to_zval(intern->palette->colors + offset, return_value);
@@ -655,7 +655,7 @@ PHP_METHOD(SDL_Palette, offsetUnset)
 	}
 	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors))
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid offset in SDL_Pixels", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid offset in SDL_Pixels", 0);
 		RETURN_FALSE;
 	}
 	memset(&color, 0, sizeof(color));
@@ -683,7 +683,7 @@ PHP_METHOD(SDL_Palette, offsetSet)
 	}
 	if (!intern->palette || offset < 0 || offset >= (intern->palette->ncolors))
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid offset in SDL_Pixels", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid offset in SDL_Pixels", 0);
 		RETURN_FALSE;
 	}
 	zval_to_sdl_color(z_color, &color);
@@ -1050,7 +1050,7 @@ static PHP_METHOD(SDL_Pixels, __construct)
 
 	if (php_sdl_check_overflow((int)pitch, (int)h, 1))
 	{
-		zend_throw_exception(zend_exception_get_default(), "Invalid size", 0);
+		zend_throw_exception(zend_ce_exception, "Invalid size", 0);
 	}
 	else
 	{
