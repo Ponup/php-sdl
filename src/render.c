@@ -235,7 +235,7 @@ PHP_FUNCTION(SDL_UpdateTexture)
 	if(z_rect != NULL && Z_TYPE_P(z_rect) != IS_NULL) {
 		rect = &def_rect;
 		zval_to_sdl_rect(z_rect, rect);
-		rect = NULL; 
+		rect = NULL;
 	}
 
 	if (!(pixels = zval_to_sdl_pixels(z_pixels)))
@@ -261,9 +261,20 @@ PHP_FUNCTION(SDL_SetRenderTarget)
 	}
 
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
-	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+	// texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+	if (Z_TYPE_P(z_texture) == IS_NULL) {
+		// SDL accepte NULL pour reset la target vers le default render target
+		texture = NULL;
+	} else {
+		texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+		if (!texture) {
+			php_error_docref(NULL, E_WARNING, "Invalid SDL_Texture resource");
+			RETURN_FALSE;
+		}
+	}
 
-	if( renderer && texture ) {
+	if (renderer)
+	{
 		RETURN_LONG(SDL_SetRenderTarget(renderer, texture));
 	}
 }

@@ -48,6 +48,16 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 
 	switch (event->type)
 	{
+	case SDL_FINGERDOWN:
+    case SDL_FINGERUP:
+    case SDL_FINGERMOTION:
+    {
+        zval tfinger;
+        php_sdl_touchfingerevent_to_zval(&event->tfinger, &tfinger);
+        add_property_zval(value, "tfinger", &tfinger);
+
+    }
+    break;
 	case SDL_MOUSEMOTION:
 	{
 		zval motion;
@@ -240,6 +250,11 @@ PHP_MINIT_FUNCTION(sdl_event)
 
 	REGISTER_LONG_CONSTANT("SDL_QUIT", SDL_QUIT, CONST_CS | CONST_PERSISTENT);
 
+	REGISTER_LONG_CONSTANT("SDL_FINGERDOWN", SDL_FINGERDOWN, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_FINGERUP", SDL_FINGERUP, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_FINGERMOTION", SDL_FINGERMOTION, CONST_CS | CONST_PERSISTENT);
+
+
 	REGISTER_LONG_CONSTANT("SDL_APP_TERMINATING", SDL_APP_TERMINATING, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_APP_LOWMEMORY", SDL_APP_LOWMEMORY, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_APP_WILLENTERBACKGROUND", SDL_APP_WILLENTERBACKGROUND, CONST_CS | CONST_PERSISTENT);
@@ -291,6 +306,50 @@ PHP_MINIT_FUNCTION(sdl_event)
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("window"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("button"), ZEND_ACC_PUBLIC);
 
+
+	// touchpad
+	zend_declare_property_null(php_sdl_event_ce, "tfinger", sizeof("tfinger") - 1, ZEND_ACC_PUBLIC);
+
+	zend_class_entry ce;
+	INIT_CLASS_ENTRY(ce, "SDL_TouchFingerEvent", NULL);
+	sdlTouchFingerEvent_ce = zend_register_internal_class(&ce);
+
+
+    // Déclaration explicite des propriétés publiques
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "type", sizeof("type") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "timestamp", sizeof("timestamp") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "x", sizeof("x") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "y", sizeof("y") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "dx", sizeof("dx") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "dy", sizeof("dy") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "pressure", sizeof("pressure") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "fingerId", sizeof("fingerId") - 1, ZEND_ACC_PUBLIC);
+    zend_declare_property_null(sdlTouchFingerEvent_ce, "touchId", sizeof("touchId") - 1, ZEND_ACC_PUBLIC);
+
+
 	return SUCCESS;
 }
 /* }}} */
+
+zend_class_entry *sdlTouchFingerEvent_ce;
+
+zend_object* php_sdl_touchfingerevent_new(zend_class_entry *class_type) {
+    zend_object *obj = zend_objects_new(class_type);
+    object_properties_init(obj, class_type);
+    obj->handlers = &std_object_handlers;
+    return obj;
+}
+
+void php_sdl_touchfingerevent_to_zval(SDL_TouchFingerEvent *event, zval *value) {
+    object_init_ex(value, sdlTouchFingerEvent_ce);
+
+    add_property_long(value, "type", event->type);
+    add_property_long(value, "timestamp", event->timestamp);
+    add_property_double(value, "x", event->x);
+    add_property_double(value, "y", event->y);
+    add_property_double(value, "dx", event->dx);
+    add_property_double(value, "dy", event->dy);
+    add_property_double(value, "pressure", event->pressure);
+    add_property_long(value, "fingerId", (zend_long)event->fingerId);
+    add_property_long(value, "touchId", (zend_long)event->touchId);
+}
