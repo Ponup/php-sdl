@@ -39,9 +39,9 @@
       <file role="doc" name="CREDITS"/>
       <file role="doc" name="LICENSE"/>
       <file role="src" name="config.m4"/>
+      <file role="src" name="php_sdl.c"/>
+      <file role="src" name="php_sdl.h"/>
       <dir name="src">
-        <file role="src" name="php_sdl.c"/>
-        <file role="src" name="php_sdl.h"/>
         <file role="src" name="blendmode.c"/>
         <file role="src" name="blendmode.h"/>
         <file role="src" name="cpuinfo.c"/>
@@ -245,7 +245,7 @@
       <license uri="http://www.php.net/license">PHP</license>
       <notes>
   	  - Fix undefined symbol (sdl_window_to_zval)
-  	  - Tidy up GL context creation 
+  	  - Tidy up GL context creation
       </notes>
     </release>
     <release>
