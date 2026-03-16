@@ -2,15 +2,38 @@ name: Build and test
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  main:
-    runs-on: ubuntu-latest
+  phpt-test:
+    name: "Run tests"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        php-versions: [ 8.0, 8.1, 8.2 ]
+        zts-mode: [ zts ]
+    runs-on: ${{ matrix.os }}
     steps:
-        - uses: actions/checkout@v1
-        - name: Build and tag image
-          run: docker build -t ponup/php-sdl .
-        - name: Run tests
-          run: docker run --rm ponup/php-sdl 
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl
+      - name: "Build extension"
+        run: |
+          sudo pecl update-channels
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install libsdl2-dev
+          phpize
+          ./configure --with-sdl
+          make
+      - name: "Run the tests"
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: |
+            php run-tests.php -q --show-diff -d extension=`pwd`/modules/sdl.so
+          working-directory: ./
+          options: -screen 0 800x600x24
